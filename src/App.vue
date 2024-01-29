@@ -6,7 +6,7 @@
     <div class="bottom-nav">
       <RouterLink to="/Main">Home</RouterLink>
       <RouterLink to="/Calendar">Calendar</RouterLink>
-      <RouterLink to="/Friend">Chat</RouterLink>
+      <RouterLink to="/Friend">Friends</RouterLink>
       <RouterLink to="/Meeting">Meeting</RouterLink>
       <RouterLink to="/mypage">MyPage</RouterLink>
     </div>
