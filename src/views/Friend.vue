@@ -73,11 +73,11 @@ export default {
 }
 
 .list-group-item {
-  border-color: #87CEEB;
+  border-color: #9EDBC5;
 }
 
 .modal-content {
-  background-color: #87CEEB;
+  background-color: #9EDBC5;
   color: #fff;
 }
 

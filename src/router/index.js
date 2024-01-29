@@ -5,7 +5,8 @@ import Calendar from '@/views/Calendar.vue'
 import Friend from '@/views/Friend.vue'
 import Meeting from '@/views/Meeting.vue'
 import MyPage from '@/views/MyPage.vue'
-import Voice from '@/components/Voice.vue'
+import Voice from '@/views/Voice/Voice.vue'
+import VoiceTrainer from '@/views/Voice/VoiceTrainer.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,12 +41,18 @@ const router = createRouter({
 		path: '/mypage',
 		component: MyPage,
 	},
-  {
-    name: 'voice',
-    path: '/voice',
-    component: Voice
-  }
+	{
+		path: '/voice',
+		name: 'Voice',
+		component: Voice
+	},
+	{
+		path: '/voice/trainer',
+		name: 'VoiceTrainer',
+		component: VoiceTrainer
+	}
   ]
 })
+
 
 export default router
