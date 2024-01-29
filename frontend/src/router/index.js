@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Main from '@/views/Main.vue'
 import Board from '@/views/Board.vue'
+import Goal from '@/views/GoalList.vue'
 import Calendar from '@/views/Calendar.vue'
 import Friend from '@/views/Friend.vue'
 import Meeting from '@/views/Meeting.vue'
@@ -20,6 +21,11 @@ const router = createRouter({
 		name: 'main',
 		path: '/main',
 		component: Main,
+	},
+	{
+		name: 'goal',
+		path: '/goal',
+		component: Goal,
 	},
     {
 		name: 'board',
