@@ -16,7 +16,7 @@
 
 <script>
 import Sidebar from '@/views/Sidebar.vue'
-import TodoList from '@/views/TodoList.vue'
+import Goal from '@/views/GoalList.vue'
 import Main from '@/views/Main.vue'
 import Calendar from '@/views/Calendar.vue'
 import Friend from '@/views/Friend.vue'
@@ -33,7 +33,7 @@ export default {
   },
   components: {
     Sidebar,
-    TodoList,
+    Goal,
     Main,
     Calendar,
     Friend,
