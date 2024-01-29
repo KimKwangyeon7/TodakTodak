@@ -9,38 +9,73 @@
         <button type="button" class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNotifications" aria-controls="offcanvasNotifications">
           알림
         </button>
+        <!-- 수정된 부분: Notifications 컴포넌트 추가 -->
         <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel" data-bs-toggle="offcanvas">
           <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Todak</h5>
+            <h5 class="offcanvas-title" id="offcanvasNavbarLabel">메뉴 전체보기</h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
           </div>
           <div class="offcanvas-body">
-            <router-link to="/goal" class="nav-link">목표 만들기</router-link>
-            <router-link to="/calendar" class="nav-link">캘린더</router-link>
-            <router-link to="/meeting" class="nav-link">모임</router-link>
-            <router-link to="/board" class="nav-link">게시판</router-link>
-            <router-link to="/Friend" class="nav-link">친구</router-link>
-            <router-link to="/habit" class="nav-link">습관</router-link>
-            <router-link to="/voice" class="nav-link">음성</router-link>
-            <router-link to="/mypage" class="nav-link">마이페이지</router-link>
+            <router-link to="/goal" class="nav-link"><span class="emoji">🎯</span> 목표 만들기</router-link>
+            <router-link to="/calendar" class="nav-link"><span class="emoji">📅</span> 캘린더</router-link>
+            <router-link to="/meeting" class="nav-link"><span class="emoji">🤝</span> 모임</router-link>
+            <router-link to="/board" class="nav-link"><span class="emoji">📋</span> 게시판</router-link>
+            <router-link to="/Friend" class="nav-link"><span class="emoji">👫</span> 친구</router-link>
+            <router-link to="/habit" class="nav-link"><span class="emoji">🔄</span> 습관</router-link>
+            <router-link to="/voice" class="nav-link"><span class="emoji">🔊</span> 음성</router-link>
+            <router-link to="/mypage" class="nav-link"><span class="emoji">👤</span> 마이페이지</router-link>
           </div>
         </div>
       </div>
     </nav>
+    
+    <!-- 수정된 부분: Notifications 컴포넌트 추가 -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNotifications" aria-labelledby="offcanvasNotificationsLabel" data-bs-toggle="offcanvas">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNotificationsLabel">알림</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <notifications></notifications>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import Friend from '@/views/Friend.vue'
+import Notifications from '@/components/Notifications.vue'
 
 export default {
   name: 'Sidebar',
   components: {
     Friend,
+    Notifications,
   },
 }
 </script>
 
 <style scoped>
-/* 여기에 컴포넌트의 스타일을 추가하세요 */
+.offcanvas-title {
+  font-size: 35px;
+  font-weight: bold;
+  font-family: 'SOYOMapleBoldTTF';
+}
+
+.offcanvas-body {
+  font-size: 30px;
+  text-align: left;
+  font-family: 'SOYOMapleBoldTTF';
+}
+
+.offcanvas-body .emoji {
+  margin-right: 15px;
+}
+
+@font-face {
+  font-family: 'SOYOMapleBoldTTF';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2310@1.0/SOYOMapleBoldTTF.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
 </style>

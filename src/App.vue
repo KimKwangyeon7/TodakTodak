@@ -46,8 +46,6 @@ export default {
       this.is_modal_valid = false
     }
   }
-  
-  // Vue 인스턴스의 데이터와 메소드를 여기에 정의합니다.
 }
 </script>
 

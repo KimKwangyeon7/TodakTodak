@@ -81,21 +81,19 @@ export default {
   justify-content: space-between; /* 요소들을 양 끝에 정렬 */
   align-items: center; /* 요소들을 세로로 가운데 정렬 */
   padding: 20px; /* 내부 여백 설정 */
-  font-size: 20px; /* 폰트 크기 설정 (모바일 화면에서 크기 조절) */
+  font-size: 30px; /* 폰트 크기 설정 (모바일 화면에서 크기 조절) */
 }
-/* 음성 선택*/
+
 .voice-title {
   display: flex; /* Flexbox 레이아웃을 사용하여 내부 요소들을 가로로 배치 */
   justify-content: space-between; /* 요소들을 양 끝에 정렬 */
   align-items: center; /* 요소들을 세로로 가운데 정렬 */
   padding: 8px; /* 내부 여백 설정 */
-  font-size: 20px; /* 폰트 크기 설정 (모바일 화면에서 크기 조절) */
+  font-size: 30px; /* 폰트 크기 설정 (모바일 화면에서 크기 조절) */
   font-weight: bold; /* 글꼴 굵기 설정 */
 }
 
-/* 음성 선택 */
 .voice-box {
-  width: 350px; /* 너비 설정 */
   overflow-y: scroll; /* 수직 스크롤 활성화 */
   max-height: 500px; /* 최대 높이 설정 */
   justify-content: space-between; /* 요소들을 양 끝에 정렬 */
@@ -119,7 +117,7 @@ export default {
   width: 40px; /* 너비 설정 */
 }
 
-  .material-switch > label::before {
+.material-switch > label::before {
   background: rgb(255, 255, 255); /* 배경색 설정 */
   border-radius: 16px; /* 테두리 반경 설정 */
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3); /* 그림자 효과 설정 */
@@ -146,7 +144,6 @@ export default {
   transition: all 0.4s ease-in-out; /* 전체 속성에 대한 변화를 부드럽게 설정 */
   width: 50px; /* 너비 설정 */
 }
-
 
 .material-switch > input[type="checkbox"]:checked + label::before {
   background: inherit; /* 체크 상태에서 배경색 유지 */
