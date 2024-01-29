@@ -6,7 +6,7 @@
     <div class="bottom-nav">
       <RouterLink to="/Main">Home</RouterLink>
       <RouterLink to="/Calendar">Calendar</RouterLink>
-      <RouterLink to="/Friend">Chat</RouterLink>
+      <RouterLink to="/Friend">Friends</RouterLink>
       <RouterLink to="/Meeting">Meeting</RouterLink>
       <RouterLink to="/mypage">MyPage</RouterLink>
     </div>
@@ -46,15 +46,12 @@ export default {
       this.is_modal_valid = false
     }
   }
-  
-  // Vue 인스턴스의 데이터와 메소드를 여기에 정의합니다.
 }
 </script>
 
 <style>
 /* 전체 앱 스타일링 */
 #app {
-
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

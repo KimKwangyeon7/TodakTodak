@@ -11,46 +11,51 @@ import VoiceTrainer from '@/views/Voice/VoiceTrainer.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+	{
+		name: '',
+		path: '/',
+		component: Main,
+	},
+	{
+		name: 'main',
+		path: '/main',
+		component: Main,
+	},
     {
-        name: 'main',
-        path: '/main',
-        component: Main,
-    },
+		name: 'board',
+		path: '/board',
+		component: Board,
+	},
     {
-        name: 'board',
-        path: '/board',
-        component: Board,
-    },
+		name: 'calendar',
+		path: '/calendar',
+		component: Calendar,
+	},
     {
-        name: 'calendar',
-        path: '/calendar',
-        component: Calendar,
-    },
+		name: 'friend',
+		path: '/friend',
+		component: Friend,
+	},
     {
-        name: 'friend',
-        path: '/friend',
-        component: Friend,
-    },
-    {
-        name: 'meeting',
-        path: '/meeting',
-        component: Meeting,
-    },
-    {
-        name: 'mypage',
-        path: '/mypage',
-        component: MyPage,
-    },
-    {
-        path: '/voice',
-        name: 'Voice',
-        component: Voice
-    },
-    {
-        path: '/voice/trainer',
-        name: 'VoiceTrainer',
-        component: VoiceTrainer
-    }
+		name: 'meeting',
+		path: '/meeting',
+		component: Meeting,
+	},
+	{
+		name: 'mypage',
+		path: '/mypage',
+		component: MyPage,
+	},
+	{
+		path: '/voice',
+		name: 'Voice',
+		component: Voice
+	},
+	{
+		path: '/voice/trainer',
+		name: 'VoiceTrainer',
+		component: VoiceTrainer
+	}
   ]
 })
 

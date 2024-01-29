@@ -8,8 +8,14 @@
     <!-- 친구 리스트 -->
     <ul class="list-group">
       <li v-for="friend in filteredFriends" :key="friend.id" class="list-group-item list-group-item-action bg-info text-white d-flex justify-content-between align-items-center" @click="showProfile(friend)">
-        <img :src="friend.profilePicture" alt="프로필 이미지" class="profile-image mr-2">
-        <span>{{ friend.name }}</span>
+        <div class="friend-item" @click="showProfile(friend)">
+          <img :src="friend.profilePicture" alt="프로필 이미지" class="profile-image mr-2">
+          <span>{{ friend.name }}</span>
+        </div>
+        <div class="buttons">
+          <button class="btn btn-secondary btn-sm" @click.stop="showProfile(friend)">프로필 보기</button>
+          <button class="btn btn-primary btn-sm" @click.stop="startChat(friend)">채팅</button>
+        </div>
       </li>
     </ul>
 
@@ -62,6 +68,10 @@ export default {
     resetSelectedFriend() {
       this.selectedFriend = null;
     },
+    startChat(friend) {
+      // 채팅을 시작하는 메소드를 구현할 수 있습니다.
+      console.log('채팅 시작:', friend.name);
+    },
   },
 };
 </script>
@@ -73,7 +83,7 @@ export default {
 }
 
 .list-group-item {
-  border-color: #9EDBC5;
+  border-color: #EAF3F9;
 }
 
 .modal-content {
@@ -99,5 +109,34 @@ export default {
   position: fixed;
   top:0; left: 0; bottom: 0; right: 0;
   background-color: rgba(0, 0, 0, 0.5);
+}
+
+.list-group-item {
+  border-color: #EAF3F9;
+  position: relative;
+  overflow: hidden;
+}
+
+.friend-item {
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+  padding-right: 80px; /* 버튼들의 너비만큼 여백을 주세요 */
+}
+
+.buttons {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  z-index: 2;
+}
+
+.buttons button {
+  margin-left: 5px;
 }
 </style>
