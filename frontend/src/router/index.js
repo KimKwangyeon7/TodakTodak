@@ -5,47 +5,54 @@ import Calendar from '@/views/Calendar.vue'
 import Friend from '@/views/Friend.vue'
 import Meeting from '@/views/Meeting.vue'
 import MyPage from '@/views/MyPage.vue'
-import Voice from '@/components/Voice.vue'
+import Voice from '@/views/Voice/Voice.vue'
+import VoiceTrainer from '@/views/Voice/VoiceTrainer.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-	{
-		name: 'main',
-		path: '/main',
-		component: Main,
-	},
     {
-		name: 'board',
-		path: '/board',
-		component: Board,
-	},
+        name: 'main',
+        path: '/main',
+        component: Main,
+    },
     {
-		name: 'calendar',
-		path: '/calendar',
-		component: Calendar,
-	},
+        name: 'board',
+        path: '/board',
+        component: Board,
+    },
     {
-		name: 'friend',
-		path: '/friend',
-		component: Friend,
-	},
+        name: 'calendar',
+        path: '/calendar',
+        component: Calendar,
+    },
     {
-		name: 'meeting',
-		path: '/meeting',
-		component: Meeting,
-	},
-	{
-		name: 'mypage',
-		path: '/mypage',
-		component: MyPage,
-	},
-  {
-    name: 'voice',
-    path: '/voice',
-    component: Voice
-  }
+        name: 'friend',
+        path: '/friend',
+        component: Friend,
+    },
+    {
+        name: 'meeting',
+        path: '/meeting',
+        component: Meeting,
+    },
+    {
+        name: 'mypage',
+        path: '/mypage',
+        component: MyPage,
+    },
+    {
+        path: '/voice',
+        name: 'Voice',
+        component: Voice
+    },
+    {
+        path: '/voice/trainer',
+        name: 'VoiceTrainer',
+        component: VoiceTrainer
+    }
   ]
 })
+
 
 export default router

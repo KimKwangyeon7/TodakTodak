@@ -54,11 +54,12 @@ export default {
 <style>
 /* 전체 앱 스타일링 */
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #2c3e50;
+    padding: 10px; /* 모바일 화면 패딩 추가 */
 }
 
 /* 상단 바 스타일링 */
@@ -107,6 +108,7 @@ export default {
   justify-content: space-around;
   background-color: #f3f3f3;
   padding: 10px 0;
+  z-index: 999;
 }
 
 
