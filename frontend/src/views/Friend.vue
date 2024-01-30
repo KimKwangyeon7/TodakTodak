@@ -1,3 +1,5 @@
+<!-- MyFriendList.vue -->
+
 <template>
   <div class="friend-list container mt-5">
     <!-- 검색 기능 -->
@@ -41,38 +43,34 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      searchQuery: '',
-      friends: [
-        { id: 1, name: '김철수', age: 25 },
-        { id: 2, name: '김영희', age: 30 },
-        { id: 3, name: '김싸피', age: 28 },
-      ],
-      selectedFriend: null,
-    };
-  },
-  computed: {
-    filteredFriends() {
-      return this.friends.filter(friend =>
-        friend.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
-    },
-  },
-  methods: {
-    showProfile(friend) {
-      this.selectedFriend = friend;
-    },
-    resetSelectedFriend() {
-      this.selectedFriend = null;
-    },
-    startChat(friend) {
-      // 채팅을 시작하는 메소드를 구현할 수 있습니다.
-      console.log('채팅 시작:', friend.name);
-    },
-  },
+<script setup>
+import { ref, computed } from 'vue'
+
+const searchQuery = ref('');
+const friends = ref([
+  { id: 1, name: '김철수', age: 25 },
+  { id: 2, name: '김영희', age: 30 },
+  { id: 3, name: '김싸피', age: 28 },
+]);
+const selectedFriend = ref(null);
+
+const filteredFriends = computed(() => {
+  return friends.value.filter(friend =>
+    friend.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
+});
+
+const showProfile = (friend) => {
+  selectedFriend.value = friend;
+};
+
+const resetSelectedFriend = () => {
+  selectedFriend.value = null;
+};
+
+const startChat = (friend) => {
+  // 채팅을 시작하는 메소드를 구현할 수 있습니다.
+  console.log('채팅 시작:', friend.name);
 };
 </script>
 

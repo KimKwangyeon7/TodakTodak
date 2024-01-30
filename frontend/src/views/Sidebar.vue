@@ -42,16 +42,13 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import Friend from '@/views/Friend.vue'
 import Notifications from '@/components/Notifications.vue'
 
-export default {
-  name: 'Sidebar',
-  components: {
-    Friend,
-    Notifications,
-  },
+const components = {
+  Friend,
+  Notifications,
 }
 </script>
 

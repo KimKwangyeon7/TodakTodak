@@ -1,9 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Main from '@/views/Main.vue'
+import Goal from '@/views/GoalView.vue'
 import Board from '@/views/Board.vue'
 import Calendar from '@/views/Calendar.vue'
 import Friend from '@/views/Friend.vue'
 import Meeting from '@/views/Meeting.vue'
+import Habit from '@/views/HabitView.vue'
 import MyPage from '@/views/MyPage.vue'
 import Voice from '@/views/Voice/Voice.vue'
 import VoiceTrainer from '@/views/Voice/VoiceTrainer.vue'
@@ -20,6 +22,11 @@ const router = createRouter({
 		name: 'main',
 		path: '/main',
 		component: Main,
+	},
+	{
+		name: 'goal',
+		path: '/goal',
+		component: Goal,
 	},
     {
 		name: 'board',
@@ -40,6 +47,11 @@ const router = createRouter({
 		name: 'meeting',
 		path: '/meeting',
 		component: Meeting,
+	},
+	{
+		name: 'habit',
+		path: '/habit',
+		component: Habit,
 	},
 	{
 		name: 'mypage',
