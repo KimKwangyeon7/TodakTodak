@@ -67,7 +67,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .voice {
   display: flex; /* Flexbox 레이아웃을 사용하여 내부 요소들을 가로로 배치 */
   justify-content: space-between; /* 요소들을 양 끝에 정렬 */

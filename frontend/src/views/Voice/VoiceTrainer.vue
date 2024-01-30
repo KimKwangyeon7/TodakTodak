@@ -63,7 +63,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .sentence-box {
   /* overflow: auto; 요소 갯수에 알맞게 자동으로 높이 조절하는 역할 */
   overflow-y: scroll; /* 오직 수직 스크롤만 활성화 */
