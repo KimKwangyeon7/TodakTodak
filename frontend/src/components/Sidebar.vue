@@ -54,13 +54,13 @@ const components = {
 
 <style scoped>
 .offcanvas-title {
-  font-size: 35px;
+  font-size: 30px;
   font-weight: bold;
   font-family: 'SOYOMapleBoldTTF';
 }
 
 .offcanvas-body {
-  font-size: 30px;
+  font-size: 27px;
   text-align: left;
   font-family: 'SOYOMapleBoldTTF';
 }

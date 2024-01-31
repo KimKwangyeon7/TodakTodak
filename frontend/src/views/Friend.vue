@@ -9,7 +9,7 @@
 
     <!-- 친구 리스트 -->
     <ul class="list-group">
-      <li v-for="friend in filteredFriends" :key="friend.id" class="list-group-item list-group-item-action bg-info text-white d-flex justify-content-between align-items-center" @click="showProfile(friend)">
+      <li v-for="friend in filteredFriends" :key="friend.id" class="list-group-item" @click="showProfile(friend)">
         <div class="friend-item" @click="showProfile(friend)">
           <img :src="friend.profilePicture" alt="프로필 이미지" class="profile-image mr-2">
           <span>{{ friend.name }}</span>
@@ -80,13 +80,9 @@ const startChat = (friend) => {
   margin: auto;
 }
 
-.list-group-item {
-  border-color: #EAF3F9;
-}
-
 .modal-content {
-  background-color: #9EDBC5;
-  color: #fff;
+  background-color: #EAF3F9;
+  color: black;
 }
 
 .profile-image {
@@ -113,6 +109,12 @@ const startChat = (friend) => {
   border-color: #EAF3F9;
   position: relative;
   overflow: hidden;
+  background-color: #EAF3F9; /* Info색상에 대한 적절한 색상 코드 사용 */
+  color: black; /* 텍스트를 흰색으로 설정 */
+  margin-bottom: 10px;
+  border-radius: 24px;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .friend-item {

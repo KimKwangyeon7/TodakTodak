@@ -29,7 +29,7 @@ const userData = ref({
 <style scoped>
 .user-data {
   display: flex;
-  padding-top: 10px;
+  padding-top: 20px;
 }
 .user-profile {
   justify-content: space-between;

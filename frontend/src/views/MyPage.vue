@@ -9,7 +9,7 @@
 <script>
 import UserInfo from '@/components/MyPage/UserInfo.vue'
 import SuccessRate from '@/components/MyPage/SuccessRate.vue'
-import GoalSuccessRate from '@/components/Mypage/GoalSuccessRate.vue'
+import GoalSuccessRate from '@/components/MyPage/GoalSuccessRate.vue'
 
 export default {
 components: {

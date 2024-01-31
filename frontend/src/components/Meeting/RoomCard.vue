@@ -1,7 +1,7 @@
 <template>
   <div class="room-card">
-    <h4>{{ room.title }}</h4>
-    <p>현재 참여 멤버 수: {{ room.currentMembers }}</p>
+    <h4>{{ room.title }}</h4><hr>
+    <p>현재 참여 멤버 수: {{ room.currentMembers }}</p><hr>
     <p>방 생성 시간: {{ formatCreationTime }}</p>
   </div>
 </template>
@@ -21,15 +21,14 @@ const formatCreationTime = computed(() => {
 
 <style scoped>
 .room-card {
-  border: 1px solid #ddd;
   padding: 10px;
   margin: 10px;
-  border-radius: 5px;
-  background-color: #f9f9f9;
+  border-radius: 15px;
+  background-color: #EAF3F9;
 }
 
 .room-card h4 {
-  margin-bottom: 5px;
+  margin-top: 5px;
 }
 
 .room-card p {

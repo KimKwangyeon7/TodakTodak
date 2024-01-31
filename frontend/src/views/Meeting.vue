@@ -12,7 +12,7 @@
     </div>
 
     <button class="btn btn-primary mt-3" @click="showCreateRoomModal">모임 방 추가</button>
-    <!-- <CreateRoomModal :show="showModal" @close="closeCreateRoomModal" @create="createRoom" /> -->
+    <CreateRoomModal v-if="showModal" @close="closeCreateRoomModal" @create="createRoom" />
   </div>
 </template>
 

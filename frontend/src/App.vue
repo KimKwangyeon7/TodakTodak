@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import Sidebar from '@/views/Sidebar.vue'
+import Sidebar from '@/components/Sidebar.vue'
 import TodoList from '@/views/TodoList.vue'
 import Main from '@/views/Main.vue'
 import Calendar from '@/views/Calendar.vue'
