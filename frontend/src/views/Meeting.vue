@@ -22,8 +22,9 @@ import RoomCard from '@/components/Meeting/RoomCard.vue'
 import CreateRoomModal from '@/components/Meeting/CreateRoomModal.vue'
 
 const rooms = ref([
-  { id: 1, title: '모임 방 1', currentMembers: 5, creationTime: new Date() },
-  { id: 2, title: '모임 방 2', currentMembers: 3, creationTime: new Date() },
+  { id: 1, title: '코딩 스터디', currentMembers: 5, creationTime: new Date() },
+  { id: 2, title: '싸피 스터디', currentMembers: 3, creationTime: new Date() },
+  { id: 3, title: 'study with me', currentMembers: 4, creationTime: new Date() },
 ])
 
 const newRoom = reactive({

@@ -35,6 +35,7 @@
   .goal-success-rate-title {
     font-size: 25px;
     margin-top: 20px;
+    margin-right: 180px;
   }
   
   .goal-item {

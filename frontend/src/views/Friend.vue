@@ -15,7 +15,6 @@
           <span>{{ friend.name }}</span>
         </div>
         <div class="buttons">
-          <button class="btn btn-secondary btn-sm" @click.stop="showProfile(friend)">프로필 보기</button>
           <button class="btn btn-primary btn-sm" @click.stop="startChat(friend)">채팅</button>
         </div>
       </li>
@@ -51,7 +50,14 @@ const friends = ref([
   { id: 1, name: '김철수', age: 25 },
   { id: 2, name: '김영희', age: 30 },
   { id: 3, name: '김싸피', age: 28 },
+  { id: 4, name: '손흥민', age: 25 },
+  { id: 5, name: '봉준호', age: 30 },
+  { id: 6, name: '김준호', age: 28 },
+  { id: 7, name: '카리나', age: 25 },
+  { id: 8, name: '공유', age: 30 },
+  { id: 9, name: '황정민', age: 28 },
 ]);
+
 const selectedFriend = ref(null);
 
 const filteredFriends = computed(() => {
@@ -112,7 +118,7 @@ const startChat = (friend) => {
   background-color: #EAF3F9; /* Info색상에 대한 적절한 색상 코드 사용 */
   color: black; /* 텍스트를 흰색으로 설정 */
   margin-bottom: 10px;
-  border-radius: 24px;
+      border-radius: 24px;
   justify-content: space-between;
   align-items: center;
 }
