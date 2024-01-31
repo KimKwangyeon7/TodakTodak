@@ -18,7 +18,6 @@
   </script>
   
   <style scoped>
- 
  .modal-content {
     background: #EAF3F9;
     border-radius: 8px;
@@ -38,4 +37,8 @@
   font-size: 12px;
 }
   </style>
+<<<<<<< HEAD
   
+=======
+  
+>>>>>>> 7ab7ce81c580c0d8f18a96ee52f74bba60d5af67

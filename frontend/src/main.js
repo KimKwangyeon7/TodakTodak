@@ -6,6 +6,8 @@ import { setupCalendar } from 'v-calendar';
 
 import App from './App.vue'
 import router from './router'
+import './registerServiceWorker'
+
 
 const app = createApp(App)
 

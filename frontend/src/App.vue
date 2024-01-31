@@ -4,10 +4,10 @@
 
     <!-- 하단 네비게이션 바 -->
     <div class="bottom-nav">
-      <RouterLink to="/">Home</RouterLink>
-      <div class="nav-item">Calendar</div>
-      <div class="nav-item">Chat</div>
-      <div class="nav-item">Meeting</div>
+      <RouterLink to="/Main">Home</RouterLink>
+      <RouterLink to="/Calendar">Calendar</RouterLink>
+      <RouterLink to="/Friend">Friends</RouterLink>
+      <RouterLink to="/Meeting">Meeting</RouterLink>
       <RouterLink to="/mypage">MyPage</RouterLink>
     </div>
     <RouterView />
@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import Sidebar from '@/views/Sidebar.vue'
+import Sidebar from '@/components/Sidebar.vue'
 import TodoList from '@/views/TodoList.vue'
 import Main from '@/views/Main.vue'
 import MyPage from '@/views/MyPage.vue'
@@ -45,19 +45,17 @@ export default {
       this.is_modal_valid = false
     }
   }
-  
-  // Vue 인스턴스의 데이터와 메소드를 여기에 정의합니다.
 }
 </script>
 
 <style>
 /* 전체 앱 스타일링 */
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  /* text-align: center; */
-  color: #2c3e50;
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #2c3e50;
+    padding: 10px; /* 모바일 화면 패딩 추가 */
 }
 
 /* 상단 바 스타일링 */
@@ -87,6 +85,7 @@ export default {
   justify-content: space-around;
   background-color: #f3f3f3;
   padding: 10px 0;
+  z-index: 999;
 }
 
 

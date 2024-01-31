@@ -1,24 +1,40 @@
 <!-- MyPage.vue -->
 
 <template>
-    <div class="mypage">
-      <h1>My Page</h1>
-      <!-- 내용 추가 -->
+    <div class="mt-5">
+      <UserInfo :userData="userData" />
+      <SuccessRate :successRate="successRate" />
+      <GoalSuccessRate :goalRate="goalRate" />
     </div>
-  </template>
-  
-  <script>
-  export default {
-    name: 'MyPage',
-    // 필요한 데이터, 메서드 등을 추가할 수 있습니다.
-  }
-  </script>
-  
-  <style scoped>
-  /* 필요한 스타일링을 추가할 수 있습니다. */
-  .mypage {
-    padding: 20px;
-    background-color: #f3f3f3;
-  }
-  </style>
-  
+</template>
+
+<script>
+import UserInfo from '@/components/MyPage/UserInfo.vue'
+import SuccessRate from '@/components/MyPage/SuccessRate.vue'
+import GoalSuccessRate from '@/components/MyPage/GoalSuccessRate.vue'
+
+export default {
+components: {
+    UserInfo,
+    SuccessRate,
+    GoalSuccessRate,
+},
+data() {
+    return {
+    userData: null,
+    successRate: null,
+    goalRate: null,
+    };
+},
+mounted() {
+    this.fetchUserData();
+},
+methods: {
+    async fetchUserData() {
+    // 사용자 정보를 가져오는 비동기 함수
+    // 예: this.userData = await api.getUserData();
+    },
+}
+};
+</script>
+>>>>>>> 7ab7ce81c580c0d8f18a96ee52f74bba60d5af67
