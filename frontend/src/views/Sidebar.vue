@@ -17,7 +17,7 @@
           <div class="offcanvas-body">
             <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
               <li class="nav-item">
-                <RouterLink @click.native="closeSidebar" to="/calendar">캘린더1111</RouterLink>
+                <RouterLink @click.native="closeSidebar" to="/calendar">캘린더</RouterLink>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">캘린더</a>

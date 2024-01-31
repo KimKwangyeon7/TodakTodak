@@ -1,7 +1,6 @@
 <template>
     <!-- 모달 -->
-
-    <div class="black-bg" v-if="is_modal_valid">
+    <div class="black-bg"  v-if="is_modal_valid">
         <component :is="activeModal" @close-modal="closeModal" />
     </div>
 
@@ -108,9 +107,11 @@ export default {
 
 /* 할 일 목록 스타일링 */
 .todo-section {
-  background-color: #ecf0f1;
-  padding: 10px;
+  background-color: #EAF3F9; 
+  border-radius: 20px; 
+  padding: 15px;
   margin: 10px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
 }
 
 .todo-date {
@@ -153,9 +154,11 @@ div {
 }
 
 .black-bg {
-  width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0, 5);
-  position: fixed; padding: 20px;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* 투명한 검은색 배경 */
+  position: fixed;
+  padding: 20px;
 }
 
 .white-bg {

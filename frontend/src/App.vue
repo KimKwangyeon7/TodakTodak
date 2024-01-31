@@ -75,25 +75,6 @@ export default {
 
 
 /* 할 일 목록 스타일링 */
-.todo-section {
-  background-color: #ecf0f1;
-  padding: 10px;
-  margin: 10px 0;
-}
-
-.todo-date {
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.todo-item {
-  display: flex;
-  align-items: center;
-}
-
-.todo-item input[type="checkbox"] {
-  margin-right: 5px;
-}
 
 /* 하단 네비게이션 바 스타일링 */
 .bottom-nav {
