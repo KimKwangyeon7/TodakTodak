@@ -1,45 +1,20 @@
 <template>
-    <v-card class="mx-auto" max-width="500">
-      <!-- 상단에 카드 이미지 표시, 파일경로는 assets 기준 -->
-      <v-img src="../assets/img/push-image.jpg" height="200px">
-      </v-img>
-      <v-row align="center">
-        <v-col offset="1" cols="2">
-          <!-- 좌측에 푸시알림 아이콘 이미지 표시, 파일경로는 public 기준 -->
-          <v-img contain color="blue darken-2" src="../assets/img/push-noti.png" max-width="70px"></v-img>
-        </v-col>
-        <!-- 우측에 안내글 표시 -->
-        <v-col cols="8">
-          <v-card-title primary-title>
-            <h1 class="headline">졸업작품 전시회 푸시알림</h1>
-            <div class="body-1"> 졸업작품 전시회의 초청 푸시 알림을 보내려고 합니다.
-              [알림허용] 단추를 클릭하시면 알림 정보를 받으실 수
-              있습니다. </div>
-          </v-card-title>
-        </v-col>
-      </v-row>
-      <v-row align="center">
-        <v-col offset="1" cols="5">
-          <!-- 하단에 푸시알림 가입 버튼 표시 -->
-          <v-btn block large @click="fnPushSubscribe" color="orange" dark>
-            <v-icon dark left>add_alert</v-icon>
-            알림 허용
-          </v-btn>
-        </v-col>
-        <v-col cols="5">
-          <!-- 하단에 푸시알림 해제 버튼 표시 -->
-          <v-btn block large @click="fnUnSubscription" color="orange" dark>
-            <v-icon dark left>notifications_off</v-icon>
-            알림 해제
-          </v-btn>
-        </v-col>
-      </v-row>
-      <v-snackbar v-model="bMsg">
-        푸시알림이 해제되었습니다.
-        <v-btn color="orange" text @click="bMsg = false">닫기</v-btn>
-      </v-snackbar>
-    </v-card>
-  </template>
+  <div class="card">
+    <img src="../assets/img/push-image.jpg" alt="Push Image" class="card-img-top">
+
+    <div class="card-body">
+      <h1 class="card-title">C210</h1>
+      <p class="card-text">프론트 푸시 알람 구현. [알림허용] 단추를 클릭하시면 알림 정보를 받으실 수 있습니다.</p>
+      
+      <button class="btn btn-primary" @click="fnPushSubscribe">알림 허용</button>
+      <button class="btn btn-secondary" @click="fnUnSubscription">알림 해제</button>
+    </div>
+
+    <div v-if="bMsg" class="alert alert-info">
+      푸시알림이 해제되었습니다. <button @click="bMsg = false">닫기</button>
+    </div>
+  </div>
+</template>
   <script>
     // 파이어베이스에서 oC210inDB  객체 변수 가져옴
     import {
@@ -134,15 +109,15 @@
         },
         // 푸시 알림 메시지 준비 및 발송
         fnDisplayNotification() {
-          const title = '졸업작품 전시회'
+          const title = 'C210'
           const options = {
-            body: '새로운 소식 알림 서비스에 가입하신 것을 환영합니다!',
+            body: '프론트 푸시 알람 구현',
             icon: '/img/push-noti.png',
             badge: '/img/push-badge-icon.png',
             image: '/img/push-image.jpg',
             actions: [{
               action: 'like',
-              title: '커피를 좋아하시면 링크를 클릭하세요.',
+              title: '싸피 ㄱ?',
               icon: '/img/push-coffee.png'
             }],
             vibrate: [500, 100, 500]

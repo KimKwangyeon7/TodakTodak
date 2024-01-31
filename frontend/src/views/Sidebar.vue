@@ -5,77 +5,68 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <router-link to="/" class="navbar-brand mx-auto">Todak Todak</router-link>
+        <a class="navbar-brand mx-auto" href="#">토닥토닥</a>
         <button type="button" class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNotifications" aria-controls="offcanvasNotifications">
           알림
         </button>
-        <!-- 수정된 부분: Notifications 컴포넌트 추가 -->
-        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel" data-bs-toggle="offcanvas">
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
           <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasNavbarLabel">메뉴 전체보기</h5>
+            <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Todak</h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
           </div>
           <div class="offcanvas-body">
-            <router-link to="/goal" class="nav-link"><span class="emoji">🎯</span> 목표 만들기</router-link>
-            <router-link to="/calendar" class="nav-link"><span class="emoji">📅</span> 캘린더</router-link>
-            <router-link to="/meeting" class="nav-link"><span class="emoji">🤝</span> 모임</router-link>
-            <router-link to="/board" class="nav-link"><span class="emoji">📋</span> 게시판</router-link>
-            <router-link to="/Friend" class="nav-link"><span class="emoji">👫</span> 친구</router-link>
-            <router-link to="/habit" class="nav-link"><span class="emoji">🔄</span> 습관</router-link>
-            <router-link to="/voice" class="nav-link"><span class="emoji">🔊</span> 음성</router-link>
-            <router-link to="/mypage" class="nav-link"><span class="emoji">👤</span> 마이페이지</router-link>
+            <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+              <li class="nav-item">
+                <RouterLink @click.native="closeSidebar" to="/calendar">캘린더</RouterLink>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">캘린더</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">모임</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">게시판</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">친구</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">습관</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">마이페이지</a>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
     </nav>
-    
-    <!-- 수정된 부분: Notifications 컴포넌트 추가 -->
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNotifications" aria-labelledby="offcanvasNotificationsLabel" data-bs-toggle="offcanvas">
-      <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasNotificationsLabel">알림</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-      </div>
-      <div class="offcanvas-body">
-        <notifications></notifications>
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
-import Friend from '@/views/Friend.vue'
-import Notifications from '@/components/Notifications.vue'
+import Calendar from '@/views/Calendar.vue'
+
+import { RouterLink, RouterView } from 'vue-router'
 
 export default {
   name: 'Sidebar',
   components: {
-    Friend,
-    Notifications,
+    Calendar,
+    RouterView,
+    RouterLink,
   },
+  methods: {
+      // 변경된 부분: 페이지 이동 시 Sidebar를 닫는 메서드
+      closeSidebar() {
+        console.log('closeSidebar method called');
+        this.$root.$emit('bv::toggle::offcanvas', 'offcanvasNavbar');
+      },
+    },
 }
 </script>
 
 <style scoped>
-.offcanvas-title {
-  font-size: 35px;
-  font-weight: bold;
-  font-family: 'SOYOMapleBoldTTF';
-}
-
-.offcanvas-body {
-  font-size: 30px;
-  text-align: left;
-  font-family: 'SOYOMapleBoldTTF';
-}
-
-.offcanvas-body .emoji {
-  margin-right: 15px;
-}
-
-@font-face {
-  font-family: 'SOYOMapleBoldTTF';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2310@1.0/SOYOMapleBoldTTF.woff2') format('woff2');
-  font-weight: 700;
-  font-style: normal;
-}
+/* 여기에 컴포넌트의 스타일을 추가하세요 */
 </style>

@@ -15,14 +15,15 @@
 </template>
 
 <script>
-import Sidebar from '@/views/Sidebar.vue'
+import Sidebar from '@/components/Sidebar.vue'
 import TodoList from '@/views/TodoList.vue'
 import Main from '@/views/Main.vue'
-import Calendar from '@/views/Calendar.vue'
-import Friend from '@/views/Friend.vue'
 import MyPage from '@/views/MyPage.vue'
 
 import { RouterLink, RouterView } from 'vue-router'
+
+let today = new Date()
+console.log(today)
 
 export default {
   name: 'App',
@@ -35,8 +36,6 @@ export default {
     Sidebar,
     TodoList,
     Main,
-    Calendar,
-    Friend,
     MyPage,
     RouterView,
     RouterLink,
@@ -74,25 +73,6 @@ export default {
 
 
 /* 할 일 목록 스타일링 */
-.todo-section {
-  background-color: #ecf0f1;
-  padding: 10px;
-  margin: 10px 0;
-}
-
-.todo-date {
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.todo-item {
-  display: flex;
-  align-items: center;
-}
-
-.todo-item input[type="checkbox"] {
-  margin-right: 5px;
-}
 
 /* 하단 네비게이션 바 스타일링 */
 .bottom-nav {

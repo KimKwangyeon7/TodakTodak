@@ -1,3 +1,5 @@
+<!-- MyFriendList.vue -->
+
 <template>
   <div class="friend-list container mt-5">
     <!-- 검색 기능 -->
@@ -7,13 +9,12 @@
 
     <!-- 친구 리스트 -->
     <ul class="list-group">
-      <li v-for="friend in filteredFriends" :key="friend.id" class="list-group-item list-group-item-action bg-info text-white d-flex justify-content-between align-items-center" @click="showProfile(friend)">
+      <li v-for="friend in filteredFriends" :key="friend.id" class="list-group-item" @click="showProfile(friend)">
         <div class="friend-item" @click="showProfile(friend)">
           <img :src="friend.profilePicture" alt="프로필 이미지" class="profile-image mr-2">
           <span>{{ friend.name }}</span>
         </div>
         <div class="buttons">
-          <button class="btn btn-secondary btn-sm" @click.stop="showProfile(friend)">프로필 보기</button>
           <button class="btn btn-primary btn-sm" @click.stop="startChat(friend)">채팅</button>
         </div>
       </li>
@@ -41,54 +42,53 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      searchQuery: '',
-      friends: [
-        { id: 1, name: '김철수', age: 25 },
-        { id: 2, name: '김영희', age: 30 },
-        { id: 3, name: '김싸피', age: 28 },
-      ],
-      selectedFriend: null,
-    };
-  },
-  computed: {
-    filteredFriends() {
-      return this.friends.filter(friend =>
-        friend.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
-    },
-  },
-  methods: {
-    showProfile(friend) {
-      this.selectedFriend = friend;
-    },
-    resetSelectedFriend() {
-      this.selectedFriend = null;
-    },
-    startChat(friend) {
-      // 채팅을 시작하는 메소드를 구현할 수 있습니다.
-      console.log('채팅 시작:', friend.name);
-    },
-  },
+<script setup>
+import { ref, computed } from 'vue'
+
+const searchQuery = ref('');
+const friends = ref([
+  { id: 1, name: '김철수', age: 25 },
+  { id: 2, name: '김영희', age: 30 },
+  { id: 3, name: '김싸피', age: 28 },
+  { id: 4, name: '손흥민', age: 25 },
+  { id: 5, name: '봉준호', age: 30 },
+  { id: 6, name: '김준호', age: 28 },
+  { id: 7, name: '카리나', age: 25 },
+  { id: 8, name: '공유', age: 30 },
+  { id: 9, name: '황정민', age: 28 },
+]);
+
+const selectedFriend = ref(null);
+
+const filteredFriends = computed(() => {
+  return friends.value.filter(friend =>
+    friend.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
+});
+
+const showProfile = (friend) => {
+  selectedFriend.value = friend;
+};
+
+const resetSelectedFriend = () => {
+  selectedFriend.value = null;
+};
+
+const startChat = (friend) => {
+  // 채팅을 시작하는 메소드를 구현할 수 있습니다.
+  console.log('채팅 시작:', friend.name);
 };
 </script>
 
-<style>
+<style scoped>
 .friend-list {
   max-width: 100%;
   margin: auto;
 }
 
-.list-group-item {
-  border-color: #EAF3F9;
-}
-
 .modal-content {
-  background-color: #9EDBC5;
-  color: #fff;
+  background-color: #EAF3F9;
+  color: black;
 }
 
 .profile-image {
@@ -115,6 +115,12 @@ export default {
   border-color: #EAF3F9;
   position: relative;
   overflow: hidden;
+  background-color: #EAF3F9; /* Info색상에 대한 적절한 색상 코드 사용 */
+  color: black; /* 텍스트를 흰색으로 설정 */
+  margin-bottom: 10px;
+      border-radius: 24px;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .friend-item {

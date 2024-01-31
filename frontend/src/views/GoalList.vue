@@ -1,8 +1,9 @@
+<!-- TodoList.vue -->
 <template>
     <div class="modal-content">
       <button type="button" class="btn-close" aria-label="Close" @click="closeModal"></button>
-      <h4>TodoList 모달</h4>
-      <p>TodoList 모달</p>
+      <h4>목표 상세페이지</h4>
+      <p>목표 상세페이지 내용임</p>
     </div>
   </template>
   
@@ -17,7 +18,7 @@
   </script>
   
   <style scoped>
-  .modal-content {
+ .modal-content {
     background: #EAF3F9;
     border-radius: 8px;
     padding: 20px;
