@@ -52,7 +52,7 @@ export default {
 
 </script>
 
-<style>
+<style scoped>
 /* 전체 앱 스타일링 */
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;

@@ -14,7 +14,6 @@
                 <label for="roomTitle">방 제목:</label>
                 <input v-model="newRoom.title" type="text" class="form-control" id="roomTitle" required>
               </div>
-              <!-- 추가 필드 및 입력 폼은 필요에 따라 확장 가능 -->
               <button type="submit" class="btn btn-primary">추가</button>
             </form>
           </div>

@@ -1,6 +1,6 @@
 <template>
     <div class="notifications">
-      <h3>알림 리스트</h3>
+      <div class="notifications-title">알림</div>
       <ul>
         <li v-for="notification in notifications" :key="notification.id">
           {{ notification.message }}

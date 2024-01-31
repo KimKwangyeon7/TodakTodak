@@ -42,28 +42,25 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import Friend from '@/views/Friend.vue'
 import Notifications from '@/components/Notifications.vue'
 
-export default {
-  name: 'Sidebar',
-  components: {
-    Friend,
-    Notifications,
-  },
+const components = {
+  Friend,
+  Notifications,
 }
 </script>
 
 <style scoped>
 .offcanvas-title {
-  font-size: 35px;
+  font-size: 30px;
   font-weight: bold;
   font-family: 'SOYOMapleBoldTTF';
 }
 
 .offcanvas-body {
-  font-size: 30px;
+  font-size: 27px;
   text-align: left;
   font-family: 'SOYOMapleBoldTTF';
 }
