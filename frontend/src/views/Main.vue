@@ -1,4 +1,6 @@
 <template>
+  <div>
+
   <!-- 모달 -->
   <div class="black-bg" v-if="is_modal_valid">
     <component :is="activeModal" @close-modal="closeModal" />
@@ -46,6 +48,7 @@
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <script>
