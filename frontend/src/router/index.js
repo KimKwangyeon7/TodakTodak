@@ -7,6 +7,9 @@ import Meeting from '@/views/Meeting.vue'
 import MyPage from '@/views/MyPage.vue'
 import Voice from '@/views/Voice/Voice.vue'
 import VoiceTrainer from '@/views/Voice/VoiceTrainer.vue'
+import Notification from '@/components/Notifications.vue'
+import subscribe from '@/components/subscribe_page.vue'
+import pushnotify from '@/components/pushnotify_page.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -55,6 +58,16 @@ const router = createRouter({
 		path: '/voice/trainer',
 		name: 'VoiceTrainer',
 		component: VoiceTrainer
+	},
+	{
+		path: '/subscribe',
+		name: 'subscribe',
+		component: subscribe
+	},
+	{
+		path: '/pushnotify',
+		name: 'pushnotify',
+		component: pushnotify
 	}
   ]
 })
