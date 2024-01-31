@@ -18,8 +18,8 @@
 
 <script setup>
 import { ref, reactive, watch } from 'vue'
-import RoomCard from '@/components/RoomCard.vue'
-import CreateRoomModal from '@/components/CreateRoomModal.vue'
+import RoomCard from '@/components/Meeting/RoomCard.vue'
+import CreateRoomModal from '@/components/Meeting/CreateRoomModal.vue'
 
 const rooms = ref([
   { id: 1, title: '모임 방 1', currentMembers: 5, creationTime: new Date() },

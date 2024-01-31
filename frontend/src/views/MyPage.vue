@@ -1,19 +1,23 @@
 <template>
     <div class="mt-5">
       <UserInfo :userData="userData" />
+      <SuccessRate :successRate="successRate" />
     </div>
 </template>
 
 <script>
-import UserInfo from '@/components/UserInfo.vue';
+import UserInfo from '@/components/MyPage/UserInfo.vue'
+import SuccessRate from '@/components/MyPage/SuccessRate.vue'
 
 export default {
 components: {
     UserInfo,
+    SuccessRate
 },
 data() {
     return {
     userData: null,
+    successRate: null,
     };
 },
 mounted() {
