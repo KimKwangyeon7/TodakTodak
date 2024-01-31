@@ -9,7 +9,7 @@
   <!-- 명언 -->
   <div class="top-bar">
     <div class="quote">"행복은 우연이 아니라 선택이다"</div>
-    <div>짐 론</div>
+    <div>짐  론</div>
   </div>
 
   <!-- 투두리스트 -->
