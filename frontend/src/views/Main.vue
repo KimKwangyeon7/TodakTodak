@@ -14,7 +14,10 @@
   <div class="todo-section">
     <div class="todo-date">
       <span>{{ today }}</span>
+      <!-- Todo 생성버튼 -->
+      <button class="add-button" @click="openModal('AddTodo')">+</button>
     </div>
+
     <div class="todo-items">
       <div class="todo-item">
         <label @click="openModal('TodoList')" for="todo1">공부하기</label>
@@ -30,7 +33,7 @@
   <!-- 목표 -->
   <div class="todo-section">
     <div class="todo-date">
-     <div>목표</div>
+     <div style="margin-bottom: 5px; margin-top: 5px;">목표</div>
     </div>
     <div class="todo-items">
       <div class="todo-item">
@@ -49,6 +52,7 @@
 import Sidebar from '@/views/Sidebar.vue'
 import TodoList from '@/views/TodoList.vue'
 import GoalList from '@/views/GoalList.vue'
+import AddTodo from '@/views/AddTodo.vue'
 
 export default {
   name: 'App',
@@ -63,6 +67,7 @@ export default {
     Sidebar,
     TodoList,
     GoalList,
+    AddTodo,
   },
   methods: {
     openModal(component) {
@@ -123,11 +128,26 @@ export default {
   font-weight: bold;
   margin-bottom: 5px;
   text-align: left;
+  display: flex;
+  justify-content: space-between; /* 요일과 버튼을 각각 왼쪽과 오른쪽에 배치 */
+  align-items: center; /* 세로 중앙 정렬 */
 }
+
+.add-button {
+  font-size: 20px;
+  background-color: #EAF3F9;
+  color: #000; /* 검정색 텍스트 색상 */
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 5px; /* 내용물과 버튼 사이의 간격 조절을 위한 패딩 */
+}
+
 
 .todo-item {
   display: flex;
   align-items: center;
+  justify-content: space-between; /* 체크박스를 오른쪽으로 이동 */
 }
 
 .todo-item input[type="checkbox"] {

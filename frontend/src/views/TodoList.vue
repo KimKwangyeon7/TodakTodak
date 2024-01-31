@@ -1,8 +1,9 @@
 <template>
     <div class="modal-content">
+      <button type="button" class="btn-close" aria-label="Close" @click="closeModal"></button>
       <h4>TodoList 모달</h4>
       <p>TodoList 모달</p>
-      <button class="close-button" @click="closeModal">x</button>
+
     </div>
   </template>
   
