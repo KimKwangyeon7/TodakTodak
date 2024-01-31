@@ -1,6 +1,8 @@
+// router/index.js
 import { createRouter, createWebHistory } from 'vue-router'
 import Main from '@/views/Main.vue'
 import Goal from '@/views/GoalView.vue'
+import GoalList from '@/views/GoalList.vue'
 import Board from '@/views/Board.vue'
 import Calendar from '@/views/Calendar.vue'
 import Friend from '@/views/Friend.vue'
@@ -9,6 +11,8 @@ import Habit from '@/views/HabitView.vue'
 import MyPage from '@/views/MyPage.vue'
 import Voice from '@/views/Voice/Voice.vue'
 import VoiceTrainer from '@/views/Voice/VoiceTrainer.vue'
+import TodoList from '@/views/TodoList.vue'
+import CalendarDetail from '@/views/CalendarDetail.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -67,7 +71,18 @@ const router = createRouter({
 		path: '/voice/trainer',
 		name: 'VoiceTrainer',
 		component: VoiceTrainer
-	}
+	},
+  {
+    path: '/calendar/calendarDetail', // 추후 바꿀 예정
+    name: 'CalendarDetail',
+    component: CalendarDetail
+  },
+  {
+    path: '/goallist',
+    name: 'GoalList',
+    component: GoalList
+  },
+  
   ]
 })
 

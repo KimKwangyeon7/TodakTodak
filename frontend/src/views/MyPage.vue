@@ -1,3 +1,5 @@
+<!-- MyPage.vue -->
+
 <template>
     <div class="mt-5">
       <UserInfo :userData="userData" />
@@ -35,3 +37,4 @@ methods: {
 }
 };
 </script>
+>>>>>>> 7ab7ce81c580c0d8f18a96ee52f74bba60d5af67
