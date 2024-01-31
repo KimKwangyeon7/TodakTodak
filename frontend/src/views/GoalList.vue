@@ -19,8 +19,8 @@
   
   <style scoped>
  
-  .modal-content {
-    background: white;
+ .modal-content {
+    background: #EAF3F9;
     border-radius: 8px;
     padding: 20px;
   }

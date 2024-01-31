@@ -1,64 +1,62 @@
 <template>
-    <!-- 모달 -->
-    <div class="black-bg"  v-if="is_modal_valid">
-        <component :is="activeModal" @close-modal="closeModal" />
-    </div>
+  <!-- 모달 -->
+  <div class="black-bg" v-if="is_modal_valid">
+    <component :is="activeModal" @close-modal="closeModal" />
+  </div>
 
-    <!-- 명언 -->
-    <div class="top-bar">
-        <div class="quote">"행복은 우연이 아니라 선택이다"</div>
-        <div>짐 론</div>
+  <!-- 명언 -->
+  <div class="top-bar">
+    <div class="quote">"행복은 우연이 아니라 선택이다"</div>
+    <div>짐 론</div>
+  </div>
+
+  <!-- 투두리스트 -->
+  <div class="todo-section">
+    <div class="todo-date">
+      <span>{{ today }}</span>
     </div>
-    
-    <!-- 투두리스트 -->
-    <div class="todo-section"> 
-        <div class="todo-date">
-            <!-- <span>{{ today }}</span> -->
-        </div>
-        <div class="todo-items">
-            <div class="todo-item">
-                <label @click="openModal('TodoList')"  for="todo1">공부하기</label>
-                <input type="checkbox">
-            </div>
-            <div class="todo-item">
-                <label @click="openModal('TodoList')"  for="todo2">운동하기</label>
-                <input type="checkbox">
-            </div>
-        </div>
+    <div class="todo-items">
+      <div class="todo-item">
+        <label @click="openModal('TodoList')" for="todo1">공부하기</label>
+        <input type="checkbox">
+      </div>
+      <div class="todo-item">
+        <label @click="openModal('TodoList')" for="todo2">운동하기</label>
+        <input type="checkbox">
+      </div>
     </div>
-    <!-- 목표 -->
-    <div class="todo-section"> 
-        <div class="todo-date">
-            <!-- <span>{{ today }}</span> -->
-        </div>
-        <div class="todo-items">
-            <div class="todo-item">
-                <label @click="openModal('GoalList')"  for="todo1">약먹기</label>
-                <input type="checkbox">
-            </div>
-            <div class="todo-item">
-                <label @click="openModal('GoalList')"  for="todo2">밥먹기</label>
-                <input type="checkbox">
-            </div>
-        </div>
+  </div>
+
+  <!-- 목표 -->
+  <div class="todo-section">
+    <div class="todo-date">
+     <div>목표</div>
     </div>
+    <div class="todo-items">
+      <div class="todo-item">
+        <label @click="openModal('GoalList')" for="todo1">약먹기</label>
+        <input type="checkbox">
+      </div>
+      <div class="todo-item">
+        <label @click="openModal('GoalList')" for="todo2">밥먹기</label>
+        <input type="checkbox">
+      </div>
+    </div>
+  </div>
 </template>
-
 
 <script>
 import Sidebar from '@/views/Sidebar.vue'
 import TodoList from '@/views/TodoList.vue'
 import GoalList from '@/views/GoalList.vue'
 
-let today = new Date()
-console.log(today)
-
 export default {
   name: 'App',
   data() {
     return {
       is_modal_valid: false,
-      activeModal: null
+      activeModal: null,
+      today: '', // 현재 날짜를 저장할 데이터 속성 추가
     }
   },
   components: {
@@ -68,16 +66,23 @@ export default {
   },
   methods: {
     openModal(component) {
-        this.is_modal_valid = true
-        this.activeModal = component
+      this.is_modal_valid = true
+      this.activeModal = component
     },
     closeModal() {
       this.is_modal_valid = false
-      this.is_modal_valid = null
-    }
-  }
-  
-  // Vue 인스턴스의 데이터와 메소드를 여기에 정의합니다.
+      this.activeModal = null
+    },
+    updateToday() {
+      const now = new Date()
+      const options = { month: '2-digit', day: '2-digit',  weekday: 'long' }
+      this.today = now.toLocaleDateString('ko-KR', options)
+    },
+  },
+  mounted() {
+    // 컴포넌트가 화면에 나타날 때 현재 날짜 업데이트
+    this.updateToday()
+  },
 }
 </script>
 
@@ -117,6 +122,7 @@ export default {
 .todo-date {
   font-weight: bold;
   margin-bottom: 5px;
+  text-align: left;
 }
 
 .todo-item {
@@ -132,8 +138,8 @@ export default {
 .bottom-nav {
   position: fixed;
   bottom: 0;
-  left: 50%; /* 가운데 정렬을 위해 왼쪽 50%로 설정 */
-  transform: translateX(-50%); /* 가운데 정렬을 위한 변형 */
+  left: 50%;
+  transform: translateX(-50%);
   width: 100%;
   display: flex;
   justify-content: space-around;
@@ -141,28 +147,23 @@ export default {
   padding: 10px 0;
 }
 
-
-.nav-item {
-  padding: 5px 10px;
-}
-
-body {
-  margin: 0;
-}
-div {
-  box-sizing: border-box;
-}
-
+/* 모달 스타일링 */
 .black-bg {
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* 투명한 검은색 배경 */
+  background: rgba(0, 0, 0, 0.5);
   position: fixed;
-  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  top: 0;
+  left: 0;
 }
 
 .white-bg {
-  width: 100%; background: white;
+  width: 100%; 
+  background: white;
   border-radius: 8px;
   padding: 20px;
 }
