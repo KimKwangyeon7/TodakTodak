@@ -1,55 +1,85 @@
 <template>
-    <div id="app">
-        <Sidebar />
-        <!-- 명언 -->
-        <div class="top-bar">
+    <!-- 모달 -->
+
+    <div class="black-bg" v-if="is_modal_valid">
+        <component :is="activeModal" @close-modal="closeModal" />
+    </div>
+
+    <!-- 명언 -->
+    <div class="top-bar">
         <div class="quote">"행복은 우연이 아니라 선택이다"</div>
         <div>짐 론</div>
-        </div>
-
-        <!-- 투두리스트 -->
-        <div class="todo-section">
+    </div>
+    
+    <!-- 투두리스트 -->
+    <div class="todo-section"> 
         <div class="todo-date">
-            <span>{{ today }}</span>
+            <!-- <span>{{ today }}</span> -->
         </div>
         <div class="todo-items">
             <div class="todo-item">
-            <label for="todo1">할 일 추가하기</label>
-            <input type="checkbox" id="todo1">
+                <label @click="openModal('TodoList')"  for="todo1">공부하기</label>
+                <input type="checkbox">
             </div>
             <div class="todo-item">
-            <label for="todo2">쇼핑 가기</label>
-            <input type="checkbox" id="todo2">
+                <label @click="openModal('TodoList')"  for="todo2">운동하기</label>
+                <input type="checkbox">
             </div>
         </div>
-        </div>
-        <!-- 목표 -->
-        <div class="todo-section"> 
+    </div>
+    <!-- 목표 -->
+    <div class="todo-section"> 
         <div class="todo-date">
-            <span>{{ today }}</span>
+            <!-- <span>{{ today }}</span> -->
         </div>
         <div class="todo-items">
             <div class="todo-item">
-            <label for="todo1">약먹기</label>
-            <input type="checkbox" id="todo1">
+                <label @click="openModal('GoalList')"  for="todo1">약먹기</label>
+                <input type="checkbox">
             </div>
             <div class="todo-item">
-            <label for="todo2">박먹기</label>
-            <input type="checkbox" id="todo2">
+                <label @click="openModal('GoalList')"  for="todo2">밥먹기</label>
+                <input type="checkbox">
             </div>
-        </div>
         </div>
     </div>
 </template>
 
+
 <script>
+import Sidebar from '@/views/Sidebar.vue'
+import TodoList from '@/views/TodoList.vue'
+import GoalList from '@/views/GoalList.vue'
+
 let today = new Date()
 console.log(today)
 
 export default {
   name: 'App',
+  data() {
+    return {
+      is_modal_valid: false,
+      activeModal: null
+    }
+  },
+  components: {
+    Sidebar,
+    TodoList,
+    GoalList,
+  },
+  methods: {
+    openModal(component) {
+        this.is_modal_valid = true
+        this.activeModal = component
+    },
+    closeModal() {
+      this.is_modal_valid = false
+      this.is_modal_valid = null
+    }
+  }
+  
+  // Vue 인스턴스의 데이터와 메소드를 여기에 정의합니다.
 }
-
 </script>
 
 <style>
@@ -115,5 +145,22 @@ export default {
   padding: 5px 10px;
 }
 
+body {
+  margin: 0;
+}
+div {
+  box-sizing: border-box;
+}
 
+.black-bg {
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0, 5);
+  position: fixed; padding: 20px;
+}
+
+.white-bg {
+  width: 100%; background: white;
+  border-radius: 8px;
+  padding: 20px;
+}
 </style>

@@ -1,51 +1,48 @@
+// router/index.js
 import { createRouter, createWebHistory } from 'vue-router'
 import Main from '@/views/Main.vue'
-import Board from '@/views/Board.vue'
-import Calendar from '@/views/Calendar.vue'
-import Friend from '@/views/Friend.vue'
-import Meeting from '@/views/Meeting.vue'
+import TodoList from '@/views/TodoList.vue'
+import GoalList from '@/views/GoalList.vue'
 import MyPage from '@/views/MyPage.vue'
-import Voice from '@/components/Voice.vue'
+import Calendar from '@/views/Calendar.vue'
+import CalendarDetail from '@/views/CalendarDetail.vue'
+
+const routes = [
+  {
+    path: '/',
+    name: 'Main',
+    component: Main
+  },
+  {
+    path: '/todolist',
+    name: 'TodoList',
+    component: TodoList
+  },
+  {
+    path: '/goallist',
+    name: 'GoalList',
+    component: GoalList
+  },
+  {
+    path: '/mypage',
+    name: 'MyPage',
+    component: MyPage
+  },
+  {
+    path: '/calendar',
+    name: 'Calendar',
+    component: Calendar
+  },
+  {
+    path: '/calendar/calendarDetail', // 추후 바꿀 예정
+    name: 'CalendarDetail',
+    component: CalendarDetail
+  },
+]
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-	{
-		name: 'main',
-		path: '/main',
-		component: Main,
-	},
-    {
-		name: 'board',
-		path: '/board',
-		component: Board,
-	},
-    {
-		name: 'calendar',
-		path: '/calendar',
-		component: Calendar,
-	},
-    {
-		name: 'friend',
-		path: '/friend',
-		component: Friend,
-	},
-    {
-		name: 'meeting',
-		path: '/meeting',
-		component: Meeting,
-	},
-	{
-		name: 'mypage',
-		path: '/mypage',
-		component: MyPage,
-	},
-  {
-    name: 'voice',
-    path: '/voice',
-    component: Voice
-  }
-  ]
+  history: createWebHistory(),
+  routes
 })
 
 export default router

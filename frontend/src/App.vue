@@ -4,10 +4,10 @@
 
     <!-- 하단 네비게이션 바 -->
     <div class="bottom-nav">
-      <RouterLink to="/Main">Home</RouterLink>
-      <RouterLink to="/Calendar">Calendar</RouterLink>
-      <RouterLink to="/Friend">Chat</RouterLink>
-      <RouterLink to="/Meeting">Meeting</RouterLink>
+      <RouterLink to="/">Home</RouterLink>
+      <div class="nav-item">Calendar</div>
+      <div class="nav-item">Chat</div>
+      <div class="nav-item">Meeting</div>
       <RouterLink to="/mypage">MyPage</RouterLink>
     </div>
     <RouterView />
@@ -18,11 +18,12 @@
 import Sidebar from '@/views/Sidebar.vue'
 import TodoList from '@/views/TodoList.vue'
 import Main from '@/views/Main.vue'
-import Calendar from '@/views/Calendar.vue'
-import Friend from '@/views/Friend.vue'
 import MyPage from '@/views/MyPage.vue'
 
 import { RouterLink, RouterView } from 'vue-router'
+
+let today = new Date()
+console.log(today)
 
 export default {
   name: 'App',
@@ -35,8 +36,6 @@ export default {
     Sidebar,
     TodoList,
     Main,
-    Calendar,
-    Friend,
     MyPage,
     RouterView,
     RouterLink,
@@ -57,7 +56,7 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  /* text-align: center; */
   color: #2c3e50;
 }
 
