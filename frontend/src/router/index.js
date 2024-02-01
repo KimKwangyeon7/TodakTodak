@@ -11,6 +11,9 @@ import Habit from '@/views/HabitView.vue'
 import MyPage from '@/views/MyPage.vue'
 import Voice from '@/views/Voice/Voice.vue'
 import VoiceTrainer from '@/views/Voice/VoiceTrainer.vue'
+import Notification from '@/components/Notifications.vue'
+import subscribe from '@/components/subscribe_page.vue'
+import pushnotify from '@/components/pushnotify_page.vue'
 import TodoList from '@/views/TodoList.vue'
 import CalendarDetail from '@/views/CalendarDetail.vue'
 
@@ -71,6 +74,16 @@ const router = createRouter({
 		path: '/voice/trainer',
 		name: 'VoiceTrainer',
 		component: VoiceTrainer
+	},
+	{
+		path: '/subscribe',
+		name: 'subscribe',
+		component: subscribe
+	},
+	{
+		path: '/pushnotify',
+		name: 'pushnotify',
+		component: pushnotify
 	},
   {
     path: '/calendar/calendarDetail', // 추후 바꿀 예정
