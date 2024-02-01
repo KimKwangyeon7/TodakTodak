@@ -20,12 +20,15 @@
       <button class="add-button" @click="openModal('AddTodo')">+</button>
     </div>
     <div class="todo-items">
-      <div class="todo-item" v-for="(todo, index) in todoItems" :key="index">
-        <label @click="openModal('TodoDetail', todo)" for="todo1">{{ todo.title }}</label>
-        <input type="checkbox">
-      </div>
       <div class="todo-item">
         <label @click="openModal('TodoDetail')" for="todo2">운동하기</label>
+        <input type="checkbox">
+      </div>
+      <div class="todo-item" v-for="todo in todos" :key="todo.id">
+        <!-- class로 todo-content 만들어야 하지만 귀찮아서 안 만듦
+        어차피 속성값은 동일함 -->
+        <div class="color-bar" :style="{ backgroundColor: getGoalColor(todo) }"></div>
+        <span @click="openModal('TodoDetail', todo)" class="goal-content">{{ todo.todoTitle }}</span>
         <input type="checkbox">
       </div>
     </div>
@@ -54,13 +57,13 @@
       <input type="checkbox">
     </div>
     <button @click="clearGoals">테스트 차원에서 잠깐 목표 리셋 버튼 만듦</button>
-
   </div>
 </div>
 </template>
 
 <script>
 import { useGoalsStore } from '@/stores/goals' // Adjust the path if necessary
+import { useTodosStore } from '@/stores/todos'
 
 
 import Sidebar from '@/views/Sidebar.vue'
@@ -76,6 +79,10 @@ export default {
     goals() {
       const goalsStore = useGoalsStore();
       return goalsStore.goals;
+    },
+    todos() {
+      const todosStore = useTodosStore();
+      return todosStore.todos;
     }
   },
   data() {
@@ -103,19 +110,29 @@ export default {
       this.is_modal_valid = false
       this.activeModal = null
     },
+    // 김요한: addTodo.vue에서도 날짜를 가지고 오는 게 있는데,
+    // 날짜 가져오는 것 관련해서 의논이 필요할 것 같습니다.
     updateToday() {
       const now = new Date()
       const options = { month: '2-digit', day: '2-digit',  weekday: 'long' }
       this.today = now.toLocaleDateString('ko-KR', options)
     },
-    addTodo(newTodo) {
-      // 실제로는 여기에서 데이터베이스에 저장하거나 상태를 업데이트하는 등의 로직을 수행
-      this.todoItems.push(newTodo);
+    // addTodo(newTodo) {
+    //   // 실제로는 여기에서 데이터베이스에 저장하거나 상태를 업데이트하는 등의 로직을 수행
+    //   this.todoItems.push(newTodo);
+    // },
+    getGoalColor(todo) {
+      const goalsStore = useGoalsStore();
+      const goal = goalsStore.goals.find(g => g.id === todo.goalId);
+      return goal ? goal.color : 'defaultColor'; // Replace 'defaultColor' with a fallback color
     },
     clearGoals() {
       const goalsStore = useGoalsStore();
+      const todosStore = useTodosStore();
       goalsStore.resetGoals();
+      todosStore.resetGoals();
       localStorage.removeItem('my_goals'); // Clear persisted state if necessary
+      localStorage.removeItem('my_todos'); // Clear persisted state if necessary
     },
   },
   mounted() {

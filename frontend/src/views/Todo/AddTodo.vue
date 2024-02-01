@@ -16,7 +16,6 @@
         </select>
       </div>
 
-
       <!-- 제목 입력 -->
       <div class="form-group">
         <label for="todoTitle">제목:</label>
@@ -55,14 +54,14 @@
         <div class="custom-control custom-switch">
           
           <div class="form-check form-switch">
-            <input v-model="alarm" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
+            <input v-model="isAlarm" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
             <label class="form-check-label" for="flexSwitchCheckChecked"></label>
           </div>
         </div>
       </div>
 
       <!-- 알람 시간 입력 -->
-      <div class="form-group" v-if="alarm">
+      <div class="form-group" v-if="isAlarm">
         <label for="time">알람 시간:</label>
         <input v-model="time" type="time" id="alarmTime" class="form-control">
       </div>
@@ -82,14 +81,19 @@ import { useGoalsStore } from '@/stores/goals';
 export default {
   data() {
     return {
-      goalId: '',
+      // todo-list
+      selectedGoal: '',
       todoTitle: '',
       todoContent: '',
       todoDate: '',
       isImportant: false,
+      // alarm(알람 설정할 때만 필요한 영역)
+      isAlarm: '',
+      day: '',
+      time: '',
       isOutside: false,
-      alarm: '',
-      alarmTime: '',
+      isChecked: false,
+      isCompleted: false,
     };
   },
   computed: {
@@ -108,12 +112,19 @@ export default {
 
       // 우선 오늘 날짜로 테스트
       const currentDate = new Date();
-      const year = currentDate.getFullYear();
-      const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 1을 더하고 2자리로 만듭니다.
-      const day = String(currentDate.getDate()).padStart(2, '0'); // 날짜를 2자리로 만듭니다.
-      const eightDigitDate = `${year}${month}${day}`;
-      
+      const yyyy = currentDate.getFullYear();
+      const mm = String(currentDate.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 1을 더하고 2자리로 만듭니다.
+      const dd = String(currentDate.getDate()).padStart(2, '0'); // 날짜를 2자리로 만듭니다.
+      const eightDigitDate = `${yyyy}${mm}${dd}`;
+
+      // 알람에 넣을 요일(알람 설정 하지 않으면 불필요한 영역)
+      const days = [0, 1, 2, 3, 4, 5, 6] // 원래는 0이 일요일
+      // 이렇게 하여 0을 월요일로 바꿈
+      const day = (currentDate.getDay() + 6) % 7
+
+      // todos 배열에 넣기
       todosStore.addTodo({ 
+        goalId: this.selectedGoal.id,
         todoTitle: this.todoTitle,
         todoContent: this.todoContent,
         todoDate: eightDigitDate,

@@ -1,5 +1,5 @@
 <template>
-    <div class="modal-content" style="border-radius: 10px;">
+  <div class="modal-content" style="border-radius: 10px;">
         <form @submit.prevent="submitGoal">
             <!-- Goal Content Input -->
             <div class="form-group">
