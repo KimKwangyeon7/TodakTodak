@@ -19,57 +19,79 @@
       <!-- Todo 생성버튼 -->
       <button class="add-button" @click="openModal('AddTodo')">+</button>
     </div>
-
     <div class="todo-items">
-      <div class="todo-item">
-        <label @click="openModal('TodoList')" for="todo1">공부하기</label>
+      <div class="todo-item" v-for="(todo, index) in todoItems" :key="index">
+        <label @click="openModal('TodoDetail', todo)" for="todo1">{{ todo.title }}</label>
         <input type="checkbox">
       </div>
       <div class="todo-item">
-        <label @click="openModal('TodoList')" for="todo2">운동하기</label>
+        <label @click="openModal('TodoDetail')" for="todo2">운동하기</label>
         <input type="checkbox">
       </div>
     </div>
   </div>
-
+  
   <!-- 목표 -->
+  <!-- 원래 목표는 todo 말고 goal이라고 속성값을 따로 해야 하는데, 
+    어차피 동일한 것이고 귀찮으니 todo로 유지 -->
   <div class="todo-section">
     <div class="todo-date">
      <div style="margin-bottom: 5px; margin-top: 5px;">목표</div>
     </div>
     <div class="todo-items">
       <div class="todo-item">
-        <label @click="openModal('GoalList')" for="todo1">약먹기</label>
+        <label @click="openModal('GoaDetail')" for="todo1">약먹기</label>
         <input type="checkbox">
       </div>
       <div class="todo-item">
-        <label @click="openModal('GoalList')" for="todo2">밥먹기</label>
+        <label @click="openModal('GoalDetail')" for="todo2">밥먹기</label>
         <input type="checkbox">
       </div>
     </div>
+    <div class="todo-item" v-for="goal in goals" :key="goal.id">
+      <div class="color-circle" :style="{ backgroundColor: goal.color }"></div>
+      <span @click="openModal('GoalDetail', goal)" class="goal-content">{{ goal.goalContent }}</span>
+      <input type="checkbox">
+    </div>
+    <button @click="clearGoals">테스트 차원에서 잠깐 목표 리셋 버튼 만듦</button>
+
   </div>
 </div>
 </template>
 
 <script>
+import { useGoalsStore } from '@/stores/goals' // Adjust the path if necessary
+
+
 import Sidebar from '@/views/Sidebar.vue'
-import TodoList from '@/views/TodoList.vue'
-import GoalList from '@/views/GoalList.vue'
-import AddTodo from '@/views/AddTodo.vue'
+import TodoList from '@/views/Todo/TodoList.vue'
+import TodoDetail from '@/views/Todo/TodoDetail.vue'
+import GoalList from '@/views/Goal/GoalList.vue'
+import GoalDetail from '@/views/Goal/GoalDetail.vue'
+import AddTodo from '@/views/Todo/AddTodo.vue'
 
 export default {
   name: 'App',
+  computed: {
+    goals() {
+      const goalsStore = useGoalsStore();
+      return goalsStore.goals;
+    }
+  },
   data() {
     return {
       is_modal_valid: false,
       activeModal: null,
       today: '', // 현재 날짜를 저장할 데이터 속성 추가
+      todoItems: []
     }
   },
   components: {
     Sidebar,
-    TodoList,
     GoalList,
+    GoalDetail,
+    TodoList,
+    TodoDetail,
     AddTodo,
   },
   methods: {
@@ -85,6 +107,15 @@ export default {
       const now = new Date()
       const options = { month: '2-digit', day: '2-digit',  weekday: 'long' }
       this.today = now.toLocaleDateString('ko-KR', options)
+    },
+    addTodo(newTodo) {
+      // 실제로는 여기에서 데이터베이스에 저장하거나 상태를 업데이트하는 등의 로직을 수행
+      this.todoItems.push(newTodo);
+    },
+    clearGoals() {
+      const goalsStore = useGoalsStore();
+      goalsStore.resetGoals();
+      localStorage.removeItem('my_goals'); // Clear persisted state if necessary
     },
   },
   mounted() {
@@ -184,10 +215,27 @@ export default {
   left: 0;
 }
 
-.white-bg {
-  width: 100%; 
-  background: white;
-  border-radius: 8px;
-  padding: 20px;
+.color-bar {
+  width: 5px; /* Adjust the width of the color bar */
+  height: 15px; /* Adjust the height of the color bar */
+  margin-right: 10px; /* Space between the bar and the content */
+}
+
+.color-circle{
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 10px;
+  display: inline-block;
+}
+
+.goal-content {
+  flex-grow: 1;
+  text-align: left;
+  margin-right: 10px; /* Space before the checkbox */
+}
+
+input[type="checkbox"] {
+  margin-left: auto; /* Push the checkbox to the far right */
 }
 </style>

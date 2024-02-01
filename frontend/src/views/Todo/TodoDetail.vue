@@ -1,8 +1,8 @@
 <template>
     <div class="modal-content">
       <button type="button" class="btn-close" aria-label="Close" @click="closeModal"></button>
-      <h4>TodoList 모달</h4>
-      <p>TodoList 모달</p>
+      <h4>TodoDetail 모달</h4>
+      <p>TodoDetail 모달</p>
     </div>
   </template>
   
