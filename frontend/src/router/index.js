@@ -16,6 +16,7 @@ import subscribe from '@/components/subscribe_page.vue'
 import pushnotify from '@/components/pushnotify_page.vue'
 import TodoList from '@/views/TodoList.vue'
 import CalendarDetail from '@/views/CalendarDetail.vue'
+import FriendProfile from '@/components/Friend/FriendProfile.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -95,7 +96,10 @@ const router = createRouter({
     name: 'GoalList',
     component: GoalList
   },
-  
+  {
+	path: '/friend-profile',
+	component: FriendProfile
+  }
   ]
 })
 

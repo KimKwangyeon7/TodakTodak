@@ -1,5 +1,3 @@
-<!-- MyFriendList.vue -->
-
 <template>
   <div class="friend-list container mt-5">
     <!-- 검색 기능 -->
@@ -21,29 +19,34 @@
     </ul>
 
     <!-- 친구 프로필 모달 -->
-    <div v-if="selectedFriend" class="modal fade show" tabindex="-1" role="dialog" @click="resetSelectedFriend">
-      <div class="modal-background">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">친구 프로필</h5>
-              <button type="button" class="close" data-dismiss="modal" @click="resetSelectedFriend">
-                <span>&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <p><strong>이름:</strong> {{ selectedFriend.name }}</p>
-              <p><strong>나이:</strong> {{ selectedFriend.age }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <router-view @close="resetSelectedFriend" />
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
+
+import FriendProfile from '@/components/Friend/FriendProfile.vue';
+
+const router = useRouter()
+
+const showProfile = (friend) => {
+  // 모달 대신 페이지로 전환
+  const route = {
+    path: '/friend-profile',
+    component: FriendProfile,
+    props: { friend },
+  };
+
+  // Vue Router를 사용하여 페이지 전환
+  router.push(route);
+};
+
+const resetSelectedFriend = () => {
+  // 친구 프로필 페이지 닫기
+  router.push('/friend');
+};
 
 const searchQuery = ref('');
 const friends = ref([
@@ -65,14 +68,6 @@ const filteredFriends = computed(() => {
     friend.name.toLowerCase().includes(searchQuery.value.toLowerCase())
   );
 });
-
-const showProfile = (friend) => {
-  selectedFriend.value = friend;
-};
-
-const resetSelectedFriend = () => {
-  selectedFriend.value = null;
-};
 
 const startChat = (friend) => {
   // 채팅을 시작하는 메소드를 구현할 수 있습니다.

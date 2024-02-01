@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div class="mt-5">
     <Sidebar />
 
     <!-- 하단 네비게이션 바 -->
@@ -55,7 +55,6 @@ export default {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
-    padding: 10px; /* 모바일 화면 패딩 추가 */
 }
 
 /* 상단 바 스타일링 */
