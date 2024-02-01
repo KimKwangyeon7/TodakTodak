@@ -72,16 +72,16 @@ const router = createRouter({
 		name: 'VoiceTrainer',
 		component: VoiceTrainer
 	},
-  {
-    path: '/calendar/calendarDetail', // 추후 바꿀 예정
-    name: 'CalendarDetail',
-    component: CalendarDetail
-  },
-  {
-    path: '/goallist',
-    name: 'GoalList',
-    component: GoalList
-  },
+	{
+		path: '/calendar-detail/:selectedDate',
+		name: 'CalendarDetail',
+		component: CalendarDetail
+	},
+	{
+		path: '/goallist',
+		name: 'GoalList',
+		component: GoalList
+	},
   
   ]
 })
