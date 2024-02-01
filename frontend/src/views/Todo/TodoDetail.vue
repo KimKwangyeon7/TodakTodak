@@ -3,11 +3,18 @@
       <button type="button" class="btn-close" aria-label="Close" @click="closeModal"></button>
       <h4>TodoDetail 모달</h4>
       <p>TodoDetail 모달</p>
+      <p>{{ item.todoTitle }}</p>
     </div>
   </template>
   
   <script>
   export default {
+    props: {
+      item: {
+        type: Object,
+        required: true
+      }
+    },
     methods: {
       closeModal() {
         this.$emit('close-modal');

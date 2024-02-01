@@ -3,7 +3,7 @@
 
   <!-- 모달 -->
   <div class="black-bg" v-if="is_modal_valid">
-    <component :is="activeModal" @close-modal="closeModal" />
+    <component :is="activeModal" :item="currentItem" @close-modal="closeModal" />
   </div>
 
   <!-- 명언 -->
@@ -20,15 +20,12 @@
       <button class="add-button" @click="openModal('AddTodo')">+</button>
     </div>
     <div class="todo-items">
-      <div class="todo-item">
-        <label @click="openModal('TodoDetail')" for="todo2">운동하기</label>
-        <input type="checkbox">
-      </div>
       <div class="todo-item" v-for="todo in todos" :key="todo.id">
         <!-- class로 todo-content 만들어야 하지만 귀찮아서 안 만듦
         어차피 속성값은 동일함 -->
         <div class="color-bar" :style="{ backgroundColor: getGoalColor(todo) }"></div>
         <span @click="openModal('TodoDetail', todo)" class="goal-content">{{ todo.todoTitle }}</span>
+        <!-- <p v-if="item">{{ item.goalContent || item.todoTitle }}</p> -->
         <input type="checkbox">
       </div>
     </div>
@@ -41,19 +38,10 @@
     <div class="todo-date">
      <div style="margin-bottom: 5px; margin-top: 5px;">목표</div>
     </div>
-    <div class="todo-items">
-      <div class="todo-item">
-        <label @click="openModal('GoaDetail')" for="todo1">약먹기</label>
-        <input type="checkbox">
-      </div>
-      <div class="todo-item">
-        <label @click="openModal('GoalDetail')" for="todo2">밥먹기</label>
-        <input type="checkbox">
-      </div>
-    </div>
     <div class="todo-item" v-for="goal in goals" :key="goal.id">
       <div class="color-circle" :style="{ backgroundColor: goal.color }"></div>
       <span @click="openModal('GoalDetail', goal)" class="goal-content">{{ goal.goalContent }}</span>
+      <!-- <p v-if="item">{{ item.goalContent || item.todoTitle }}</p> -->
       <input type="checkbox">
     </div>
     <button @click="clearGoals">테스트 차원에서 잠깐 목표 리셋 버튼 만듦</button>
@@ -90,7 +78,8 @@ export default {
       is_modal_valid: false,
       activeModal: null,
       today: '', // 현재 날짜를 저장할 데이터 속성 추가
-      todoItems: []
+      // todoItems: [],
+      currentItem: null,
     }
   },
   components: {
@@ -102,9 +91,10 @@ export default {
     AddTodo,
   },
   methods: {
-    openModal(component) {
+    openModal(component, itemData) {
       this.is_modal_valid = true
       this.activeModal = component
+      this.currentItem = itemData; // This can be a goal or a todo
     },
     closeModal() {
       this.is_modal_valid = false

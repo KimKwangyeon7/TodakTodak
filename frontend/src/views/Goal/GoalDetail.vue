@@ -1,13 +1,21 @@
 <template>
   <div class="modal-content">
     <button type="button" class="btn-close" aria-label="Close" @click="closeModal"></button>
-    <h4>GoalDetail 모달</h4>
-    <p>GoalDetail 모달</p>
+    <p>목표: {{ item.goalContent }}</p>
+    <p>관련 투두리스트:</p>
   </div>
 </template>
 
 <script>
+//import 
+
 export default {
+  props: {
+    item: {
+      type: Object,
+      required: true
+    }
+  },
   methods: {
     closeModal() {
       this.$emit('close-modal');
