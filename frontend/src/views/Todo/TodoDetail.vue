@@ -3,7 +3,10 @@
       <button type="button" class="btn-close" aria-label="Close" @click="closeModal"></button>
       <h4>TodoDetail 모달</h4>
       <p>TodoDetail 모달</p>
-      <p>{{ item.todoTitle }}</p>
+      <p> 제목: {{ item.todoTitle }}</p>
+      <p> 내용: {{ item.todoContent }}</p>
+      <p> 외출 여부: {{ item.isOutside }}</p>
+      <p> 알람 시간: {{ item.time }}</p>
     </div>
   </template>
   

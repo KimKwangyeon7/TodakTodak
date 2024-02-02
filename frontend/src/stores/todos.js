@@ -16,6 +16,7 @@ export const useTodosStore = defineStore({
     addTodo(newTodo) {
       const todoWithId = { id: this.nextId++, ...newTodo }; // Assign an ID to the new goal
       this.todos.push(todoWithId);
+      console.log('todoWithId',todoWithId.id)
     },
 
     logTodos() {
@@ -24,17 +25,30 @@ export const useTodosStore = defineStore({
       });
     },
 
+    findId(objectTitle) {
+      let i = null
+      const todosArr = this.todos
+      for (let j = 1; j <= todosArr.length; j++) {
+        if (todosArr[j] && todosArr[j].todoTitle === objectTitle){
+          i = j
+          break
+        }
+      }
+      return todosArr[i].id
+    },
+
     resetTodos() {
       this.todos = []; // Reset the goals array to an empty array
       this.nextId = 1; // Reset the ID as well
     },
   },
+
   persist: {
     enabled: true,
     strategies: [
       {
         key: 'my_todos',
-        storage: sessionStorage, // Or localStorage if you want persistence across sessions
+        storage: localStorage, // Or localStorage if you want persistence across sessions
       },
     ],
   }

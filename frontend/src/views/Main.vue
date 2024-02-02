@@ -61,7 +61,10 @@ import GoalList from '@/views/Goal/GoalList.vue'
 import GoalDetail from '@/views/Goal/GoalDetail.vue'
 import AddTodo from '@/views/Todo/AddTodo.vue'
 
+
+
 export default {
+
   name: 'App',
   computed: {
     goals() {
@@ -91,10 +94,23 @@ export default {
     AddTodo,
   },
   methods: {
-    openModal(component, itemData) {
-      this.is_modal_valid = true
-      this.activeModal = component
-      this.currentItem = itemData; // This can be a goal or a todo
+    openModal(component, itemData = null) {
+
+      // Assuming the goals are related to todos, check if there are any goals when opening a TodoDetail
+      if (component === 'AddTodo') {
+        const goalsStore = useGoalsStore();
+
+        // Now check if there are no goals
+        if (goalsStore.goals.length === 0) {
+          alert('최소 한 가지 목표를 먼저 설정하세요 :)');
+          return; // Exit the function early if there are no goals
+        }
+      }
+
+      // If all checks pass, then proceed to open the modal
+      this.is_modal_valid = true;
+      this.activeModal = component;https://lab.ssafy.com/s10-webmobile1-sub2/S10P12C210/-/blob/back/src/main/java/com/ssafy/todak/goal/controller/GoalController.java?ref_type=heads
+      this.currentItem = itemData;
     },
     closeModal() {
       this.is_modal_valid = false
@@ -120,7 +136,7 @@ export default {
       const goalsStore = useGoalsStore();
       const todosStore = useTodosStore();
       goalsStore.resetGoals();
-      todosStore.resetGoals();
+      todosStore.resetTodos();
       localStorage.removeItem('my_goals'); // Clear persisted state if necessary
       localStorage.removeItem('my_todos'); // Clear persisted state if necessary
     },

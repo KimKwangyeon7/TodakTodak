@@ -31,7 +31,7 @@ export const useGoalsStore = defineStore({
     strategies: [
       {
         key: 'my_goals',
-        storage: sessionStorage, // Or localStorage if you want persistence across sessions
+        storage: localStorage, // Or localStorage if you want persistence across sessions
       },
     ],
   }

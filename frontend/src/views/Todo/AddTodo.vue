@@ -54,21 +54,19 @@
         <div class="custom-control custom-switch">
           
           <div class="form-check form-switch">
-            <input v-model="isAlarm" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
+            <input v-model="isAlarmed" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
             <label class="form-check-label" for="flexSwitchCheckChecked"></label>
           </div>
         </div>
       </div>
 
       <!-- 알람 시간 입력 -->
-      <div class="form-group" v-if="isAlarm">
+      <div class="form-group" v-if="isAlarmed">
         <label for="time">알람 시간:</label>
-        <input v-model="time" type="time" id="alarmTime" class="form-control">
+        <input v-model="time" type="time" id="time" class="form-control">
       </div>
 
-      <form @submit.prevent="submitTodo">
-        <button type="submit" class="btn btn-primary" @click="submitTodo">저장</button>
-      </form>
+      <button type="submit" class="btn btn-primary" @click="submitTodo">저장</button>
     </form>
   </div>
 </template>
@@ -76,19 +74,22 @@
 <script>
 import { useTodosStore } from '@/stores/todos';
 import { useGoalsStore } from '@/stores/goals';
+import { useAlarmsStore } from '@/stores/alarm';
 
 
 export default {
+
   data() {
     return {
       // todo-list
       selectedGoal: '',
+      todoId: '',
       todoTitle: '',
       todoContent: '',
       todoDate: '',
       isImportant: false,
       // alarm(알람 설정할 때만 필요한 영역)
-      isAlarm: '',
+      isAlarmed: false,
       day: '',
       time: '',
       isOutside: false,
@@ -100,47 +101,87 @@ export default {
     goals() {
       const goalsStore = useGoalsStore()
       return goalsStore.goals
-    }
-  },
-  methods: {
-    closeModal() {
-      this.$emit('close-modal');
     },
-    submitTodo() {
-
-      const todosStore = useTodosStore()
-
+    eightDigitDate() {
       // 우선 오늘 날짜로 테스트
       const currentDate = new Date();
       const yyyy = currentDate.getFullYear();
       const mm = String(currentDate.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 1을 더하고 2자리로 만듭니다.
       const dd = String(currentDate.getDate()).padStart(2, '0'); // 날짜를 2자리로 만듭니다.
-      const eightDigitDate = `${yyyy}${mm}${dd}`;
+      const curDate= `${yyyy}${mm}${dd}`;
+      return curDate
+    },
+    formattedTime() {
+      if (this.time) {
+        // Split the time by colon
+        const [hours, minutes] = this.time.split(':');
+        // Convert the hours part to an integer
+        const hoursInt = parseInt(hours, 10);
+        // Determine the period of the day
+        const period = hoursInt >= 12 ? 'PM' : 'AM';
+        // Convert to 12-hour format
+        const formattedHours = ((hoursInt + 11) % 12 + 1);
+        // Return the formatted time
+        return `${formattedHours}:${minutes} ${period}`;
+      }
+      return '';
+    },
+  },
+  methods: {
+    closeModal() {
+      this.$emit('close-modal');
+    },
 
-      // 알람에 넣을 요일(알람 설정 하지 않으면 불필요한 영역)
-      const days = [0, 1, 2, 3, 4, 5, 6] // 원래는 0이 일요일
-      // 이렇게 하여 0을 월요일로 바꿈
-      const day = (currentDate.getDay() + 6) % 7
-
+    submitTodo() {
+      const todosStore = useTodosStore()
       // todos 배열에 넣기
+
+      console.log(todosStore)
+
       todosStore.addTodo({ 
         goalId: this.selectedGoal.id,
         todoTitle: this.todoTitle,
         todoContent: this.todoContent,
-        todoDate: eightDigitDate,
-        isImportant: this.isImportant, })
+        todoDate: this.eightDigitDate,
+        isImportant: this.isImportant,
+        time: this.formattedTime
+      });
+
       console.log(todosStore)
-      this.closeModal()    
-    },
-    // setAlarm() {
-    // const newAlarm = {
-    //   todoTitle: this.todoTitle,
-    //   todoContent: this.todoContent,
-    //   isOutside: this.isOutside,
-    //   alarm: this.alarm,
-    //   alarmTime: this.alarmTime,
-    // }
-  }
+
+      if (this.isAlarmed) {
+
+        // todoId
+        this.todoId = todosStore.findId(this.todoTitle);
+
+        // day 
+        const currentDate = new Date(this.eightDigitDate)
+        this.day = (currentDate.getDay() + 6) % 7 // 이렇게 하여 0을 월요일로 바꿈
+
+        // time
+        const setTime = this.formattedTime
+        this.time = setTime.hours + setTime.minutes
+      }
+
+      const alarmsStore = useAlarmsStore()
+
+      console.log(alarmsStore)
+
+      alarmsStore.addAlarm({
+        todoId: this.todoId,
+        day: this.day,
+        time: this.time,
+        isOutside: this.isOutside,
+        isAlarmed: this.isAlarmed,
+        isChecked: this.isChecked,
+        isCompleted: this.isCompleted,
+      }) 
+
+      console.log(alarmsStore)
+      this.closeModal() 
+
+    }
+  }  
 }
 </script>
 
