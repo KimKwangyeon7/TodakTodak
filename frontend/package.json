@@ -2,20 +2,32 @@
   "name": "frontend",
   "version": "0.0.0",
   "private": true,
-  "type": "module",
   "scripts": {
-    "dev": "vite",
     "build": "vite build",
+    "dev": "vite",
+    "serve": "vite serve",
+    "web-push": "web-push",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.2",
+    "firebase": "^10.7.2",
+    "firebase-tools": "^13.1.0",
     "pinia": "^2.1.7",
-    "vue": "^3.3.11",
-    "vue-router": "^4.2.5"
+    "register-service-worker": "^1.7.2",
+    "socket.io-client": "^4.7.4",
+    "v-calendar": "^3.1.2",
+    "vite-plugin-pwa": "^0.17.5",
+    "vue": "^3.4.15",
+    "vue-router": "^4.2.5",
+    "vue-socket": "^0.2.3",
+    "vuefire": "^3.1.22",
+    "web-push": "^3.6.7"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.5.2",
     "vite": "^5.0.10"
-  }
+  },
+  "type": "module"
 }
