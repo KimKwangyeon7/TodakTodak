@@ -4,7 +4,7 @@
     <div class="modal-title">
       <button type="button" class="btn-close" aria-label="Close" @click="closeModal"></button>
     </div>
-    <form @submit.prevent="submitTodo">
+    <form>
 
       <!-- 상속 목표 -->
       <div class="form-group">
@@ -74,7 +74,7 @@
 <script>
 import { useTodosStore } from '@/stores/todos';
 import { useGoalsStore } from '@/stores/goals';
-import { useAlarmsStore } from '@/stores/alarm';
+import { useAlarmsStore } from '@/stores/alarms';
 
 
 export default {
@@ -102,8 +102,13 @@ export default {
       const goalsStore = useGoalsStore()
       return goalsStore.goals
     },
-    eightDigitDate() {
-      // 우선 오늘 날짜로 테스트
+  },
+  methods: {
+    closeModal() {
+      this.$emit('close-modal');
+    },
+
+    eightDigitDate(d) {
       const currentDate = new Date();
       const yyyy = currentDate.getFullYear();
       const mm = String(currentDate.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 1을 더하고 2자리로 만듭니다.
@@ -111,74 +116,65 @@ export default {
       const curDate= `${yyyy}${mm}${dd}`;
       return curDate
     },
-    formattedTime() {
-      if (this.time) {
-        // Split the time by colon
-        const [hours, minutes] = this.time.split(':');
-        // Convert the hours part to an integer
-        const hoursInt = parseInt(hours, 10);
-        // Determine the period of the day
-        const period = hoursInt >= 12 ? 'PM' : 'AM';
-        // Convert to 12-hour format
-        const formattedHours = ((hoursInt + 11) % 12 + 1);
-        // Return the formatted time
-        return `${formattedHours}:${minutes} ${period}`;
-      }
-      return '';
-    },
-  },
-  methods: {
-    closeModal() {
-      this.$emit('close-modal');
+
+    // formattedTime(t) {
+    //   if (this.time) {
+    //     const [hours, minutes] = this.t.split(':');
+    //     const hoursInt = parseInt(hours, 10);
+    //     const period = hoursInt >= 12 ? 'PM' : 'AM';
+    //     const formattedHours = ((hoursInt + 11) % 12 + 1);
+    //     console.log(`${formattedHours}:${minutes} ${period}`)
+    //     return `${formattedHours}:${minutes} ${period}`;
+    //   }
+    //   return '';
+    // },
+
+    fourDigitTime(t) {
+      const [hours, minutes] = t.split(':')
+      return hours + minutes   
     },
 
     submitTodo() {
       const todosStore = useTodosStore()
+      const alarmsStore = useAlarmsStore()
+
+      // 우선 오늘 날짜로 테스트
+      const d = new Date()
+      const t = this.time
+
       // todos 배열에 넣기
-
-      console.log(todosStore)
-
       todosStore.addTodo({ 
         goalId: this.selectedGoal.id,
         todoTitle: this.todoTitle,
         todoContent: this.todoContent,
-        todoDate: this.eightDigitDate,
+        todoDate: this.eightDigitDate(d),
         isImportant: this.isImportant,
-        time: this.formattedTime
       });
 
-      console.log(todosStore)
+      // todoId
+      this.todoId = todosStore.findId(this.todoTitle);
+
+      this.closeModal() 
+
 
       if (this.isAlarmed) {
-
-        // todoId
-        this.todoId = todosStore.findId(this.todoTitle);
-
         // day 
-        const currentDate = new Date(this.eightDigitDate)
-        this.day = (currentDate.getDay() + 6) % 7 // 이렇게 하여 0을 월요일로 바꿈
+        this.day = (d.getDay() + 6) % 7 // 이렇게 하여 0을 월요일로 바꿈
 
         // time
-        const setTime = this.formattedTime
-        this.time = setTime.hours + setTime.minutes
+        const setTime = this.fourDigitTime(t)
+        this.time = setTime
+
       }
-
-      const alarmsStore = useAlarmsStore()
-
-      console.log(alarmsStore)
-
       alarmsStore.addAlarm({
         todoId: this.todoId,
         day: this.day,
-        time: this.time,
+        time: this.time, 
         isOutside: this.isOutside,
         isAlarmed: this.isAlarmed,
         isChecked: this.isChecked,
         isCompleted: this.isCompleted,
       }) 
-
-      console.log(alarmsStore)
-      this.closeModal() 
 
     }
   }  
@@ -218,4 +214,4 @@ export default {
 .custom-control-label {
   padding-left: 10px;
 }
-</style>
+</style>@/stores/alarms

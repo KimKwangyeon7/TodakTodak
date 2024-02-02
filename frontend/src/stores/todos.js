@@ -28,7 +28,7 @@ export const useTodosStore = defineStore({
     findId(objectTitle) {
       let i = null
       const todosArr = this.todos
-      for (let j = 1; j <= todosArr.length; j++) {
+      for (let j = 0; j <= todosArr.length; j++) {
         if (todosArr[j] && todosArr[j].todoTitle === objectTitle){
           i = j
           break

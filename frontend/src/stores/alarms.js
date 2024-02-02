@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 // import axios from 'axios'
-import { useTodosStore } from './todos'
+// import { useTodosStore } from './todos'
 // import { useHabitsStore } from './habits'
 
 
@@ -19,12 +19,6 @@ export const useAlarmsStore = defineStore({
       const alarmWithId = { id: this.nextAlarmId++, ...newAlarm}
       this.alarms.push(alarmWithId)
       console.log(this.alarms)
-    },
-
-    logAlarms() {
-      this.alarms.forEach(alarm => {
-        console.log(`id: ${alarm.id}, todoTitle: ${alarm.todoTitle}, todoContent: ${todo.todoContent}, todoDate: ${todo.eightDigitDate}, isImportant: ${todo.isImportant}`);
-      });
     },
 
     resetAlarms() {

@@ -52,6 +52,7 @@
 <script>
 import { useGoalsStore } from '@/stores/goals' // Adjust the path if necessary
 import { useTodosStore } from '@/stores/todos'
+import { useAlarmsStore } from '@/stores/alarms'
 
 
 import Sidebar from '@/views/Sidebar.vue'
@@ -74,7 +75,7 @@ export default {
     todos() {
       const todosStore = useTodosStore();
       return todosStore.todos;
-    }
+    },
   },
   data() {
     return {
@@ -135,10 +136,13 @@ export default {
     clearGoals() {
       const goalsStore = useGoalsStore();
       const todosStore = useTodosStore();
+      const alarmsStore = useAlarmsStore()
       goalsStore.resetGoals();
       todosStore.resetTodos();
+      alarmsStore.resetAlarms()
       localStorage.removeItem('my_goals'); // Clear persisted state if necessary
       localStorage.removeItem('my_todos'); // Clear persisted state if necessary
+      localStorage.removeItem('my_alarms')
     },
   },
   mounted() {
