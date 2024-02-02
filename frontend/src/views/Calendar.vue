@@ -7,7 +7,8 @@
             <div class="calendar-header">
               <b-row align-v="center">
                 <div class="calendar-title">
-                  <span class="arrow-left" @click="subtractMonth">&lt;</span> {{ year }}년 {{ dateContext.format('M') }}월
+                  <span class="arrow-left" @click="subtractMonth">&lt;</span> 
+                  {{ year }}년 {{ dateContext.format('M') }}월
                   <span class="arrow-right" @click="addMonth">&gt;</span>
                 </div>
               </b-row>
@@ -19,12 +20,15 @@
               </div>
             </div>
             <div class="calendar-dates">
-              <div class="date text-center" :class="{
+              <div class="date text-center"
+               :class="{
                 'today': date.today,
                 'blank': date.blank,
                 'now': (date.now && isStyleCurrentDate),
-                'weekend': date.weekDay === 'S'
-              }" v-for="(date, index) in dateList" @click="setSelectedDate(date, index)" :key="index">
+                'weekend': date.weekDay === 'S',
+                'previous-month': date.blank && date.weekDay === 'S',
+              }" v-for="(date, index) in dateList"
+               @click="setSelectedDate(date, index)" :key="index">
                 <span class="day">{{ date.dayNumber }}</span>
               </div>
             </div>
@@ -42,6 +46,7 @@ export default {
   name: 'Calendar',
   data() {
     return {
+      monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
       today: moment(),
       dateContext: moment(),
       selectedDate: moment(),
@@ -52,6 +57,10 @@ export default {
     }
   },
   computed: {
+    monthNumber: function () {
+    // 월 이름을 숫자로 변환
+    return this.monthNames.indexOf(this.month) + 1;
+    },
     year: function () {
       return this.dateContext.format("Y");
     },
@@ -66,6 +75,8 @@ export default {
     },
     firstDayOfMonth: function () {
       let firstDay = moment(this.dateContext).subtract(this.currentDate, "days");
+      let weekday = firstDay.weekday();
+      console.log('First day of month:', weekday);
       return firstDay.weekday();
     },
     previousMonth: function () {
@@ -107,6 +118,8 @@ export default {
 
         dateList[countDayInCurrentMonth] = {
           key: countDayInCurrentMonth,
+          year: parseInt($this.year),
+          month: parseInt($this.month) - 1,
           dayNumber: formattedDay,
           blank: true,
           today: false,
@@ -154,6 +167,8 @@ export default {
 
           dateList[countDayInCurrentMonth] = {
             key: countDayInCurrentMonth,
+            year: parseInt($this.year),
+            month: parseInt($this.month) - 1,
             dayNumber: formattedDay,
             blank: true,
             today: false,
@@ -194,13 +209,35 @@ export default {
       this.dateContext = this.previousMonth;
     },
     setSelectedDate: function (date, index) {
-      this.selectedDate = date;
-      this.$router.push({
-        name: 'CalendarDetail',
-        params: {
-          selectedDate: date.dayNumber,
-        },
-      })
+      console.log('Year:', this.year);  // 수정된 부분: date에서 year를 바로 가져오도록 변경
+      console.log('Month:', this.month);
+      console.log('Day Number:', date.dayNumber);
+
+  // formattedDay를 숫자로 변환
+  let formattedDay = parseInt(date.dayNumber);
+  let formattedyear = parseInt(this.year)
+
+  console.log('Formatted Day1:', formattedDay);
+  console.log('Formatted Year1:', formattedyear)
+  // moment 객체 생성
+  this.selectedDate = moment({
+    year: formattedyear,
+    month: this.monthNumber - 1,
+    day: formattedDay
+  });
+
+  console.log('Formatted Date2:', this.selectedDate.format('YYYY-MM-DD'));
+
+  if (!this.selectedDate.isValid()) {
+    console.error('Invalid Date!');
+  }
+
+  this.$router.push({
+    name: 'CalendarDetail',
+    params: {
+      selectedDate: this.selectedDate.isValid() ? this.selectedDate.format('YYYY-MM-DD') : null,
+    },
+  });
       // reset last value
       this.fixtureDate.forEach(i => {
         i.today = false
@@ -413,4 +450,9 @@ export default {
 .weekend {
   color: #222350;
 }
+
+.calendar-dates .date.previous-month {
+    background-color: #f0f0f0; /* 이전 달 날짜의 백그라운드 색상을 변경하세요 */
+    color: #949ba4; /* 변경된 백그라운드에 대한 글자 색상을 지정하세요 */
+  }
 </style>
