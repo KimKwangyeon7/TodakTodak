@@ -83,8 +83,9 @@ export default {
   display: flex;
   justify-content: space-around;
   background-color: #f3f3f3;
-  padding: 10px 0;
+  padding: 10px;
   z-index: 999;
+  height: 60px
 }
 
 

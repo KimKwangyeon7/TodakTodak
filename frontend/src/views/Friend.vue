@@ -1,14 +1,14 @@
 <template>
   <div class="friend-list container mt-5">
     <!-- 검색 기능 -->
-    <div class="mb-3">
+    <div class="friend-search mb-3">
       <input v-model="searchQuery" type="text" class="form-control" placeholder="친구 검색">
     </div>
 
     <!-- 친구 리스트 -->
     <ul class="list-group">
       <li v-for="friend in filteredFriends" :key="friend.id" class="list-group-item" @click="showProfile(friend)">
-        <div class="friend-item" @click="showProfile(friend)">
+        <div class="friend-item">
           <img :src="friend.profilePicture" alt="프로필 이미지" class="profile-image mr-2">
           <span>{{ friend.name }}</span>
         </div>
@@ -17,19 +17,17 @@
         </div>
       </li>
     </ul>
-
-    <!-- 친구 프로필 모달 -->
-    <router-view @close="resetSelectedFriend" />
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
 
 import FriendProfile from '@/components/Friend/FriendProfile.vue';
+import Chat from '@/components/Friend/Chat.vue'
 
-const router = useRouter()
+const router = useRouter();
 
 const showProfile = (friend) => {
   // 모달 대신 페이지로 전환
@@ -43,9 +41,10 @@ const showProfile = (friend) => {
   router.push(route);
 };
 
-const resetSelectedFriend = () => {
-  // 친구 프로필 페이지 닫기
-  router.push('/friend');
+const selectedFriend = ref(null);
+
+const goBackHandler = () => {
+  router.push('/friend')
 };
 
 const searchQuery = ref('');
@@ -61,8 +60,6 @@ const friends = ref([
   { id: 9, name: '황정민', age: 28 },
 ]);
 
-const selectedFriend = ref(null);
-
 const filteredFriends = computed(() => {
   return friends.value.filter(friend =>
     friend.name.toLowerCase().includes(searchQuery.value.toLowerCase())
@@ -70,8 +67,12 @@ const filteredFriends = computed(() => {
 });
 
 const startChat = (friend) => {
-  // 채팅을 시작하는 메소드를 구현할 수 있습니다.
-  console.log('채팅 시작:', friend.name);
+  selectedFriend.value = friend;
+  const route = {
+    path: '/chat',
+    component: Chat,
+  };
+  router.push(route);
 };
 </script>
 
@@ -102,7 +103,10 @@ const startChat = (friend) => {
 
 .modal-background {
   position: fixed;
-  top:0; left: 0; bottom: 0; right: 0;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
   background-color: rgba(0, 0, 0, 0.5);
 }
 
@@ -110,10 +114,10 @@ const startChat = (friend) => {
   border-color: #EAF3F9;
   position: relative;
   overflow: hidden;
-  background-color: #EAF3F9; /* Info색상에 대한 적절한 색상 코드 사용 */
-  color: black; /* 텍스트를 흰색으로 설정 */
+  background-color: #EAF3F9;
+  color: black;
   margin-bottom: 10px;
-      border-radius: 24px;
+  border-radius: 24px;
   justify-content: space-between;
   align-items: center;
 }
@@ -123,7 +127,7 @@ const startChat = (friend) => {
   align-items: center;
   position: relative;
   z-index: 1;
-  padding-right: 80px; /* 버튼들의 너비만큼 여백을 주세요 */
+  padding-right: 80px;
 }
 
 .buttons {
