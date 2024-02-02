@@ -6,20 +6,22 @@
           <h5 class="profile-title">친구 프로필</h5>
           <button class="back-button" @click="goBack">뒤로가기</button>
         </div>
+
         <div class="profile-body" v-if="friend">
           <div class="profile-info">
             <img :src="friend.profilePicture" alt="프로필 사진" class="profile-picture" />
-            <p><strong></strong> {{ friend.name }}</p>
-            <p><strong></strong> {{ friend.memo }}</p>
-          </div>
-
-          <div class="goal-list">
-            <h6><strong>목표 리스트</strong></h6>
-            <ul>
-              <li v-for="(goal, index) in friend.goals" :key="index">{{ goal }}</li>
-            </ul>
+            <p class="profile-name">{{ friend.name }}</p>
+            <p class="profile-memo">{{ friend.memo }}</p>
           </div>
         </div>
+
+        <div class="goal-list">
+          <p class="goal-list-title">목표 리스트</p>
+          <ul>
+            <li v-for="(goal, index) in friend.goals" :key="index">{{ goal }}</li>
+          </ul>
+        </div>
+        
       </div>
     </div>
   </div>
@@ -36,7 +38,7 @@ const friend = ref({
   name: '김싸피',
   memo: '오늘만 살자',
   profilePicture: '/src/assets/damgom.png',
-  goals: ['목표 1', '목표 2', '목표 3']
+  goals: ['교촌치킨 주문', '네네치킨 주문', '노랑통닭 주문']
 })
 </script>
 
@@ -54,6 +56,19 @@ const friend = ref({
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.profile-title {
+  margin-top: 10px;
+}
+
+.profile-name {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.profile-memo {
+  font-size: 15px;
 }
 
 .back-button {
@@ -82,8 +97,10 @@ const friend = ref({
   margin-top: 20px;
 }
 
-.goal-list h6 {
-  color: #0084ff;
+.goal-list-title {
+  font-size: 25px;
+  font-weight: bold;
+  color:#0084ff;
 }
 
 .goal-list ul {
