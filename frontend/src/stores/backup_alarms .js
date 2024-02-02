@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 // import axios from 'axios'
-import { useTodosStore } from './todos'
+// import { useTodosStore } from './todos'
 // import { useHabitsStore } from './habits'
 
 
@@ -27,37 +27,17 @@ export const useAlarmsStore = defineStore({
     },
 
     sendPush(alarm) {
-      // const title = alarm.todoTitle || alarm.habitTitle || "Default Title";
-      // const message = alarm.todoContent || "Default message";
-
-      const todosStore = useTodosStore()
-      console.log('todosStore', todosStore)
-      const arr = todosStore.todos
-      console.log('arr', arr)
-      const tempId = alarm.todoId
-      console.log('tempId', tempId)
-
-      let i = null
-      for (let j = 0; j <= arr.length; j++) {
-        console.log(arr[i])
-        if (arr[j].id === tempId){
-          i = j
-          break
-        }
+      if (alarm.todoId) {
+        const title = alarm.todoTitle
+        const message = alarm.todoContent
       }
-
-
-
+      else if (alarm.habitId) {
+        const title = alarm.habitTitle
+        const message = ""
+      } 
       const preparedData = JSON.stringify({
-        pTitle: arr[i].todoTitle, pMsg: arr[i].todoContent
+        pTitle: title, pMsg: message
       })
-
-      // const preparedData = JSON.stringify({
-      //   pTitle: foundTodo.todoTitle, 
-      //   pMsg: foundTodo.todoContent
-      // });
-
-      console.log(preparedData)
 
       fetch('https://us-central1-c210-67728.cloudfunctions.net/storePushData', {
         method: "POST",

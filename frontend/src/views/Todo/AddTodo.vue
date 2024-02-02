@@ -154,18 +154,28 @@ export default {
       // todoId
       this.todoId = todosStore.findId(this.todoTitle);
 
+      // day 
+      this.day = (d.getDay() + 6) % 7 // 이렇게 하여 0을 월요일로 바꿈
+
       this.closeModal() 
 
-
       if (this.isAlarmed) {
-        // day 
-        this.day = (d.getDay() + 6) % 7 // 이렇게 하여 0을 월요일로 바꿈
-
         // time
         const setTime = this.fourDigitTime(t)
         this.time = setTime
-
       }
+
+      ////
+      alarmsStore.sendPush({
+        todoId: this.todoId,
+        day: this.day,
+        time: this.time, 
+        isOutside: this.isOutside,
+        isAlarmed: this.isAlarmed,
+        isChecked: this.isChecked,
+        isCompleted: this.isCompleted,
+      })
+
       alarmsStore.addAlarm({
         todoId: this.todoId,
         day: this.day,
