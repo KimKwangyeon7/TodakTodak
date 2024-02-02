@@ -165,16 +165,6 @@ export default {
         this.time = setTime
       }
 
-      ////
-      alarmsStore.sendPush({
-        todoId: this.todoId,
-        day: this.day,
-        time: this.time, 
-        isOutside: this.isOutside,
-        isAlarmed: this.isAlarmed,
-        isChecked: this.isChecked,
-        isCompleted: this.isCompleted,
-      })
 
       alarmsStore.addAlarm({
         todoId: this.todoId,
@@ -185,6 +175,19 @@ export default {
         isChecked: this.isChecked,
         isCompleted: this.isCompleted,
       }) 
+
+      ////
+      alarmsStore.sendPushForTodo({
+        todoId: this.todoId,
+        day: this.day,
+        time: this.time, 
+        isOutside: this.isOutside,
+        isAlarmed: this.isAlarmed,
+        isChecked: this.isChecked,
+        isCompleted: this.isCompleted,
+      })
+
+      
 
     }
   }  
