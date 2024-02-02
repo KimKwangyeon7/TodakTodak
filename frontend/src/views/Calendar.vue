@@ -26,9 +26,12 @@
                 'blank': date.blank,
                 'now': (date.now && isStyleCurrentDate),
                 'weekend': date.weekDay === 'S',
-                'previous-month': date.blank && date.weekDay === 'S',
-              }" v-for="(date, index) in dateList"
-               @click="setSelectedDate(date, index)" :key="index">
+                'previous-month': date.isPreviousMonth,
+                'next-month': date.isNextMonth
+              }" 
+              v-for="(date, index) in dateList"
+              @click="handleDateClick(date, index)"
+              :key="index">
                 <span class="day">{{ date.dayNumber }}</span>
               </div>
             </div>
@@ -124,7 +127,8 @@ export default {
           blank: true,
           today: false,
           now: false,
-          weekDay: false
+          weekDay: false,
+          isPreviousMonth: true  // 이전 달의 날짜를 구별하기 위한 플래그
         };
       });
 
@@ -173,7 +177,8 @@ export default {
             blank: true,
             today: false,
             now: false,
-            weekDay: false
+            weekDay: false,
+            isNextMonth: true  // 다음 달의 날짜를 구별하기 위한 플래그
           };
         }
       }
@@ -202,6 +207,15 @@ export default {
     }
   },
   methods: {
+    handleDateClick(date, index) {
+        if (date.isPreviousMonth) {
+            this.subtractMonth();
+        } else if (date.isNextMonth) {
+            this.addMonth();
+        } else {
+            this.setSelectedDate(date, index);
+        }
+    },
     addMonth: function () {
       this.dateContext = this.nextMonth;
     },
@@ -451,8 +465,4 @@ export default {
   color: #222350;
 }
 
-.calendar-dates .date.previous-month {
-    background-color: #f0f0f0; /* 이전 달 날짜의 백그라운드 색상을 변경하세요 */
-    color: #949ba4; /* 변경된 백그라운드에 대한 글자 색상을 지정하세요 */
-  }
 </style>
