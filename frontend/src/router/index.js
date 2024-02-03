@@ -1,22 +1,19 @@
 // router/index.js
 import { createRouter, createWebHistory } from 'vue-router'
 import Main from '@/views/Main.vue'
-import Goal from '@/views/GoalView.vue'
-import GoalList from '@/views/GoalList.vue'
+import AddGoal from '@/views/Goal/AddGoal.vue'
 import Board from '@/views/Board.vue'
 import Calendar from '@/views/Calendar.vue'
 import Friend from '@/views/Friend.vue'
 import Chat from '@/components/Friend/Chat.vue'
 import Meeting from '@/views/Meeting.vue'
-import Habit from '@/views/HabitView.vue'
 import MyPage from '@/views/MyPage.vue'
-import MyPageSettings from '@/components/MyPage/MypageSettings.vue'
+import Habit from '@/views/Habit/HabitList.vue'
 import Voice from '@/views/Voice/Voice.vue'
 import VoiceTrainer from '@/views/Voice/VoiceTrainer.vue'
 import Notification from '@/components/Notifications.vue'
 import subscribe from '@/components/subscribe_page.vue'
 import pushnotify from '@/components/pushnotify_page.vue'
-import TodoList from '@/views/TodoList.vue'
 import CalendarDetail from '@/views/CalendarDetail.vue'
 import FriendProfile from '@/components/Friend/FriendProfile.vue'
 
@@ -36,7 +33,7 @@ const router = createRouter({
 	{
 		name: 'goal',
 		path: '/goal',
-		component: Goal,
+		component: AddGoal,
 	},
     {
 		name: 'board',
