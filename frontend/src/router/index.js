@@ -10,6 +10,7 @@ import Chat from '@/components/Friend/Chat.vue'
 import Meeting from '@/views/Meeting.vue'
 import Habit from '@/views/HabitView.vue'
 import MyPage from '@/views/MyPage.vue'
+import MyPageSettings from '@/components/MyPage/MypageSettings.vue'
 import Voice from '@/views/Voice/Voice.vue'
 import VoiceTrainer from '@/views/Voice/VoiceTrainer.vue'
 import Notification from '@/components/Notifications.vue'
@@ -71,6 +72,11 @@ const router = createRouter({
 		name: 'mypage',
 		path: '/mypage',
 		component: MyPage,
+	},
+	{
+		name: 'mypageSettings',
+		path: '/mypageSettings',
+		component: MyPageSettings,
 	},
 	{
 		path: '/voice',

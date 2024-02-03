@@ -1,6 +1,21 @@
 <template>
   <div class="friend-list container mt-5">
+<<<<<<< HEAD
     <div class="friend-search mb-3">
+=======
+    <div class="friend-header">
+      <div class="friend">친구</div>
+      <div class="friend-buttons">
+        <button class="create-chat-button btn btn-primary" @click="toggleSearch">
+          <div class="search">검색</div>
+        </button>
+        <button class="create-chat-button btn btn-primary" @click="showCreateRoomModal">추가</button>
+        <CreateRoomModal v-if="showModal" @close="closeCreateRoomModal" @create="createRoom" />
+      </div>
+    </div>
+
+    <div class="friend-search mb-3" v-show="showSearch">
+>>>>>>> ef41bd7757d8e55acd0a3398b0717bceac2f7e4a
       <input v-model="searchQuery" type="text" class="form-control" placeholder="친구 검색">
     </div>
 
@@ -12,8 +27,13 @@
         </div>
         <div class="buttons">
           <button class="btn btn-success btn-sm ml-2"
+<<<<<<< HEAD
                   @click.stop="followFriend(friend)"
                   :class="{ 'following': friend.following }">
+=======
+            @click.stop="followFriend(friend)"
+            :class="{ 'following': friend.following }">
+>>>>>>> ef41bd7757d8e55acd0a3398b0717bceac2f7e4a
             {{ friend.following ? '친구' : '친구 추가' }}
           </button>
           <button class="btn btn-primary btn-sm" @click.stop="startChat(friend)">채팅</button>
@@ -45,12 +65,9 @@ const showProfile = (friend) => {
 };
 
 const selectedFriend = ref(null);
-
-const goBackHandler = () => {
-  router.push('/friend')
-};
-
+const showSearch = ref(false);
 const searchQuery = ref('');
+
 const friends = ref([
   { id: 1, name: '김철수', age: 25 },
   { id: 2, name: '김영희', age: 30 },
@@ -84,7 +101,18 @@ const followFriend = (friend) => {
   if (index !== -1) {
     friends.value[index].following = !friends.value[index].following;
   }
+<<<<<<< HEAD
 };
+=======
+}
+
+const toggleSearch = () => {
+  showSearch.value = !showSearch.value;
+  if (!showSearch.value) {
+    searchQuery.value = ''; // Clear the search query when hiding the search input
+  }
+}
+>>>>>>> ef41bd7757d8e55acd0a3398b0717bceac2f7e4a
 </script>
 
 <style scoped>
@@ -168,4 +196,21 @@ const followFriend = (friend) => {
   border-color: #007bff;
 }
 
+<<<<<<< HEAD
 </style>
+=======
+.friend-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.friend-buttons {
+  display: flex;
+  margin-left: auto;
+}
+
+.friend {
+  font-size: 30px;
+}
+</style>
+>>>>>>> ef41bd7757d8e55acd0a3398b0717bceac2f7e4a
