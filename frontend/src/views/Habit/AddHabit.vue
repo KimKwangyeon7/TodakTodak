@@ -114,27 +114,27 @@
           // time
           const setTime = this.fourDigitTime(t)
           this.time = setTime
-        }
-          
-        alarmsStore.addAlarm({
-          habitId: habitsStore.habits[habitsStore.habits.length - 1].id,
-          day: this.day,
-          time: this.time, 
-          isOutside: this.isOutside,
-          isAlarmed: this.isAlarmed,
-          isChecked: this.isChecked,
-          isCompleted: this.isCompleted,
-        }) 
 
-        alarmsStore.sendPushForHabit({
-          habitId: habitsStore.habits[habitsStore.habits.length - 1].id,
-          day: this.day,
-          time: this.time, 
-          isOutside: this.isOutside,
-          isAlarmed: this.isAlarmed,
-          isChecked: this.isChecked,
-          isCompleted: this.isCompleted,
-        })
+          alarmsStore.addAlarm({
+            habitId: habitsStore.habits[habitsStore.habits.length - 1].id,
+            day: this.day,
+            time: this.time, 
+            isOutside: this.isOutside,
+            isAlarmed: this.isAlarmed,
+            isChecked: this.isChecked,
+            isCompleted: this.isCompleted,
+          }) 
+
+          alarmsStore.sendPushForHabit({
+            habitId: habitsStore.habits[habitsStore.habits.length - 1].id,
+            day: this.day,
+            time: this.time, 
+            isOutside: this.isOutside,
+            isAlarmed: this.isAlarmed,
+            isChecked: this.isChecked,
+            isCompleted: this.isCompleted,
+          })
+        }
       }
     }  
   }

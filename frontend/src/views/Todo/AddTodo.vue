@@ -159,34 +159,36 @@ export default {
 
       this.closeModal() 
 
-      if (this.isAlarmed) {
+      // console.log('this.isAlarmed', this.isAlarmed)
+
+      // console.log('isAlarmed', isAlarmed)
+
+      if (this.isAlarmed === true) {
         // time
         const setTime = this.fourDigitTime(t)
         this.time = setTime
+
+          alarmsStore.addAlarm({
+          todoId: this.todoId,
+          day: this.day,
+          time: this.time, 
+          isOutside: this.isOutside,
+          isAlarmed: this.isAlarmed,
+          isChecked: this.isChecked,
+          isCompleted: this.isCompleted,
+        }) 
+
+        ////
+        alarmsStore.sendPushForTodo({
+          todoId: this.todoId,
+          day: this.day,
+          time: this.time, 
+          isOutside: this.isOutside,
+          isAlarmed: this.isAlarmed,
+          isChecked: this.isChecked,
+          isCompleted: this.isCompleted,
+        })
       }
-
-
-      alarmsStore.addAlarm({
-        todoId: this.todoId,
-        day: this.day,
-        time: this.time, 
-        isOutside: this.isOutside,
-        isAlarmed: this.isAlarmed,
-        isChecked: this.isChecked,
-        isCompleted: this.isCompleted,
-      }) 
-
-      ////
-      alarmsStore.sendPushForTodo({
-        todoId: this.todoId,
-        day: this.day,
-        time: this.time, 
-        isOutside: this.isOutside,
-        isAlarmed: this.isAlarmed,
-        isChecked: this.isChecked,
-        isCompleted: this.isCompleted,
-      })
-
       
 
     }
