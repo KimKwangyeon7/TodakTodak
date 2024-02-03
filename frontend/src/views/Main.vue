@@ -3,7 +3,7 @@
 
   <!-- 모달 -->
   <div class="black-bg" v-if="is_modal_valid">
-    <component :is="activeModal" @close-modal="closeModal" />
+    <component :is="activeModal" :item="currentItem" @close-modal="closeModal" />
   </div>
 
   <!-- 명언 -->
@@ -19,72 +19,134 @@
       <!-- Todo 생성버튼 -->
       <button class="add-button" @click="openModal('AddTodo')">+</button>
     </div>
-
     <div class="todo-items">
-      <div class="todo-item">
-        <label @click="openModal('TodoList')" for="todo1">공부하기</label>
-        <input type="checkbox">
-      </div>
-      <div class="todo-item">
-        <label @click="openModal('TodoList')" for="todo2">운동하기</label>
+      <div class="todo-item" v-for="todo in todos" :key="todo.id">
+        <!-- class로 todo-content 만들어야 하지만 귀찮아서 안 만듦
+        어차피 속성값은 동일함 -->
+        <div class="color-bar" :style="{ backgroundColor: getGoalColor(todo) }"></div>
+        <span @click="openModal('TodoDetail', todo)" class="goal-content">{{ todo.todoTitle }}</span>
+        <!-- <p v-if="item">{{ item.goalContent || item.todoTitle }}</p> -->
         <input type="checkbox">
       </div>
     </div>
   </div>
-
+  
   <!-- 목표 -->
+  <!-- 원래 목표는 todo 말고 goal이라고 속성값을 따로 해야 하는데, 
+    어차피 동일한 것이고 귀찮으니 todo로 유지 -->
   <div class="todo-section">
     <div class="todo-date">
      <div style="margin-bottom: 5px; margin-top: 5px;">목표</div>
     </div>
-    <div class="todo-items">
-      <div class="todo-item">
-        <label @click="openModal('GoalList')" for="todo1">약먹기</label>
-        <input type="checkbox">
-      </div>
-      <div class="todo-item">
-        <label @click="openModal('GoalList')" for="todo2">밥먹기</label>
-        <input type="checkbox">
-      </div>
+    <div class="todo-item" v-for="goal in goals" :key="goal.id">
+      <div class="color-circle" :style="{ backgroundColor: goal.color }"></div>
+      <span @click="openModal('GoalDetail', goal)" class="goal-content">{{ goal.goalContent }}</span>
+      <!-- <p v-if="item">{{ item.goalContent || item.todoTitle }}</p> -->
+      <input type="checkbox">
     </div>
+    <button @click="clearGoals">테스트 차원에서 잠깐 목표 리셋 버튼 만듦</button>
   </div>
 </div>
 </template>
 
 <script>
+import { useGoalsStore } from '@/stores/goals' // Adjust the path if necessary
+import { useTodosStore } from '@/stores/todos'
+import { useAlarmsStore } from '@/stores/alarms'
+
+
 import Sidebar from '@/views/Sidebar.vue'
-import TodoList from '@/views/TodoList.vue'
-import GoalList from '@/views/GoalList.vue'
-import AddTodo from '@/views/AddTodo.vue'
+import TodoList from '@/views/Todo/TodoList.vue'
+import TodoDetail from '@/views/Todo/TodoDetail.vue'
+import AddTodo from '@/views/Todo/AddTodo.vue'
+import GoalList from '@/views/Goal/GoalList.vue'
+import GoalDetail from '@/views/Goal/GoalDetail.vue'
+import HabitList from '@/views/Habit/HabitList.vue'
+
+
+
+
 
 export default {
+
   name: 'App',
+  computed: {
+    goals() {
+      const goalsStore = useGoalsStore();
+      return goalsStore.goals;
+    },
+    todos() {
+      const todosStore = useTodosStore();
+      return todosStore.todos;
+    },
+  },
   data() {
     return {
       is_modal_valid: false,
       activeModal: null,
       today: '', // 현재 날짜를 저장할 데이터 속성 추가
+      // todoItems: [],
+      currentItem: null,
     }
   },
   components: {
     Sidebar,
-    TodoList,
     GoalList,
+    GoalDetail,
+    TodoList,
+    TodoDetail,
     AddTodo,
+    HabitList,
   },
   methods: {
-    openModal(component) {
-      this.is_modal_valid = true
-      this.activeModal = component
+    openModal(component, itemData = null) {
+
+      // Assuming the goals are related to todos, check if there are any goals when opening a TodoDetail
+      if (component === 'AddTodo') {
+        const goalsStore = useGoalsStore();
+
+        // Now check if there are no goals
+        if (goalsStore.goals.length === 0) {
+          alert('최소 한 가지 목표를 먼저 설정하세요 :)');
+          return; // Exit the function early if there are no goals
+        }
+      }
+
+      // If all checks pass, then proceed to open the modal
+      this.is_modal_valid = true;
+      this.activeModal = component;https://lab.ssafy.com/s10-webmobile1-sub2/S10P12C210/-/blob/back/src/main/java/com/ssafy/todak/goal/controller/GoalController.java?ref_type=heads
+      this.currentItem = itemData;
     },
     closeModal() {
       this.is_modal_valid = false
       this.activeModal = null
     },
+    // 김요한: addTodo.vue에서도 날짜를 가지고 오는 게 있는데,
+    // 날짜 가져오는 것 관련해서 의논이 필요할 것 같습니다.
     updateToday() {
       const now = new Date()
       const options = { month: '2-digit', day: '2-digit',  weekday: 'long' }
       this.today = now.toLocaleDateString('ko-KR', options)
+    },
+    // addTodo(newTodo) {
+    //   // 실제로는 여기에서 데이터베이스에 저장하거나 상태를 업데이트하는 등의 로직을 수행
+    //   this.todoItems.push(newTodo);
+    // },
+    getGoalColor(todo) {
+      const goalsStore = useGoalsStore();
+      const goal = goalsStore.goals.find(g => g.id === todo.goalId);
+      return goal ? goal.color : 'defaultColor'; // Replace 'defaultColor' with a fallback color
+    },
+    clearGoals() {
+      const goalsStore = useGoalsStore();
+      const todosStore = useTodosStore();
+      const alarmsStore = useAlarmsStore()
+      goalsStore.resetGoals();
+      todosStore.resetTodos();
+      alarmsStore.resetAlarms()
+      localStorage.removeItem('my_goals'); // Clear persisted state if necessary
+      localStorage.removeItem('my_todos'); // Clear persisted state if necessary
+      localStorage.removeItem('my_alarms')
     },
   },
   mounted() {
@@ -184,10 +246,27 @@ export default {
   left: 0;
 }
 
-.white-bg {
-  width: 100%; 
-  background: white;
-  border-radius: 8px;
-  padding: 20px;
+.color-bar {
+  width: 5px; /* Adjust the width of the color bar */
+  height: 15px; /* Adjust the height of the color bar */
+  margin-right: 10px; /* Space between the bar and the content */
+}
+
+.color-circle{
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 10px;
+  display: inline-block;
+}
+
+.goal-content {
+  flex-grow: 1;
+  text-align: left;
+  margin-right: 10px; /* Space before the checkbox */
+}
+
+input[type="checkbox"] {
+  margin-left: auto; /* Push the checkbox to the far right */
 }
 </style>
