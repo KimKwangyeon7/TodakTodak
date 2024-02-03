@@ -52,7 +52,7 @@ const friend = ref({
 .profile-header {
   background-color: #0084ff;
   color: #fff;
-  padding: 10px;
+  padding: 5px;
   display: flex;
   justify-content: space-between;
   align-items: center;
