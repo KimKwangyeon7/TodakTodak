@@ -1,51 +1,64 @@
-<!-- MyFriendList.vue -->
-
 <template>
   <div class="friend-list container mt-5">
-    <!-- 검색 기능 -->
-    <div class="mb-3">
+    <div class="friend-header">
+      <div class="friend">친구</div>
+      <div class="friend-buttons">
+        <button class="create-chat-button btn btn-primary" @click="toggleSearch">
+          <div class="search">검색</div>
+        </button>
+        <button class="create-chat-button btn btn-primary" @click="showCreateRoomModal">추가</button>
+        <CreateRoomModal v-if="showModal" @close="closeCreateRoomModal" @create="createRoom" />
+      </div>
+    </div>
+
+    <div class="friend-search mb-3" v-show="showSearch">
       <input v-model="searchQuery" type="text" class="form-control" placeholder="친구 검색">
     </div>
 
-    <!-- 친구 리스트 -->
     <ul class="list-group">
       <li v-for="friend in filteredFriends" :key="friend.id" class="list-group-item" @click="showProfile(friend)">
-        <div class="friend-item" @click="showProfile(friend)">
+        <div class="friend-item">
           <img :src="friend.profilePicture" alt="프로필 이미지" class="profile-image mr-2">
           <span>{{ friend.name }}</span>
         </div>
         <div class="buttons">
+          <button class="btn btn-success btn-sm ml-2"
+            @click.stop="followFriend(friend)"
+            :class="{ 'following': friend.following }">
+            {{ friend.following ? '친구' : '친구 추가' }}
+          </button>
           <button class="btn btn-primary btn-sm" @click.stop="startChat(friend)">채팅</button>
         </div>
       </li>
     </ul>
-
-    <!-- 친구 프로필 모달 -->
-    <div v-if="selectedFriend" class="modal fade show" tabindex="-1" role="dialog" @click="resetSelectedFriend">
-      <div class="modal-background">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">친구 프로필</h5>
-              <button type="button" class="close" data-dismiss="modal" @click="resetSelectedFriend">
-                <span>&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <p><strong>이름:</strong> {{ selectedFriend.name }}</p>
-              <p><strong>나이:</strong> {{ selectedFriend.age }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
 
+import FriendProfile from '@/components/Friend/FriendProfile.vue';
+import Chat from '@/components/Friend/Chat.vue'
+
+const router = useRouter();
+
+const showProfile = (friend) => {
+  // 모달 대신 페이지로 전환
+  const route = {
+    path: '/friend-profile',
+    component: FriendProfile,
+    props: { friend },
+  };
+
+  // Vue Router를 사용하여 페이지 전환
+  router.push(route);
+};
+
+const selectedFriend = ref(null);
+const showSearch = ref(false);
 const searchQuery = ref('');
+
 const friends = ref([
   { id: 1, name: '김철수', age: 25 },
   { id: 2, name: '김영희', age: 30 },
@@ -58,26 +71,35 @@ const friends = ref([
   { id: 9, name: '황정민', age: 28 },
 ]);
 
-const selectedFriend = ref(null);
-
 const filteredFriends = computed(() => {
   return friends.value.filter(friend =>
     friend.name.toLowerCase().includes(searchQuery.value.toLowerCase())
   );
 });
 
-const showProfile = (friend) => {
-  selectedFriend.value = friend;
-};
-
-const resetSelectedFriend = () => {
-  selectedFriend.value = null;
-};
-
 const startChat = (friend) => {
-  // 채팅을 시작하는 메소드를 구현할 수 있습니다.
-  console.log('채팅 시작:', friend.name);
+  selectedFriend.value = friend;
+  const route = {
+    path: '/chat',
+    component: Chat,
+  };
+  router.push(route);
 };
+
+const followFriend = (friend) => {
+  // 이미 팔로잉 중이면 팔로잉 취소, 아니면 팔로잉 추가
+  const index = friends.value.findIndex(f => f.id === friend.id);
+  if (index !== -1) {
+    friends.value[index].following = !friends.value[index].following;
+  }
+}
+
+const toggleSearch = () => {
+  showSearch.value = !showSearch.value;
+  if (!showSearch.value) {
+    searchQuery.value = ''; // Clear the search query when hiding the search input
+  }
+}
 </script>
 
 <style scoped>
@@ -107,7 +129,10 @@ const startChat = (friend) => {
 
 .modal-background {
   position: fixed;
-  top:0; left: 0; bottom: 0; right: 0;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
   background-color: rgba(0, 0, 0, 0.5);
 }
 
@@ -115,10 +140,10 @@ const startChat = (friend) => {
   border-color: #EAF3F9;
   position: relative;
   overflow: hidden;
-  background-color: #EAF3F9; /* Info색상에 대한 적절한 색상 코드 사용 */
-  color: black; /* 텍스트를 흰색으로 설정 */
+  background-color: #EAF3F9;
+  color: black;
   margin-bottom: 10px;
-      border-radius: 24px;
+  border-radius: 24px;
   justify-content: space-between;
   align-items: center;
 }
@@ -128,7 +153,7 @@ const startChat = (friend) => {
   align-items: center;
   position: relative;
   z-index: 1;
-  padding-right: 80px; /* 버튼들의 너비만큼 여백을 주세요 */
+  padding-right: 80px;
 }
 
 .buttons {
@@ -144,5 +169,31 @@ const startChat = (friend) => {
 
 .buttons button {
   margin-left: 5px;
+}
+
+/* 팔로잉 중일 때의 버튼 스타일 */
+.buttons button.following {
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+/* 팔로잉 중이 아닐 때의 버튼 스타일 */
+.buttons button:not(.following) {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.friend-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.friend-buttons {
+  display: flex;
+  margin-left: auto;
+}
+
+.friend {
+  font-size: 30px;
 }
 </style>

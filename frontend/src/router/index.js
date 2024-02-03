@@ -5,6 +5,7 @@ import AddGoal from '@/views/Goal/AddGoal.vue'
 import Board from '@/views/Board.vue'
 import Calendar from '@/views/Calendar.vue'
 import Friend from '@/views/Friend.vue'
+import Chat from '@/components/Friend/Chat.vue'
 import Meeting from '@/views/Meeting.vue'
 import MyPage from '@/views/MyPage.vue'
 import Habit from '@/views/Habit/HabitList.vue'
@@ -14,6 +15,7 @@ import Notification from '@/components/Notifications.vue'
 import subscribe from '@/components/subscribe_page.vue'
 import pushnotify from '@/components/pushnotify_page.vue'
 import CalendarDetail from '@/views/CalendarDetail.vue'
+import FriendProfile from '@/components/Friend/FriendProfile.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -48,6 +50,11 @@ const router = createRouter({
 		path: '/friend',
 		component: Friend,
 	},
+	{
+		name: 'chat',
+		path: '/chat',
+		component: Chat,
+	},
     {
 		name: 'meeting',
 		path: '/meeting',
@@ -62,6 +69,11 @@ const router = createRouter({
 		name: 'mypage',
 		path: '/mypage',
 		component: MyPage,
+	},
+	{
+		name: 'mypageSettings',
+		path: '/mypageSettings',
+		component: MyPageSettings,
 	},
 	{
 		path: '/voice',
@@ -88,12 +100,15 @@ const router = createRouter({
     name: 'CalendarDetail',
     component: CalendarDetail
   },
-//   {
-//     path: '/goallist',
-//     name: 'GoalList',
-//     component: GoalList
-//   },
-  
+  {
+    path: '/goallist',
+    name: 'GoalList',
+    component: GoalList
+  },
+  {
+	path: '/friend-profile',
+	component: FriendProfile
+  }
   ]
 })
 

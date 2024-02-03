@@ -157,16 +157,6 @@ export default {
 </script>
 
 <style scoped>
-/* 전체 앱 스타일링 */
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-/* 상단 바 스타일링 */
 .top-bar {
   display: flex;
   justify-content: space-between;

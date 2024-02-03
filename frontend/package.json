@@ -22,8 +22,11 @@
     "vite-plugin-pwa": "^0.17.5",
     "vue": "^3.3.11",
     "vue-router": "^4.2.5",
+    "vue-socket": "^0.2.3",
+    "vue-webrtc": "^3.0.1",
     "vuefire": "^3.1.22",
-    "web-push": "^3.6.7"
+    "web-push": "^3.6.7",
+    "webrtc-adapter": "^8.2.3"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.5.2",

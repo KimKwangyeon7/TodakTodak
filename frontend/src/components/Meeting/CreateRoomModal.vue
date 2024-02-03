@@ -13,8 +13,12 @@
               <div class="form-group">
                 <label for="roomTitle">방 제목:</label>
                 <input v-model="newRoom.title" type="text" class="form-control" id="roomTitle" required>
+                <label for="roomMember">참여 인원 제한:</label>
+                <input v-model="newRoom.title" type="text" class="form-control" id="roomTitle" required>
+                <label for="roomPassword">비밀번호:</label>
+                <input v-model="newRoom.title" type="text" class="form-control" id="roomTitle" required>
               </div>
-              <button type="submit" class="btn btn-primary">추가</button>
+              <button type="submit" class="create-room-button btn btn-primary">추가</button>
             </form>
           </div>
         </div>
@@ -28,7 +32,6 @@
       return {
         newRoom: {
           title: '',
-          // 추가 필드는 필요에 따라 여기에 추가
         },
       };
     },
@@ -41,7 +44,6 @@
   </script>
   
   <style scoped>
-  /* 필요에 따라 스타일링을 추가할 수 있습니다. */
   .modal {
     position: fixed;
     top: 0;
@@ -78,6 +80,11 @@
   
   .form-group {
     margin-bottom: 20px;
+  }
+
+  .create-room-button {
+    margin-left: auto;
+    display: flex;
   }
   
   </style>
