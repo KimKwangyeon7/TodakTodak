@@ -465,4 +465,8 @@ export default {
   color: #222350;
 }
 
+.vcal-date:hover {
+  background-color: #3498db;
+  color: #ffffff;
+}
 </style>

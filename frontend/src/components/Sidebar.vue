@@ -24,6 +24,10 @@
             <router-link to="/habit" class="nav-link"><span class="emoji">🔄</span> 습관</router-link>
             <router-link to="/voice" class="nav-link"><span class="emoji">🔊</span> 음성</router-link>
             <router-link to="/mypage" class="nav-link"><span class="emoji">👤</span> 마이페이지</router-link>
+            <p style="color:red">잠깐 아래 부분 푸시 알림 테스트 용도로 쓸게요!!</p>
+            <router-link to="/subscribe" class="nav-link" style="color:red"><span class="emoji"></span> subscribe</router-link>
+            <router-link to="/pushnotify" class="nav-link" style="color:red"><span class="emoji"></span> pushnotify</router-link>
+
           </div>
         </div>
       </div>

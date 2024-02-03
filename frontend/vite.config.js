@@ -2,6 +2,7 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { VitePWA } from 'vite-plugin-pwa'
+// import { resolve } from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -13,8 +14,16 @@ export default defineConfig({
   plugins: [
     vue(),
     VitePWA({
-      registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
+      srcDir: 'src',
+      filename: 'sw.js',
+      devOptions: {
+        enabled: true,
+        type: 'module',
+      },
+      strategies: 'injectManifest',
+      injectManifest: {
+        injectionPoint: undefined
+      },
       manifest: {
         "name": "c210",
         "short_name": "c210",

@@ -2,6 +2,7 @@
 
 <template>
     <div class="mt-5">
+        <button class="settings-button" @click="goToSettings">설정</button>
       <UserInfo :userData="userData" />
       <SuccessRate :successRate="successRate" />
       <GoalSuccessRate :goalRate="goalRate" />
@@ -34,7 +35,24 @@ methods: {
     // 사용자 정보를 가져오는 비동기 함수
     // 예: this.userData = await api.getUserData();
     },
+    goToSettings() {
+      // 설정 페이지로 이동하는 메서드
+      this.$router.push('/MypageSettings');
+    },
 }
 };
 </script>
->>>>>>> 7ab7ce81c580c0d8f18a96ee52f74bba60d5af67
+
+
+<style scoped>
+.settings-button {
+  background-color: #0084ff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: auto;
+  display: flex;
+}
+</style>
+>>>>>>> 4a0503d1cac1b39ca6331fc165aacd5708ab8644
