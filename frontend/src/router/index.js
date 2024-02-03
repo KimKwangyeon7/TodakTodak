@@ -8,6 +8,7 @@ import Friend from '@/views/Friend.vue'
 import Chat from '@/components/Friend/Chat.vue'
 import Meeting from '@/views/Meeting.vue'
 import MyPage from '@/views/MyPage.vue'
+import MyPageSettings from '@/components/MyPage/MypageSettings.vue'
 import Habit from '@/views/Habit/HabitList.vue'
 import Voice from '@/views/Voice/Voice.vue'
 import VoiceTrainer from '@/views/Voice/VoiceTrainer.vue'
@@ -99,11 +100,6 @@ const router = createRouter({
     path: '/calendar/calendarDetail', // 추후 바꿀 예정
     name: 'CalendarDetail',
     component: CalendarDetail
-  },
-  {
-    path: '/goallist',
-    name: 'GoalList',
-    component: GoalList
   },
   {
 	path: '/friend-profile',
