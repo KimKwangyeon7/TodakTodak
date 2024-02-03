@@ -2,7 +2,6 @@ import './assets/main.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import { setupCalendar } from 'v-calendar';
 import piniaPluginPersist from 'pinia-plugin-persist'
 import { setupCalendar } from 'v-calendar';
 import { registerSW } from 'virtual:pwa-register'

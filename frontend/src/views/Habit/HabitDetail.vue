@@ -1,17 +1,12 @@
 <template>
     <div class="modal-content">
       <button type="button" class="btn-close" aria-label="Close" @click="closeModal"></button>
-<<<<<<< HEAD:frontend/src/views/GoalList.vue
-      <h4>목표 상세페이지</h4>
-      <p>목표 상세페이지 내용임</p>
-=======
       <h4>HabitDetail 모달</h4>
       <p>HabitDetail 모달</p>
       <!-- <p> 제목: {{ item.todoTitle }}</p>
       <p> 내용: {{ item.todoContent }}</p>
       <p> 외출 여부: {{ item.isOutside }}</p>
       <p> 알람 시간: {{ item.time }}</p> -->
->>>>>>> 4a0503d1cac1b39ca6331fc165aacd5708ab8644:frontend/src/views/Habit/HabitDetail.vue
     </div>
   </template>
   
@@ -32,11 +27,7 @@
   </script>
   
   <style scoped>
-<<<<<<< HEAD:frontend/src/views/GoalList.vue
  .modal-content {
-=======
-  .modal-content {
->>>>>>> 4a0503d1cac1b39ca6331fc165aacd5708ab8644:frontend/src/views/Habit/HabitDetail.vue
     background: #EAF3F9;
     border-radius: 8px;
     padding: 20px;
@@ -54,13 +45,6 @@
   cursor: pointer;
   font-size: 12px;
 }
-<<<<<<< HEAD:frontend/src/views/GoalList.vue
-  </style>
-<<<<<<< HEAD
-  
-=======
-  
->>>>>>> 7ab7ce81c580c0d8f18a96ee52f74bba60d5af67
-=======
-  </style>
->>>>>>> 4a0503d1cac1b39ca6331fc165aacd5708ab8644:frontend/src/views/Habit/HabitDetail.vue
+</style>
+
+
