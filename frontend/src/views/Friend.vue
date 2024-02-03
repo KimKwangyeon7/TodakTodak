@@ -1,11 +1,9 @@
 <template>
   <div class="friend-list container mt-5">
-    <!-- 검색 기능 -->
     <div class="friend-search mb-3">
       <input v-model="searchQuery" type="text" class="form-control" placeholder="친구 검색">
     </div>
 
-    <!-- 친구 리스트 -->
     <ul class="list-group">
       <li v-for="friend in filteredFriends" :key="friend.id" class="list-group-item" @click="showProfile(friend)">
         <div class="friend-item">
@@ -13,6 +11,11 @@
           <span>{{ friend.name }}</span>
         </div>
         <div class="buttons">
+          <button class="btn btn-success btn-sm ml-2"
+                  @click.stop="followFriend(friend)"
+                  :class="{ 'following': friend.following }">
+            {{ friend.following ? '친구' : '친구 추가' }}
+          </button>
           <button class="btn btn-primary btn-sm" @click.stop="startChat(friend)">채팅</button>
         </div>
       </li>
@@ -73,6 +76,14 @@ const startChat = (friend) => {
     component: Chat,
   };
   router.push(route);
+};
+
+const followFriend = (friend) => {
+  // 이미 팔로잉 중이면 팔로잉 취소, 아니면 팔로잉 추가
+  const index = friends.value.findIndex(f => f.id === friend.id);
+  if (index !== -1) {
+    friends.value[index].following = !friends.value[index].following;
+  }
 };
 </script>
 
@@ -144,4 +155,17 @@ const startChat = (friend) => {
 .buttons button {
   margin-left: 5px;
 }
+
+/* 팔로잉 중일 때의 버튼 스타일 */
+.buttons button.following {
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+/* 팔로잉 중이 아닐 때의 버튼 스타일 */
+.buttons button:not(.following) {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
 </style>
