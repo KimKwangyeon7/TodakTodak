@@ -13,6 +13,8 @@ import Voice from '@/views/Voice/Voice.vue'
 import VoiceTrainer from '@/views/Voice/VoiceTrainer.vue'
 import TodoList from '@/views/TodoList.vue'
 import CalendarDetail from '@/views/CalendarDetail.vue'
+import LoginView from '@/views/LoginView.vue'
+import SignupView from '@/views/SignupView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -82,6 +84,17 @@ const router = createRouter({
 		name: 'GoalList',
 		component: GoalList
 	},
+	{
+		path: '/login',
+		name: 'LoginView',
+		component: LoginView
+	},
+	{
+		path: '/signup',
+		name: 'SignUpView',
+		component: SignupView
+	}, 
+
   
   ]
 })
