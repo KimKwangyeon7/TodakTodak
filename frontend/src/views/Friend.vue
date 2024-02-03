@@ -1,6 +1,17 @@
 <template>
   <div class="friend-list container mt-5">
-    <div class="friend-search mb-3">
+    <div class="friend-header">
+      <div class="friend">친구</div>
+      <div class="friend-buttons">
+        <button class="create-chat-button btn btn-primary" @click="toggleSearch">
+          <div class="search">검색</div>
+        </button>
+        <button class="create-chat-button btn btn-primary" @click="showCreateRoomModal">추가</button>
+        <CreateRoomModal v-if="showModal" @close="closeCreateRoomModal" @create="createRoom" />
+      </div>
+    </div>
+
+    <div class="friend-search mb-3" v-show="showSearch">
       <input v-model="searchQuery" type="text" class="form-control" placeholder="친구 검색">
     </div>
 
@@ -45,12 +56,9 @@ const showProfile = (friend) => {
 };
 
 const selectedFriend = ref(null);
-
-const goBackHandler = () => {
-  router.push('/friend')
-};
-
+const showSearch = ref(false);
 const searchQuery = ref('');
+
 const friends = ref([
   { id: 1, name: '김철수', age: 25 },
   { id: 2, name: '김영희', age: 30 },
@@ -84,7 +92,14 @@ const followFriend = (friend) => {
   if (index !== -1) {
     friends.value[index].following = !friends.value[index].following;
   }
-};
+}
+
+const toggleSearch = () => {
+  showSearch.value = !showSearch.value;
+  if (!showSearch.value) {
+    searchQuery.value = ''; // Clear the search query when hiding the search input
+  }
+}
 </script>
 
 <style scoped>
@@ -168,4 +183,17 @@ const followFriend = (friend) => {
   border-color: #007bff;
 }
 
+.friend-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.friend-buttons {
+  display: flex;
+  margin-left: auto;
+}
+
+.friend {
+  font-size: 30px;
+}
 </style>
