@@ -82,7 +82,7 @@ export default {
   width: 100%;
   display: flex;
   justify-content: space-around;
-  background-color: #f3f3f3;
+  background-color: #EAF3F9;
   padding: 10px;
   z-index: 999;
   height: 60px
