@@ -15,6 +15,7 @@
           <button @click="nextSentence" :disabled="currentSentenceIndex === sentences.length - 1">></button>
         </div>
       </div>    
+
       
       <br>
       <!-- 학습 중인 음성 -->
@@ -28,6 +29,7 @@
   
 <script>
 import { ref } from 'vue'
+import { voiceRecord } from './VoiceRecord.vue'
 
 let sentences = ref([{id: 1, name: '안녕하세요. 좋은 아침입니다.'},
                      {id: 2, name: '안녕하세요. 좋은 점심입니다.'},
