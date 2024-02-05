@@ -84,7 +84,7 @@ const components = {
 }
 
 .offcanvas-body {
-  font-size: 27px;
+  font-size: 25px;
   text-align: left;
   display: flex;
   flex-direction: column;

@@ -131,6 +131,7 @@ textarea {
   border: 1px solid #ccc;
   border-radius: 5px;
   margin-right: 10px;
+  touch-action: manipulation;
 }
 
 .input-button {
