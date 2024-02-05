@@ -16,6 +16,9 @@
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
           </div>
           <div class="offcanvas-body">
+            <router-link to="/main" class="nav-link">
+              <img src="@/assets/sidebar/todo.png" alt=""> To-do
+            </router-link>
             <router-link to="/goal" class="nav-link">
               <img src="@/assets/sidebar/goal.png" alt=""> 목표 만들기
             </router-link>
@@ -81,7 +84,7 @@ const components = {
 }
 
 .offcanvas-body {
-  font-size: 27px;
+  font-size: 25px;
   text-align: left;
   display: flex;
   flex-direction: column;
@@ -97,7 +100,7 @@ const components = {
 
 .offcanvas-body img {
   margin-right: 20px;
-  max-width: 35px; /* 이미지 크기 조절, 필요에 따라 조절 가능 */
+  max-width: 35px; 
 }
 
 @font-face {

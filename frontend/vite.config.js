@@ -6,6 +6,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  assetsInclude: ['**/*.mem'],
   workboxOptions: {
     include: [/^index\.html$/, /\.css$/, /\.js$/, /^manifest\.json$/, /\.png$/],
     exclude: []
