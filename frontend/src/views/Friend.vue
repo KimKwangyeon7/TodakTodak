@@ -3,10 +3,11 @@
     <div class="friend-header">
       <div class="friend">친구</div>
       <div class="friend-buttons">
-        <button class="create-chat-button btn btn-primary" @click="toggleSearch">
-          <div class="search">검색</div>
+        <button class="create-chat-button btn" @click="toggleSearch">
+          <div class="search"><img src="@/assets/search.png" alt=""></div>
         </button>
-        <button class="create-chat-button btn btn-primary" @click="showCreateRoomModal">추가</button>
+        <button class="create-chat-button btn" @click="showCreateRoomModal">
+          <img src="@/assets/user-plus.png" alt=""></button>
         <CreateRoomModal v-if="showModal" @close="closeCreateRoomModal" @create="createRoom" />
       </div>
     </div>
@@ -22,12 +23,9 @@
           <span>{{ friend.name }}</span>
         </div>
         <div class="buttons">
-          <button class="btn btn-success btn-sm ml-2"
-            @click.stop="followFriend(friend)"
-            :class="{ 'following': friend.following }">
-            {{ friend.following ? '친구' : '친구 추가' }}
+          <button class="btn btn-sm" @click.stop="startChat(friend)">
+            <img src="@/assets/messages.png" alt="">
           </button>
-          <button class="btn btn-primary btn-sm" @click.stop="startChat(friend)">채팅</button>
         </div>
       </li>
     </ul>
@@ -35,29 +33,27 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 
-import FriendProfile from '@/components/Friend/FriendProfile.vue';
+import FriendProfile from '@/components/Friend/FriendProfile.vue'
 import Chat from '@/components/Friend/Chat.vue'
 
-const router = useRouter();
+const router = useRouter()
 
 const showProfile = (friend) => {
-  // 모달 대신 페이지로 전환
   const route = {
     path: '/friend-profile',
     component: FriendProfile,
     props: { friend },
-  };
+  }
 
-  // Vue Router를 사용하여 페이지 전환
-  router.push(route);
-};
+  router.push(route)
+}
 
-const selectedFriend = ref(null);
-const showSearch = ref(false);
-const searchQuery = ref('');
+const selectedFriend = ref(null)
+const showSearch = ref(false)
+const searchQuery = ref('')
 
 const friends = ref([
   { id: 1, name: '김철수', age: 25 },
@@ -69,35 +65,27 @@ const friends = ref([
   { id: 7, name: '카리나', age: 25 },
   { id: 8, name: '공유', age: 30 },
   { id: 9, name: '황정민', age: 28 },
-]);
+])
 
 const filteredFriends = computed(() => {
   return friends.value.filter(friend =>
     friend.name.toLowerCase().includes(searchQuery.value.toLowerCase())
-  );
-});
+  )
+})
 
 const startChat = (friend) => {
   selectedFriend.value = friend;
   const route = {
     path: '/chat',
     component: Chat,
-  };
-  router.push(route);
-};
-
-const followFriend = (friend) => {
-  // 이미 팔로잉 중이면 팔로잉 취소, 아니면 팔로잉 추가
-  const index = friends.value.findIndex(f => f.id === friend.id);
-  if (index !== -1) {
-    friends.value[index].following = !friends.value[index].following;
   }
+  router.push(route)
 }
 
 const toggleSearch = () => {
   showSearch.value = !showSearch.value;
   if (!showSearch.value) {
-    searchQuery.value = ''; // Clear the search query when hiding the search input
+    searchQuery.value = ''
   }
 }
 </script>
@@ -154,6 +142,7 @@ const toggleSearch = () => {
   position: relative;
   z-index: 1;
   padding-right: 80px;
+  font-size: 18px;
 }
 
 .buttons {
@@ -171,17 +160,6 @@ const toggleSearch = () => {
   margin-left: 5px;
 }
 
-/* 팔로잉 중일 때의 버튼 스타일 */
-.buttons button.following {
-  background-color: #28a745;
-  border-color: #28a745;
-}
-
-/* 팔로잉 중이 아닐 때의 버튼 스타일 */
-.buttons button:not(.following) {
-  background-color: #007bff;
-  border-color: #007bff;
-}
 
 .friend-header {
   display: flex;

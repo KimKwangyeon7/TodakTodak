@@ -1,6 +1,8 @@
 <template>
   <div>
-    <button class="back-button" @click="goBack">뒤로가기</button>
+    <button class="back-button btn" @click="goBack">
+      <img src="@/assets/back.png" alt="">
+    </button>
 
     <div class="chat-container">
       <div class="chat-messages" ref="chatContainer">
@@ -126,8 +128,6 @@ textarea {
 }
 
 .back-button {
-  background-color: #0084ff;
-  color: #fff;
   border: none;
   padding: 8px 16px;
   border-radius: 5px;
