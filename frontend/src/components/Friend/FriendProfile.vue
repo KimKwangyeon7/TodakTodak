@@ -12,12 +12,12 @@
             <img :src="friend.profilePicture" alt="프로필 사진" class="profile-picture" />
             <p class="profile-name">{{ friend.name }}</p>
             <p class="profile-memo">{{ friend.memo }}</p>
+            <button class="friend-add btn btn-success btn-sm ml-2"
+              @click.stop="followFriend(friend)"
+              :class="{ 'following': friend.following }">
+              {{ friend.following ? '친구' : '친구 추가' }}
+            </button>
           </div>
-          <button class="friend-add btn btn-success btn-sm ml-2"
-            @click.stop="followFriend(friend)"
-            :class="{ 'following': friend.following }">
-            {{ friend.following ? '친구' : '친구 추가' }}
-          </button>
         </div>
 
         <div class="goal-list">
@@ -26,7 +26,6 @@
             <li v-for="(goal, index) in friend.goals" :key="index">{{ goal }}</li>
           </ul>
         </div>
-        
       </div>
     </div>
   </div>
@@ -34,6 +33,7 @@
 
 <script setup>
 import { ref } from 'vue'
+// import friends from '@/data/friends' 
 
 function goBack() {
   window.history.back()
@@ -43,14 +43,12 @@ const friend = ref({
   name: '김싸피',
   memo: '오늘만 살자',
   profilePicture: '/src/assets/damgom.png',
-  goals: ['교촌치킨 주문', '네네치킨 주문', '노랑통닭 주문']
+  goals: ['교촌치킨 주문', '네네치킨 주문', '노랑통닭 주문'],
+  following: false  // 친구 추가 여부에 따라 초기값 설정
 })
 
 const followFriend = (friend) => {
-    const index = friends.value.findIndex(f => f.id === friend.id)
-  if (index !== -1) {
-    friends.value[index].following = !friends.value[index].following
-  }
+  friend.following = !friend.following
 }
 </script>
 
@@ -92,6 +90,8 @@ const followFriend = (friend) => {
 
 .profile-body {
   padding: 20px;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .profile-info {
@@ -112,7 +112,7 @@ const followFriend = (friend) => {
 .goal-list-title {
   font-size: 25px;
   font-weight: bold;
-  color:#0084ff;
+  color: #0084ff;
 }
 
 .goal-list ul {
@@ -135,5 +135,5 @@ const followFriend = (friend) => {
   background-color: #007bff;
   border-color: #007bff;
 }
-</style>
 
+</style>
