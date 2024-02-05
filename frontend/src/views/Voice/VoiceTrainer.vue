@@ -9,7 +9,7 @@
     <div class="sentence-box">
       <p>다음 문장을 소리내어 읽으세요.</p>
       <p>{{ currentSentence ? currentSentence.sentence : '문장을 불러오는 중...' }}</p>
-      <p p>{{ currentSentenceId }} / {{ sentences.length }}</p>
+      <p p>{{ currentSentenceId + 1 }} / {{ sentences.length }}</p>
       <div class="buttons">
         <button @click="prevSentence" :disabled="currentSentenceIndex === 0"><</button>
         <button @click="nextSentence" :disabled="currentSentenceIndex === sentences.length - 1">></button>
@@ -45,17 +45,37 @@
 
 <script>
 import { ref, onMounted, computed } from 'vue'
+import axios from 'axios';
 import { loadKoreanCorpus } from '@/stores/koreanCorpus'
 
+const apiClient = axios.create({
+  baseURL: 'http://your-backend-api-url', // 백엔드 서버 URL로 대체
+  withCredentials: false,
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  },
+});
 
 export default {
   name: 'App',
   setup() {
     const sentences = ref([]);
     const currentSentenceId = ref(1);
-    //test
+    
+    const voiceList = ref([]);
+
+    const fetchVoiceList = async () => {
+      try {
+        const response = await apiClient.get('/record');
+        voiceList.value = response.data;
+      } catch (error) {
+        console.error('Error fetching voice list:', error);
+      }
+    };
 
     onMounted(async () => {
+      await fetchVoiceList();
       try {
         sentences.value = await loadKoreanCorpus();
       } catch (error) {
@@ -79,7 +99,7 @@ export default {
       }
     }
 
-    return { sentences, currentSentenceId, currentSentence, prevSentence, nextSentence };
+    return { sentences, currentSentenceId, currentSentence, prevSentence, nextSentence, voiceList, fetchVoiceList };
   },
   data() {
     return {
@@ -113,6 +133,123 @@ methods: {
       this.currentSentenceId++;
     }
   },
+  async createNewVoice() {
+    if (this.title === "") {
+      console.error("Title is required");
+      return;
+    }
+
+    const payload = {
+      title: this.title,
+      memo: this.memo 
+    };
+
+    try {
+      const response = await apiClient.post('/record', payload);
+      if (response.status === 200) {
+        console.log("New voice created successfully");
+        // 추가 로직을 넣을 수 있음 (예: 상태 업데이트, 사용자에게 알림 등)
+      } else {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+    } catch (error) {
+      console.error("Error creating new voice:", error);
+    }
+  },
+  async fetchVoiceDetail(recordId) {
+    try {
+      const response = await apiClient.get(`/record/${recordId}`);
+      this.voiceDetail = response.data; // 'voiceDetail'을 데이터 속성으로 추가해야 합니다.
+    } catch (error) {
+      console.error('Error fetching voice detail:', error);
+    }
+  },
+  async modifyVoice(recordId, title, memo) {
+    const payload = {
+      title,
+      memo
+    };
+    try {
+      const response = await apiClient.put(`/record/${recordId}`, payload);
+      if (response.status === 200) {
+        console.log("Voice modified successfully");
+        // 추가 로직을 넣을 수 있음 (예: 상태 업데이트, 사용자에게 알림 등)
+      } else {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+    } catch (error) {
+      console.error('Error modifying voice:', error);
+    }
+  },
+  async deleteVoice(recordId) {
+    try {
+      const response = await apiClient.delete(`/record/${recordId}`);
+      if (response.status === 200) {
+        console.log("Voice deleted successfully");
+        // 추가적인 상태 업데이트나 사용자 알림 로직을 여기에 넣을 수 있습니다.
+      } else {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+    } catch (error) {
+      console.error('Error deleting voice:', error);
+    }
+  },
+  async selectVoice(recordId) {
+    try {
+      const response = await apiClient.put(`record/use`, { recordId });
+      if (response.status === 200) {
+        console.log("Voice selected successfully");
+        // 여기에 추가적인 상태 업데이트나 사용자 알림 로직을 넣을 수 있습니다.
+      } else {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+    } catch (error) {
+      console.error('Error selecting voice:', error);
+    }
+  },
+  async fetchRecordingPrompt(uuid) {
+    try {
+      const response = await apiClient.get(`record/prompt/${uuid}`);
+      this.currentPrompt = response.data; // 'currentPrompt'를 데이터 속성으로 추가해야 합니다.
+    } catch (error) {
+      console.error('Error fetching recording prompt:', error);
+    }
+  },
+  async saveRecord(promptNum) {
+  try {
+    await apiClient.post('record/save/member', { promptNum });
+    console.log("Record saved successfully");
+    // 추가적인 처리가 필요한 경우 여기에 로직 추가
+  } catch (error) {
+    console.error('Error saving record:', error);
+  }
+},
+async saveAudio(prompt, promptNum) {
+  const formData = new FormData();
+  formData.append("audio", this.blob, `${this.title}.wav`);
+  formData.append("prompt", prompt);
+  formData.append("promptNum", promptNum);
+
+  try {
+    const response = await apiClient.post('record/save/audio', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    this.nextPrompt = response.data; // 'nextPrompt'를 데이터 속성으로 추가해야 합니다.
+  } catch (error) {
+    console.error('Error saving audio:', error);
+  }
+},
+async startLearning() {
+  try {
+    await apiClient.post('/learning');
+    console.log("Learning started successfully");
+    // 추가적인 처리가 필요한 경우 여기에 로직 추가
+  } catch (error) {
+    console.error('Error starting learning process:', error);
+  }
+},
   async record() {
       if (this.recording) {
         this.stopRecording();
@@ -207,7 +344,7 @@ methods: {
         return;
       }
       
-      // save in loacl
+      // Save in local
       const url = window.URL.createObjectURL(this.blob);
       const a = document.createElement("a");
       document.body.appendChild(a);
@@ -218,14 +355,13 @@ methods: {
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
 
-
-      //transmit to server
+      // Transmit to server
       const formData = new FormData();
       formData.append("title", this.title);
       formData.append("audio", this.blob, this.title + ".wav");
 
       try {
-        const response = await fetch('record/save/member', {
+        const response = await fetch('/api/record/save/member', {
           method: 'POST',
           body: formData,
         });
@@ -235,11 +371,38 @@ methods: {
         }
 
         console.log("Sound saved successfully");
-        // 추가적인 처리 (예: 페이지 이동)
+        // Additional handling (e.g., page navigation)
       } catch (error) {
         console.error("Error during sound saving:", error);
       }
     },
+    async saveRecordingToServer() {
+      if (!this.blob) {
+        console.error("No recording available to upload");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("title", this.title);
+      formData.append("audio", this.blob, `${this.title}.wav`);
+
+      try {
+        const response = await apiClient.post('/api/record/save/member', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+
+        if (response.status === 200) {
+          console.log("Recording uploaded successfully");
+          // 여기에 추가 로직을 넣을 수 있음 (예: 상태 업데이트, 사용자에게 알림 등)
+        } else {
+          throw new Error(`Error: ${response.statusText}`);
+        }
+      } catch (error) {
+        console.error("Error uploading recording:", error);
+      }
+    }
   },
 };
 </script>
