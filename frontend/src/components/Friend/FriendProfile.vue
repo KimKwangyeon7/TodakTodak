@@ -13,6 +13,11 @@
             <p class="profile-name">{{ friend.name }}</p>
             <p class="profile-memo">{{ friend.memo }}</p>
           </div>
+          <button class="friend-add btn btn-success btn-sm ml-2"
+            @click.stop="followFriend(friend)"
+            :class="{ 'following': friend.following }">
+            {{ friend.following ? '친구' : '친구 추가' }}
+          </button>
         </div>
 
         <div class="goal-list">
@@ -40,6 +45,13 @@ const friend = ref({
   profilePicture: '/src/assets/damgom.png',
   goals: ['교촌치킨 주문', '네네치킨 주문', '노랑통닭 주문']
 })
+
+const followFriend = (friend) => {
+    const index = friends.value.findIndex(f => f.id === friend.id)
+  if (index !== -1) {
+    friends.value[index].following = !friends.value[index].following
+  }
+}
 </script>
 
 <style scoped>
@@ -112,6 +124,16 @@ const friend = ref({
   margin-bottom: 8px;
 }
 
-/* 필요한 경우 추가적인 스타일링 코드를 작성하세요. */
+/* 팔로잉 중일 때의 버튼 스타일 */
+.friend-add button.following {
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+/* 팔로잉 중이 아닐 때의 버튼 스타일 */
+.friend-add button:not(.following) {
+  background-color: #007bff;
+  border-color: #007bff;
+}
 </style>
 
