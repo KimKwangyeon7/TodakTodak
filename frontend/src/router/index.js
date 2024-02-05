@@ -1,6 +1,7 @@
 // router/index.js
 import { createRouter, createWebHistory } from 'vue-router'
 import Main from '@/views/Main.vue'
+import GoalList from '@/views/Goal/GoalList.vue'
 import AddGoal from '@/views/Goal/AddGoal.vue'
 import Board from '@/views/Board.vue'
 import Calendar from '@/views/Calendar.vue'
@@ -13,10 +14,11 @@ import UserInfoEdit from '@/components/MyPage/UserInfoEdit.vue'
 import Habit from '@/views/Habit/HabitList.vue'
 import Voice from '@/views/Voice/Voice.vue'
 import VoiceTrainer from '@/views/Voice/VoiceTrainer.vue'
+import TodoList from '@/views/Todo/TodoList.vue'
+import CalendarDetail from '@/views/CalendarDetail.vue'
 import Notification from '@/components/Notifications.vue'
 import subscribe from '@/components/subscribe_page.vue'
 import pushnotify from '@/components/pushnotify_page.vue'
-import CalendarDetail from '@/views/CalendarDetail.vue'
 import FriendProfile from '@/components/Friend/FriendProfile.vue'
 
 const router = createRouter({
@@ -93,6 +95,16 @@ const router = createRouter({
 		component: VoiceTrainer
 	},
 	{
+		path: '/calendar-detail/:selectedDate',
+		name: 'CalendarDetail',
+		component: CalendarDetail
+	},
+	{
+		path: '/goallist',
+		name: 'GoalList',
+		component: GoalList
+	},
+	{
 		path: '/subscribe',
 		name: 'subscribe',
 		component: subscribe
@@ -103,14 +115,9 @@ const router = createRouter({
 		component: pushnotify
 	},
   {
-    path: '/calendar/calendarDetail', // 추후 바꿀 예정
-    name: 'CalendarDetail',
-    component: CalendarDetail
-  },
-  {
 	path: '/friend-profile',
 	component: FriendProfile
-  }
+  },
   ]
 })
 

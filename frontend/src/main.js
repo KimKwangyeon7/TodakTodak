@@ -24,4 +24,5 @@ app.use(setupCalendar, {})
 
 app.mount('#app')
 
+app.use(setupCalendar, {})
 registerSW({ immediate: true })
