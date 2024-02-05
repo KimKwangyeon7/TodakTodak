@@ -20,7 +20,7 @@
               <img src="@/assets/sidebar/goal.png" alt=""> 목표 만들기
             </router-link>
             <router-link to="/calendar" class="nav-link">
-              <img src="@/assets/sidebar/calander.png" alt=""> 캘린더
+              <img src="@/assets/sidebar/calendar.png" alt=""> 캘린더
             </router-link>
             <router-link to="/meeting" class="nav-link">
               <img src="@/assets/sidebar/meeting.png" alt=""> 모임
