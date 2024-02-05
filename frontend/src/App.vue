@@ -1,14 +1,24 @@
 <template>
-  <div id="app">
+  <div class="mt-5">
     <Sidebar />
 
     <!-- 하단 네비게이션 바 -->
     <div class="bottom-nav">
-      <RouterLink to="/Main">Home</RouterLink>
-      <RouterLink to="/Calendar">Calendar</RouterLink>
-      <RouterLink to="/Friend">Friends</RouterLink>
-      <RouterLink to="/Meeting">Meeting</RouterLink>
-      <RouterLink to="/mypage">MyPage</RouterLink>
+      <RouterLink to="/Main" class="nav-item">
+        <img src="@/assets/bottom-nav/home.png" alt=""> Home
+      </RouterLink>
+      <RouterLink to="/Calendar" class="nav-item">
+        <img src="@/assets/bottom-nav/Group.png" alt=""> Calendar
+      </RouterLink>
+      <RouterLink to="/Friend" class="nav-item">
+        <img src="@/assets/bottom-nav/Lucide.png" alt=""> Friends
+      </RouterLink>
+      <RouterLink to="/Meeting" class="nav-item">
+        <img src="@/assets/bottom-nav/people.png" alt=""> Meeting
+      </RouterLink>
+      <RouterLink to="/mypage" class="nav-item">
+        <img src="@/assets/bottom-nav/profile.png" alt=""> MyPage
+      </RouterLink>
     </div>
     <RouterView />
   </div>
@@ -51,11 +61,10 @@ export default {
 <style>
 /* 전체 앱 스타일링 */
 #app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    font-family: 'SUITE-Regular';
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
-    padding: 10px; /* 모바일 화면 패딩 추가 */
 }
 
 /* 상단 바 스타일링 */
@@ -83,14 +92,20 @@ export default {
   width: 100%;
   display: flex;
   justify-content: space-around;
-  background-color: #f3f3f3;
-  padding: 10px 0;
+  align-items: center; /* 세로 가운데 정렬 추가 */
+  background-color: #EAF3F9;
+  padding: 10px;
   z-index: 999;
+  height: 70px;
+  font-size: 12px;
 }
 
-
 .nav-item {
-  padding: 5px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 5px;
 }
 
 body {
@@ -110,5 +125,12 @@ div {
   width: 100%; background: white;
   border-radius: 8px;
   padding: 20px;
+}
+
+@font-face {
+    font-family: 'SUITE-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/SUITE-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
 }
 </style>

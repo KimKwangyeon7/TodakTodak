@@ -27,7 +27,7 @@
   </script>
   
   <style scoped>
-  .modal-content {
+ .modal-content {
     background: #EAF3F9;
     border-radius: 8px;
     padding: 20px;
@@ -45,4 +45,6 @@
   cursor: pointer;
   font-size: 12px;
 }
-  </style>
+</style>
+
+
