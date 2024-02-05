@@ -45,17 +45,8 @@
 
 <script>
 import { ref, onMounted, computed } from 'vue'
-import axios from 'axios';
 import { loadKoreanCorpus } from '@/stores/koreanCorpus'
-
-const apiClient = axios.create({
-  baseURL: 'http://your-backend-api-url', // 백엔드 서버 URL로 대체
-  withCredentials: false,
-  headers: {
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-  },
-});
+import apiClient from '@/stores/apiClient'
 
 export default {
   name: 'App',
