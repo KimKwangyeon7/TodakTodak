@@ -53,4 +53,3 @@ methods: {
   display: flex;
 }
 </style>
->>>>>>> 4a0503d1cac1b39ca6331fc165aacd5708ab8644

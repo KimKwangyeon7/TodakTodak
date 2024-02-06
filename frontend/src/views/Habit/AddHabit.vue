@@ -38,8 +38,8 @@
   </template>
   
   <script>
-  import { useHabitsStore } from '@/stores/habits';
-  import { useAlarmsStore } from '@/stores/alarms';
+  import { useHabitsStore } from '@/api/habits';
+  import { useAlarmsStore } from '@/api/alarms';
   
   
   export default {

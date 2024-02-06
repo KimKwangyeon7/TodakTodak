@@ -72,9 +72,9 @@
 </template>
 
 <script>
-import { useTodosStore } from '@/stores/todos';
-import { useGoalsStore } from '@/stores/goals';
-import { useAlarmsStore } from '@/stores/alarms';
+import { useTodosStore } from '@/api/todos';
+import { useGoalsStore } from '@/api/goals';
+import { useAlarmsStore } from '@/api/alarms';
 
 
 export default {

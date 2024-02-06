@@ -24,7 +24,7 @@
   </template>
   
   <script>
-  import { useHabitsStore } from '@/stores/habits'
+  import { useHabitsStore } from '@/api/habits'
 
 
   export default {

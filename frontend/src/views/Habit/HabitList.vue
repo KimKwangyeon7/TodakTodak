@@ -30,7 +30,7 @@
 import HabitDetail from '@/views/Habit/HabitDetail.vue'
 import AddHabit from '@/views/Habit/AddHabit.vue'
 
-import { useHabitsStore } from '@/stores/habits'
+import { useHabitsStore } from '@/api/habits'
 
 export default {
 

@@ -44,15 +44,15 @@
       <!-- <p v-if="item">{{ item.goalContent || item.todoTitle }}</p> -->
       <input type="checkbox">
     </div>
-    <button @click="clearGoals">테스트 차원에서 잠깐 목표 리셋 버튼 만듦</button>
   </div>
 </div>
 </template>
 
 <script>
-import { useGoalsStore } from '@/stores/goals' // Adjust the path if necessary
-import { useTodosStore } from '@/stores/todos'
-import { useAlarmsStore } from '@/stores/alarms'
+import { useGoalsStore } from '@/api/goals' // Adjust the path if necessary
+import { useTodosStore } from '@/api/todos'
+import { useAuthStore } from '@/stores/auth'
+
 
 import Sidebar from '@/views/Sidebar.vue'
 import TodoList from '@/views/Todo/TodoList.vue'
@@ -61,7 +61,6 @@ import AddTodo from '@/views/Todo/AddTodo.vue'
 import GoalList from '@/views/Goal/GoalList.vue'
 import GoalDetail from '@/views/Goal/GoalDetail.vue'
 import HabitList from '@/views/Habit/HabitList.vue'
-import { useAuthStore } from '@/stores/auth'
 
 export default {
 
@@ -133,17 +132,6 @@ export default {
       const goalsStore = useGoalsStore();
       const goal = goalsStore.goals.find(g => g.id === todo.goalId);
       return goal ? goal.color : 'defaultColor'; // Replace 'defaultColor' with a fallback color
-    },
-    clearGoals() {
-      const goalsStore = useGoalsStore();
-      const todosStore = useTodosStore();
-      const alarmsStore = useAlarmsStore()
-      goalsStore.resetGoals();
-      todosStore.resetTodos();
-      alarmsStore.resetAlarms()
-      localStorage.removeItem('my_goals'); // Clear persisted state if necessary
-      localStorage.removeItem('my_todos'); // Clear persisted state if necessary
-      localStorage.removeItem('my_alarms')
     },
   },
   mounted() {

@@ -51,9 +51,9 @@
 </template>
 
 <script>
-import { useGoalsStore } from '@/stores/goals';
-import { useTodosStore } from '@/stores/todos';
-import { useAlarmsStore } from '@/stores/alarms';
+import { useGoalsStore } from '@/api/goals';
+import { useTodosStore } from '@/api/todos';
+import { useAlarmsStore } from '@/api/alarms';
 
 export default {
   data() {

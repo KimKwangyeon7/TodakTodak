@@ -18,7 +18,7 @@
 </template>
   
 <script>
-    import { useGoalsStore } from '@/stores/goals' // Adjust the path if necessary
+    import { useGoalsStore } from '@/api/goals' // Adjust the path if necessary
 
     export default {
         data() {

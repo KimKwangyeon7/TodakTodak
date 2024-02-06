@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { useGoalsStore } from '@/stores/goals';
+import { useGoalsStore } from '@/api/goals';
 
 export default {
   data() {
