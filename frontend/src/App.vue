@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-5">
+  <div v-if="authStore.isLogin" class="mt-5">
     <Sidebar />
 
     <!-- 하단 네비게이션 바 -->
@@ -12,6 +12,13 @@
     </div>
     <RouterView />
   </div>
+  <div v-else>
+    <div>
+      <RouterLink :to="{ name: 'SignUpView' }">SignUp</RouterLink>
+      <RouterLink :to="{ name: 'LoginView' }">Login</RouterLink>
+    </div>
+  </div>
+  <RouterView />
 </template>
 
 <script>
@@ -21,6 +28,8 @@ import Main from '@/views/Main.vue'
 import MyPage from '@/views/MyPage.vue'
 
 import { RouterLink, RouterView } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+
 
 let today = new Date()
 console.log(today)
@@ -30,6 +39,13 @@ export default {
   data() {
     return {
       is_modal_valid: false,
+    }
+  },
+  setup() {
+    const authStore = useAuthStore()
+
+    return {
+      authStore,
     }
   },
   components: {
@@ -43,6 +59,10 @@ export default {
   methods: {
     closeModal() {
       this.is_modal_valid = false
+    },
+    handleLoginClick() {
+      console.log(this.authStore.isLogin);
+      // 여기에서 로그인 상태 확인
     }
   }
 }

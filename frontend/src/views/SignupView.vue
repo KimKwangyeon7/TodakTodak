@@ -57,10 +57,8 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useCounterStore } from '@/stores/counter'
 import axios from 'axios';
 
-const store = useCounterStore()
 const name = ref(null)
 const email = ref(null)
 const password1 = ref(null)

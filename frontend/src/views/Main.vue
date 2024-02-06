@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="authStore.isLogin">
 
   <!-- 모달 -->
   <div class="black-bg" v-if="is_modal_valid">
@@ -62,7 +62,7 @@ import AddTodo from '@/views/Todo/AddTodo.vue'
 import GoalList from '@/views/Goal/GoalList.vue'
 import GoalDetail from '@/views/Goal/GoalDetail.vue'
 import HabitList from '@/views/Habit/HabitList.vue'
-
+import { useAuthStore } from '@/stores/auth'
 
 
 
@@ -87,6 +87,13 @@ export default {
       today: '', // 현재 날짜를 저장할 데이터 속성 추가
       // todoItems: [],
       currentItem: null,
+    }
+  },
+  setup() {
+    const authStore = useAuthStore()
+
+    return {
+      authStore,
     }
   },
   components: {

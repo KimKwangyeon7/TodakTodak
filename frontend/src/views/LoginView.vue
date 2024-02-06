@@ -29,9 +29,7 @@
   
   <script setup>
   import { ref } from 'vue'
-  import { useCounterStore } from '@/stores/counter'
   
-  const store = useCounterStore()
   const email = ref(null)
   const password = ref(null)
   
