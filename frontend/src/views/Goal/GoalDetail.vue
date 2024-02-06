@@ -1,24 +1,76 @@
 <template>
   <div class="modal-content">
     <button type="button" class="btn-close" aria-label="Close" @click="closeModal"></button>
-    <p>목표: {{ item.goalContent }}</p>
-    <p>관련 투두리스트:</p>
+      <div class="form-group">
+          <label for="goalContent">목표 내용:</label>
+          <input v-model="item.goalContent" type="text" id="goalContent" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="selectedColor">목표 색상:</label>
+          <select v-model="localSelectedColor" id="selectedColor" class="form-control">
+            <option v-for="goal in goals" :key="goal.id" :value="goal.id">
+              {{ goal.color }}
+            </option>
+        </select>
+    </div>
+    <button class="" @click="fnDelete">삭제</button>
+    <button class="" @click="fnSave">저장</button>
+
   </div>
 </template>
 
 <script>
-//import 
+import { useGoalsStore } from '@/stores/goals';
 
 export default {
+  data() {
+    return {
+      originalItem: {}
+    }
+  },
+  created() {
+    this.originalItem = {...this.item}
+  },
   props: {
     item: {
       type: Object,
       required: true
     }
   },
+  computed: {
+    goals() {
+      return useGoalsStore().goals
+    },
+    get() {
+      return this.item.selectedColor || this.goals[0]?.id;
+    },
+    set(newValue) {
+      this.item.selectedColor = newValue
+    }
+  },
   methods: {
     closeModal() {
+      Object.assign(this.item, this.originalItem)
+      this.editableItem = {...this.item};
       this.$emit('close-modal');
+    },
+    async fnDelete() {
+      try {
+        const goalStore = useGoalsStore();
+        await goalStore.deleteGoal(this.item.id);
+        this.$emit('close-modal');
+      } catch (error) {
+        console.error('Error deleting goal:', error);
+      }
+    },
+    async fnSave() {
+      try {
+        const todoStore = useGoalsStore(); 
+        await todoStore.updateGoal(this.item.id, this.item); 
+        this.$emit('close-modal'); 
+      } catch (error) {
+        console.error('Error updating goal:', error);
+      }
     },
   },
 };

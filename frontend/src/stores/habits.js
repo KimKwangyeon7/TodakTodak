@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
-// import axios from 'axios'
-
+import apiClient from '@/stores/apiClient'
 
 export const useHabitsStore = defineStore({
   id: 'habits', // The unique ID of the store across your application
@@ -13,11 +12,77 @@ export const useHabitsStore = defineStore({
 
 
   actions: {
-    addHabit(newHabit) {
-      const habitWithId = { id: this.nextId++, ...newHabit }; 
-      this.habits.push(habitWithId);
-      console.log('habitWithId', habitWithId.id)
+    async addHabit(newHabit) {
+      try {
+        // const response = await apiClient.post('/habits', newHabit);
+        // this.habits = response.data;
+        const habitWithId = { id: this.nextId++, ...newHabit }
+        this.habits.push(habitWithId)
+        console.log("Habit added:", response.data)
+      } catch (error) {
+        console.error('Error creating habit:', error);
+      }
     },
+
+    async getHabitList() {
+      try {
+        const response = await apiClient.get('/habits');
+        this.habits = response.data;
+      } catch (error) {
+        console.error('Error fetching habits:', error);
+      }
+    },
+
+    async getHabitListByDay(day) {
+      try {
+        const response = await apiClient.get(`/habits/day/${day}`);
+        this.habits = response.data;
+      } catch (error) {
+        console.error('Error fetching habits by day:', error);
+      }
+    },
+
+    async isHabitCompleted(habitId, alarmId) {
+      try {
+        const response = await apiClient.patch(`/habits/${habitId}/${alarmId}/complete`);
+        this.habits[hatibId].isCompleted = true;
+      } catch (error) {
+        console.error('Error completing habit:', error);
+      }
+    },
+
+    async getHabitDetail(habitId) {
+      try {
+        const response = await apiClient.get(`/habits/${habitId}`);
+        // 여기에서 특정 습관의 상세 정보를 처리할 수 있습니다.
+      } catch (error) {
+        console.error('Error fetching habit detail:', error);
+      }
+    },
+
+    async updateGoal(habitId, habitUpdateInfo) {
+      try {
+        const response = await apiClient.put(`/habits/${habitId}`, habitUpdateInfo);
+        console.log(response.data);
+      } catch (error) {
+          console.error(error);
+    }
+  },
+
+  async deleteGoal(habitId) {
+    try {
+      // const response = await apiClient.delete(`/goals/${goalId}`);
+      const index = this.goals.findIndex(habit => habit.id === habitId);
+      if (index !== -1) {
+        // Remove the deleted todo from the this.todos array using splice
+        this.habits.splice(index, 1);
+      }
+      console.log(response.data);
+    } catch (error) {
+        console.error(error);
+    }
+  },
+
 
     logHabits() {
       this.habits.forEach(habit => {
