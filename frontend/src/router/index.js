@@ -120,10 +120,10 @@ const router = createRouter({
 		name: 'pushnotify',
 		component: pushnotify
 	},
-  {
-	path: '/friend-profile',
-	component: FriendProfile
-  },
+	{
+		path: '/friend-profile',
+		component: FriendProfile
+	},
   ]
 })
 
