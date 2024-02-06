@@ -1,7 +1,6 @@
 <template>
   <div class="app mt-5">
-    <!-- 편집-->
-    <p class="word-voice-edit">편집
+    <p class="word-voice-edit">음성
       <router-link :to="{ name: 'VoiceTrainer' }" style="font-size: 40px;">+</router-link>
     </p>
 
@@ -15,6 +14,7 @@
             <button class="toggle-button" :class="{ 'active': voice.isActive }" @click="toggleVoice(voice)">
               {{ voice.isActive ? '사용 중' : '적용하기' }}
             </button>
+            <button class="delete-button" @click="showDeleteConfirmation(usable, voice.id)">삭제</button>
           </dd>
         </div>
       </dl>
@@ -31,6 +31,7 @@
             <button class="toggle-button" :class="{ 'active': voice.isActive }" @click="toggleVoice(voice)">
               {{ voice.isActive ? '사용 중' : '적용하기' }}
             </button>
+            <button class="delete-button" @click="showDeleteConfirmation(training, voice.id)">삭제</button>
           </dd>
         </div>
       </dl>
@@ -53,6 +54,22 @@ for (let i = 1; i <= 5; i++) {
 const toggleVoice = (voice) => {
   voice.isActive = !voice.isActive;
 };
+
+const showDeleteConfirmation = (list, id) => {
+  const confirmed = window.confirm('정말 삭제하시겠습니까?');
+  if (confirmed) {
+    deleteVoice(list, id);
+  }
+}
+
+const deleteVoice = (list, id) => {
+  const index = list.findIndex(voice => voice.id === id);
+  if (index !== -1) {
+    list.splice(index, 1);
+  }
+}
+
+
 </script>
 
 
@@ -94,56 +111,6 @@ const toggleVoice = (voice) => {
   box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.25);
 }
 
-.material-switch > input[type="checkbox"] {
-  display: none;
-}
-
-.material-switch > label {
-  cursor: pointer;
-  height: 10px;
-  position: relative;
-  top: 2px;
-  width: 40px;
-}
-
-.material-switch > label::before {
-  background: rgb(255, 255, 255);
-  border-radius: 16px;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
-  content: '';
-  height: 24px;
-  left: -10px;
-  margin-top: -4px;
-  position: absolute;
-  transition: all 0.3s ease-in-out;
-  width: 24px;
-  z-index: 1;
-}
-
-.material-switch > label::after {
-  background: rgb(0, 0, 0);
-  box-shadow: inset 0px 0px 10px rgba(161, 160, 160, 0.5);
-  border-radius: 10px;
-  content: '';
-  height: 16px;
-  margin-top: 0px;
-  position: absolute;
-  left: -10px;
-  opacity: 0.3;
-  transition: all 0.4s ease-in-out;
-  width: 50px;
-}
-
-.material-switch > input[type="checkbox"]:checked + label::before {
-  background: inherit;
-  left: 25px;
-}
-
-.material-switch > input[type="checkbox"]:checked + label::after {
-  background: red;
-  opacity: 0.6;
-}
-
 .toggle-button {
   cursor: pointer;
   background: #e0e0e0;
@@ -155,6 +122,17 @@ const toggleVoice = (voice) => {
 
 .toggle-button.active {
   background: red;
+  color: white;
+}
+
+.delete-button {
+  cursor: pointer;
+  background: #ff3333; /* 삭제 버튼 색상은 사용자에게 명확하게 나타내기 위해 변경 가능 */
+  border: none;
+  border-radius: 16px;
+  padding: 5px 10px;
+  font-size: 14px;
+  margin-left: 10px; /* 삭제 버튼 간격 조절 가능 */
   color: white;
 }
 </style>
