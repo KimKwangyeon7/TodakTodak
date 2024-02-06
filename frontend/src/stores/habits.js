@@ -14,8 +14,11 @@ export const useHabitsStore = defineStore({
   actions: {
     async addHabit(newHabit) {
       try {
-        const response = await apiClient.post('/habits', newHabit);
-        this.habits = response.data;
+        // const response = await apiClient.post('/habits', newHabit);
+        // this.habits = response.data;
+        const habitWithId = { id: this.nextId++, ...newHabit }
+        this.habits.push(habitWithId)
+        console.log("Habit added:", response.data)
       } catch (error) {
         console.error('Error creating habit:', error);
       }
@@ -56,6 +59,29 @@ export const useHabitsStore = defineStore({
         console.error('Error fetching habit detail:', error);
       }
     },
+
+    async updateGoal(habitId, habitUpdateInfo) {
+      try {
+        const response = await apiClient.put(`/habits/${habitId}`, habitUpdateInfo);
+        console.log(response.data);
+      } catch (error) {
+          console.error(error);
+    }
+  },
+
+  async deleteGoal(habitId) {
+    try {
+      // const response = await apiClient.delete(`/goals/${goalId}`);
+      const index = this.goals.findIndex(habit => habit.id === habitId);
+      if (index !== -1) {
+        // Remove the deleted todo from the this.todos array using splice
+        this.habits.splice(index, 1);
+      }
+      console.log(response.data);
+    } catch (error) {
+        console.error(error);
+    }
+  },
 
 
     logHabits() {

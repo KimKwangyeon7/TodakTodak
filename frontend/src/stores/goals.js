@@ -1,17 +1,5 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
-
-
-  // const token
-
-const apiClient = axios.create({
-  baseURL: 'http://your-backend-api-url', // 백엔드 서버 URL로 대체
-  withCredentials: false,
-  headers: {
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-  },
-});
+import apiClient from './apiClient';
 
 export const useGoalsStore = defineStore({
   id: 'goals', // The unique ID of the store across your application
@@ -23,8 +11,10 @@ export const useGoalsStore = defineStore({
   actions: {
     async addGoal(newGoal) {
       try {
-          const response = await apiClient.post('/goals', newGoal);
-          this.goals.push(response.data); 
+          // const response = await apiClient.post('/goals', newGoal);
+          // this.goals.push(response.data); 
+          const goalWithId = { id: this.nextId++, ...newGoal }
+          this.goals.push(goalWithId)
           console.log("Goal added:", response.data);
       } catch (error) {
           console.error("Error adding goal:", error);
@@ -51,7 +41,7 @@ export const useGoalsStore = defineStore({
 
     async updateGoal(goalId, goalUpdateInfo) {
         try {
-          const response = await axios.put(`/goals/${goalId}`, goalUpdateInfo);
+          const response = await apiClient.put(`/goals/${goalId}`, goalUpdateInfo);
           console.log(response.data);
         } catch (error) {
             console.error(error);
@@ -60,7 +50,12 @@ export const useGoalsStore = defineStore({
 
     async deleteGoal(goalId) {
       try {
-        const response = await axios.delete(`/goals/${goalId}`);
+        // const response = await apiClient.delete(`/goals/${goalId}`);
+        const index = this.goals.findIndex(goal => goal.id === goalId);
+        if (index !== -1) {
+          // Remove the deleted todo from the this.todos array using splice
+          this.goals.splice(index, 1);
+        }
         console.log(response.data);
       } catch (error) {
           console.error(error);

@@ -15,8 +15,11 @@ export const useTodosStore = defineStore({
 
     async addTodo(newTodo) {
       try {
-        const response = await apiClient.post('/todos', newTodo);
-        this.todos.push(response.data);
+        // const response = await apiClient.post('/todos', newTodo);
+        // this.goals.push(response.data); 
+        const todoWithId = { id: this.nextId++, ...newTodo}
+        this.todos.push(todoWithId)
+        console.log("Todo added:", response.data);
       } catch (error) {
         console.error('Error creating todo:', error);
       }
@@ -69,7 +72,7 @@ export const useTodosStore = defineStore({
 
     async updateTodo(todoId, todoUpdateInfo) {
         try {
-          const response = await axios.put(`/todos/${todoId}`, todoUpdateInfo);
+          const response = await apiClient.put(`/todos/${todoId}`, todoUpdateInfo);
           console.log(response.data);
         } catch (error) {
             console.error(error);
@@ -78,7 +81,12 @@ export const useTodosStore = defineStore({
 
     async deleteTodo(todoId) {
       try {
-        const response = await axios.delete(`/todos/${todoId}`);
+        // const response = await apiClient.delete(`/todos/${todoId}`);
+        const index = this.todos.findIndex(todo => todo.id === todoId);
+        if (index !== -1) {
+          // Remove the deleted todo from the this.todos array using splice
+          this.todos.splice(index, 1);
+        }
         console.log(response.data);
       } catch (error) {
           console.error(error);

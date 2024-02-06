@@ -1,16 +1,32 @@
 <template>
     <div class="modal-content">
       <button type="button" class="btn-close" aria-label="Close" @click="closeModal"></button>
-      <h4>HabitDetail 모달</h4>
-      <p>HabitDetail 모달</p>
-      <!-- <p> 제목: {{ item.todoTitle }}</p>
-      <p> 내용: {{ item.todoContent }}</p>
-      <p> 외출 여부: {{ item.isOutside }}</p>
-      <p> 알람 시간: {{ item.time }}</p> -->
+      <div class="form-group">
+        <label for="habitContent">내용:</label>
+        <input v-model="item.habitContent" type="text" id="todoTitle" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label>알람 여부:</label>
+        <div class="custom-control custom-switch">
+          <div class="form-check form-switch">
+            <input v-model="item.isAlarmed" class="form-check-input" type="checkbox" role="switch" id="alarmSwitch">
+            <label class="form-check-label" for="alarmSwitch"></label>
+          </div>
+        </div>   
+      </div>
+      <div class="form-group" v-if="item.isAlarmed">
+        <label for="time">알람 시간:</label>
+        <input v-model="item.time" type="time" id="time" class="form-control">
+      </div>      
+        <button class="" @click="fnDelete">삭제</button>
+        <button class="" @click="fnSave">저장</button>
     </div>
   </template>
   
   <script>
+  import { useHabitsStore } from '@/stores/habits'
+
+
   export default {
     props: {
       item: {
@@ -21,6 +37,24 @@
     methods: {
       closeModal() {
         this.$emit('close-modal');
+      },
+      async fnDelete() {
+        try {
+          const habitsStore = useHabitsStore();
+          await habitsStore.deleteHabit(this.item.id);
+          this.$emit('close-modal');
+        } catch (error) {
+          console.error('Error deleting habit:', error);
+        }
+      },
+      async fnSave() {
+        try {
+          const habitsStore = useHabitsStore(); 
+          await habitsStore.updateHabit(this.item.id, this.item); 
+          this.$emit('close-modal'); 
+        } catch (error) {
+          console.error('Error updating habit:', error);
+        }
       },
     },
   };
