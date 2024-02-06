@@ -28,23 +28,41 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useCounterStore } from '@/stores/counter'
+import { ref } from 'vue';
+import { useStore } from 'vuex';
+import * as axios from 'axios';
 
-const store = useCounterStore()
-const email = ref(null)
-const password = ref(null)
+const store = useStore(); // 기존에 생성된 스토어에 접근
 
-const logIn = function () {
+const email = ref(null);
+const password = ref(null);
+
+const logIn = async function () {
+  console.log('Axios object:', axios); // axios 객체 확인
   const payload = {
     email: email.value,
-    password: password.value
+    password: password.value,
+  };
+
+  try {
+    // Axios를 사용하여 로그인 요청을 보냄
+    const response = await axios.post('your_login_endpoint', payload);
+
+    // 토큰을 받아옴
+    const receivedToken = response.data.token;
+
+    // 받아온 토큰을 Vuex store에 저장
+    store.commit('setToken', receivedToken);
+
+    // 받아온 토큰을 로컬 스토리지에 저장
+    localStorage.setItem('token', receivedToken);
+  } catch (error) {
+    console.error('Login failed:', error);
+    // 실패 시 필요한 로직 추가
   }
-  store.logIn(payload)
-}
-
-
+};
 </script>
+
 
 <style>
 .loginbox{
