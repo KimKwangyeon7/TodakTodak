@@ -5,7 +5,7 @@
         </button>
 
       <div class="profile-section">
-        <h2>프로필 수정 페이지</h2>
+        <h2>프로필 수정</h2>
         <form @submit.prevent="saveProfile">
           <div class="form-group">
             <label for="name">이름:</label>
@@ -16,10 +16,10 @@
             <textarea v-model="userData.memo" id="memo" class="form-control"></textarea>
           </div>
           <div class="form-group">
-            <label for="profilePicture">프로필 이미지 URL:</label>
+            <label for="profilePicture">프로필 이미지:</label>
             <input v-model="userData.profilePicture" type="text" id="profilePicture" class="form-control">
           </div>
-          <button type="submit" class="btn btn-primary">저장</button>
+          <button type="submit" class="profile-save-btn btn">저장</button>
         </form>
       </div>
     </div>
@@ -64,15 +64,13 @@
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    touch-action: manipulation;
+  }
+
+  .profile-save-btn {
+    display: flex;
+    margin-left: auto;
   }
   
-  .btn-primary {
-    background-color: #007bff;
-    color: #fff;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
   </style>
   

@@ -1,4 +1,3 @@
-
 <template>
   <div class="app mt-5">
     <!-- 편집-->
@@ -13,10 +12,9 @@
         <div v-for="voice in usable" :key="voice.id" class="voice">
           <dt>{{ voice.name }}</dt>
           <dd>
-            <div class="material-switch">
-              <input :id="`switch-${voice.id}`" name="s`switch-${voice.id}`" type="checkbox">
-              <label :for="`switch-${voice.id}`" class="default-color"></label>
-            </div>
+            <button class="toggle-button" :class="{ 'active': voice.isActive }" @click="toggleVoice(voice)">
+              {{ voice.isActive ? '사용 중' : '적용하기' }}
+            </button>
           </dd>
         </div>
       </dl>
@@ -30,10 +28,9 @@
         <div v-for="voice in training" :key="voice.id" class="voice">
           <dt>{{ voice.name }}</dt>
           <dd>
-            <div class="material-switch">
-              <input :id="`switch-${voice.id}`" name="s`switch-${voice.id}`" type="checkbox">
-              <label :for="`switch-${voice.id}`" class="default-color"></label>
-            </div>
+            <button class="toggle-button" :class="{ 'active': voice.isActive }" @click="toggleVoice(voice)">
+              {{ voice.isActive ? '사용 중' : '적용하기' }}
+            </button>
           </dd>
         </div>
       </dl>
@@ -48,11 +45,16 @@ import { ref } from 'vue';
 const usable = ref([]);
 const training = ref([]);
 
-for (let i = 1; i <= 15; i++) {
-  usable.value.push({ id: `usable-${i}`, name: '학습된 음성 ' + i });
-  training.value.push({ id: `training-${i}`, name: '훈련 중 ' + i });
+for (let i = 1; i <= 5; i++) {
+  usable.value.push({ id: `usable-${i}`, name: '학습된 음성 ' + i, isActive: false });
+  training.value.push({ id: `training-${i}`, name: '훈련 중 ' + i, isActive: false });
 }
+
+const toggleVoice = (voice) => {
+  voice.isActive = !voice.isActive;
+};
 </script>
+
 
 <style scoped>
 .voice {
@@ -140,5 +142,19 @@ for (let i = 1; i <= 15; i++) {
 .material-switch > input[type="checkbox"]:checked + label::after {
   background: red;
   opacity: 0.6;
+}
+
+.toggle-button {
+  cursor: pointer;
+  background: #e0e0e0;
+  border: none;
+  border-radius: 16px;
+  padding: 5px 10px;
+  font-size: 14px;
+}
+
+.toggle-button.active {
+  background: red;
+  color: white;
 }
 </style>

@@ -23,13 +23,10 @@
               <img src="@/assets/sidebar/goal.png" alt=""> 목표 만들기
             </router-link>
             <router-link to="/calendar" class="nav-link">
-              <img src="@/assets/sidebar/calander.png" alt=""> 캘린더
+              <img src="@/assets/sidebar/calendar.png" alt=""> 캘린더
             </router-link>
             <router-link to="/meeting" class="nav-link">
               <img src="@/assets/sidebar/meeting.png" alt=""> 모임
-            </router-link>
-            <router-link to="/board" class="nav-link">
-              <img src="@/assets/sidebar/board.png" alt=""> 게시판
             </router-link>
             <router-link to="/Friend" class="nav-link">
               <img src="@/assets/sidebar/friend.png" alt=""> 친구
@@ -100,7 +97,7 @@ const components = {
 
 .offcanvas-body img {
   margin-right: 20px;
-  max-width: 35px; 
+  max-width: 30px; 
 }
 
 @font-face {
