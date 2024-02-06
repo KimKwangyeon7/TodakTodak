@@ -38,7 +38,7 @@ export default {
     computed: {
       habits() {
         const habitsStore = useHabitsStore();
-        console.log(habitsStore.habits)
+        // console.log(habitsStore.habits)
         return habitsStore.habits;
       },
     },
