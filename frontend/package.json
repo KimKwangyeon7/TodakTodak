@@ -26,11 +26,13 @@
     "v-calendar": "^3.1.2",
     "vite-plugin-pwa": "^0.17.5",
     "vue": "^3.3.11",
+    "vue-jwt-decode": "^0.1.0",
     "vue-router": "^4.2.5",
     "vue-socket": "^0.2.3",
     "vue-webrtc": "^3.0.1",
     "vuefire": "^3.1.22",
     "web-audio-recorder-js": "^0.0.2",
+    "vuex": "^4.1.0",
     "web-push": "^3.6.7",
     "webrtc-adapter": "^8.2.3"
   },

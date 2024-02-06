@@ -20,6 +20,8 @@ import Notification from '@/components/Notifications.vue'
 import subscribe from '@/components/subscribe_page.vue'
 import pushnotify from '@/components/pushnotify_page.vue'
 import FriendProfile from '@/components/Friend/FriendProfile.vue'
+import LoginView from '@/views/LoginView.vue'
+import SignupView from '@/views/SignupView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -105,6 +107,16 @@ const router = createRouter({
 		component: GoalList
 	},
 	{
+		path: '/login',
+		name: 'LoginView',
+		component: LoginView
+	},
+	{
+		path: '/signup',
+		name: 'SignUpView',
+		component: SignupView
+	}, 
+	{
 		path: '/subscribe',
 		name: 'subscribe',
 		component: subscribe
@@ -118,6 +130,16 @@ const router = createRouter({
 	path: '/friend-profile',
 	component: FriendProfile
   },
+  {
+	path: '/login',
+	name: 'LoginView',
+	component: LoginView
+},
+{
+	path: '/signup',
+	name: 'SignUpView',
+	component: SignupView
+}, 
   ]
 })
 
