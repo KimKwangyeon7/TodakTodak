@@ -21,21 +21,24 @@ export const useCounterStore = defineStore('counter', () => {
 
  
   const signUp = function (payload) {
-    const username =payload.username
-    const password1 =payload.password1
-    const password2 =payload.password2
+    const email =payload.email
+    const password =payload.password
+    const nickname=payload.nickname
+    const birthDate=payload.birthDate
+    const name=payload.name
+    const sex=payload.sex
+    const phoneNumber=payload.phoneNumber
 
     axios({
       method: 'post',
-      url: `http://localhost:5173/signup/`,
+      url: `http://localhost:8080/members`,
       data: {
-        username, password1, password2
+        email, password, name, nickname, sex, phoneNumber, birthDate
       }
     })
       .then((res) => {
         window.alert('회원가입이 완료되었습니다.')
-        const password = password1
-        logIn({ username, password })
+        logIn({ email, password })
 
       })
       .catch((err) => {

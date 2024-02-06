@@ -2,7 +2,6 @@
 
   <div>
   <div class="loginbox"  >
-
     <div style="display: flex; border-radius: 10px; color: black ; background-color: aliceblue; align-items: center; justify-content: center;" class="z-2">
       <img src="@/assets/sleepcat.gif" alt="logo" style=" width: auto; height: 350px; border-radius: 10px;">
       <form @submit.prevent="logIn" >
@@ -29,10 +28,10 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useStore } from 'vuex';
-import * as axios from 'axios';
+// import { useStore } from 'pinia';
+import axios from 'axios';
 
-const store = useStore(); // 기존에 생성된 스토어에 접근
+// const store = useStore(); // 기존에 생성된 스토어에 접근
 
 const email = ref(null);
 const password = ref(null);
@@ -46,13 +45,14 @@ const logIn = async function () {
 
   try {
     // Axios를 사용하여 로그인 요청을 보냄
-    const response = await axios.post('your_login_endpoint', payload);
-
+    const response = await axios.post('http://localhost:8080/members/login', payload);
+    console.log(response);
     // 토큰을 받아옴
-    const receivedToken = response.data.token;
+    const receivedToken = response.data.accessToken;
+    console.log(receivedToken);
 
     // 받아온 토큰을 Vuex store에 저장
-    store.commit('setToken', receivedToken);
+    // useStore.commit('token', receivedToken);
 
     // 받아온 토큰을 로컬 스토리지에 저장
     localStorage.setItem('token', receivedToken);
