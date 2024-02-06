@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div v-if="authStore.isLogin" class="mt-5">
     <Sidebar />
 
     <!-- 하단 네비게이션 바 -->
@@ -12,15 +12,24 @@
     </div>
     <RouterView />
   </div>
+  <div v-else>
+    <div>
+      <RouterLink :to="{ name: 'SignUpView' }">SignUp</RouterLink>
+      <RouterLink :to="{ name: 'LoginView' }">Login</RouterLink>
+    </div>
+  </div>
+  <RouterView />
 </template>
 
 <script>
 import Sidebar from '@/components/Sidebar.vue'
-import TodoList from '@/views/TodoList.vue'
+import TodoList from '@/views/Todo/TodoList.vue'
 import Main from '@/views/Main.vue'
 import MyPage from '@/views/MyPage.vue'
 
 import { RouterLink, RouterView } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+
 
 let today = new Date()
 console.log(today)
@@ -30,6 +39,13 @@ export default {
   data() {
     return {
       is_modal_valid: false,
+    }
+  },
+  setup() {
+    const authStore = useAuthStore()
+
+    return {
+      authStore,
     }
   },
   components: {
@@ -43,6 +59,10 @@ export default {
   methods: {
     closeModal() {
       this.is_modal_valid = false
+    },
+    handleLoginClick() {
+      console.log(this.authStore.isLogin);
+      // 여기에서 로그인 상태 확인
     }
   }
 }
@@ -55,7 +75,6 @@ export default {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
-    padding: 10px; /* 모바일 화면 패딩 추가 */
 }
 
 /* 상단 바 스타일링 */
@@ -83,9 +102,10 @@ export default {
   width: 100%;
   display: flex;
   justify-content: space-around;
-  background-color: #f3f3f3;
-  padding: 10px 0;
+  background-color: #EAF3F9;
+  padding: 10px;
   z-index: 999;
+  height: 60px
 }
 
 

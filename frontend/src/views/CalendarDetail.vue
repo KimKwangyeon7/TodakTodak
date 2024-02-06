@@ -38,17 +38,18 @@ export default {
   created() {
     this.calculateWeekDates();
     console.log('Selected Date:', this.selectedDate);
+    console.log('Week Dates:', this.weekDates);
   },
   methods: {
     calculateWeekDates() {
-      let selectedMoment = moment(this.selectedDate, 'DD');
-      let startOfWeek = selectedMoment.clone().startOf('week');
+  let selectedMoment = moment(this.selectedDate, 'YYYY-MM-DD');
+  let startOfWeek = selectedMoment.clone().startOf('week');
 
-      for (let i = 1; i < 8; i++) {
-        let day = startOfWeek.clone().add(i, 'days');
-        this.weekDates.push(day.format('D'));
-      }
-    }
+  for (let i = 1; i < 8; i++) {
+    let day = startOfWeek.clone().add(i, 'days');
+    this.weekDates.push(day.format('D'));
+  }
+}
   }
 };
 </script>

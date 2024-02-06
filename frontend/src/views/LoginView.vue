@@ -8,9 +8,15 @@
         <form @submit.prevent="logIn" >
           <div class="containtext">
             <div>
+<<<<<<< HEAD
               <label for="username">username :    </label>
             </div>
             <input type="text" name="username" id="username" v-model.trim="username"> 
+=======
+              <label for="email">email :    </label>
+            </div>
+            <input type="text" name="email" id="email" v-model.trim="email"> 
+>>>>>>> sh
           </div>
           <div class="containtext">
             <div>
@@ -29,15 +35,24 @@
   
   <script setup>
   import { ref } from 'vue'
+<<<<<<< HEAD
   import { useCounterStore } from '@/stores/counter'
   
   const store = useCounterStore()
   const username = ref(null)
+=======
+  
+  const email = ref(null)
+>>>>>>> sh
   const password = ref(null)
   
   const logIn = function () {
     const payload = {
+<<<<<<< HEAD
       username: username.value,
+=======
+      email: email.value,
+>>>>>>> sh
       password: password.value
     }
     store.logIn(payload)
