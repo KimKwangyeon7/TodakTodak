@@ -64,13 +64,8 @@
 </template>
 
 <script setup>
-import Friend from '@/views/Friend.vue'
 import Notifications from '@/components/Notifications.vue'
 
-const components = {
-  Friend,
-  Notifications,
-}
 </script>
 
 <style scoped>
