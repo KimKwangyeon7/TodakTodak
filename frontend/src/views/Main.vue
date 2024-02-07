@@ -55,7 +55,7 @@ import { useTodosStore } from '@/stores/todos'
 import { useAlarmsStore } from '@/stores/alarms'
 
 
-import Sidebar from '@/views/Sidebar.vue'
+// import Sidebar from '@/views/Sidebar.vue'
 import TodoList from '@/views/Todo/TodoList.vue'
 import TodoDetail from '@/views/Todo/TodoDetail.vue'
 import AddTodo from '@/views/Todo/AddTodo.vue'
@@ -87,7 +87,7 @@ export default {
     }
   },
   components: {
-    Sidebar,
+    // Sidebar,
     GoalList,
     GoalDetail,
     TodoList,
@@ -111,7 +111,7 @@ export default {
 
       // If all checks pass, then proceed to open the modal
       this.is_modal_valid = true;
-      this.activeModal = component;https://lab.ssafy.com/s10-webmobile1-sub2/S10P12C210/-/blob/back/src/main/java/com/ssafy/todak/goal/controller/GoalController.java?ref_type=heads
+      this.activeModal = component; //https://lab.ssafy.com/s10-webmobile1-sub2/S10P12C210/-/blob/back/src/main/java/com/ssafy/todak/goal/controller/GoalController.java?ref_type=heads
       this.currentItem = itemData;
     },
     closeModal() {
