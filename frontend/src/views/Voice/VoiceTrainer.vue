@@ -1,7 +1,7 @@
 <template>
   <div class="app mt-5">
     <p class="voice-title">음성 학습
-      <button @click="$router.back()">back</button>
+      <button class='btn' @click="$router.back()">back</button>
     </p>
 
     <div class="sentence-box">
@@ -15,7 +15,7 @@
         녹음 시간: {{ elapsedTime }} 초
       </div>
     </div>    
-
+    
     <div id="app">
       <div>
         <input type="text" label="Sound Name" required v-model="title" />
@@ -247,35 +247,60 @@ export default {
 </script>
 
 <style scoped>
-  .sentence-box {
-    /* overflow: auto; 요소 갯수에 알맞게 자동으로 높이 조절하는 역할 */
-    overflow-y: scroll; /* 오직 수직 스크롤만 활성화 */
-    max-height: 500px; /* 적절한 최대 높이 설정 */
-    justify-content: space-between;
-    text-align: center;
-    align-items: right;
-    flex-shrink: 0;
-    background-color: #EAF3F9;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 24px;
-    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.25);
-  }
+.sentence-box {
+  /* overflow: auto; */
+  overflow-y: scroll; /* 오직 수직 스크롤만 활성화 */
+  max-height: 500px; /* 적절한 최대 높이 설정 */
+  justify-content: space-between;
+  text-align: center;
+  background-color: #EAF3F9;
+  padding: 10px;
+  margin: 10px 0;
+  height: 260px;
+  border-radius: 24px;
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.25);
+  font-size: 20px;
+  position: relative;
+}
 
-  .voice-title {
-    display: flex; /* Flexbox 레이아웃을 사용하여 내부 요소들을 가로로 배치 */
-    justify-content: space-between; /* 요소들을 양 끝에 정렬 */
-    align-items: center; /* 요소들을 세로로 가운데 정렬 */
-    padding: 8px; /* 내부 여백 설정 */
-    font-size: 30px; /* 폰트 크기 설정 (모바일 화면에서 크기 조절) */
-  }
+.sentence-btn {
+  position: absolute;
+  top: 90%;
+  transform: translateY(-50%);
+}
 
-  #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #e47932;
-    margin-top: 60px;
-  }
+.sentence-text {
+  font-weight: bold;
+  margin-top: 35px;
+}
+.left-btn img,
+.right-btn img {
+  width: 30px; /* 원하는 크기로 조정 */
+  height: 30px; /* 원하는 크기로 조정 */
+}
+
+.left-btn {
+  left: 0;
+}
+
+.right-btn {
+  margin-left: 245px;
+}
+
+.voice-title {
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  padding: 8px; 
+  font-size: 30px; 
+}
+
+.voice-title button {
+  font-size: 20px;
+}
+
+#app {
+  text-align: center;
+  color: #e47932;
+}
 </style>

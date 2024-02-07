@@ -1,5 +1,3 @@
-<!-- MyPage.vue -->
-
 <template>
     <div class="mt-5">
         <button class="settings-button btn" @click="goToSettings"><img src="@/assets/settings.png" alt=""></button>

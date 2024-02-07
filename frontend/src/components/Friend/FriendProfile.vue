@@ -60,8 +60,6 @@ const followFriend = (friend) => {
 }
 
 .profile-header {
-  background-color: #0084ff;
-  color: #fff;
   padding: 5px;
   display: flex;
   justify-content: space-between;
@@ -69,7 +67,7 @@ const followFriend = (friend) => {
 }
 
 .profile-title {
-  margin-top: 10px;
+  font-size: 30px;
 }
 
 .profile-name {
@@ -83,7 +81,6 @@ const followFriend = (friend) => {
 
 .back-button {
   background-color: transparent;
-  color: #fff;
   border: none;
   cursor: pointer;
 }

@@ -59,8 +59,6 @@ function sendMessage() {
     })
 }
 
-function adjustTextarea() {
-}
 
 function scrollChatToBottom() {
     if (chatContainer.value) {

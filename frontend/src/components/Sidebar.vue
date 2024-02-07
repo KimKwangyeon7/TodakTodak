@@ -1,11 +1,13 @@
 <template>
   <div>
-    <nav class="navbar bg-body-tertiary fixed-top">
+    <nav class="navbar fixed-top">
       <div class="container-fluid d-flex justify-content-between align-items-center">
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <router-link to="/" class="navbar-brand mx-auto">Todak Todak</router-link>
+        <router-link to="/" class="todak-logo navbar-brand mx-auto">
+          <img src="@/assets/todak/todak-logo.png" alt="">
+        </router-link>
         <button type="button" class="btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNotifications" aria-controls="offcanvasNotifications">
           <img src="@/assets/bell.png" alt="">
         </button>
@@ -28,9 +30,6 @@
             <router-link to="/meeting" class="nav-link">
               <img src="@/assets/sidebar/meeting.png" alt=""> 모임
             </router-link>
-            <router-link to="/board" class="nav-link">
-              <img src="@/assets/sidebar/board.png" alt=""> 게시판
-            </router-link>
             <router-link to="/Friend" class="nav-link">
               <img src="@/assets/sidebar/friend.png" alt=""> 친구
             </router-link>
@@ -46,7 +45,6 @@
             <p style="color:red">잠깐 아래 부분 푸시 알림 테스트 용도로 쓸게요!!</p>
             <router-link to="/subscribe" class="nav-link" style="color:red"><span class="emoji"></span> subscribe</router-link>
             <router-link to="/pushnotify" class="nav-link" style="color:red"><span class="emoji"></span> pushnotify</router-link>
-
           </div>
         </div>
       </div>
@@ -66,25 +64,23 @@
 </template>
 
 <script setup>
-import Friend from '@/views/Friend.vue'
 import Notifications from '@/components/Notifications.vue'
 
-const components = {
-  Friend,
-  Notifications,
-}
 </script>
 
 <style scoped>
+.todak-logo img {
+  max-width: 100px;
+}
 .offcanvas-title {
-  font-size: 30px;
+  font-size: 25px;
   font-weight: bold;
   margin-left: 10px;
   font-family: 'SUITE-Regular';
 }
 
 .offcanvas-body {
-  font-size: 25px;
+  font-size: 18px;
   text-align: left;
   display: flex;
   flex-direction: column;
@@ -100,7 +96,7 @@ const components = {
 
 .offcanvas-body img {
   margin-right: 20px;
-  max-width: 35px; 
+  max-width: 30px; 
 }
 
 @font-face {

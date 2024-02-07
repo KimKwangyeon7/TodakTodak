@@ -51,14 +51,14 @@
   </template>
   
   <script>
-  import { useGoalsStore } from '@/api/goals';
+  import { getGoalList } from '@/api/goals';
   import { useTodosStore } from '@/api/todos';
   import { useAlarmsStore } from '@/api/alarms';
   
   export default {
     data() {
       return {
-        originalItem: {}
+        originalItem: {},
       }
     },
     created() {
@@ -71,9 +71,9 @@
       }
     },
     computed: {
-      goals() {
+      async goals() {
         // This will reactively update when the store's state changes
-        return useGoalsStore().goals;
+        this.goals = await getGoalList()
       },
       localSelectedGoal: {
         get() {

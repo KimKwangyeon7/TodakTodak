@@ -43,15 +43,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import {  }from '@/api/record'
 
-const usable = ref([]);
-const training = ref([]);
-
-for (let i = 1; i <= 15; i++) {
-  usable.value.push({ id: `usable-${i}`, name: '학습된 음성 ' + i });
-  training.value.push({ id: `training-${i}`, name: '훈련 중 ' + i });
-}
 </script>
 
 <style scoped>

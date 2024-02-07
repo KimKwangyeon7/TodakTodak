@@ -45,13 +45,10 @@ import { getGoalList, getGoalDetail } from '@/api/goals';
 import { getTodoList, getTodoDetail } from '@/api/todos';
 import { useAuthStore } from '@/stores/auth'
 
-import Sidebar from '@/views/Sidebar.vue'
-import TodoList from '@/views/Todo/TodoList.vue'
 import TodoDetail from '@/components/Todo/TodoDetail.vue'
 import AddTodo from '@/components/Todo/AddTodo.vue'
-import GoalList from '@/views/Goal/GoalList.vue'
 import GoalDetail from '@/components/Goal/GoalDetail.vue'
-import HabitList from '@/views/Habit/HabitList.vue'
+import Habit from '@/views/Habit.vue'
 
 export default {
   name: 'App',
@@ -73,13 +70,10 @@ export default {
     }
   },
   components: {
-    Sidebar,
-    GoalList,
     GoalDetail,
-    TodoList,
     TodoDetail,
     AddTodo,
-    HabitList,
+    Habit,
   },  
   methods: {
     async openModal(component, itemData = null) {
@@ -155,109 +149,109 @@ export default {
   },
 };
 </script>
-  
-  <style scoped>
-  .top-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    background-color: #ffffff;
-  }
-  
-  .quote {
-    font-size: 10px;
-  }
-  
-  
-  /* 할 일 목록 스타일링 */
-  .todo-section {
-    background-color: #EAF3F9; 
-    border-radius: 20px; 
-    padding: 15px;
-    margin: 10px 0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
-  }
-  
-  .todo-date {
-    font-weight: bold;
-    margin-bottom: 5px;
-    text-align: left;
-    display: flex;
-    justify-content: space-between; /* 요일과 버튼을 각각 왼쪽과 오른쪽에 배치 */
-    align-items: center; /* 세로 중앙 정렬 */
-  }
-  
-  .add-button {
-    font-size: 20px;
-    background-color: #EAF3F9;
-    color: #000; /* 검정색 텍스트 색상 */
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    padding: 5px; /* 내용물과 버튼 사이의 간격 조절을 위한 패딩 */
-  }
-  
-  
-  .todo-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* 체크박스를 오른쪽으로 이동 */
-  }
-  
-  .todo-item input[type="checkbox"] {
-    margin-right: 5px;
-  }
-  
-  /* 하단 네비게이션 바 스타일링 */
-  .bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    background-color: #f3f3f3;
-    padding: 10px 0;
-  }
-  
-  /* 모달 스타일링 */
-  .black-bg {
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    position: fixed;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2;
-    top: 0;
-    left: 0;
-  }
-  
-  .color-bar {
-    width: 5px; /* Adjust the width of the color bar */
-    height: 15px; /* Adjust the height of the color bar */
-    margin-right: 10px; /* Space between the bar and the content */
-  }
-  
-  .color-circle{
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    margin-right: 10px;
-    display: inline-block;
-  }
-  
-  .goal-content {
-    flex-grow: 1;
-    text-align: left;
-    margin-right: 10px; /* Space before the checkbox */
-  }
-  
-  input[type="checkbox"] {
-    margin-left: auto; /* Push the checkbox to the far right */
-  }
+
+<style scoped>
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #ffffff;
+}
+
+.quote {
+  font-size: 20px;
+}
+
+
+/* 할 일 목록 스타일링 */
+.todo-section {
+  background-color: #EAF3F9; 
+  border-radius: 20px; 
+  padding: 15px;
+  margin: 10px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+}
+
+.todo-date {
+  font-weight: bold;
+  margin-bottom: 5px;
+  text-align: left;
+  display: flex;
+  justify-content: space-between; /* 요일과 버튼을 각각 왼쪽과 오른쪽에 배치 */
+  align-items: center; /* 세로 중앙 정렬 */
+}
+
+.add-button {
+  font-size: 20px;
+  background-color: #EAF3F9;
+  color: #000; /* 검정색 텍스트 색상 */
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 5px; /* 내용물과 버튼 사이의 간격 조절을 위한 패딩 */
+}
+
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* 체크박스를 오른쪽으로 이동 */
+}
+
+.todo-item input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+/* 하단 네비게이션 바 스타일링 */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  background-color: #f3f3f3;
+  padding: 10px 0;
+}
+
+/* 모달 스타일링 */
+.black-bg {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  top: 0;
+  left: 0;
+}
+
+.color-bar {
+  width: 5px; /* Adjust the width of the color bar */
+  height: 15px; /* Adjust the height of the color bar */
+  margin-right: 10px; /* Space between the bar and the content */
+}
+
+.color-circle{
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 10px;
+  display: inline-block;
+}
+
+.goal-content {
+  flex-grow: 1;
+  text-align: left;
+  margin-right: 10px; /* Space before the checkbox */
+}
+
+input[type="checkbox"] {
+  margin-left: auto; /* Push the checkbox to the far right */
+}
 </style>
   

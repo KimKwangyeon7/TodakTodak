@@ -9,7 +9,6 @@
         <!-- 상속 목표 -->
         <div class="form-group">
           <label for="selectedGoal">목표:</label>
-          <!-- <select v-model="item.selectedGoal" id="selectedGoal" class="form-control"> -->
           <select v-model="selectedGoal" id="selectedGoal" class="form-control">
             <option v-for="goal in goals" :key="goal.id" :value="goal">
               {{ goal.goalContent }}
@@ -66,14 +65,14 @@
           <input v-model="time" type="time" id="time" class="form-control">
         </div>
   
-        <button type="submit" class="btn btn-primary" @click="submitTodo">저장</button>
+        <button type="submit" class="btn btn-primary" @click="fnAdd">저장</button>
       </form>
     </div>
   </template>
   
   <script>
-  import { useTodosStore } from '@/api/todos';
-  import { useGoalsStore } from '@/api/goals';
+  import { addTodo } from '@/api/todos';
+  import { getGoalList } from '@/api/goals';
   import { useAlarmsStore } from '@/api/alarms';
   
   
@@ -95,17 +94,21 @@
         isOutside: false,
         isChecked: false,
         isCompleted: false,
+        
+        goals: [] // 목표
       };
-    },
-    computed: {
-      goals() {
-        const goalsStore = useGoalsStore()
-        return goalsStore.goals
-      },
     },
     methods: {
       closeModal() {
         this.$emit('close-modal');
+      },
+
+      async fetchGoals() {
+        try {
+          this.goals = await getGoalList();
+        } catch (error) {
+          console.error('Error fetching goals:', error);
+        }
       },
   
       eightDigitDate(d) {
@@ -117,33 +120,18 @@
         return curDate
       },
   
-      // formattedTime(t) {
-      //   if (this.time) {
-      //     const [hours, minutes] = this.t.split(':');
-      //     const hoursInt = parseInt(hours, 10);
-      //     const period = hoursInt >= 12 ? 'PM' : 'AM';
-      //     const formattedHours = ((hoursInt + 11) % 12 + 1);
-      //     console.log(`${formattedHours}:${minutes} ${period}`)
-      //     return `${formattedHours}:${minutes} ${period}`;
-      //   }
-      //   return '';
-      // },
-  
       fourDigitTime(t) {
         const [hours, minutes] = t.split(':')
         return hours + minutes   
       },
   
-      async submitTodo() {
-  
-        const todosStore = useTodosStore()
+      fnAdd() {
         const alarmsStore = useAlarmsStore()
   
-        try {
         const d = new Date();
         const t = this.time;
   
-        todosStore.addTodo({
+        addTodo({
           goalId: this.selectedGoal.id,
           todoTitle: this.todoTitle,
           todoContent: this.todoContent,
@@ -151,20 +139,19 @@
           isImportant: this.isImportant,
         });
   
-        this.todoId = todosStore.findId(this.todoTitle)
         this.day = (d.getDay() + 6) % 7
         this.closeModal()
   
         // Handle alarms only if isAlarmed is true
         if (this.isAlarmed) {
-          const day = (d.getDay() + 6) % 7;
-          const time = this.fourDigitTime(t);
+          const setTime = this.fourDigitTime(t)
+          this.time = setTime
   
           // Add the alarm to the store
           alarmsStore.addAlarm({
-            todoId,
-            day,
-            time,
+            // todoId,
+            day: this.day,
+            time: this.time,
             isOutside: this.isOutside,
             isAlarmed: this.isAlarmed,
             isChecked: this.isChecked,
@@ -182,13 +169,10 @@
             isCompleted: this.isCompleted,
           });
         }
-  
-        } catch (error) {
-          console.error('Error adding todo or alarm:', error);
-          // Handle the error appropriately, e.g., show an error message to the user
-        }
-        
-      }
+      },
+    },
+    mounted() {
+      this.fetchGoals();
     }  
   }
   </script>

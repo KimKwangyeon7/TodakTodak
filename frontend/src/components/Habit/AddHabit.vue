@@ -76,18 +76,6 @@
         return curDate
       },
   
-      // formattedTime(t) {
-      //   if (this.time) {
-      //     const [hours, minutes] = this.t.split(':');
-      //     const hoursInt = parseInt(hours, 10);
-      //     const period = hoursInt >= 12 ? 'PM' : 'AM';
-      //     const formattedHours = ((hoursInt + 11) % 12 + 1);
-      //     console.log(`${formattedHours}:${minutes} ${period}`)
-      //     return `${formattedHours}:${minutes} ${period}`;
-      //   }
-      //   return '';
-      // },
-  
       fourDigitTime(t) {
         const [hours, minutes] = t.split(':')
         return hours + minutes   
@@ -105,7 +93,6 @@
         });
     
         this.day = (d.getDay() + 6) % 7 // 이렇게 하여 0을 월요일로 바꿈
-  
         this.closeModal() 
   
         if (this.isAlarmed) {
@@ -114,7 +101,7 @@
           this.time = setTime
 
           alarmsStore.addAlarm({
-            habitId: habitsStore.habits[habitsStore.habits.length - 1].id,
+            // habitId: habitsStore.habits[habitsStore.habits.length - 1].id,
             day: this.day,
             time: this.time, 
             isOutside: this.isOutside,
