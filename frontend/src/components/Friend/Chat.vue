@@ -1,6 +1,8 @@
 <template>
   <div>
-    <button class="back-button" @click="goBack">뒤로가기</button>
+    <button class="back-button btn" @click="goBack">
+      <img src="@/assets/back.png" alt="">
+    </button>
 
     <div class="chat-container">
       <div class="chat-messages" ref="chatContainer">
@@ -25,6 +27,7 @@
 <script setup>
 import { chatMessages, id, socket } from '@/socket';
 import { nextTick, ref, watchEffect } from 'vue'
+import axios from 'axios'
 
 const message = ref([])
 const chatContainer = ref(null)
@@ -37,14 +40,25 @@ function sendMessage() {
     chatMessages.value.push(chat)
     socket.timeout(5000).emit('chat', chat)
 
+    // 추가: axios를 사용하여 채팅 메시지 서버에 전송
+    axios.post('/api/chat', chat, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('jwt')}`
+      }
+    })
+    .then(response => {
+      console.log('채팅 메시지 전송 성공', response.data)
+    })
+    .catch(error => {
+      console.error('채팅 메시지 전송 실패', error)
+    })
+
     message.value = ""
     nextTick(() => {
         scrollChatToBottom()
     })
 }
 
-function adjustTextarea() {
-}
 
 function scrollChatToBottom() {
     if (chatContainer.value) {
@@ -62,6 +76,7 @@ function goBack() {
 }
 
 </script>
+
 
 <style scoped>
 .chat-container {
@@ -114,6 +129,7 @@ textarea {
   border: 1px solid #ccc;
   border-radius: 5px;
   margin-right: 10px;
+  touch-action: manipulation;
 }
 
 .input-button {
@@ -126,8 +142,6 @@ textarea {
 }
 
 .back-button {
-  background-color: #0084ff;
-  color: #fff;
   border: none;
   padding: 8px 16px;
   border-radius: 5px;

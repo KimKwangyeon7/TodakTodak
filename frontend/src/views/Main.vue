@@ -9,7 +9,7 @@
   <!-- 명언 -->
   <div class="top-bar">
     <div class="quote">"행복은 우연이 아니라 선택이다"</div>
-    <div>짐  론</div>
+    <div class="quote">짐  론</div>
   </div>
 
   <!-- 투두리스트 -->
@@ -55,16 +55,13 @@ import { useTodosStore } from '@/stores/todos'
 import { useAlarmsStore } from '@/stores/alarms'
 
 
-import Sidebar from '@/views/Sidebar.vue'
+// import Sidebar from '@/views/Sidebar.vue'
 import TodoList from '@/views/Todo/TodoList.vue'
 import TodoDetail from '@/views/Todo/TodoDetail.vue'
 import AddTodo from '@/views/Todo/AddTodo.vue'
 import GoalList from '@/views/Goal/GoalList.vue'
 import GoalDetail from '@/views/Goal/GoalDetail.vue'
 import HabitList from '@/views/Habit/HabitList.vue'
-
-
-
 
 
 export default {
@@ -90,7 +87,7 @@ export default {
     }
   },
   components: {
-    Sidebar,
+    // Sidebar,
     GoalList,
     GoalDetail,
     TodoList,
@@ -114,7 +111,7 @@ export default {
 
       // If all checks pass, then proceed to open the modal
       this.is_modal_valid = true;
-      this.activeModal = component;https://lab.ssafy.com/s10-webmobile1-sub2/S10P12C210/-/blob/back/src/main/java/com/ssafy/todak/goal/controller/GoalController.java?ref_type=heads
+      this.activeModal = component; //https://lab.ssafy.com/s10-webmobile1-sub2/S10P12C210/-/blob/back/src/main/java/com/ssafy/todak/goal/controller/GoalController.java?ref_type=heads
       this.currentItem = itemData;
     },
     closeModal() {
@@ -166,7 +163,7 @@ export default {
 }
 
 .quote {
-  font-size: 10px;
+  font-size: 20px;
 }
 
 

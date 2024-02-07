@@ -1,8 +1,6 @@
-<!-- MyPage.vue -->
-
 <template>
     <div class="mt-5">
-        <button class="settings-button" @click="goToSettings">설정</button>
+        <button class="settings-button btn" @click="goToSettings"><img src="@/assets/settings.png" alt=""></button>
       <UserInfo :userData="userData" />
       <SuccessRate :successRate="successRate" />
       <GoalSuccessRate :goalRate="goalRate" />
@@ -46,8 +44,6 @@ methods: {
 
 <style scoped>
 .settings-button {
-  background-color: #0084ff;
-  color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -55,4 +51,3 @@ methods: {
   display: flex;
 }
 </style>
->>>>>>> 4a0503d1cac1b39ca6331fc165aacd5708ab8644

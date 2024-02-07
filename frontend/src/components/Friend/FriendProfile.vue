@@ -12,6 +12,11 @@
             <img :src="friend.profilePicture" alt="프로필 사진" class="profile-picture" />
             <p class="profile-name">{{ friend.name }}</p>
             <p class="profile-memo">{{ friend.memo }}</p>
+            <button class="friend-add btn btn-success btn-sm ml-2"
+              @click.stop="followFriend(friend)"
+              :class="{ 'following': friend.following }">
+              {{ friend.following ? '친구' : '친구 추가' }}
+            </button>
           </div>
         </div>
 
@@ -21,7 +26,6 @@
             <li v-for="(goal, index) in friend.goals" :key="index">{{ goal }}</li>
           </ul>
         </div>
-        
       </div>
     </div>
   </div>
@@ -29,6 +33,7 @@
 
 <script setup>
 import { ref } from 'vue'
+// import friends from '@/data/friends' 
 
 function goBack() {
   window.history.back()
@@ -38,8 +43,13 @@ const friend = ref({
   name: '김싸피',
   memo: '오늘만 살자',
   profilePicture: '/src/assets/damgom.png',
-  goals: ['교촌치킨 주문', '네네치킨 주문', '노랑통닭 주문']
+  goals: ['교촌치킨 주문', '네네치킨 주문', '노랑통닭 주문'],
+  following: false  // 친구 추가 여부에 따라 초기값 설정
 })
+
+const followFriend = (friend) => {
+  friend.following = !friend.following
+}
 </script>
 
 <style scoped>
@@ -50,8 +60,6 @@ const friend = ref({
 }
 
 .profile-header {
-  background-color: #0084ff;
-  color: #fff;
   padding: 5px;
   display: flex;
   justify-content: space-between;
@@ -59,7 +67,7 @@ const friend = ref({
 }
 
 .profile-title {
-  margin-top: 10px;
+  font-size: 30px;
 }
 
 .profile-name {
@@ -73,13 +81,14 @@ const friend = ref({
 
 .back-button {
   background-color: transparent;
-  color: #fff;
   border: none;
   cursor: pointer;
 }
 
 .profile-body {
   padding: 20px;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .profile-info {
@@ -100,7 +109,7 @@ const friend = ref({
 .goal-list-title {
   font-size: 25px;
   font-weight: bold;
-  color:#0084ff;
+  color: #0084ff;
 }
 
 .goal-list ul {
@@ -112,6 +121,16 @@ const friend = ref({
   margin-bottom: 8px;
 }
 
-/* 필요한 경우 추가적인 스타일링 코드를 작성하세요. */
-</style>
+/* 팔로잉 중일 때의 버튼 스타일 */
+.friend-add button.following {
+  background-color: #28a745;
+  border-color: #28a745;
+}
 
+/* 팔로잉 중이 아닐 때의 버튼 스타일 */
+.friend-add button:not(.following) {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+</style>
