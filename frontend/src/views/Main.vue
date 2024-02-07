@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="authStore.isLogin">
 
   <!-- 모달 -->
   <div class="black-bg" v-if="is_modal_valid">
@@ -54,7 +54,6 @@ import { useGoalsStore } from '@/stores/goals' // Adjust the path if necessary
 import { useTodosStore } from '@/stores/todos'
 import { useAlarmsStore } from '@/stores/alarms'
 
-
 import Sidebar from '@/views/Sidebar.vue'
 import TodoList from '@/views/Todo/TodoList.vue'
 import TodoDetail from '@/views/Todo/TodoDetail.vue'
@@ -62,10 +61,7 @@ import AddTodo from '@/views/Todo/AddTodo.vue'
 import GoalList from '@/views/Goal/GoalList.vue'
 import GoalDetail from '@/views/Goal/GoalDetail.vue'
 import HabitList from '@/views/Habit/HabitList.vue'
-
-
-
-
+import { useAuthStore } from '@/stores/auth'
 
 export default {
 
@@ -89,6 +85,13 @@ export default {
       currentItem: null,
     }
   },
+  setup() {
+    const authStore = useAuthStore()
+
+    return {
+      authStore,
+    }
+  },
   components: {
     Sidebar,
     GoalList,
@@ -100,7 +103,6 @@ export default {
   },
   methods: {
     openModal(component, itemData = null) {
-
       // Assuming the goals are related to todos, check if there are any goals when opening a TodoDetail
       if (component === 'AddTodo') {
         const goalsStore = useGoalsStore();
@@ -111,7 +113,6 @@ export default {
           return; // Exit the function early if there are no goals
         }
       }
-
       // If all checks pass, then proceed to open the modal
       this.is_modal_valid = true;
       this.activeModal = component;https://lab.ssafy.com/s10-webmobile1-sub2/S10P12C210/-/blob/back/src/main/java/com/ssafy/todak/goal/controller/GoalController.java?ref_type=heads
@@ -128,10 +129,6 @@ export default {
       const options = { month: '2-digit', day: '2-digit',  weekday: 'long' }
       this.today = now.toLocaleDateString('ko-KR', options)
     },
-    // addTodo(newTodo) {
-    //   // 실제로는 여기에서 데이터베이스에 저장하거나 상태를 업데이트하는 등의 로직을 수행
-    //   this.todoItems.push(newTodo);
-    // },
     getGoalColor(todo) {
       const goalsStore = useGoalsStore();
       const goal = goalsStore.goals.find(g => g.id === todo.goalId);

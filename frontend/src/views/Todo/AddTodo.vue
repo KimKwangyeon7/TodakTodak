@@ -9,13 +9,13 @@
       <!-- 상속 목표 -->
       <div class="form-group">
         <label for="selectedGoal">목표:</label>
+        <!-- <select v-model="item.selectedGoal" id="selectedGoal" class="form-control"> -->
         <select v-model="selectedGoal" id="selectedGoal" class="form-control">
           <option v-for="goal in goals" :key="goal.id" :value="goal">
             {{ goal.goalContent }}
           </option>
         </select>
       </div>
-
       <!-- 제목 입력 -->
       <div class="form-group">
         <label for="todoTitle">제목:</label>
@@ -134,16 +134,16 @@ export default {
       return hours + minutes   
     },
 
-    submitTodo() {
+    async submitTodo() {
+
       const todosStore = useTodosStore()
       const alarmsStore = useAlarmsStore()
 
-      // 우선 오늘 날짜로 테스트
-      const d = new Date()
-      const t = this.time
+      try {
+      const d = new Date();
+      const t = this.time;
 
-      // todos 배열에 넣기
-      todosStore.addTodo({ 
+      todosStore.addTodo({
         goalId: this.selectedGoal.id,
         todoTitle: this.todoTitle,
         todoContent: this.todoContent,
@@ -151,46 +151,43 @@ export default {
         isImportant: this.isImportant,
       });
 
-      // todoId
-      this.todoId = todosStore.findId(this.todoTitle);
+      this.todoId = todosStore.findId(this.todoTitle)
+      this.day = (d.getDay() + 6) % 7
+      this.closeModal()
 
-      // day 
-      this.day = (d.getDay() + 6) % 7 // 이렇게 하여 0을 월요일로 바꿈
+      // Handle alarms only if isAlarmed is true
+      if (this.isAlarmed) {
+        const day = (d.getDay() + 6) % 7;
+        const time = this.fourDigitTime(t);
 
-      this.closeModal() 
-
-      // console.log('this.isAlarmed', this.isAlarmed)
-
-      // console.log('isAlarmed', isAlarmed)
-
-      if (this.isAlarmed === true) {
-        // time
-        const setTime = this.fourDigitTime(t)
-        this.time = setTime
-
-          alarmsStore.addAlarm({
-          todoId: this.todoId,
-          day: this.day,
-          time: this.time, 
+        // Add the alarm to the store
+        alarmsStore.addAlarm({
+          todoId,
+          day,
+          time,
           isOutside: this.isOutside,
           isAlarmed: this.isAlarmed,
           isChecked: this.isChecked,
           isCompleted: this.isCompleted,
-        }) 
+        });
 
-        ////
+        // Send push for the alarm
         alarmsStore.sendPushForTodo({
-          todoId: this.todoId,
-          day: this.day,
-          time: this.time, 
+          todoId,
+          day,
+          time,
           isOutside: this.isOutside,
           isAlarmed: this.isAlarmed,
           isChecked: this.isChecked,
           isCompleted: this.isCompleted,
-        })
+        });
+      }
+
+      } catch (error) {
+        console.error('Error adding todo or alarm:', error);
+        // Handle the error appropriately, e.g., show an error message to the user
       }
       
-
     }
   }  
 }
@@ -229,4 +226,4 @@ export default {
 .custom-control-label {
   padding-left: 10px;
 }
-</style>@/stores/alarms
+</style>

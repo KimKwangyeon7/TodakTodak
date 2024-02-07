@@ -28,7 +28,7 @@
             };
         },
         methods: {
-            submitGoal() {
+            async submitGoal() {
                 const goalsStore = useGoalsStore();
                 goalsStore.addGoal({ goalContent: this.goalContent, color: this.color });
                 
