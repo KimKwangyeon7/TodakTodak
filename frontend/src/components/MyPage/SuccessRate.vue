@@ -1,5 +1,5 @@
 <template>
-    <div class="success-rate">
+    <div class="success-rate m-3">
       <p class="success-rate-title">Success Rate</p>
   
       <div class="progress-circle-container">

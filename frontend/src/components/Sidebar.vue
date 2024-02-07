@@ -42,7 +42,6 @@
             <router-link to="/mypage" class="nav-link">
               <img src="@/assets/sidebar/profile.png" alt=""> 마이페이지
             </router-link>
-            <p style="color:red">잠깐 아래 부분 푸시 알림 테스트 용도로 쓸게요!!</p>
             <router-link to="/subscribe" class="nav-link" style="color:red"><span class="emoji"></span> subscribe</router-link>
             <router-link to="/pushnotify" class="nav-link" style="color:red"><span class="emoji"></span> pushnotify</router-link>
           </div>
@@ -73,8 +72,8 @@ import Notifications from '@/components/Notifications.vue'
   max-width: 100px;
 }
 .offcanvas-title {
-  font-size: 25px;
-  font-weight: bold;
+  font-size: 24px;
+  font-weight: 400;
   margin-left: 10px;
   font-family: 'SUITE-Regular';
 }

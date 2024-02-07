@@ -1,5 +1,5 @@
 <template>
-    <div class="goal-success-rate">
+    <div class="goal-success-rate m-3">
       <p class="goal-success-rate-title">목표별 성취율</p>
   
       <!-- 각 목표에 대한 성취율을 동적으로 출력 -->
