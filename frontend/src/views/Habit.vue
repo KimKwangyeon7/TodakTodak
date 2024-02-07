@@ -27,27 +27,20 @@
 
 <script>
 
-import HabitDetail from '@/views/Habit/HabitDetail.vue'
-import AddHabit from '@/views/Habit/AddHabit.vue'
+import HabitDetail from '@/components/Habit/HabitDetail.vue'
+import AddHabit from '@/components/Habit/AddHabit.vue'
 
-import { useHabitsStore } from '@/api/habits'
+import { getHabitList, getHabitDetail } from '@/api/habits'
 
 export default {
 
     name: 'App',
-    computed: {
-      habits() {
-        const habitsStore = useHabitsStore();
-        // console.log(habitsStore.habits)
-        return habitsStore.habits;
-      },
-    },
     data() {
       return {
+        habits: [],
         is_modal_valid: false,
         activeModal: null,
-        today: '', // 현재 날짜를 저장할 데이터 속성 추가
-        // todoItems: [],
+        today: '', 
         currentItem: null,
       }
     },
@@ -56,17 +49,38 @@ export default {
         HabitDetail,
     },
     methods: {
-      openModal(component, itemData = null) {
-        // If all checks pass, then proceed to open the modal
+      async openModal(component, itemData = null) {
+
+        if (component === 'HabitDetail' && itemData) {
+          try {
+            const detailedHabit = await getHabitDetail(itemData.id)
+            this.currentItem = detailedHabit
+          } catch (error) {
+            console.error('Error fetching habit detail:', error);
+            return;
+          }
+        }
+
         this.is_modal_valid = true;
         this.activeModal = component;
         this.currentItem = itemData;
       },
+      async fetchHabits() {
+        try {
+          this.habits = await getHabitList()
+        } catch (error) {
+          console.error('Error fetching habits:', error)
+        }
+      },
+
       closeModal() {
         this.is_modal_valid = false
         this.activeModal = null
       },
     },
+    mounted() {
+      this.fetchHabits()
+    }
   }
   </script>
 

@@ -1,6 +1,6 @@
 <template>
   <div class="modal-content" style="border-radius: 10px;">
-        <form @submit.prevent="submitGoal">
+        <form @submit.prevent="fnAdd">
             <!-- Goal Content Input -->
             <div class="form-group">
                 <label for="goalContent">목표 내용:</label>
@@ -18,7 +18,7 @@
 </template>
   
 <script>
-    import { useGoalsStore } from '@/api/goals' // Adjust the path if necessary
+    import { addGoal } from '@/api/goals' // Adjust the path if necessary
 
     export default {
         data() {
@@ -28,10 +28,8 @@
             };
         },
         methods: {
-            async submitGoal() {
-                const goalsStore = useGoalsStore();
-                goalsStore.addGoal({ goalContent: this.goalContent, color: this.color });
-                
+            async fnAdd() {
+                addGoal({ goalContent: this.goalContent, color: this.color });
                 // Redirect after adding goal
                 this.$router.push('/Main');
             },

@@ -16,7 +16,6 @@
         <!-- isAlarmed -->
         <div class="form-group">
           <label>알람 여부:</label>
-          <p>시간 넣어야 하는 거 맞죠?(김요한)</p>
           <div class="custom-control custom-switch">
             
             <div class="form-check form-switch">
@@ -32,13 +31,13 @@
           <input v-model="time" type="time" id="time" class="form-control">
         </div>
   
-        <button type="submit" class="btn btn-primary" @click="submitHabit">저장</button>
+        <button type="submit" class="btn btn-primary" @click="fnAdd">저장</button>
       </form>
     </div>
   </template>
   
   <script>
-  import { useHabitsStore } from '@/api/habits';
+  import { addHabit } from '@/api/habits';
   import { useAlarmsStore } from '@/api/alarms';
   
   
@@ -94,15 +93,14 @@
         return hours + minutes   
       },
   
-      submitHabit() {
-        const habitsStore = useHabitsStore()
+      fnAdd() {
         const alarmsStore = useAlarmsStore()
   
         // 우선 오늘 날짜로 테스트
         const d = new Date()
         const t = this.time
   
-        habitsStore.addHabit({ 
+        addHabit({ 
           habitContent: this.habitContent,
         });
     

@@ -1,21 +1,18 @@
 <template>
   <div class="app mt-5">
-      
-    <!-- 음성 학습 -->
     <p class="voice-title">음성 학습
       <button @click="$router.back()">back</button>
     </p>
-  
+
     <div class="sentence-box">
       <p>다음 문장을 소리내어 읽으세요.</p>
       <p>{{ currentSentence || '문장을 불러오는 중...' }}</p>
-      <p p>{{ currentSentenceId + 1 }} / {{ sentences.length }}</p>
+      <p>{{ currentSentenceId + 1 }} / {{ sentences.length }}</p>
       <div class="buttons">
-        <button @click="prevSentence" :disabled="currentSentenceIndex === 0"><</button>
-        <button @click="nextSentence" :disabled="currentSentenceIndex === sentences.length - 1">></button>
+        <button @click="nextSentence" :disabled="currentSentenceId === sentences.length - 1">></button>
       </div>
       <div v-if="recording">
-        녹음 시간: {{  elapsedTime }} 초
+        녹음 시간: {{ elapsedTime }} 초
       </div>
     </div>    
 
@@ -36,45 +33,39 @@
       <button v-if="isAllRecordingsDone" @click="startLearningProcess">학습하기</button>
     </div>
 
-    
     <br>
-    <!-- 학습 중인 음성 -->
     <p class="voice-title">학습 중인 음성</p>
     <div class="voice-box">
-      
+      <!-- Content here -->
     </div>    
-
   </div>
 </template>
 
 <script>
-import { onMounted } from 'vue'
-import { useVoicesStore } from '@/stores/voice'
+import { onMounted, ref, computed } from 'vue'
+import { useVoicesStore } from '@/api/voices'
 import { loadKoreanCorpus } from '@/stores/koreanCorpus'
 
 export default {
-  name: 'App',
+  name: 'VoiceTrainer',
   setup() {
     const voicesStore = useVoicesStore()
-    const { fetchCurrentSentence, currentSentence } = useVoicesStore();
-    const uuid = voicesStore.state.user.uuid; // 예시: Vuex store 또는 다른 상태 관리 라이브러리에서 UUID 가져오기
-    const sentences = loadKoreanCorpus()
+    const currentSentenceId = ref(0)
+    const sentences = ref(loadKoreanCorpus())
+    const currentSentence = computed(() => sentences.value[currentSentenceId.value] || '')
 
     onMounted(async () => {
-      await sentences;
-      fetchCurrentSentence(uuid);
-      isAllRecordingsDone() {
-        return this.currentSentenceId >= this.sentences.length
-      }
+      await sentences.value;
+      voicesStore.fetchCurrentSentence(voicesStore.state.user.uuid);
     });
 
     function nextSentence() {
-      if (currentSentenceId.value < sentences.value.length) {
+      if (currentSentenceId.value < sentences.value.length - 1) {
         currentSentenceId.value++;
       }
     }
 
-    return { sentences, currentSentenceId, currentSentence, nextSentence, voiceList, fetchVoiceList };
+    return { sentences, currentSentenceId, currentSentence, nextSentence };
   },
   data() {
     return {
@@ -91,15 +82,15 @@ export default {
       elapsedTime: 0,
     };
   },
-computed: {
-  currentSentence() {
-    return this.sentences[this.currentSentenceId];
-  },
-  cantSave() {
+  computed: {
+    cantSave() {
       return this.title === "" || !this.blob;
+    },
+    isAllRecordingsDone() {
+      return this.currentSentenceId >= this.sentences.length;
+    },
   },
-},
-methods: {
+  methods: {
 
   nextSentence() {
     if (this.currentSentenceId < this.sentences.length - 1) {

@@ -24,7 +24,7 @@
   </template>
   
   <script>
-  import { useHabitsStore } from '@/api/habits'
+  import { deleteHabit, updateHabit } from '@/api/habits'
 
 
   export default {
@@ -40,8 +40,7 @@
       },
       async fnDelete() {
         try {
-          const habitsStore = useHabitsStore();
-          await habitsStore.deleteHabit(this.item.id);
+          await deleteHabit(this.item.id);
           this.$emit('close-modal');
         } catch (error) {
           console.error('Error deleting habit:', error);
@@ -49,8 +48,7 @@
       },
       async fnSave() {
         try {
-          const habitsStore = useHabitsStore(); 
-          await habitsStore.updateHabit(this.item.id, this.item); 
+          await updateHabit(this.item.id, this.item); 
           this.$emit('close-modal'); 
         } catch (error) {
           console.error('Error updating habit:', error);

@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { useGoalsStore } from '@/api/goals';
+import { deleteGoal, updateGoal } from '@/api/goals';
 
 export default {
   data() {
@@ -56,8 +56,7 @@ export default {
     },
     async fnDelete() {
       try {
-        const goalStore = useGoalsStore();
-        await goalStore.deleteGoal(this.item.id);
+        await deleteGoal(this.item.id);
         this.$emit('close-modal');
       } catch (error) {
         console.error('Error deleting goal:', error);
@@ -65,8 +64,7 @@ export default {
     },
     async fnSave() {
       try {
-        const todoStore = useGoalsStore(); 
-        await todoStore.updateGoal(this.item.id, this.item); 
+        await updateGoal(this.item.id, this.item); 
         this.$emit('close-modal'); 
       } catch (error) {
         console.error('Error updating goal:', error);
