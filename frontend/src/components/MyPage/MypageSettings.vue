@@ -10,7 +10,7 @@
             <router-link to="/calendar" class="nav-link">
               알림 관리
             </router-link>
-            <router-link to="/meeting" class="nav-link">
+            <router-link to="/meet" class="nav-link">
               친구 관리
             </router-link>
             <router-link to="/board" class="nav-link">

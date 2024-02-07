@@ -5,19 +5,16 @@
     <!-- 하단 네비게이션 바 -->
     <div class="bottom-nav">
       <RouterLink to="/Main" class="nav-item">
-        <img src="@/assets/bottom-nav/home.png" alt=""> Home
+        <img class='nav-icon' src="@/assets/bottom-nav/home.png" alt=""> Home
       </RouterLink>
       <RouterLink to="/Calendar" class="nav-item">
-        <img src="@/assets/bottom-nav/Group.png" alt=""> Calendar
+        <img class='nav-icon' src="@/assets/sidebar/calendar.png" alt=""> Calendar
       </RouterLink>
       <RouterLink to="/Friend" class="nav-item">
-        <img src="@/assets/bottom-nav/Lucide.png" alt=""> Friends
-      </RouterLink>
-      <RouterLink to="/Meeting" class="nav-item">
-        <img src="@/assets/bottom-nav/people.png" alt=""> Meeting
+        <img class='nav-icon' src="@/assets/bottom-nav/Lucide.png" alt=""> Friends
       </RouterLink>
       <RouterLink to="/mypage" class="nav-item">
-        <img src="@/assets/bottom-nav/profile.png" alt=""> MyPage
+        <img class='nav-icon' src="@/assets/bottom-nav/profile.png" alt=""> MyPage
       </RouterLink>
     </div>
     <RouterView />
@@ -85,6 +82,8 @@ export default {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
+    padding-top: 25px;
+    padding-bottom: 90px;
 }
 
 /* 상단 바 스타일링 */
@@ -116,7 +115,7 @@ export default {
   background-color: #EAF3F9;
   padding: 10px;
   z-index: 999;
-  height: 70px;
+  height: 80px;
   font-size: 12px;
 }
 
@@ -125,7 +124,12 @@ export default {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
+}
+
+.nav-icon {
+  width: 30px;
+  height: 30px;
 }
 
 body {

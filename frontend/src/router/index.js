@@ -8,6 +8,7 @@ import Calendar from '@/views/Calendar.vue'
 import Friend from '@/views/Friend.vue'
 import Chat from '@/components/Friend/Chat.vue'
 import Meeting from '@/views/Meeting.vue'
+import Meet from '@/components/Meeting/MeetingRoom.vue'
 import MyPage from '@/views/MyPage.vue'
 import MyPageSettings from '@/components/MyPage/MypageSettings.vue'
 import UserInfoEdit from '@/components/MyPage/UserInfoEdit.vue'
@@ -65,6 +66,11 @@ const router = createRouter({
 		name: 'meeting',
 		path: '/meeting',
 		component: Meeting,
+	},
+	{
+		name: 'meet',
+		path: '/meet',
+		component: Meet,
 	},
 	{
 		name: 'habit',
@@ -140,6 +146,10 @@ const router = createRouter({
 	name: 'SignUpView',
 	component: SignupView
 }, 
+	{
+		path: '/friend-profile',
+		component: FriendProfile
+	},
   ]
 })
 

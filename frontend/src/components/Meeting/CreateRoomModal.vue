@@ -24,68 +24,68 @@
         </div>
       </div>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    data() {
-      return {
-        newRoom: {
-          title: '',
-        },
-      };
-    },
-    methods: {
-      createRoom() {
-        this.$emit('create', this.newRoom); // 부모 컴포넌트로 새로운 방 정보를 전달
-      },
-    },
-  };
-  </script>
-  
-  <style scoped>
-  .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .modal-dialog {
-    max-width: 400px;
-    width: 100%;
-  }
-  
-  .modal-content {
-    position: relative;
-  }
-  
-  .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #007bff;
-    color: #fff;
-    padding: 10px;
-  }
-  
-  .modal-body {
-    padding: 20px;
-  }
-  
-  .form-group {
-    margin-bottom: 20px;
-  }
+</template>
 
-  .create-room-button {
-    margin-left: auto;
-    display: flex;
-  }
-  
-  </style>
+<script>
+export default {
+  data() {
+    return {
+      newRoom: {
+        title: '',
+      },
+    };
+  },
+  methods: {
+    createRoom() {
+      this.$emit('create', this.newRoom); // 부모 컴포넌트로 새로운 방 정보를 전달
+    },
+  },
+};
+</script>
+
+<style scoped>
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-dialog {
+  max-width: 400px;
+  width: 100%;
+}
+
+.modal-content {
+  position: relative;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #007bff;
+  color: #fff;
+  padding: 10px;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.create-room-button {
+  margin-left: auto;
+  display: flex;
+}
+
+</style>
   

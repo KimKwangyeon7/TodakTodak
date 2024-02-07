@@ -30,7 +30,6 @@
 import { ref, reactive, watch } from 'vue'
 import RoomCard from '@/components/Meeting/RoomCard.vue'
 import CreateRoomModal from '@/components/Meeting/CreateRoomModal.vue'
-import MeetingRoom from '@/components/Meeting/MeetingRoom.vue'
 import router from '@/router';
 
 const rooms = ref([
