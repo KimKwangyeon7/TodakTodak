@@ -54,15 +54,23 @@ import { useGoalsStore } from '@/stores/goals' // Adjust the path if necessary
 import { useTodosStore } from '@/stores/todos'
 import { useAlarmsStore } from '@/stores/alarms'
 
+<<<<<<< HEAD
 import Sidebar from '@/views/Sidebar.vue'
+=======
+
+// import Sidebar from '@/views/Sidebar.vue'
+>>>>>>> junbro
 import TodoList from '@/views/Todo/TodoList.vue'
 import TodoDetail from '@/views/Todo/TodoDetail.vue'
 import AddTodo from '@/views/Todo/AddTodo.vue'
 import GoalList from '@/views/Goal/GoalList.vue'
 import GoalDetail from '@/views/Goal/GoalDetail.vue'
 import HabitList from '@/views/Habit/HabitList.vue'
+<<<<<<< HEAD
 import { useAuthStore } from '@/stores/auth'
+=======
 
+>>>>>>> junbro
 
 export default {
 
