@@ -138,6 +138,7 @@ const toggleSearch = () => {
   justify-content: space-between;
   align-items: center;
   overflow-y: auto;
+  
 }
 
 .friend-item {

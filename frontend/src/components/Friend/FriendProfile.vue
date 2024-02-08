@@ -89,6 +89,15 @@ const followFriend = (friend) => {
   padding: 20px;
   align-items: center;
   justify-content: space-between;
+  border-color: #EAF3F9;
+  position: relative;
+  overflow: hidden;
+  background-color: #EAF3F9;
+  color: black;
+  margin-bottom: 10px;
+  border-radius: 24px;
+  overflow-y: auto;
+  box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.25);
 }
 
 .profile-info {
@@ -104,9 +113,21 @@ const followFriend = (friend) => {
 
 .goal-list {
   margin-top: 20px;
+  border-color: #EAF3F9;
+  position: relative;
+  overflow: hidden;
+  background-color: #EAF3F9;
+  color: black;
+  margin-bottom: 10px;
+  border-radius: 24px;
+  justify-content: space-between;
+  align-items: center;
+  overflow-y: auto;
+  box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.25);
 }
 
 .goal-list-title {
+  margin-left: 10px;
   font-size: 25px;
   font-weight: bold;
   color: #0084ff;
@@ -118,6 +139,7 @@ const followFriend = (friend) => {
 }
 
 .goal-list li {
+  margin-left: 20px;
   margin-bottom: 8px;
 }
 
