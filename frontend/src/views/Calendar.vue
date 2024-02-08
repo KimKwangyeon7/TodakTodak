@@ -1,5 +1,6 @@
 <template>
   <b-container>
+    <div class="calendar">캘린더</div>
     <main class="calendar-wrapper">
       <b-row>
         <b-col md="8">
@@ -318,6 +319,10 @@ export default {
 </script>
 
 <style>
+.calendar {
+  font-size: 30px;
+}
+
 .calendar-wrapper {
   display: flex;
   margin: 2.5em 0;
@@ -325,8 +330,8 @@ export default {
 }
 
 .calendar-body {
-  width: 384px;
-  height: 394px;
+  width: 360px;
+  height: 360px;
 }
 
 .calendar-header {

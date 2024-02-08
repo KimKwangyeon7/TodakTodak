@@ -283,11 +283,13 @@ methods: {
 }
 
 .left-btn {
+  width: 180px;
   left: 0;
 }
 
 .right-btn {
-  margin-left: 245px;
+  width: 180px;
+  right: 0;
 }
 
 .voice-title {

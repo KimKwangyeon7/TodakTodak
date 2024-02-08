@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav class="navbar fixed-top">
+    <nav class="navbar bg-white fixed-top">
       <div class="container-fluid d-flex justify-content-between align-items-center">
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -90,7 +90,7 @@ import Notifications from '@/components/Notifications.vue'
   display: flex;
   align-items: center;
   padding: 10px;
-  margin-left: 10px;
+  margin-left: 20px;
 }
 
 .offcanvas-body img {
