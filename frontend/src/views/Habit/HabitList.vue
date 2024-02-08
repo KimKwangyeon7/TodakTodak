@@ -73,7 +73,7 @@ export default {
 
 <style scoped>
 .habit {
-  font-size: 30px;
+  font-size: 25px;
 }
 
 /* 상단 바 스타일링 */

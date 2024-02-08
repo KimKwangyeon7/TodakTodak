@@ -1,5 +1,5 @@
 <template>
-  <div class="app mt-5">
+  <div class="voice-trainer mt-5">
       
     <!-- 음성 학습 -->
     <p class="voice-title">음성 학습
@@ -21,7 +21,7 @@
       </div>
     </div>    
     
-    <div id="app">
+    <div id="voice-training">
       <div>
         <input type="text" label="Sound Name" required v-model="title" />
         <button class="mr-4" @click="record">
@@ -36,13 +36,12 @@
         <button color="primary" @click="recordSave" :disabled="cantSave">Save</button>
       </div>
     </div>
-
     
     <br>
+    
     <!-- 학습 중인 음성 -->
     <p class="voice-title">학습 중인 음성</p>
     <div class="voice-box">
-      
     </div>    
 
   </div>
@@ -259,10 +258,10 @@ methods: {
   background-color: #EAF3F9;
   padding: 10px;
   margin: 10px 0;
-  height: 260px;
+  height: 220px;
   border-radius: 24px;
   box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.25);
-  font-size: 20px;
+  font-size: 17px;
   position: relative;
 }
 
@@ -297,7 +296,7 @@ methods: {
   justify-content: space-between; 
   align-items: center; 
   padding: 8px; 
-  font-size: 30px; 
+  font-size: 25px; 
 }
 
 .voice-title button {

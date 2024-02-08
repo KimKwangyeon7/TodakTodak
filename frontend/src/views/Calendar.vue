@@ -320,7 +320,7 @@ export default {
 
 <style>
 .calendar {
-  font-size: 30px;
+  font-size: 25px;
 }
 
 .calendar-wrapper {
