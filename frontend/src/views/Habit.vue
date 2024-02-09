@@ -10,7 +10,7 @@
     <div class="todo-section">
       <div class="todo-date">
         <span>{{ today }}</span>
-        <!-- Todo 생성버튼 -->
+        <!-- Habit 생성버튼 -->
         <button class="add-button" @click="openModal('AddHabit')">+</button>
       </div>
       <div class="todo-items">

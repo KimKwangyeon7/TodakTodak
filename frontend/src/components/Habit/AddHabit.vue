@@ -37,9 +37,7 @@
   </template>
   
   <script>
-  import { addHabit } from '@/api/habits';
-  import { useAlarmsStore } from '@/api/alarms';
-  
+  import { addHabit } from '@/api/habits';  
   
   export default {
   
@@ -55,25 +53,9 @@
         isCompleted: false,
       };
     },
-    computed: {
-      habits() {
-        const habitsStore = useHabitsStore()
-        return habitsStore.habits
-      },
-    },
     methods: {
       closeModal() {
         this.$emit('close-modal');
-      },
-  
-      // 우선 오늘 날짜로 테스트
-      eightDigitDate(d) {
-        const currentDate = new Date();
-        const yyyy = currentDate.getFullYear();
-        const mm = String(currentDate.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 1을 더하고 2자리로 만듭니다.
-        const dd = String(currentDate.getDate()).padStart(2, '0'); // 날짜를 2자리로 만듭니다.
-        const curDate= `${yyyy}${mm}${dd}`;
-        return curDate
       },
   
       fourDigitTime(t) {
@@ -82,44 +64,24 @@
       },
   
       fnAdd() {
-        const alarmsStore = useAlarmsStore()
-  
         // 우선 오늘 날짜로 테스트
         const d = new Date()
+        this.day = (d.getDay() + 6) % 7 // 이렇게 하여 0을 월요일로 바꿈
         const t = this.time
-  
+        const setTime = this.fourDigitTime(t)
+        this.time = setTime
+
         addHabit({ 
           habitContent: this.habitContent,
+          day: this.day,
+          time: this.time, 
+          isOutside: this.isOutside,
+          isAlarmed: this.isAlarmed,
+          isChecked: this.isChecked,
+          isCompleted: this.isCompleted,
         });
-    
-        this.day = (d.getDay() + 6) % 7 // 이렇게 하여 0을 월요일로 바꿈
+        
         this.closeModal() 
-  
-        if (this.isAlarmed) {
-          // time
-          const setTime = this.fourDigitTime(t)
-          this.time = setTime
-
-          alarmsStore.addAlarm({
-            // habitId: habitsStore.habits[habitsStore.habits.length - 1].id,
-            day: this.day,
-            time: this.time, 
-            isOutside: this.isOutside,
-            isAlarmed: this.isAlarmed,
-            isChecked: this.isChecked,
-            isCompleted: this.isCompleted,
-          }) 
-
-          alarmsStore.sendPushForHabit({
-            habitId: habitsStore.habits[habitsStore.habits.length - 1].id,
-            day: this.day,
-            time: this.time, 
-            isOutside: this.isOutside,
-            isAlarmed: this.isAlarmed,
-            isChecked: this.isChecked,
-            isCompleted: this.isCompleted,
-          })
-        }
       }
     }  
   }

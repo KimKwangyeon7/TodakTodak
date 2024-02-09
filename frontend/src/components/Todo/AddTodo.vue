@@ -72,9 +72,7 @@
   
   <script>
   import { addTodo } from '@/api/todos';
-  import { getGoalList } from '@/api/goals';
-  import { useAlarmsStore } from '@/api/alarms';
-  
+  import { getGoalList } from '@/api/goals';  
   
   export default {
   
@@ -125,11 +123,13 @@
         return hours + minutes   
       },
   
-      fnAdd() {
-        const alarmsStore = useAlarmsStore()
-  
-        const d = new Date();
-        const t = this.time;
+      fnAdd() {  
+        // 우선 오늘 날짜로 테스트
+        const d = new Date()
+        this.day = (d.getDay() + 6) % 7 // 이렇게 하여 0을 월요일로 바꿈
+        const t = this.time
+        const setTime = this.fourDigitTime(t)
+        this.time = setTime
   
         addTodo({
           goalId: this.selectedGoal.id,
@@ -137,38 +137,15 @@
           todoContent: this.todoContent,
           todoDate: this.eightDigitDate(d),
           isImportant: this.isImportant,
+          day: this.day,
+          time: this.time, 
+          isOutside: this.isOutside,
+          isAlarmed: this.isAlarmed,
+          isChecked: this.isChecked,
+          isCompleted: this.isCompleted,
         });
   
-        this.day = (d.getDay() + 6) % 7
         this.closeModal()
-  
-        // Handle alarms only if isAlarmed is true
-        if (this.isAlarmed) {
-          const setTime = this.fourDigitTime(t)
-          this.time = setTime
-  
-          // Add the alarm to the store
-          alarmsStore.addAlarm({
-            // todoId,
-            day: this.day,
-            time: this.time,
-            isOutside: this.isOutside,
-            isAlarmed: this.isAlarmed,
-            isChecked: this.isChecked,
-            isCompleted: this.isCompleted,
-          });
-  
-          // Send push for the alarm
-          alarmsStore.sendPushForTodo({
-            todoId,
-            day,
-            time,
-            isOutside: this.isOutside,
-            isAlarmed: this.isAlarmed,
-            isChecked: this.isChecked,
-            isCompleted: this.isCompleted,
-          });
-        }
       },
     },
     mounted() {

@@ -1,9 +1,18 @@
 import apiClient from './habitsApiClient';
+import { alarm } from './alarms'
 
 async function addHabit(newHabit) {
   try {
+    // 습관 넣기
     const response = await apiClient.post(newHabit);
     console.log("Habit added:", response.data);
+    // 푸시 알림
+    if (newHabit.isAlarmed === true) {
+        const preparedData = JSON.stringify({
+        alarmTitle: newHabit.habitContent, alarmContent: ""
+      })
+      alarm(preparedData)
+    }    
   } catch (error) {
     console.error('Error creating habit:', error);
   }
@@ -65,7 +74,6 @@ async function deleteHabit(habitId) {
     console.error('Error deleting habit:', error);
   }
 }
-
 
 export {
   addHabit,

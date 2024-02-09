@@ -20,11 +20,20 @@
       </div>      
         <button class="" @click="fnDelete">삭제</button>
         <button class="" @click="fnSave">저장</button>
+      <div class="form-group">
+        <label>완료 여부:</label>
+        <div class="custom-control custom-switch">
+          <div class="form-check form-switch">
+            <input v-model="isChecked" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
+            <label class="form-check-label" for="flexSwitchCheckChecked"></label>
+          </div>
+        </div>
+      </div>
     </div>
   </template>
   
   <script>
-  import { deleteHabit, updateHabit } from '@/api/habits'
+  import { deleteHabit, updateHabit, isHabitCompleted } from '@/api/habits'
 
 
   export default {
@@ -36,6 +45,9 @@
     },
     methods: {
       closeModal() {
+        if (item.isChecked === true) {
+          isHabitCompleted(alarm.id, item.id)
+        }
         this.$emit('close-modal');
       },
       async fnDelete() {
@@ -54,6 +66,9 @@
           console.error('Error updating habit:', error);
         }
       },
+      async finish(){
+
+      }
     },
   };
   </script>
@@ -77,6 +92,10 @@
   cursor: pointer;
   font-size: 12px;
 }
+
+.custom-control-label {
+    padding-left: 10px;
+  }
 </style>
 
 

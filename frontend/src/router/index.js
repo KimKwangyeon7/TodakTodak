@@ -12,8 +12,10 @@ import MyPage from '@/views/MyPage.vue'
 import MyPageSettings from '@/components/MyPage/MypageSettings.vue'
 import UserInfoEdit from '@/components/MyPage/UserInfoEdit.vue'
 import Habit from '@/views/Habit.vue'
-import Voice from '@/views/Voice.vue'
-import VoiceTrainer from '@/views/Voice/VoiceTrainer.vue'
+// import Voice from '@/views/Voice.vue'
+import Record from '@/views/Record/Record.vue'
+// import VoiceTrainer from '@/views/Voice/VoiceTrainer.vue'
+import Trainer from '@/views/Record/Trainer.vue'
 import CalendarDetail from '@/views/CalendarDetail.vue'
 import Notification from '@/components/Notifications.vue'
 import subscribe from '@/components/subscribe_page.vue'
@@ -91,14 +93,14 @@ const router = createRouter({
 		component: UserInfoEdit,
 	},
 	{
-		path: '/voice',
-		name: 'Voice',
-		component: Voice
+		path: '/record',
+		name: 'Record',
+		component: Record
 	},
 	{
-		path: '/voice/trainer',
-		name: 'VoiceTrainer',
-		component: VoiceTrainer
+		path: '/record/trainer',
+		name: 'Trainer',
+		component: Trainer
 	},
 	{
 		path: '/calendar-detail/:selectedDate',

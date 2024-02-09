@@ -55,7 +55,6 @@
                 // Redirect after adding goal
                 this.$router.push('/Main');
             },
-
             openColorDetailModal() {
               this.showColorDetailModal = true;
               console.log(`Goal Content:',${this.goalContent} `)
@@ -68,12 +67,6 @@
             selectColor(selectedColor) {
               this.color = selectedColor;
               this.selectedColor = selectedColor; // 추가: 선택한 색상 저장
-            },
-            submitGoal() {
-              const goalsStore = useGoalsStore();
-              goalsStore.addGoal({ goalContent: this.goalContent, color: this.color });
-              this.clearForm();
-              this.$router.push('/Main');
             },
             clearForm() {
               this.goalContent = '';

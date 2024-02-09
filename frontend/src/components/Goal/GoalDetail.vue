@@ -38,8 +38,8 @@ export default {
     }
   },
   computed: {
-    goals() {
-      return useGoalsStore().goals
+    async goals() {
+      this.goals = await getGoalList()
     },
     get() {
       return this.item.selectedColor || this.goals[0]?.id;

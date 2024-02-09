@@ -23,7 +23,7 @@ self.addEventListener('push', function (event) {
       image: '/img/push-news.jpg',
       actions: [{
         action: 'info',
-        title: '에듀싸피 ㄱ?',
+        // title: '에듀싸피 ㄱ?',
         icon: '/img/push-info.png'
       }],
       vibrate: [500, 100, 500]
@@ -37,9 +37,9 @@ self.addEventListener('push', function (event) {
   self.addEventListener('notificationclick', function (event) {
     // 알림 메시지의 링크 클릭 시 경우별 사이트로 이동
     if (event.action == 'like') {
-      clients.openWindow("https://www.ssafy.com/ksp/jsp/swp/swpMain.jsp");
+      // clients.openWindow("https://www.ssafy.com/ksp/jsp/swp/swpMain.jsp");
     } else if (event.action == 'info') {
-      clients.openWindow("https://edu.ssafy.com/comm/login/SecurityLoginForm.do");
+      // clients.openWindow("https://edu.ssafy.com/comm/login/SecurityLoginForm.do");
     }
     // 푸시알림 이벤트 종료
     event.notification.close();

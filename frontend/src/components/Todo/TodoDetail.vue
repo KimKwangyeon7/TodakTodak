@@ -46,14 +46,21 @@
       </div>
       <button class="" @click="fnDelete">삭제</button>
       <button class="" @click="fnSave">저장</button>
-  
+      <div class="form-group">
+        <label>완료 여부:</label>
+        <div class="custom-control custom-switch">
+          <div class="form-check form-switch">
+            <input v-model="isChecked" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
+            <label class="form-check-label" for="flexSwitchCheckChecked"></label>
+          </div>
+        </div>
+      </div>
     </div>
   </template>
   
   <script>
   import { getGoalList } from '@/api/goals';
-  import { useTodosStore } from '@/api/todos';
-  import { useAlarmsStore } from '@/api/alarms';
+  import { updateTodo, deleteTodo, isTodoCompleted } from '@/api/todos';
   
   export default {
     data() {
@@ -85,36 +92,19 @@
           this.item.selectedGoal = newValue;
         }
       },
-      alarmTime: {
-        get() {
-          // Get the alarm for the current todo item
-          const alarmStore = useAlarmsStore();
-          const alarm = alarmStore.alarms.find(alarm => alarm.todoId === this.item.id);
-          return alarm ? alarm.time : null;
-        },
-        set(newTime) {
-          // Update the alarm time
-          const alarmStore = useAlarmsStore();
-          const alarmIndex = alarmStore.alarms.findIndex(alarm => alarm.todoId === this.item.id);
-          if (alarmIndex !== -1) {
-            alarmStore.alarms[alarmIndex].time = newTime;
-          } else {
-            // Handle the case where there's no existing alarm for this todo item
-            // Possibly by creating a new alarm
-          }
-        }
-      }
     },
     methods: {
       closeModal() {
         Object.assign(this.item, this.originalItem)
         this.editableItem = {...this.item};
+        if (item.isChecked === true) {
+          isTodoCompleted(alarm.id, todo.id)
+        }
         this.$emit('close-modal');    
       },
       async fnDelete() {
         try {
-          const todoStore = useTodosStore();
-          await todoStore.deleteTodo(this.item.id);
+          await deleteTodo(this.item.id);
           this.$emit('close-modal');
         } catch (error) {
           console.error('Error deleting todo:', error);
@@ -122,8 +112,7 @@
       },
       async fnSave() {
         try {
-          const todoStore = useTodosStore(); 
-          await todoStore.updateTodo(this.item.id, this.item); 
+          await updateTodo(this.item.id, this.item); 
           this.$emit('close-modal'); 
         } catch (error) {
           console.error('Error updating todo:', error);

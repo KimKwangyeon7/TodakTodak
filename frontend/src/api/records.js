@@ -1,13 +1,17 @@
-import apiClient from './goalsApiClient';
+import apiClient from './recordsApiClient';
 
-async function fetchCurrentSentence(uuid) {
-  try {
-    const response = await apiClient.get(`/prompt`, { params: { uuid } });
-    console.log("Current sentence:", response.data);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching current sentence:', error);
-  }
+// async function fetchCurrentSentence(uuid) {
+//   try {
+//     const response = await apiClient.get(`/prompt`, { params: { uuid } });
+//     console.log("Current sentence:", response.data);
+//     return response.data;
+//   } catch (error) {
+//     console.error('Error fetching current sentence:', error);
+//   }
+// }
+
+async function fetchCurrentSentence(currentSentenceId) {
+
 }
 
 async function fetchVoiceList() {
@@ -20,20 +24,10 @@ async function fetchVoiceList() {
   }
 }
 
-async function createNewVoice() {
-  if (title === "") {
-    console.error("Title is required");
-    return;
-  }
-
-  const payload = { title, memo };
+async function createNewVoice(newRecord) {
   try {
-    const response = await apiClient.post(payload);
-    if (response.status === 200) {
-      console.log("New voice created successfully");
-    } else {
-      throw new Error(`Error: ${response.statusText}`);
-    }
+    const response = await apiClient.post(newRecord);
+    console.log("Voice created:", response.data)
   } catch (error) {
     console.error("Error creating new voice:", error);
   }
@@ -97,9 +91,15 @@ async function saveRecord(promptNum) {
     return;
   }
 
-  const formData = new FormData();
-  formData.append("title", title);
-  formData.append("audio", blob, title + ".wav");
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  document.body.appendChild(a);
+  a.style = "display: none";
+  a.href = url;
+  a.download = title + ".wav";
+  a.click();
+  window.URL.revokeObjectURL(url);
+  document.body.removeChild(a);
 
   try {
     await apiClient.post('/save/member', { promptNum });
@@ -140,7 +140,7 @@ async function saveAudio(prompt, promptNum) {
 
 // Export all the actions
 export {
-  fetchCurrentSentence,
+  // fetchCurrentSentence,
   fetchVoiceList,
   createNewVoice,
   fetchVoiceDetail,
