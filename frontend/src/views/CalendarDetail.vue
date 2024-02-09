@@ -1,11 +1,15 @@
 <template>
-  <div class="calendar-wrapper" style="margin-top: 70px;">
+  <div class="calendar-wrapper m-3" style="margin-top: 70px;">
     <main class="calendar-body">
+      <button class='btn' @click="$router.back()">
+       <img src="@/assets/back.png" alt="">
+      </button>
       <div class="calendar-weekdays">
         <div
           v-for="(date, index) in weekDate"
           :key="index"
           class="date"
+          :class="{ 'bold': index < 7 }"
         >
           {{ date }}
         </div>
@@ -54,7 +58,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .calendar-wrapper {
   display: flex;
   margin: 2.5em 0;
@@ -64,6 +68,10 @@ export default {
 .calendar-body {
   width: 384px;
   height: 394px;
+}
+
+.calendar-body button {
+  margin-bottom: 7px;
 }
 
 .calendar-weekdays {
@@ -79,6 +87,10 @@ export default {
   line-height: 1.25;
   text-align: center;
   color: #2091a2;
+}
+
+.calendar-weekdays .date.bold {  /* Add this block */
+  font-weight: bold;
 }
 
 .calendar-dates {

@@ -15,7 +15,7 @@
             <button class="friend-add btn btn-success btn-sm ml-2"
               @click.stop="followFriend(friend)"
               :class="{ 'following': friend.following }">
-              {{ friend.following ? '친구!' : '친구 추가 하기' }}
+              {{ friend.following ? '친구!' : '친구 신청' }}
             </button>
           </div>
         </div>
@@ -67,7 +67,7 @@ const followFriend = (friend) => {
 }
 
 .profile-title {
-  font-size: 30px;
+  font-size: 25px;
 }
 
 .profile-name {
