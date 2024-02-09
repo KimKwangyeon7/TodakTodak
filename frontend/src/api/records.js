@@ -1,18 +1,5 @@
 import apiClient from './recordsApiClient';
 
-// async function fetchCurrentSentence(uuid) {
-//   try {
-//     const response = await apiClient.get(`/prompt`, { params: { uuid } });
-//     console.log("Current sentence:", response.data);
-//     return response.data;
-//   } catch (error) {
-//     console.error('Error fetching current sentence:', error);
-//   }
-// }
-
-async function fetchCurrentSentence(currentSentenceId) {
-
-}
 
 async function fetchVoiceList() {
   try {
@@ -72,6 +59,9 @@ async function deleteVoice(recordId) {
   }
 }
 
+// 알림 소리로 사용할 음성 고르기
+// 한 버튼만 활성화만 활성화하기
+// 다른 버튼 눌러도 어차피 백에서 하나만 설정되게 하니까 프론트가 신경쓸 것 없음
 async function selectVoice(recordId) {
   try {
     const response = await apiClient.put(`use`, { recordId });
@@ -85,7 +75,8 @@ async function selectVoice(recordId) {
   }
 }
 
-async function saveRecord(promptNum) {
+// 저장할 때마다 녹음 길이, 프롬프트 넘버
+async function saveRecord(promptNum, duration) {
   if (!blob) {
     console.error("No recording available to save");
     return;
@@ -102,7 +93,7 @@ async function saveRecord(promptNum) {
   document.body.removeChild(a);
 
   try {
-    await apiClient.post('/save/member', { promptNum });
+    await apiClient.post('/save/member', { promptNum, a });
     console.log("Record saved successfully");
   } catch (error) {
     console.error('Error saving record:', error);
@@ -110,20 +101,9 @@ async function saveRecord(promptNum) {
 }
 
 async function saveAudio(prompt, promptNum) {
-  const url = window.URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  document.body.appendChild(a);
-  a.style = "display: none";
-  a.href = url;
-  a.download = title + ".wav";
-  a.click();
-  window.URL.revokeObjectURL(url);
-  document.body.removeChild(a);
-
-  const formData = new FormData();
-  formData.append("audio", blob, `${title}.wav`);
-  formData.append("prompt", prompt);
-  formData.append("promptNum", promptNum);
+  // prompt 한 문장
+  // promptNum 한 문장의 번호
+  
 
   try {
     const response = await apiClient.post('/save/audio', formData, {
