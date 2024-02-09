@@ -1,98 +1,66 @@
 <template>
   <div v-if="authStore.isLogin">
-
-  <!-- 모달 -->
-  <div class="black-bg" v-if="is_modal_valid">
-    <component :is="activeModal" :item="currentItem" @close-modal="closeModal" />
-  </div>
-
-  <!-- 명언 -->
-  <div class="top-bar">
-    <div class="quote">"행복은 우연이 아니라 선택이다"</div>
-    <div class="quote">짐  론</div>
-  </div>
-
-  <!-- 투두리스트 -->
-  <div class="todo-section">
-    <div class="todo-date">
-      <span>{{ today }}</span>
-      <!-- Todo 생성버튼 -->
-      <button class="add-button" @click="openModal('AddTodo')">+</button>
+    <!-- Modal -->
+    <div class="black-bg" v-if="is_modal_valid">
+      <component :is="activeModal" :item="currentItem" @close-modal="closeModal" />
     </div>
-    <div class="todo-items">
-      <div class="todo-item" v-for="todo in todos" :key="todo.id">
-        <!-- class로 todo-content 만들어야 하지만 귀찮아서 안 만듦
-        어차피 속성값은 동일함 -->
-        <div class="color-bar" :style="{ backgroundColor: getGoalColor(todo) }"></div>
-        <span @click="openModal('TodoDetail', todo)" class="goal-content">{{ todo.todoTitle }}</span>
-        <!-- <p v-if="item">{{ item.goalContent || item.todoTitle }}</p> -->
+  
+    <!-- Quote -->
+    <div class="top-bar">
+      <div class="quote">"행복은 우연이 아니라 선택이다"</div>
+      <div>짐 론</div>
+    </div>
+  
+    <!-- Todo List -->
+    <div class="todo-section">
+      <div class="todo-date">
+        <span>{{ today }}</span>
+        <button class="add-button" @click="openModal('AddTodo')">+</button>
+      </div>
+      <div class="todo-items">
+        <div class="todo-item" v-for="todo in todos" :key="todo.id">
+          <div class="color-bar" :style="{ backgroundColor: getGoalColor(todo) }"></div>
+          <span @click="openModal('TodoDetail', todo)" class="goal-content">{{ todo.todoTitle }}</span>
+          <input type="checkbox">
+        </div>
+      </div>
+    </div>
+    
+    <!-- Goals -->
+    <div class="todo-section">
+      <div class="todo-date">
+        <div style="margin-bottom: 5px; margin-top: 5px;">목표</div>
+      </div>
+      <div class="todo-item" v-for="goal in goals" :key="goal.id">
+        <div class="color-circle" :style="{ backgroundColor: goal.color }"></div>
+        <span @click="openModal('GoalDetail', goal)" class="goal-content">{{ goal.goalContent }}</span>
         <input type="checkbox">
       </div>
     </div>
   </div>
-  
-  <!-- 목표 -->
-  <!-- 원래 목표는 todo 말고 goal이라고 속성값을 따로 해야 하는데, 
-    어차피 동일한 것이고 귀찮으니 todo로 유지 -->
-  <div class="todo-section">
-    <div class="todo-date">
-     <div style="margin-bottom: 5px; margin-top: 5px;">목표</div>
-    </div>
-    <div class="todo-item" v-for="goal in goals" :key="goal.id">
-      <div class="color-circle" :style="{ backgroundColor: goal.color }"></div>
-      <span @click="openModal('GoalDetail', goal)" class="goal-content">{{ goal.goalContent }}</span>
-      <!-- <p v-if="item">{{ item.goalContent || item.todoTitle }}</p> -->
-      <input type="checkbox">
-    </div>
-    <button @click="clearGoals">테스트 차원에서 잠깐 목표 리셋 버튼 만듦</button>
-  </div>
-</div>
 </template>
 
 <script>
-import { useGoalsStore } from '@/stores/goals' // Adjust the path if necessary
-import { useTodosStore } from '@/stores/todos'
-import { useAlarmsStore } from '@/stores/alarms'
-
-<<<<<<< HEAD
-import Sidebar from '@/views/Sidebar.vue'
-=======
-
-// import Sidebar from '@/views/Sidebar.vue'
->>>>>>> junbro
-import TodoList from '@/views/Todo/TodoList.vue'
-import TodoDetail from '@/views/Todo/TodoDetail.vue'
-import AddTodo from '@/views/Todo/AddTodo.vue'
-import GoalList from '@/views/Goal/GoalList.vue'
-import GoalDetail from '@/views/Goal/GoalDetail.vue'
-import HabitList from '@/views/Habit/HabitList.vue'
-<<<<<<< HEAD
+import { getGoalList, getGoalDetail } from '@/api/goals';
+import { getTodoList, getTodoDetail } from '@/api/todos';
 import { useAuthStore } from '@/stores/auth'
-=======
 
->>>>>>> junbro
+import TodoDetail from '@/components/Todo/TodoDetail.vue'
+import AddTodo from '@/components/Todo/AddTodo.vue'
+import GoalDetail from '@/components/Goal/GoalDetail.vue'
+import Habit from '@/views/Habit.vue'
 
 export default {
-
   name: 'App',
-  computed: {
-    goals() {
-      const goalsStore = useGoalsStore();
-      return goalsStore.goals;
-    },
-    todos() {
-      const todosStore = useTodosStore();
-      return todosStore.todos;
-    },
-  },
   data() {
     return {
+      goals: [],
+      todos: [],
       is_modal_valid: false,
       activeModal: null,
-      today: '', // 현재 날짜를 저장할 데이터 속성 추가
-      // todoItems: [],
+      today: '',
       currentItem: null,
-    }
+    };
   },
   setup() {
     const authStore = useAuthStore()
@@ -102,64 +70,84 @@ export default {
     }
   },
   components: {
-    // Sidebar,
-    GoalList,
     GoalDetail,
-    TodoList,
     TodoDetail,
     AddTodo,
-    HabitList,
-  },
+    Habit,
+  },  
   methods: {
-    openModal(component, itemData = null) {
-      // Assuming the goals are related to todos, check if there are any goals when opening a TodoDetail
-      if (component === 'AddTodo') {
-        const goalsStore = useGoalsStore();
-
-        // Now check if there are no goals
-        if (goalsStore.goals.length === 0) {
-          alert('최소 한 가지 목표를 먼저 설정하세요 :)');
-          return; // Exit the function early if there are no goals
+    async openModal(component, itemData = null) {
+      if (component === 'GoalDetail' && itemData) {
+        try {
+          const detailedGoal = await getGoalDetail(itemData.id);
+          this.currentItem = detailedGoal;
+        } catch (error) {
+          console.error('Error fetching goal detail:', error);
+          return;
+        }
+      } else if (component === 'TodoDetail' && itemData) {
+        try {
+          const detailedTodo = await getTodoDetail(itemData.id);
+          this.currentItem = detailedTodo; 
+        } catch (error) {
+          console.error('Error fetching todo detail:', error);
+          return;
         }
       }
-      // If all checks pass, then proceed to open the modal
+      else if (component === 'AddTodo') {
+        try {
+          const goalList = await getGoalList();
+          if (goalList.length === 0) {
+            alert('최소 한 가지 목표를 먼저 설정하세요 :)');
+            return;
+          }
+        } catch (error) {
+          console.error('Error fetching goal list:', error);
+          return;
+        }
+      } 
+      
       this.is_modal_valid = true;
-      this.activeModal = component; //https://lab.ssafy.com/s10-webmobile1-sub2/S10P12C210/-/blob/back/src/main/java/com/ssafy/todak/goal/controller/GoalController.java?ref_type=heads
+      this.activeModal = component;
       this.currentItem = itemData;
     },
-    closeModal() {
-      this.is_modal_valid = false
-      this.activeModal = null
+    async fetchGoals() {
+      try {
+        this.goals = await getGoalList();
+      } catch (error) {
+        console.error('Error fetching goals:', error);
+      }
     },
-    // 김요한: addTodo.vue에서도 날짜를 가지고 오는 게 있는데,
-    // 날짜 가져오는 것 관련해서 의논이 필요할 것 같습니다.
+    async fetchTodos() {
+      try {
+        this.todos = await getTodoList();
+      } catch (error) {
+        console.error('Error fetching todos:', error);
+      }
+    },
     updateToday() {
       const now = new Date()
       const options = { month: '2-digit', day: '2-digit',  weekday: 'long' }
       this.today = now.toLocaleDateString('ko-KR', options)
     },
     getGoalColor(todo) {
-      const goalsStore = useGoalsStore();
-      const goal = goalsStore.goals.find(g => g.id === todo.goalId);
+      // 직접 this.goals 배열에서 목표를 찾습니다.
+      const goal = this.goals.find(g => g.id === todo.goalId);
       return goal ? goal.color : 'defaultColor'; // Replace 'defaultColor' with a fallback color
     },
-    clearGoals() {
-      const goalsStore = useGoalsStore();
-      const todosStore = useTodosStore();
-      const alarmsStore = useAlarmsStore()
-      goalsStore.resetGoals();
-      todosStore.resetTodos();
-      alarmsStore.resetAlarms()
-      localStorage.removeItem('my_goals'); // Clear persisted state if necessary
-      localStorage.removeItem('my_todos'); // Clear persisted state if necessary
-      localStorage.removeItem('my_alarms')
+    closeModal() {
+      this.is_modal_valid = false;
+      this.activeModal = null;
     },
+    // Other methods remain the same
   },
+
   mounted() {
-    // 컴포넌트가 화면에 나타날 때 현재 날짜 업데이트
-    this.updateToday()
+    this.updateToday();
+    this.fetchGoals();
+    this.fetchTodos();
   },
-}
+};
 </script>
 
 <style scoped>
@@ -266,3 +254,4 @@ input[type="checkbox"] {
   margin-left: auto; /* Push the checkbox to the far right */
 }
 </style>
+  

@@ -16,7 +16,6 @@
         <!-- isAlarmed -->
         <div class="form-group">
           <label>알람 여부:</label>
-          <p>시간 넣어야 하는 거 맞죠?(김요한)</p>
           <div class="custom-control custom-switch">
             
             <div class="form-check form-switch">
@@ -32,15 +31,13 @@
           <input v-model="time" type="time" id="time" class="form-control">
         </div>
   
-        <button type="submit" class="btn btn-primary" @click="submitHabit">저장</button>
+        <button type="submit" class="btn btn-primary" @click="fnAdd">저장</button>
       </form>
     </div>
   </template>
   
   <script>
-  import { useHabitsStore } from '@/stores/habits';
-  import { useAlarmsStore } from '@/stores/alarms';
-  
+  import { addHabit } from '@/api/habits';  
   
   export default {
   
@@ -56,85 +53,35 @@
         isCompleted: false,
       };
     },
-    computed: {
-      habits() {
-        const habitsStore = useHabitsStore()
-        return habitsStore.habits
-      },
-    },
     methods: {
       closeModal() {
         this.$emit('close-modal');
       },
-  
-      // 우선 오늘 날짜로 테스트
-      eightDigitDate(d) {
-        const currentDate = new Date();
-        const yyyy = currentDate.getFullYear();
-        const mm = String(currentDate.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 1을 더하고 2자리로 만듭니다.
-        const dd = String(currentDate.getDate()).padStart(2, '0'); // 날짜를 2자리로 만듭니다.
-        const curDate= `${yyyy}${mm}${dd}`;
-        return curDate
-      },
-  
-      // formattedTime(t) {
-      //   if (this.time) {
-      //     const [hours, minutes] = this.t.split(':');
-      //     const hoursInt = parseInt(hours, 10);
-      //     const period = hoursInt >= 12 ? 'PM' : 'AM';
-      //     const formattedHours = ((hoursInt + 11) % 12 + 1);
-      //     console.log(`${formattedHours}:${minutes} ${period}`)
-      //     return `${formattedHours}:${minutes} ${period}`;
-      //   }
-      //   return '';
-      // },
   
       fourDigitTime(t) {
         const [hours, minutes] = t.split(':')
         return hours + minutes   
       },
   
-      submitHabit() {
-        const habitsStore = useHabitsStore()
-        const alarmsStore = useAlarmsStore()
-  
+      fnAdd() {
         // 우선 오늘 날짜로 테스트
         const d = new Date()
-        const t = this.time
-  
-        habitsStore.addHabit({ 
-          habitContent: this.habitContent,
-        });
-    
         this.day = (d.getDay() + 6) % 7 // 이렇게 하여 0을 월요일로 바꿈
-  
+        const t = this.time
+        const setTime = this.fourDigitTime(t)
+        this.time = setTime
+
+        addHabit({ 
+          habitContent: this.habitContent,
+          day: this.day,
+          time: this.time, 
+          isOutside: this.isOutside,
+          isAlarmed: this.isAlarmed,
+          isChecked: this.isChecked,
+          isCompleted: this.isCompleted,
+        });
+        
         this.closeModal() 
-  
-        if (this.isAlarmed) {
-          // time
-          const setTime = this.fourDigitTime(t)
-          this.time = setTime
-
-          alarmsStore.addAlarm({
-            habitId: habitsStore.habits[habitsStore.habits.length - 1].id,
-            day: this.day,
-            time: this.time, 
-            isOutside: this.isOutside,
-            isAlarmed: this.isAlarmed,
-            isChecked: this.isChecked,
-            isCompleted: this.isCompleted,
-          }) 
-
-          alarmsStore.sendPushForHabit({
-            habitId: habitsStore.habits[habitsStore.habits.length - 1].id,
-            day: this.day,
-            time: this.time, 
-            isOutside: this.isOutside,
-            isAlarmed: this.isAlarmed,
-            isChecked: this.isChecked,
-            isCompleted: this.isCompleted,
-          })
-        }
       }
     }  
   }

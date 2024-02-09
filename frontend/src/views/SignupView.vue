@@ -57,7 +57,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useCounterStore } from '@/stores/counter'
+import { useCounterStore } from '@/api/counter'
 import axios from 'axios';
 
 const store = useCounterStore()
