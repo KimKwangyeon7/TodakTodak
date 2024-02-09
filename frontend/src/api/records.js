@@ -42,9 +42,9 @@ async function fetchVoiceDetail(recordId) {
   }
 }
 
-async function modifyVoice(recordId, updatedTitle, updatedMemo) {
+async function modifyVoice(recordId, updatedName, updatedMemo) {
   const payload = {
-    title: updatedTitle,
+    name: updatedName,
     memo: updatedMemo
   };
   try {
