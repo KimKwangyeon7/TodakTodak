@@ -48,7 +48,6 @@ import { useAuthStore } from '@/stores/auth'
 import TodoDetail from '@/components/Todo/TodoDetail.vue'
 import AddTodo from '@/components/Todo/AddTodo.vue'
 import GoalDetail from '@/components/Goal/GoalDetail.vue'
-import Habit from '@/views/Habit.vue'
 
 export default {
   name: 'App',
@@ -73,7 +72,6 @@ export default {
     GoalDetail,
     TodoDetail,
     AddTodo,
-    Habit,
   },  
   methods: {
     async openModal(component, itemData = null) {
