@@ -41,8 +41,8 @@
 </template>
 
 <script>
-import { fetchVoiceList, fetchVoiceDetail, deleteVoice, } from '@/api/record'
-import { RecordDetail } from '@/components/RecordDetail.vue'
+import { fetchVoiceList, fetchVoiceDetail, deleteVoice, } from '@/api/records'
+import  RecordDetail from '@/components/Record/RecordDetail.vue'
 
 export default {
   name: 'Record',
