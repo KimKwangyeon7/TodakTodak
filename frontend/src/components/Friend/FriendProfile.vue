@@ -10,12 +10,12 @@
         <div class="profile-body" v-if="friend">
           <div class="profile-info">
             <img :src="friend.profilePicture" alt="프로필 사진" class="profile-picture" />
-            <p class="profile-name">{{ friend.name }}</p>
-            <p class="profile-memo">{{ friend.memo }}</p>
+            <div class="profile-name">{{ friend.name }}</div>
+            <div class="profile-memo">{{ friend.memo }}</div>
             <button class="friend-add btn btn-success btn-sm ml-2"
               @click.stop="followFriend(friend)"
               :class="{ 'following': friend.following }">
-              {{ friend.following ? '친구' : '친구 추가' }}
+              {{ friend.following ? '친구!' : '친구 신청' }}
             </button>
           </div>
         </div>
@@ -43,7 +43,7 @@ const friend = ref({
   name: '김싸피',
   memo: '오늘만 살자',
   profilePicture: '/src/assets/damgom.png',
-  goals: ['교촌치킨 주문', '네네치킨 주문', '노랑통닭 주문'],
+  goals: ['와플대학 입학', '청년카페 취업', '김밥천국 승천'],
   following: false  // 친구 추가 여부에 따라 초기값 설정
 })
 
@@ -67,7 +67,7 @@ const followFriend = (friend) => {
 }
 
 .profile-title {
-  font-size: 30px;
+  font-size: 25px;
 }
 
 .profile-name {
@@ -77,6 +77,7 @@ const followFriend = (friend) => {
 
 .profile-memo {
   font-size: 15px;
+  margin-bottom: 10px;
 }
 
 .back-button {
@@ -89,6 +90,15 @@ const followFriend = (friend) => {
   padding: 20px;
   align-items: center;
   justify-content: space-between;
+  border-color: #EAF3F9;
+  position: relative;
+  overflow: hidden;
+  background-color: #EAF3F9;
+  color: black;
+  margin-bottom: 10px;
+  border-radius: 24px;
+  overflow-y: auto;
+  box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.25);
 }
 
 .profile-info {
@@ -104,12 +114,23 @@ const followFriend = (friend) => {
 
 .goal-list {
   margin-top: 20px;
+  border-color: #EAF3F9;
+  position: relative;
+  overflow: hidden;
+  background-color: #EAF3F9;
+  color: black;
+  margin-bottom: 10px;
+  border-radius: 24px;
+  justify-content: space-between;
+  align-items: center;
+  overflow-y: auto;
+  box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.25);
 }
 
 .goal-list-title {
+  margin-top: 10px;
+  margin-left: 20px;
   font-size: 25px;
-  font-weight: bold;
-  color: #0084ff;
 }
 
 .goal-list ul {
@@ -118,7 +139,8 @@ const followFriend = (friend) => {
 }
 
 .goal-list li {
-  margin-bottom: 8px;
+  margin-left: 22px;
+  margin-bottom: 5px;
 }
 
 /* 팔로잉 중일 때의 버튼 스타일 */

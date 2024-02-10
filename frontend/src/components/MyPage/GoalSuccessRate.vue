@@ -14,8 +14,9 @@
   import { ref } from 'vue'
 
   const goals = ref([
-    { name: '목표 1', successRate: 80 },
-    { name: '목표 2', successRate: 60 },
+    { name: '정보처리기사 자격증 획득', successRate: 80 },
+    { name: '삼성전자 취업', successRate: 60 },
+    { name: '공동 프로젝트 앱 완성', successRate: 70 },
     // 추가 목표는 필요에 따라 계속해서 추가
   ]);
   </script>
@@ -43,7 +44,6 @@
     justify-content: space-between;
     align-items: center;
     width: 80%;
-    margin: 10px 0;
   }
   
   .goal-name {

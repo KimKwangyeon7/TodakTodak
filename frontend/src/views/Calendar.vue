@@ -1,5 +1,5 @@
 <template>
-  <b-container>
+  <div class="m-3">
     <main class="calendar-wrapper">
       <b-row>
         <b-col md="8">
@@ -39,7 +39,7 @@
         </b-col>
       </b-row>
     </main>
-  </b-container>
+  </div>
 </template>
 
 <script>
@@ -317,20 +317,16 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+
 .calendar-wrapper {
   display: flex;
   margin: 2.5em 0;
   overflow: auto;
 }
 
-.calendar-body {
-  width: 384px;
-  height: 394px;
-}
-
 .calendar-header {
-  margin-bottom: 2rem;
+  margin-bottom: 20px;
 }
 
 .calendar-header .month {

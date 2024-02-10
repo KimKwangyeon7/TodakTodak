@@ -65,6 +65,9 @@ const friends = ref([
   { id: 7, name: '카리나', age: 25 },
   { id: 8, name: '공유', age: 30 },
   { id: 9, name: '황정민', age: 28 },
+  { id: 10, name: '윈터', age: 25 },
+  { id: 11, name: '김민재', age: 30 },
+  { id: 12, name: '이강인', age: 28 },
 ])
 
 const filteredFriends = computed(() => {
@@ -134,6 +137,8 @@ const toggleSearch = () => {
   border-radius: 24px;
   justify-content: space-between;
   align-items: center;
+  overflow-y: auto;
+  
 }
 
 .friend-item {
@@ -166,12 +171,13 @@ const toggleSearch = () => {
   align-items: center;
   margin-bottom: 10px;
 }
+
 .friend-buttons {
   display: flex;
   margin-left: auto;
 }
 
 .friend {
-  font-size: 30px;
+  font-size: 25px;
 }
 </style>
