@@ -1,15 +1,16 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: 'http://localhost:8080/goals/todos',
+  baseURL: 'http://i10c210.p.ssafy.io:8080/goals/',
   headers: {
+    Authorization : "Bearer " + localStorage.getItem("accessToken"),
     Accept: 'application/json',
     'Content-Type': 'application/json',
   },
 });
 
 apiClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem('jwtToken');
+  const token = localStorage.getItem('accessToken');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }

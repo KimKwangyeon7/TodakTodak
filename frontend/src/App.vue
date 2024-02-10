@@ -34,7 +34,7 @@ import Main from '@/views/Main.vue'
 import MyPage from '@/views/MyPage.vue'
 
 import { RouterLink, RouterView } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
+import { useMemberStore } from '@/stores/auth'
 
 
 let today = new Date()
@@ -48,7 +48,7 @@ export default {
     }
   },
   setup() {
-    const authStore = useAuthStore()
+    const authStore = useMemberStore()
 
     return {
       authStore,

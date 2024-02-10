@@ -31,8 +31,8 @@
     "vue-socket": "^0.2.3",
     "vue-webrtc": "^3.0.1",
     "vuefire": "^3.1.22",
-    "web-audio-recorder-js": "^0.0.2",
     "vuex": "^4.1.0",
+    "web-audio-recorder-js": "^0.0.2",
     "web-push": "^3.6.7",
     "webrtc-adapter": "^8.2.3"
   },

@@ -1,12 +1,15 @@
-import apiClient from './goalsApiClient';
+/* eslint-disable no-unused-vars */
+import { localAxios } from "@/util/http-commons";
+import apiClient from "./goalsApiClient";
 
-async function addGoal(newGoal) {
-  try {
-    await apiClient.post(newGoal);
-    console.log("Goal added successfully");
-  } catch (error) {
-    console.error("Error adding goal:", error);
-  }
+const local = localAxios(); // axios instance
+
+const url = "/goals";
+
+function addGoal(goal, success, fail) {
+  console.log("addGoal 실행", goal);
+  local.defaults.headers.Authorization = "Bearer " + localStorage.getItem("accessToken");
+  local.post(`${url}`, JSON.stringify(goal)).then(success).catch(fail);
 }
 
 async function getGoalList() {
@@ -47,10 +50,4 @@ async function deleteGoal(goalId) {
   }
 }
 
-export {
-  addGoal,
-  getGoalList,
-  getGoalDetail,
-  updateGoal,
-  deleteGoal
-};
+export { addGoal, getGoalList, getGoalDetail, updateGoal, deleteGoal };
