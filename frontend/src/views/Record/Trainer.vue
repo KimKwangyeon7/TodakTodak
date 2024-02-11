@@ -98,7 +98,7 @@ export default {
     return {
       recordingStatus: "Record Sound",
       recording: false,
-      records: [],
+      // records: [],
       recordHistory: [],
       name: "",
       memo: "",
@@ -128,7 +128,13 @@ export default {
     },
     nameExists() {
       return this.records.some(record => record.name === this.name)
-    }
+    },
+    onSuccess(response){
+        console.log(response.data)
+    },
+    onFail(error){
+        console.error(error)
+    },
   },
   methods: {
     prevSentence() {
@@ -161,8 +167,8 @@ export default {
       if (!this.nameExists) {
           this.records.push({ id: this.currentSentenceId, name: this.name });
           // 음성 생성 api(post)
-          console.log("createNewVoice({ name: this.name, memo: this.memo }")
-          createNewVoice({ name: this.name, memo: this.memo })
+          // console.log("createNewVoice({ name: this.name, memo: this.memo }")
+          createNewVoice({ name: this.name, memo: this.memo, onSuccess, onFail })
       }
 
       if (this.recording) {
