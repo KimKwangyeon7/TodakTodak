@@ -50,7 +50,7 @@ const goBack = () => {
 const toggleFriendship = () => {
   if (!friend.value.following) {
     // 모달 창 표시
-    if (confirm("친구 신청이 되었습니다.")) {
+    if (confirm("친구 신청하겠습니까?")) {
       friend.value.following = !friend.value.following
       buttonText.value = '친구 신청 중'
     }

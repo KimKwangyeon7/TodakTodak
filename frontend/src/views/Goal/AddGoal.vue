@@ -24,8 +24,8 @@
           <div class="color-options">
             <div v-for="color in colorOptions" :key="color" @click="selectColor(color)" class="color-option" :style="{ backgroundColor: color }"></div>
           </div>
+          <button @click="closeColorDetailModal" class="btn color-select">닫기</button>
         </div>
-        <button @click="closeColorDetailModal" class="btn btn-primary">닫기</button>
       </div>
     </form>
   </div>
@@ -129,5 +129,10 @@ export default {
   width: 30px;
   height: 30px;
   cursor: pointer;
+}
+.color-select {
+  display: flex;
+  margin-top: 10px;
+  margin-left: auto;
 }
 </style>
