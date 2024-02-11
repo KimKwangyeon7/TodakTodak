@@ -12,14 +12,10 @@ function addGoal(goal, success, fail) {
   local.post(`${url}`, JSON.stringify(goal)).then(success).catch(fail);
 }
 
-async function getGoalList() {
-  try {
-    const response = await apiClient.get();
-    console.log("Goal List:", response.data);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching goal list:", error);
-  }
+function getGoalList(success, fail) {
+  console.log("goalList 실행");
+  local.defaults.headers.Authorization = 'Bearer '+ localStorage.getItem("accessToken");
+  local.get(`/goals`).then(success).catch(fail);
 }
 
 async function getGoalDetail(goalId) {

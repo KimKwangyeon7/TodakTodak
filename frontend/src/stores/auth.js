@@ -16,6 +16,14 @@ export const useMemberStore = defineStore("memberStore", () => {
   const token = ref(null);
   const userInfo = ref(null);
 
+  const initializeAuth = () => {
+    const accessToken = localStorage.getItem('accessToken')
+    if (accessToken) {
+      token.value = accessToken
+      isLogin.value = true
+    }
+  }
+
   const userLogin = async (loginUser) => {
     await login(
       loginUser,
@@ -32,6 +40,25 @@ export const useMemberStore = defineStore("memberStore", () => {
           console.log("nickname", nickname.value);
 
           localStorage.setItem("accessToken", accessToken); //로컬스토리지 토큰 저장
+
+          findByToken(
+            (response) => {
+              if (response.status === httpStatusCode.OK) {
+                let { data } = response;
+                userInfo.value = data;
+                console.log("3. getUserInfo data >> ", response.data);
+              } else {
+                console.log("유저 정보 없음!!!!");
+              }
+            },
+            async (error) => {
+              console.log(error);
+              console.error(
+                "getUserInfo() error code [토큰 만료되어 사용 불가능.] ::: ",
+                error.response.status
+              );
+            }
+          );
         } else {
           console.log("로그인 실패했다");
           isLogin.value = false;
@@ -46,7 +73,6 @@ export const useMemberStore = defineStore("memberStore", () => {
   };
 
   const getUserInfo = async (token) => {
-
     await findByToken(
       (response) => {
         if (response.status === httpStatusCode.OK) {
@@ -75,7 +101,9 @@ export const useMemberStore = defineStore("memberStore", () => {
     isLoginError,
     nickname,
     token,
+    userInfo,
     userLogin,
-    getUserInfo
+    getUserInfo,
+    initializeAuth
   };
 });

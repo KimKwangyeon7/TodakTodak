@@ -44,7 +44,8 @@
       </div>
       <div class="todo-item" v-for="goal in goals" :key="goal.id">
         <div
-          class="color-circle" :style="{ backgroundColor: goal.color }"
+          class="color-circle"
+          :style="{ backgroundColor: goal.color }"
         ></div>
         <span @click="openModal('GoalDetail', goal)" class="goal-content">{{
           goal.content
@@ -125,43 +126,50 @@ export default {
       this.activeModal = component;
       this.currentItem = itemData;
     },
-    async fetchGoals() {
-      try {
-        this.goals = await getGoalList();
-      } catch (error) {
-        console.error("Error fetching goals:", error);
-      }
+    fetchGoals() {
+      console.log("채팅 목록 가져오기");
+      // API 호출
+      getGoalList(
+        ({ data }) => {
+          console.log("채팅목록리스트");
+          console.log(data);
+          this.goals = data;
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     },
     async fetchTodos() {
-  try {
-    const now = new Date();
+      try {
+        const now = new Date();
 
-    // 연도, 월, 일 추출
-    var year = now.getFullYear().toString();
-    var month = (now.getMonth() + 1).toString();
-    var day = now.getDate().toString();
+        // 연도, 월, 일 추출
+        var year = now.getFullYear().toString();
+        var month = (now.getMonth() + 1).toString();
+        var day = now.getDate().toString();
 
-    console.log(year);
-    console.log(month);
-    console.log(day);
+        console.log(year);
+        console.log(month);
+        console.log(day);
 
-    // 여기서 사용할 변수명 수정
-    if (month < 10) {
-      month = "0" + month;
-    }
+        // 여기서 사용할 변수명 수정
+        if (month < 10) {
+          month = "0" + month;
+        }
 
-    if (day < 10) {
-      day = "0" + day;
-    }
-    console.log()
-    // 여기서 사용할 변수명 수정
-    const todayString = year + "" + month + "" + day;
+        if (day < 10) {
+          day = "0" + day;
+        }
+        console.log();
+        // 여기서 사용할 변수명 수정
+        const todayString = year + "" + month + "" + day;
 
-    this.todos = await getTodoListByDate(todayString);
-  } catch (error) {
-    console.error("Error fetching todos:", error);
-  }
-},
+        this.todos = await getTodoListByDate(todayString);
+      } catch (error) {
+        console.error("Error fetching todos:", error);
+      }
+    },
 
     updateToday() {
       const now = new Date();

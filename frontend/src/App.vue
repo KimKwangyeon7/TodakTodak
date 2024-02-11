@@ -1,4 +1,5 @@
 <template>
+  <div>
   <div v-if="authStore.isLogin" class="mt-5">
     <Sidebar />
 
@@ -10,28 +11,25 @@
       <RouterLink to="/Calendar" class="nav-item">
         <img class='nav-icon' src="@/assets/sidebar/calendar.png" alt=""> Calendar
       </RouterLink>
-      <RouterLink to="/Friend" class="nav-item">
+      <RouterLink to="/friends" class="nav-item">
         <img class='nav-icon' src="@/assets/bottom-nav/Lucide.png" alt=""> Friends
       </RouterLink>
       <RouterLink to="/mypage" class="nav-item">
         <img class='nav-icon' src="@/assets/bottom-nav/profile.png" alt=""> MyPage
       </RouterLink>
     </div>
-    <RouterView />
   </div>
-  <div v-else>
-    <div>
-      <RouterLink :to="{ name: 'SignUpView' }">SignUp</RouterLink>
-      <RouterLink :to="{ name: 'LoginView' }">Login</RouterLink>
-    </div>
-  </div>
+
+  <AuthLinks v-else />
   <RouterView />
+  </div>
 </template>
 
 <script>
 import Sidebar from '@/components/Sidebar.vue'
 import Main from '@/views/Main.vue'
 import MyPage from '@/views/MyPage.vue'
+import AuthLinks from '@/views/AuthLinks.vue'
 
 import { RouterLink, RouterView } from 'vue-router'
 import { useMemberStore } from '@/stores/auth'
@@ -58,6 +56,7 @@ export default {
     Sidebar,
     Main,
     MyPage,
+    AuthLinks,
     RouterView,
     RouterLink,
 },
