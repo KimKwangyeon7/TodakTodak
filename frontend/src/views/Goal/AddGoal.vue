@@ -10,13 +10,13 @@
       <!-- Color Input using Bootstrap classes -->
       <div class="form-group">
         <label for="color">목표 색상:</label>
-        <button @click.prevent="openColorDetailModal" class="btn btn-primary">색상 선택</button>
+        <button @click.prevent="openColorDetailModal" class="btn">색상 선택</button>
       </div>
       <div v-if="selectedColor" class="selected-color">
         <p>선택한 색상: {{ selectedColor }}</p>
         <div :key="color" class="color-option" :style="{ backgroundColor: color }"></div>
       </div>
-      <button @click.prevent="submitGoal" class="btn btn-primary">저장</button>
+      <button @click.prevent="submitGoal" class="btn goal-save">저장</button>
 
       <!-- Color Detail Modal -->
       <div v-if="showColorDetailModal" class="color-modal">
@@ -52,7 +52,6 @@ export default {
   methods: {
     openColorDetailModal() {
       this.showColorDetailModal = true;
-      console.log(`Goal Content:',${this.goalContent} `)
     },
     closeColorDetailModal() {
       this.showColorDetailModal = false;
@@ -79,6 +78,27 @@ export default {
 </script>
 
 <style scoped>
+.modal-content {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #EAF3F9;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.goal-save{
+  display: flex;
+  margin-left: auto;
+}
+
+.selected-color {
+  margin-top: 10px;
+}
+
 .color-modal {
   position: fixed;
   top: 0;
@@ -109,9 +129,5 @@ export default {
   width: 30px;
   height: 30px;
   cursor: pointer;
-}
-
-.selected-color {
-  margin-top: 10px;
 }
 </style>
