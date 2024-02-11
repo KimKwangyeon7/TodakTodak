@@ -1,5 +1,4 @@
 <template>
-  <div>
   <div v-if="authStore.isLogin" class="mt-5">
     <Sidebar />
 
@@ -19,17 +18,19 @@
       </RouterLink>
     </div>
   </div>
-
-  <AuthLinks v-else />
-  <RouterView />
+  <div v-else>
+    <div>
+      <RouterLink :to="{ name: 'SignUpView' }">SignUp</RouterLink>
+      <RouterLink :to="{ name: 'LoginView' }">Login</RouterLink>
+    </div>
   </div>
+  <RouterView />
 </template>
 
 <script>
 import Sidebar from '@/components/Sidebar.vue'
 import Main from '@/views/Main.vue'
 import MyPage from '@/views/MyPage.vue'
-import AuthLinks from '@/views/AuthLinks.vue'
 
 import { RouterLink, RouterView } from 'vue-router'
 import { useMemberStore } from '@/stores/auth'
@@ -56,7 +57,6 @@ export default {
     Sidebar,
     Main,
     MyPage,
-    AuthLinks,
     RouterView,
     RouterLink,
 },
