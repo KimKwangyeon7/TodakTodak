@@ -87,7 +87,7 @@ const deleteVoice = (list, id) => {
   justify-content: space-between;
   align-items: center;
   margin: 0 8px;
-  font-size: 30px;
+  font-size: 25px;
   font-weight: bold;
 }
 
@@ -96,7 +96,7 @@ const deleteVoice = (list, id) => {
   justify-content: space-between;
   align-items: center;
   padding: 8px;
-  font-size: 30px;
+  font-size: 20px;
 }
 
 .voice-box {

@@ -130,6 +130,7 @@ textarea {
   border-radius: 5px;
   margin-right: 10px;
   touch-action: manipulation;
+  font-size: 16px;
 }
 
 .input-button {

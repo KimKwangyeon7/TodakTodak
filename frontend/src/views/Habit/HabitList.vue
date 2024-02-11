@@ -1,5 +1,6 @@
 <template>
     <div>
+      <div class="habit">습관</div>
     <!-- 모달 -->
     <div class="black-bg" v-if="is_modal_valid">
       <component :is="activeModal" :item="currentItem" @close-modal="closeModal" />
@@ -71,13 +72,8 @@ export default {
   </script>
 
 <style scoped>
-/* 전체 앱 스타일링 */
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+.habit {
+  font-size: 25px;
 }
 
 /* 상단 바 스타일링 */

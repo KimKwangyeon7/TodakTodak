@@ -172,7 +172,7 @@ export default {
 }
 
 .quote {
-  font-size: 20px;
+  font-size: 16px;
 }
 
 
