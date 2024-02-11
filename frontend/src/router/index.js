@@ -1,8 +1,7 @@
 // router/index.js
 import { createRouter, createWebHistory } from 'vue-router'
 import Main from '@/views/Main.vue'
-import GoalList from '@/views/Goal/GoalList.vue'
-import AddGoal from '@/views/Goal/AddGoal.vue'
+import AddGoal from '@/components/Goal/AddGoal.vue'
 import Board from '@/views/Board.vue'
 import Calendar from '@/views/Calendar.vue'
 import Friend from '@/views/Friend.vue'
@@ -12,10 +11,11 @@ import Meet from '@/components/Meeting/MeetingRoom.vue'
 import MyPage from '@/views/MyPage.vue'
 import MyPageSettings from '@/components/MyPage/MypageSettings.vue'
 import UserInfoEdit from '@/components/MyPage/UserInfoEdit.vue'
-import Habit from '@/views/Habit/HabitList.vue'
-import Voice from '@/views/Voice/Voice.vue'
-import VoiceTrainer from '@/views/Voice/VoiceTrainer.vue'
-import TodoList from '@/views/Todo/TodoList.vue'
+import Habit from '@/views/Habit.vue'
+// import Voice from '@/views/Voice.vue'
+import Record from '@/views/Record/Record.vue'
+// import VoiceTrainer from '@/views/Voice/VoiceTrainer.vue'
+import Trainer from '@/views/Record/Trainer.vue'
 import CalendarDetail from '@/views/CalendarDetail.vue'
 import Notification from '@/components/Notifications.vue'
 import subscribe from '@/components/subscribe_page.vue'
@@ -93,24 +93,19 @@ const router = createRouter({
 		component: UserInfoEdit,
 	},
 	{
-		path: '/voice',
-		name: 'Voice',
-		component: Voice
+		path: '/record',
+		name: 'Record',
+		component: Record
 	},
 	{
-		path: '/voice/trainer',
-		name: 'VoiceTrainer',
-		component: VoiceTrainer
+		path: '/record/trainer',
+		name: 'Trainer',
+		component: Trainer
 	},
 	{
 		path: '/calendar-detail/:selectedDate',
 		name: 'CalendarDetail',
 		component: CalendarDetail
-	},
-	{
-		path: '/goallist',
-		name: 'GoalList',
-		component: GoalList
 	},
 	{
 		path: '/login',
@@ -132,24 +127,20 @@ const router = createRouter({
 		name: 'pushnotify',
 		component: pushnotify
 	},
-  {
-	path: '/friend-profile',
-	component: FriendProfile
-  },
-  {
-	path: '/login',
-	name: 'LoginView',
-	component: LoginView
-},
-{
-	path: '/signup',
-	name: 'SignUpView',
-	component: SignupView
-}, 
 	{
 		path: '/friend-profile',
 		component: FriendProfile
 	},
+	{
+		path: '/login',
+		name: 'LoginView',
+		component: LoginView
+	},
+	{
+		path: '/signup',
+		name: 'SignUpView',
+		component: SignupView
+	}, 
   ]
 })
 

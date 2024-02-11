@@ -30,7 +30,6 @@
 
 <script>
 import Sidebar from '@/components/Sidebar.vue'
-import TodoList from '@/views/Todo/TodoList.vue'
 import Main from '@/views/Main.vue'
 import MyPage from '@/views/MyPage.vue'
 
@@ -57,7 +56,6 @@ export default {
   },
   components: {
     Sidebar,
-    TodoList,
     Main,
     MyPage,
     RouterView,
