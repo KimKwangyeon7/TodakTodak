@@ -9,6 +9,12 @@
                 <div class="calendar-title">
                   <span class="arrow-left" @click="subtractMonth">&lt;</span> 
                   {{ year }}년 {{ dateContext.format('M') }}월
+                  <div>{{ goalColors }}</div>
+                  <ul>
+                  <li v-for="todo in todos" :key="todo.id">
+                    {{ todo.title }} - {{ todo.date }}
+                  </li>
+                </ul>
                   <span class="arrow-right" @click="addMonth">&gt;</span>
                 </div>
               </b-row>
@@ -43,10 +49,26 @@
 </template>
 
 <script>
+import { useGoalsStore } from '@/stores/goals';
+import { getTodosByMonth } from "@/api/calendar"
+import { computed } from "vue";
+
 import moment from 'moment'
 
 export default {
   name: 'Calendar',
+  mounted() {
+    this.fetchTodos(); // 컴포넌트가 마운트될 때 fetchTodos 호출
+  },
+  setup() {
+    const goalsStore = useGoalsStore();
+
+  // 모든 목표의 색상 정보를 배열로 반환하는 계산된 속성
+    const goalColors = computed(() => goalsStore.goals.map(goal => goal.color));
+    console.log("가져온색상:", goalColors.value);
+
+    return { goalColors };
+  },
   data() {
     return {
       monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
@@ -59,7 +81,15 @@ export default {
       isStyleCurrentDate: true
     }
   },
+  props: {
+    selectedColor: String
+  },
   computed: {
+    goalColors() {
+      const goalsStore = useGoalsStore();
+      // 목표 배열에서 각 목표의 색상만 추출하여 배열로 반환
+      return goalsStore.goals.map(goal => goal.color);
+    },
     monthNumber: function () {
     // 월 이름을 숫자로 변환
     return this.monthNames.indexOf(this.month) + 1;
@@ -207,6 +237,20 @@ export default {
     }
   },
   methods: {
+    fetchTodos() {
+      const month = this.dateContext.format('YYYY-MM')
+      getTodosByMonth(month,
+      (response) => {
+        console.log("성공적인 투두가져오기:", response.data)
+      },
+      (error) => {
+        console.error("투두가져오는거 실패:", error)
+      }
+      )
+    },
+    mounted() {
+    this.fetchTodos(); // 컴포넌트가 마운트될 때 fetchTodos 호출
+    },
     handleDateClick(date, index) {
         if (date.isPreviousMonth) {
             this.subtractMonth();
@@ -226,7 +270,7 @@ export default {
       console.log('Year:', this.year);  // 수정된 부분: date에서 year를 바로 가져오도록 변경
       console.log('Month:', this.month);
       console.log('Day Number:', date.dayNumber);
-
+      
   // formattedDay를 숫자로 변환
   let formattedDay = parseInt(date.dayNumber);
   let formattedyear = parseInt(this.year)
@@ -245,7 +289,6 @@ export default {
   if (!this.selectedDate.isValid()) {
     console.error('Invalid Date!');
   }
-
   this.$router.push({
     name: 'CalendarDetail',
     params: {
@@ -312,7 +355,7 @@ export default {
     },
     accept() {
       console.log(this.activeDates)
-    }
+    },
   }
 }
 </script>
