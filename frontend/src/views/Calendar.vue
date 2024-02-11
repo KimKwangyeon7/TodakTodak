@@ -10,6 +10,11 @@
                   <span class="arrow-left" @click="subtractMonth">&lt;</span> 
                   {{ year }}년 {{ dateContext.format('M') }}월
                   <div>{{ goalColors }}</div>
+                  <div v-for="(color, index) in goalColors" 
+                  :key="index" class="color-box" 
+                  :style="{ backgroundColor: color }">
+                  </div>
+
                   <ul>
                   <li v-for="todo in todos" :key="todo.id">
                     {{ todo.title }} - {{ todo.date }}
@@ -511,5 +516,12 @@ export default {
 .vcal-date:hover {
   background-color: #3498db;
   color: #ffffff;
+}
+
+.color-box {
+  width: 20px; /* 상자의 너비 */
+  height: 20px; /* 상자의 높이 */
+  display: inline-block; /* 상자를 인라인 요소처럼 배치 */
+  margin-right: 4px; /* 상자 사이의 간격 */
 }
 </style>

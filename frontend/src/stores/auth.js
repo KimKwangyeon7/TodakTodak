@@ -16,6 +16,15 @@ export const useMemberStore = defineStore("memberStore", () => {
   const token = ref(null);
   const userInfo = ref(null);
 
+  const initializeAuth = () => {
+    const accessToken = localStorage.getItem('accessToken')
+    if (accessToken) {
+      token.value = accessToken
+      isLogin.value = true
+    }
+  }
+
+
   const userLogin = async (loginUser) => {
     await login(
       loginUser,
@@ -44,7 +53,6 @@ export const useMemberStore = defineStore("memberStore", () => {
       { persist: true }
     );
   };
-
   const getUserInfo = async (token) => {
 
     await findByToken(
@@ -76,6 +84,7 @@ export const useMemberStore = defineStore("memberStore", () => {
     nickname,
     token,
     userLogin,
-    getUserInfo
+    getUserInfo,
+    initializeAuth
   };
 });
