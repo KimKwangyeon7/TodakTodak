@@ -41,8 +41,8 @@
 </template>
 
 <script>
-import { fetchVoiceList, fetchVoiceDetail, deleteVoice, } from '@/api/record'
-import { RecordDetail } from '@/components/RecordDetail.vue'
+import { fetchVoiceList, fetchVoiceDetail, deleteVoice, } from '@/api/records'
+import  RecordDetail from '@/components/Record/RecordDetail.vue'
 
 export default {
   name: 'Record',
@@ -58,16 +58,17 @@ export default {
   components: {
     RecordDetail
   },
+  computed: {
+    onSuccess(response){
+        console.log(response.data)
+      },
+    onFail(error){
+        console.error(error)
+      },
+  },
   methods: {
     toggleVoice(voice) {
       voice.isActive = !voice.isActive;
-    },
-    async fetchRecords() {
-      try {
-        this.recordedVoices = await fetchVoiceList();
-      } catch(error) {
-        console.log('Error fetching records:', error)
-      }
     },
     async openModal(component = RecordDetail, itemData = null) {
       try {
@@ -80,6 +81,13 @@ export default {
       this.is_modal_valid = true
       this.activeModal = component
       this.currentItem = itemData
+    },
+    async fetchRecords() {
+      try {
+        this.recordedVoices = await fetchVoiceList(onSuccess, onFail);
+      } catch(error) {
+        console.log('Error fetching records:', error)
+      }
     },
     async fnDelete(voiceId) {
       const confirmed = window.confirm('정말 삭제하시겠습니까?');
