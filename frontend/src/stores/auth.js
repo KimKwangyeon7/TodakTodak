@@ -24,6 +24,10 @@ export const useMemberStore = defineStore("memberStore", () => {
     }
   }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> aa5d36e815f60e1aaaf8927b6596c340ca11dcf6
   const userLogin = async (loginUser) => {
     await login(
       loginUser,
@@ -71,7 +75,6 @@ export const useMemberStore = defineStore("memberStore", () => {
       { persist: true }
     );
   };
-
   const getUserInfo = async (token) => {
     await findByToken(
       (response) => {

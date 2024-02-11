@@ -13,20 +13,28 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useMemberStore } from '@/stores/auth'
 
-const props = {
+const userData = ref(null)
+
+// props 정의
+const props = defineProps({
   userData: Object,
-}
+});
 
 const router = useRouter()
+const memberStore = useMemberStore() // Pinia 스토어 사용
 
-const userData = ref({
-  name: '김철수',
-  memo: '오늘도 힘내요',
-  profilePicture: '/src/assets/damgom.png',
-})
+// 컴포넌트 마운트 시 사용자 정보 가져오기
+onMounted(async () => {
+  const token = localStorage.getItem("accessToken");
+  userData.value = await memberStore.getUserInfo(token); // 사용자 정보를 가져옴
+  console.log('userData:', userData);
+  // userData.value = memberStore.userInfo; // 가져온 사용자 정보를 userData에 할당
+  // console.log('userData.value', userData )
+});
 
 const goToProfileEdit = () => {
   // 사용자 프로필 수정 페이지로 이동하는 라우터 링크
