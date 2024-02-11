@@ -1,11 +1,11 @@
 <template>
   <div class="modal-content" style="border-radius: 10px;">
-        <form @submit.prevent="fnAdd">
-            <!-- Goal Content Input -->
-            <div class="form-group">
-                <label for="goalContent">목표 내용:</label>
-                <input v-model="goalContent" type="text" id="goalContent" class="form-control" required>
-            </div>
+    <form>
+      <!-- Goal Content Input -->
+      <div class="form-group">
+        <label for="goalContent">목표 내용:</label>
+        <input v-model="goalContent" type="text" id="goalContent" class="form-control" required>
+      </div>
 
       <!-- Color Input using Bootstrap classes -->
       <div class="form-group">
@@ -32,49 +32,62 @@
 </template>
 
 <script>
-    import { addGoal } from '@/api/goals' // Adjust the path if necessary
+import { useGoalsStore } from '@/stores/goals';
+import { addGoal } from '@/api/goals'
+import axios from 'axios'
 
-    export default {
-        data() {
-            return {
-              goalContent: '',
-              color: '#46beff',
-              showColorDetailModal: false,
-              colorOptions: [
-                '#fff56e', '#ffa500', '#ffdbc1', '#ffbc9b',
-                '#e6c178', '#dc9146', '#ffcfda', '#ff9e9b',
-                '#ff7493', '#ff96ff', '#75ffca', '#b4f0b4',
-                '#6dd66d', '#32bebe', '#9ab9ff', '#46beff'
-              ],
-              selectedColor: '', // 추가: 선택한 색상 저장 변수
-            };
-        },
-        methods: {
-            async fnAdd() {
-                addGoal({ goalContent: this.goalContent, color: this.color });
-                // Redirect after adding goal
-                this.$router.push('/Main');
-            },
-            openColorDetailModal() {
-              this.showColorDetailModal = true;
-              console.log(`Goal Content:',${this.goalContent} `)
-            },
-            closeColorDetailModal() {
-              this.showColorDetailModal = false;
-              // 추가: 모달이 닫힐 때 선택한 색상을 표시
-              console.log(`Selected Color: ${this.selectedColor}`);
-            },
-            selectColor(selectedColor) {
-              this.color = selectedColor;
-              this.selectedColor = selectedColor; // 추가: 선택한 색상 저장
-            },
-            clearForm() {
-              this.goalContent = '';
-              this.color = '#000000';
-              this.selectedColor = ''; // 추가: 저장된 선택한 색상 초기화
-            },
-        }
-      }
+export default {
+  data() {
+    return {
+        selectedColor: "", // Main 컴포넌트에서 선택한 색상
+      goalContent: '',
+      color: '#46beff',
+      showColorDetailModal: false,
+      colorOptions: [
+        '#fff56e', '#ffa500', '#ffdbc1', '#ffbc9b',
+        '#e6c178', '#dc9146', '#ffcfda', '#ff9e9b',
+        '#ff7493', '#ff96ff', '#75ffca', '#b4f0b4',
+        '#6dd66d', '#32bebe', '#9ab9ff', '#46beff'
+      ],
+      selectedColor: '', // 추가: 선택한 색상 저장 변수
+    };
+  },
+  methods: {
+    openColorDetailModal() {
+      this.showColorDetailModal = true;
+      console.log(`Goal Content:',${this.goalContent} `)
+    },
+    closeColorDetailModal() {
+      this.showColorDetailModal = false;
+      // 추가: 모달이 닫힐 때 선택한 색상을 표시
+      console.log(`Selected Color: ${this.selectedColor}`);
+    },
+    selectColor(selectedColor) {
+      this.color = selectedColor;
+      this.selectedColor = selectedColor; // 추가: 선택한 색상 저장
+    },
+    submitGoal() {
+      const onSuccess = (response) => {
+    console.log("Goal added successfully:", response.data);
+    this.clearForm();
+    this.$router.push('/Main');
+  };
+
+  // 실패 콜백 함수 정의
+  const onFail = (error) => {
+    console.error("Error adding goal:", error);
+  };
+
+  // `addgoal` 함수 호출
+  addGoal({ content: this.goalContent, color: this.color }, onSuccess, onFail);
+},
+    clearForm() {
+      this.goalContent = '';
+      this.color = '#000000';
+      this.selectedColor = ''; // 추가: 저장된 선택한 색상 초기화
+    },
+  },
+};
 </script>
 
 <style scoped>

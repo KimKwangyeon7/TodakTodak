@@ -28,9 +28,9 @@ async function getTodoList() {
   }
 }
 
-async function getTodoListByDate(date) {
+async function getTodoListByDate(todoDate) {
   try {
-    const response = await apiClient.get(`/date/${date}`);
+    const response = await apiClient.get(`/todos/date/${todoDate}`);
     console.log("Todos by date:", response.data);
     return response.data;
   } catch (error) {

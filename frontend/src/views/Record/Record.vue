@@ -1,7 +1,7 @@
 <template>
   <div class="app mt-5">
     <p class="word-voice-edit">음성
-      <router-link :to="{ name: 'VoiceTrainer' }" style="font-size: 40px;">+</router-link>
+      <button class="add-button" @click="openModal('AddVoice')" style="font-size: 40px">+</button>
     </p>
 
     <!-- 기본 성우 -->
@@ -41,8 +41,9 @@
 </template>
 
 <script>
-import { fetchVoiceList, fetchVoiceDetail, deleteVoice, } from '@/api/records'
-import  RecordDetail from '@/components/Record/RecordDetail.vue'
+import { selectVoice, fetchVoiceList, fetchVoiceDetail, deleteVoice, } from '@/api/records'
+import RecordDetail from '@/components/Record/RecordDetail.vue'
+import AddRecord from '@/components/Record/AddRecord.vue'
 
 export default {
   name: 'Record',
@@ -56,19 +57,29 @@ export default {
     }
   },
   components: {
-    RecordDetail
+    RecordDetail,
+    AddRecord
   },
-  computed: {
+  methods: {
     onSuccess(response){
         console.log(response.data)
       },
     onFail(error){
         console.error(error)
       },
-  },
-  methods: {
-    toggleVoice(voice) {
-      voice.isActive = !voice.isActive;
+    async toggleVoice(voice) {
+          if (!voice.isActive) {
+        voice.isActive = true;
+        this.recordedVoices.forEach(v => {
+          if (v.id !== voice.id) v.isActive = false;
+        });
+
+        try {
+          await selectVoice(voice.id, this.onSuccess, this.onFail);
+        } catch (error) {
+          console.error('Error selecting voice:', error);
+        }
+      }
     },
     async openModal(component = RecordDetail, itemData = null) {
       try {
@@ -82,18 +93,23 @@ export default {
       this.activeModal = component
       this.currentItem = itemData
     },
+    async closeModal() {
+      this.is_modal_valid = false;
+      this.activeModal= null;
+      this.currentItem = null;
+    },
     async fetchRecords() {
       try {
-        this.recordedVoices = await fetchVoiceList(onSuccess, onFail);
+        this.recordedVoices = await fetchVoiceList({ success: this.onSuccess, fail: this.onFail});
       } catch(error) {
         console.log('Error fetching records:', error)
       }
     },
-    async fnDelete(voiceId) {
+    async fnDelete(RecordId) {
       const confirmed = window.confirm('정말 삭제하시겠습니까?');
       if (confirmed){
         try {
-          await deleteVoice(voiceId)
+          await deleteVoice({RecordId, success: this.onSuccess, fail: this.onFail})
         } catch (error) {
           console.error('Error deleting voice', error)
         }
@@ -169,4 +185,14 @@ export default {
   margin-left: 10px; /* 삭제 버튼 간격 조절 가능 */
   color: white;
 }
-</style>@/api/records
+
+.add-button {
+  font-size: 20px;
+  background-color: #ffffff;
+  color: #000; /* 검정색 텍스트 색상 */
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 5px; /* 내용물과 버튼 사이의 간격 조절을 위한 패딩 */
+}
+</style>
