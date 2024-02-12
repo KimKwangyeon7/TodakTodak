@@ -406,7 +406,7 @@ this.$router.push({
 display: flex;
 margin: 2.5em 0;
 overflow: auto;
-height: 500px;
+height: 700px;
 }
 
 .calendar-body {
