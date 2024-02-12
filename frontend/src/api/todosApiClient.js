@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: 'http://i10c210.p.ssafy.io:8080/goals/',
+  baseURL: 'http://i10c210.p.ssafy.io:8080/goals',
   headers: {
     Authorization : "Bearer " + localStorage.getItem("accessToken"),
     Accept: 'application/json',

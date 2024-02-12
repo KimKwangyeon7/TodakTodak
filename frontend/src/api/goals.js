@@ -19,6 +19,7 @@ async function getGoalList() {
     return response.data;
   } catch (error) {
     console.error("Error fetching goal list:", error);
+    return null; // 오류 발생 시 null 반환
   }
 }
 

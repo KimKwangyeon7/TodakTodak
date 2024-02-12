@@ -97,7 +97,6 @@
         goals: [] // 목표
       };
     },
-    
     methods: {
       closeModal() {
         this.$emit('close-modal');

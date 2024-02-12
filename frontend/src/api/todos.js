@@ -1,15 +1,16 @@
 import apiClient from './todosApiClient';
 import { alarm } from './alarms'
 
-async function addTodo(newTodo) {
+async function addTodo(todoDate) {
   try {
     // 습관 넣기
-    const response = await apiClient.post(newTodo);
+    const response = await apiClient.post(`/${todoDate.goalId}/todos`, todoDate);
     console.log("Todo added:", response.data);
     // 푸시 알림
-    if (newTodo.isAlarmed === true) {
+    if (todoDate.isAlarmed === true) {
       const preparedData = JSON.stringify({
-          alarmTitle: newTodo.todoTitle, alarmContent: newTodo.todoContent
+          alarmTitle: todoDate.todoTitle, 
+          alarmContent: todoDate.todoContent
         })
         alarm(preparedData)
     }
@@ -18,9 +19,9 @@ async function addTodo(newTodo) {
   }
 }
 
-async function getTodoList() {
+async function getTodoList(todoDate) {
   try {
-    const response = await apiClient.get();
+    const response = await apiClient.get(`/todos/date/${todoDate}`);
     console.log("Todos fetched:", response.data);
     return response.data;
   } catch (error) {

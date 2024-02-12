@@ -59,6 +59,7 @@
 import { getGoalList, getGoalDetail } from "@/api/goals";
 import { getTodoListByDate, getTodoDetail } from "@/api/todos";
 import { useMemberStore } from "@/stores/auth";
+import { useTodoStore } from '@/stores/todoList';
 
 import TodoDetail from "@/components/Todo/TodoDetail.vue";
 import AddTodo from "@/components/Todo/AddTodo.vue";
@@ -79,9 +80,14 @@ export default {
   },
   setup() {
     const authStore = useMemberStore();
-
+    const todoStore = useTodoStore()
+    const addTodoToStore = (newTodo) => {
+      todoStore.addTodo(newTodo);
+      // Todo 추가 후 필요한 로직 처리 (예: 알림 표시, 폼 초기화 등)
+    };
     return {
       authStore,
+      addTodoToStore
     };
   },
   components: {

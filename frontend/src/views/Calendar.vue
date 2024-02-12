@@ -1,25 +1,22 @@
 <template>
-  <b-container>
+  
     <main class="calendar-wrapper">
-      <b-row>
-        <b-col md="8">
+      
+        <div md="8">
           <div class="calendar-body">
             <div class="calendar-header">
               <b-row align-v="center">
                 <div class="calendar-title">
                   <span class="arrow-left" @click="subtractMonth">&lt;</span> 
                   {{ year }}년 {{ dateContext.format('M') }}월
-                  <div>{{ goalColors }}</div>
-                  <div v-for="(color, index) in goalColors" 
-                  :key="index" class="color-box" 
+                  <!-- <div v-for="todo in todos" :key="todo.id">
+                    <span>{{ todo.color }}</span>
+                  </div> -->
+                  <!-- <div v-for="color in uniqueColors" 
+                  :key="color" 
                   :style="{ backgroundColor: color }">
-                  </div>
-
-                  <ul>
-                  <li v-for="todo in todos" :key="todo.id">
-                    {{ todo.title }} - {{ todo.date }}
-                  </li>
-                </ul>
+                  <span>{{ color }}</span>
+                  </div> -->
                   <span class="arrow-right" @click="addMonth">&gt;</span>
                 </div>
               </b-row>
@@ -31,40 +28,51 @@
               </div>
             </div>
             <div class="calendar-dates">
-              <div class="date text-center"
-               :class="{
-                'today': date.today,
-                'blank': date.blank,
-                'now': (date.now && isStyleCurrentDate),
-                'weekend': date.weekDay === 'S',
-                'previous-month': date.isPreviousMonth,
-                'next-month': date.isNextMonth
-              }" 
-              v-for="(date, index) in dateList"
-              @click="handleDateClick(date, index)"
-              :key="index">
-                <span class="day">{{ date.dayNumber }}</span>
-              </div>
-            </div>
+  <div
+    v-for="(date, index) in dateList"
+    :key="index"
+    class="date text-center"
+    :class="{
+      'blank': date.blank,
+      'weekend': date.weekDay === 'S',
+      'previous-month': date.isPreviousMonth,
+      'next-month': date.isNextMonth
+    }"
+    @click="handleDateClick(date, index)"
+  >
+    <span class="day">{{ date.dayNumber }}</span>
+    <!-- 선형 바를 날짜 div 안에 추가 -->
+    <div v-if="isToday(date) && today" class="color-bars">
+      <div
+        v-for="color in uniqueColors"
+        :key="color"
+        class="color-bar"
+        :style="{ backgroundColor: color }"
+      ></div>
+    </div>
+  </div>
+</div>
           </div>
-        </b-col>
-      </b-row>
+        </div>
+      
     </main>
-  </b-container>
+  
 </template>
 
 <script>
 import { useGoalsStore } from '@/stores/goals';
-import { getTodosByMonth } from "@/api/calendar"
-import { computed } from "vue";
+// import { getTodosByMonth } from "@/api/calendar"
+import { ref, computed, onMounted } from "vue";
+import { useRoute } from 'vue-router';
+import { getTodoList } from '@/api/todos'
 
 import moment from 'moment'
 
 export default {
   name: 'Calendar',
-  mounted() {
-    this.fetchTodos(); // 컴포넌트가 마운트될 때 fetchTodos 호출
-  },
+  // mounted() {
+  //   this.fetchTodos(); // 컴포넌트가 마운트될 때 fetchTodos 호출
+  // },
   setup() {
     const goalsStore = useGoalsStore();
 
@@ -72,7 +80,30 @@ export default {
     const goalColors = computed(() => goalsStore.goals.map(goal => goal.color));
     console.log("가져온색상:", goalColors.value);
 
-    return { goalColors };
+    const todos = ref([])
+    const route = useRoute(); // 현재 라우트에 접근
+    const selectedDate = ref(route.params.selectedDate || moment().format('YYYY-MM-DD')); // URL 파라미터에서 selectedDate 가져오거나 기본값 설정
+    onMounted(async () => {
+      
+      try {
+        const formattedDate = moment(selectedDate.value).format('YYYYMMDD')
+        console.log('formattedDate:', formattedDate)
+        const response = await getTodoList(formattedDate); // API 호출을 통해 Todo 목록을 가져옴
+        todos.value = response; // 가져온 Todo 목록으로 로컬 상태 업데이트
+        console.log('todos:', todos.value)
+      } catch (error) {
+        console.error('Error fetching todos:', error); // 에러 처리
+      }
+    });
+    const uniqueColors = computed(() => {
+      const colors = todos.value.map(todo => todo.color);
+      return [...new Set(colors)]; // Set을 사용하여 중복 제거 후, 다시 배열로 변환
+    });
+    return { 
+      goalColors,
+      todos,
+      uniqueColors
+     };
   },
   data() {
     return {
@@ -242,16 +273,21 @@ export default {
     }
   },
   methods: {
-    fetchTodos() {
-      const month = this.dateContext.format('YYYY-MM')
-      getTodosByMonth(month,
-      (response) => {
-        console.log("성공적인 투두가져오기:", response.data)
-      },
-      (error) => {
-        console.error("투두가져오는거 실패:", error)
-      }
-      )
+    // fetchTodos() {
+    //   const month = this.dateContext.format('YYYY-MM')
+    //   getTodosByMonth(month,
+    //   (response) => {
+    //     console.log("성공적인 투두가져오기:", response.data)
+    //   },
+    //   (error) => {
+    //     console.error("투두가져오는거 실패:", error)
+    //   }
+    //   )
+    // },
+    isToday(date) {
+      const today = moment();
+      console.log('today:', today)
+      return today.isSame(moment({ year: date.year, month: date.month, day: date.dayNumber }), 'day');
     },
     mounted() {
     this.fetchTodos(); // 컴포넌트가 마운트될 때 fetchTodos 호출
@@ -370,11 +406,12 @@ export default {
   display: flex;
   margin: 2.5em 0;
   overflow: auto;
+  height: 500px;
 }
 
 .calendar-body {
-  width: 384px;
-  height: 394px;
+  width: 330px !important;
+  height: 500px !important;
 }
 
 .calendar-header {
@@ -399,12 +436,13 @@ export default {
   color: red;
 }
 
-.calendar-weekdays {
+/* .calendar-weekdays {
+  width: 100%;
   display: flex;
   margin-bottom: 1.25rem;
   color: #2091a2;
   font-size: 16px;
-}
+} */
 
 .calendar-weekdays .weekday {
   width: calc(100% / 7);
@@ -415,9 +453,11 @@ export default {
 }
 
 .calendar-dates {
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
   position: relative;
+  height: 395px;
 }
 
 .day:hover {
@@ -425,25 +465,20 @@ export default {
 }
 
 .calendar-dates .date {
-  font-weight: 200;
-  padding: 0.25rem 0.5rem;
-  position: relative;
-  width: calc(100% / 7);
-  margin-top: 1px;
+  padding: 0.5rem; /* 상하좌우 패딩을 늘림 */
+  margin-bottom: 1rem; /* 하단 마진을 늘림 */
+  height: auto; /* 높이를 자동으로 조정하여 내용에 맞게 함 */
 }
 
-.calendar-dates .date.blank {
+/* .calendar-dates .date.blank {
   color: #949ba4;
 }
 
 .calendar-dates .date.no-border-right {
   border-right: none;
-}
+} */
 
-.calendar-dates .date.today {
-  background-color: #45b7c1;
-  color: white !important;
-}
+
 
 .date.today:first-child,
 :not(.today)+.today {
@@ -456,16 +491,16 @@ export default {
   border-bottom-right-radius: 20px;
 }
 
-.calendar-dates .date.now {
+/* .calendar-dates .date.now {
   border: 1px solid #45b7c1;
   border-radius: 100px;
   color: #45b7c1;
   margin-top: -1px;
-}
+} */
 
-.calendar-dates .date .weekday {
+/* .calendar-dates .date .weekday {
   display: none;
-}
+} */
 
 .arrow-left {
   margin-left: 90px;
@@ -480,7 +515,7 @@ export default {
   cursor: pointer;
 }
 
-.btn-accept {
+/* .btn-accept {
   width: 75px;
   height: 35px;
   background-color: #45b7c1;
@@ -490,7 +525,7 @@ export default {
   font-size: 14px;
   text-align: center;
   float: right;
-}
+} */
 
 .c-hr {
   border: none;
@@ -513,15 +548,21 @@ export default {
   color: #222350;
 }
 
-.vcal-date:hover {
+/* .vcal-date:hover {
   background-color: #3498db;
   color: #ffffff;
-}
+} */
 
 .color-box {
   width: 20px; /* 상자의 너비 */
   height: 20px; /* 상자의 높이 */
   display: inline-block; /* 상자를 인라인 요소처럼 배치 */
   margin-right: 4px; /* 상자 사이의 간격 */
+}
+
+.color-bar {
+  height: 5px; /* 색상 바의 높이 */
+  width: 100%; /* 색상 바의 너비 */
+  margin-top: 2px; /* 색상 바 위의 마진 */
 }
 </style>
