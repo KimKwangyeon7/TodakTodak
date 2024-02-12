@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 import { localAxios } from "@/util/http-commons";
-import apiClient from "./goalsApiClient";
 
 const local = localAxios(); // axios instance
 
@@ -14,36 +13,26 @@ function addGoal(goal, success, fail) {
 
 function getGoalList(success, fail) {
   console.log("goalList 실행");
-  local.defaults.headers.Authorization = 'Bearer '+ localStorage.getItem("accessToken");
-  local.get(`/goals`).then(success).catch(fail);
+  local.defaults.headers.Authorization = 'Bearer ' + localStorage.getItem("accessToken");
+  local.get(`${url}`).then(success).catch(fail);
 }
 
-async function getGoalDetail(goalId) {
-  try {
-    const response = await apiClient.get(`/${goalId}`);
-    console.log("Goal details:", response.data);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching goal detail:", error);
-  }
+async function getGoalDetail(goalId, success, fail) {
+  console.log("getGoalDetail 실행");
+  local.defaults.headers.Authorization = 'Bearer ' + localStorage.getItem("accessToken")
+  local.get(`${url}/${goalId}`).then(success).catch(fail) 
 }
 
-async function updateGoal(goalId, goalUpdateInfo) {
-  try {
-    await apiClient.put(`/${goalId}`, goalUpdateInfo);
-    console.log("Goal updated successfully");
-  } catch (error) {
-    console.error("Error updating goal:", error);
-  }
+async function updateGoal(goalId, content, color, success, fail) {
+  console.log("updateGoal 실행")
+  local.defaults.headers.Authorization = 'Bearer ' + localStorage.getItem("accessToken")
+  local.get(`${url}/${goalId}`, JSON.stringify(content, color)).then(success).catch(fail) 
 }
 
 async function deleteGoal(goalId) {
-  try {
-    await apiClient.delete(`/${goalId}`);
-    console.log("Goal deleted successfully");
-  } catch (error) {
-    console.error("Error deleting goal:", error);
-  }
+  console.log("deleteGoal 실행")
+  local.defaults.headers.Authorization = 'Bearer ' + localStorage.getItem("accessToken")
+  local.delete(`${url}/${goalId}`).then(success).catch(fail)
 }
 
 export { addGoal, getGoalList, getGoalDetail, updateGoal, deleteGoal };

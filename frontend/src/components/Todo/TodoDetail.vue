@@ -5,7 +5,7 @@
         <label for="selectedGoal">목표:</label>
         <select v-model="localSelectedGoal" id="selectedGoal" class="form-control">
           <option v-for="goal in goals" :key="goal.id" :value="goal.id">
-            {{ goal.goalContent }}
+            {{ goal.content }}
           </option>
         </select>
       </div>
@@ -60,7 +60,7 @@
   
   <script>
   import { getGoalList } from '@/api/goals';
-  import { updateTodo, deleteTodo, isTodoCompleted } from '@/api/todos';
+  import { updateTodo, deleteTodo, checkTodoComplete } from '@/api/todos';
   
   export default {
     data() {
@@ -98,7 +98,7 @@
         Object.assign(this.item, this.originalItem)
         this.editableItem = {...this.item};
         if (item.isChecked === true) {
-          isTodoCompleted(alarm.id, todo.id)
+          checkTodoComplete(item.id)
         }
         this.$emit('close-modal');    
       },

@@ -14,7 +14,7 @@
 export default {
   data() {
     return {
-      goalContent: '',
+      content: '',
       color: '#ff0000', // Default color, you can set it to any default color you want
     };
   },

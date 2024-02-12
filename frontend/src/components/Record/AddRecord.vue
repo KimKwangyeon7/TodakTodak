@@ -23,7 +23,7 @@
   </template>
   
   <script>
-  import { getUser, createNewVoice } from '@/api/record';
+  import { getUser, createNewVoice } from '@/api/records';
   
   export default {
     data() {
@@ -47,20 +47,26 @@
       },
       fnAdd() {
         if (this.name === "" || this.memo === "") {
-            alert('이름과 메모를 입력하세요')
-            return
+          alert('이름과 메모를 입력하세요');
+          return;
         }
-        // createVoice(post)
-        createNewVoice({ name: this.name, 
-                        memo: this.memo, 
-                        success: this.onSuccess, 
-                        fail: this.onFail })
-        this.$emit('add-voice', { name: this.name, memo: this.memo });
-        this.$router.push({ path: '/voice/trainer' }).catch(err => {
-            console.error(err);
-        });
-        // getUser(get)
-        getUser({ recordId, success: this.onSuccess, fail: this.onFail })
+        
+        const voiceData = {
+          name: this.name, 
+          memo: this.memo
+        };
+
+        createNewVoice(
+          voiceData,
+          (response) => {
+            console.log("Voice created successfully:", response.data);
+            this.$emit('add-voice', voiceData);
+            this.$router.push({ path: '/voice/trainer' }).catch(console.error);
+          },
+          (error) => {
+            console.error("Error creating new voice:", error);
+          }
+        );
       }
     }  
   }
@@ -99,4 +105,4 @@
   .custom-control-label {
     padding-left: 10px;
   }
-  </style>
+  </style>@/api/records

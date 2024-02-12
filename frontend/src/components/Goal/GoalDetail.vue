@@ -2,8 +2,8 @@
   <div class="modal-content">
     <button type="button" class="btn-close" aria-label="Close" @click="closeModal"></button>
       <div class="form-group">
-          <label for="goalContent">목표 내용:</label>
-          <input v-model="item.goalContent" type="text" id="goalContent" class="form-control" required>
+          <label for="content">목표 내용:</label>
+          <input v-model="item.content" type="text" id="content" class="form-control" required>
       </div>
       <div class="form-group">
         <label for="selectedColor">목표 색상:</label>

@@ -3,8 +3,8 @@
     <form>
       <!-- Goal Content Input -->
       <div class="form-group">
-        <label for="goalContent">목표 내용:</label>
-        <input v-model="goalContent" type="text" id="goalContent" class="form-control" required>
+        <label for="content">목표 내용:</label>
+        <input v-model="content" type="text" id="content" class="form-control" required>
       </div>
 
       <!-- Color Input using Bootstrap classes -->
@@ -40,7 +40,7 @@ export default {
   data() {
     return {
         selectedColor: "", // Main 컴포넌트에서 선택한 색상
-      goalContent: '',
+      content: '',
       color: '#46beff',
       showColorDetailModal: false,
       colorOptions: [
@@ -55,7 +55,7 @@ export default {
   methods: {
     openColorDetailModal() {
       this.showColorDetailModal = true;
-      console.log(`Goal Content:',${this.goalContent} `)
+      console.log(`Goal Content:',${this.content} `)
     },
     closeColorDetailModal() {
       this.showColorDetailModal = false;
@@ -79,10 +79,10 @@ export default {
   };
 
   // `addgoal` 함수 호출
-  addGoal({ content: this.goalContent, color: this.color }, onSuccess, onFail);
+  addGoal({ content: this.content, color: this.color }, onSuccess, onFail);
 },
     clearForm() {
-      this.goalContent = '';
+      this.content = '';
       this.color = '#000000';
       this.selectedColor = ''; // 추가: 저장된 선택한 색상 초기화
     },

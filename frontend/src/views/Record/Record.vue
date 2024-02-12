@@ -1,7 +1,12 @@
 <template>
   <div class="app mt-5">
+
+    <div class="black-bg" v-if="is_modal_valid">
+      <component :is="activeModal" :item="currentItem" @close-modal="closeModal" />
+    </div>
+
     <p class="word-voice-edit">음성
-      <button class="add-button" @click="openModal('AddVoice')" style="font-size: 40px">+</button>
+      <button class="add-button" @click="openModal('AddRecord')" style="font-size: 40px">+</button>
     </p>
 
     <!-- 기본 성우 -->
@@ -49,7 +54,10 @@ export default {
   name: 'Record',
   data() {
     return {
-      basicVoices: ['김영희의 음성', '김철수의 음성', '이잼민의 음성'],
+      basicVoices: [{id: 0, name: '김영희의 음성'}, 
+                    {id: 1, name: '김철수의 음성'},
+                    {id: 2, name: '이잼민의 음성'}
+                  ],
       recordedVoices: [],
       is_modal_valid: false,
       activeModal: null,
@@ -81,17 +89,22 @@ export default {
         }
       }
     },
-    async openModal(component = RecordDetail, itemData = null) {
-      try {
-        const detailedRecord = await fetchVoiceDetail(itemData.id)
-        this.currentItem = detailedRecord
-      } catch (error) {
-        console.error('Error fetching record detail:', error);
-        return;
+    async openModal(component = 'RecordDetail', itemData = null) {
+      if (component === 'RecordDetail' && itemData) {
+        try {
+          const detailedRecord = await fetchVoiceDetail(itemData.id);
+          this.currentItem = detailedRecord;
+        } catch (error) {
+          console.error('Error fetching record detail:', error);
+          return;
+        }
+      } else if (component === 'AddRecord') {
+        console.log('AddRecord is going to be opened...')
       }
-      this.is_modal_valid = true
-      this.activeModal = component
-      this.currentItem = itemData
+    
+      this.is_modal_valid = true;
+      this.activeModal = component;
+      this.currentItem = itemData;
     },
     async closeModal() {
       this.is_modal_valid = false;
@@ -99,6 +112,7 @@ export default {
       this.currentItem = null;
     },
     async fetchRecords() {
+      console.log("fetchRecords 실행")
       try {
         this.recordedVoices = await fetchVoiceList({ success: this.onSuccess, fail: this.onFail});
       } catch(error) {
@@ -173,6 +187,19 @@ export default {
 .toggle-button.active {
   background: red;
   color: white;
+}
+
+.black-bg {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  top: 0;
+  left: 0;
 }
 
 .delete-button {

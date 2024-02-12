@@ -61,16 +61,10 @@ import { getGoalList, getGoalDetail } from "@/api/goals";
 import { getTodoListByDate, getTodoDetail } from "@/api/todos";
 import { useMemberStore } from "@/stores/auth";
 
-<<<<<<< HEAD
-import TodoDetail from '@/components/Todo/TodoDetail.vue'
-import AddTodo from '@/components/Todo/AddTodo.vue'
-import GoalDetail from '@/components/Goal/GoalDetail.vue'
-=======
 import TodoDetail from "@/components/Todo/TodoDetail.vue";
 import AddTodo from "@/components/Todo/AddTodo.vue";
 import GoalDetail from "@/components/Goal/GoalDetail.vue";
 import Habit from "@/views/Habit.vue";
->>>>>>> 06ab3a56ff074d45bb90a1f1f97a06a80e596c9d
 
 export default {
   name: "App",
@@ -95,12 +89,8 @@ export default {
     GoalDetail,
     TodoDetail,
     AddTodo,
-<<<<<<< HEAD
-  },  
-=======
     Habit,
   },
->>>>>>> 06ab3a56ff074d45bb90a1f1f97a06a80e596c9d
   methods: {
     async openModal(component, itemData = null) {
       if (component === "GoalDetail" && itemData) {
