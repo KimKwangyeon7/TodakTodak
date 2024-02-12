@@ -8,6 +8,10 @@
 
     <TodoList :todoList="todoList" />
     <HabitList :habitList="habitList" />
+
+    <div class="penguin">
+      <img src="@/assets/penguin.jpg">
+    </div>
   </div>
 </template>
 
@@ -32,5 +36,19 @@ export default {
 <style scoped>
 .quote {
   font-size: 16px;
+}
+
+.penguin {
+  position: fixed;
+  bottom: 80px; 
+  width: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: -1;
+}
+
+.penguin img {
+  opacity: 0.5;
+  width: 100%;
 }
 </style>
