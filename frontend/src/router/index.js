@@ -112,9 +112,10 @@ const router = createRouter({
       component: Records,
     },
     {
-      path: "/record/trainer",
+      path: "/records/:recordId/trainer",
       name: "Trainer",
       component: Trainer,
+      props: true
     },
     {
       path: "/calendar-detail/:selectedDate",

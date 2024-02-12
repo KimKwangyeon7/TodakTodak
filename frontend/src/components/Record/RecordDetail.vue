@@ -48,12 +48,11 @@ export default {
       }
     },
     async recordCont() {
-      this.$router.push({ path: '/voice/trainer' }).catch(err => {
+      this.$router.push({ name: 'Trainer', params: { recordId: this.item.id } });
           console.error(err);
-      });
+      }
     }
-  },
-};
+  }
 </script>
 
 <style scoped>

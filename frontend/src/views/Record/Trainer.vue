@@ -65,7 +65,7 @@
 
 <script>
 import { ref, computed } from 'vue'
-import { clickStop, saveRecord, saveAudio } from '@/api/records'
+import { saveRecord, saveAudio } from '@/api/records'
 import { loadKoreanCorpus } from '@/stores/koreanCorpus'
 
 export default {
@@ -77,19 +77,30 @@ export default {
 
     loadKoreanCorpus().then(sentencesArray => {
       sentences.value = sentencesArray.slice(0, 5); // 4000천 개의 문장 중에 우선 5개만
+      console.log('sentences: ', sentences.value)
     }).catch(error => {
       console.error('Error loading Korean corpus:', error);
     });
 
     return { sentences, currentSentenceId, currentSentence, };
   },
+  created() {
+    // When the component is created, get the recordId from the URL
+    const recordId = this.$route.params.recordId;
+    if (recordId) {
+      // If recordId is available, do something with it
+      console.log('The recordId from URL is:', recordId);
+      // You can store it in your component's data if you need to use it later
+      this.recordId = recordId;
+    } else {
+      console.error('RecordId is not defined in the URL');
+    }
+  },
   data() {
     return {
       recordingStatus: "Record Sound",
       recording: false,
       recordHistory: [],
-      name: "",
-      memo: "",
       recorder: null,
       blob: null,
       stream: null,
@@ -99,6 +110,7 @@ export default {
       recordingStartTime: null,
       elapsedTime: 0,
       recordingDurations: [],
+      recordId: null
     };
   },
   computed: {
@@ -119,11 +131,15 @@ export default {
     },
   },
   methods: {
-    onSuccess(response){
-        console.log(response.data)
+    onSuccess(response) {
+      console.log('Recording saved successfully:', response);
+      // Handle the successful response, e.g., navigate to another page or show a message
     },
-    onFail(error){
-        console.error(error)
+
+    // Failure callback
+    onFail(error) {
+      console.error('Failed to save recording:', error);
+      // Handle the error, e.g., show an error message to the user
     },
     prevSentence() {
         if (this.currentSentenceId > 0) {
@@ -145,15 +161,6 @@ export default {
       if (this.hasRecordedCurrent) {
           alert("이 문장은 이미 녹음되었습니다. 다른 문장을 선택해 주세요.");
           return;
-      }
-
-      if (this.name === "" || this.memo === "") {
-          alert("녹음을 시작하기 전에 음성 제목과 메모를 입력해야 합니다.");
-          return;
-      } 
-      
-      if (!this.nameExists) {
-          this.records.push({ id: this.currentSentenceId, name: this.name });
       }
 
       if (this.recording) {
@@ -203,20 +210,33 @@ export default {
       });
 
       recorder.onComplete = (recorder, blob) => {
+        console.log('onCompleteblob: ', blob)
         this.recordingStatus = "Record Sound";
         this.blob = blob;
-        saveRecord({ promptNum: this.currentSentenceId + 1, 
-          duration: this.elapsedTime,
-          success: this.onSuccess,
-          fail: this.onFail
-        })  
+
+
+        if (this.blob) {
+        saveRecord(
+          this.recordId,
+          this.blob,
+          this.currentSentenceId + 1,
+          this.elapsedTime,
+          this.onSuccess, // pass the onSuccess callback
+          this.onFail    // pass the onFail callback
+        );
+      } else {
+        console.error('Blob is not defined at the time of stopping the recording.');
+      }
+
       };
       this.recorder = recorder;
     },
 
     stopRecording() {
       this.stream.getAudioTracks().forEach(track => track.stop());
-      this.recorder.finishRecording();
+      if (this.recorder) {
+        this.recorder.finishRecording();
+      }
       this.recordingStatus = "Record Sound";
       this.recording = false;
       clearInterval(this.timer);
@@ -224,9 +244,8 @@ export default {
       this.recordingDurations.push(duration);
       this.elapsedTime = duration;
       this.recordingStartTime = null;
-
-      clickStop({success: this.success, fail: this.fail})
     },
+
 
     async fnFinish() {
       saveAudio({
