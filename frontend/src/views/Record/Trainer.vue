@@ -24,10 +24,10 @@
       <div v-if="currentRecordHistory.length > 0">
         <div v-for="record in currentRecordHistory" :key="record.id">
           <div v-if="record.elapsedTime > 60">
-            <div>{{ record.id + 1 }}번 녹음 시간: {{ Math.floor(record.elapsedTime / 60) }} 분 {{ record.elapsedTime % 60 }} 초</div>
+            <div>{{ record.promptNum }}번 녹음 시간: {{ Math.floor(record.elapsedTime / 60) }} 분 {{ record.elapsedTime % 60 }} 초</div>
           </div>
           <div v-else>
-            <div>{{ record.id + 1 }}번 녹음 시간: {{ record.elapsedTime }} 초</div>
+            <div>{{ record.promptNum }}번 녹음 시간: {{ record.elapsedTime }} 초</div>
           </div>
         </div>
       </div>
@@ -121,7 +121,9 @@ export default {
   },
   computed: {
     currentRecordHistory() {
-      return this.recordHistoryStore.histories[this.recordId.toString()] || [];
+      const history = this.recordHistoryStore.histories[this.recordId.toString()] || [];
+      console.log('Current Record History:', history);
+      return history.records || [];
     },
     cantSave() {
       return this.name === "" || !this.blob;
@@ -145,9 +147,10 @@ export default {
     },
 
     hasRecordedCurrent() {
-      const currentHistory = this.recordHistoryStore.histories[this.recordId];
-      if (Array.isArray(currentHistory)) {
-        return currentHistory.some(record => record.id === this.currentSentenceId);
+      const currentHistory = this.recordHistoryStore.histories[this.recordId.toString()];
+      console.log('currentHistory', currentHistory)
+      if (currentHistory && currentHistory.records) {
+        return currentHistory.records.some(record => record.promptNum === this.currentSentenceId + 1);
       }
       return false;
     },

@@ -37,7 +37,7 @@ export const useRecordHistorystore = defineStore({
         elapsedTime: record.elapsedTime
         // ... other record properties ...
       };
-      this.histories[recordId].push(simpleRecord);
+      this.histories[recordId].records.push(simpleRecord);
     },
 
     addRecordingDuration(recordId, duration) {
