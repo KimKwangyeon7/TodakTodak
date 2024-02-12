@@ -40,6 +40,7 @@ function deleteMember(userEmail, success, fail) {
   local.delete(`api/member/${userEmail}`).then(success).catch(fail);
 }
 
+
 export {
   signup,
   login,
