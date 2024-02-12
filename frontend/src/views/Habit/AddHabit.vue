@@ -15,8 +15,7 @@
         <!-- 알람 여부 선택 -->
         <!-- isAlarmed -->
         <div class="form-group">
-          <label>알람 여부:</label>
-          <p>시간 넣어야 하는 거 맞죠?(김요한)</p>
+          <label>알람 시간:</label>
           <div class="custom-control custom-switch">
             
             <div class="form-check form-switch">
@@ -28,11 +27,10 @@
   
         <!-- 알람 시간 입력 -->
         <div class="form-group" v-if="isAlarmed">
-          <label for="time">알람 시간:</label>
           <input v-model="time" type="time" id="time" class="form-control">
         </div>
   
-        <button type="submit" class="btn btn-primary" @click="submitHabit">저장</button>
+        <button type="submit" class="habit-save btn" @click="submitHabit">저장</button>
       </form>
     </div>
   </template>
@@ -162,7 +160,7 @@
     border-radius: 4px;
     cursor: pointer;
     font-size: 12px;
-    margin-right: auto; /* 나머지 공간을 최대한 차지하여 왼쪽으로 이동 */
+    margin-left: auto; 
   }
   .form-group {
     text-align: left;
@@ -170,7 +168,13 @@
     margin-right: 10px;
   }
   
-  .custom-control-label {
-    padding-left: 10px;
+  .form-control {
+    display: flex;
+    margin-left: au;
+  }
+
+  .habit-save {
+    display: flex;
+    margin-left: auto;
   }
   </style>
