@@ -1,7 +1,12 @@
 <template>
   <div class="app mt-5">
+
+    <div class="black-bg" v-if="is_modal_valid">
+      <component :is="activeModal" :item="currentItem" @close-modal="closeModal" />
+    </div>
+
     <p class="word-voice-edit">음성
-      <router-link :to="{ name: 'VoiceTrainer' }" style="font-size: 40px;">+</router-link>
+      <button class="add-button" @click="openModal('AddRecord')" style="font-size: 40px">+</button>
     </p>
 
     <!-- 기본 성우 -->
@@ -41,14 +46,18 @@
 </template>
 
 <script>
-import { fetchVoiceList, fetchVoiceDetail, deleteVoice, } from '@/api/records'
-import  RecordDetail from '@/components/Record/RecordDetail.vue'
+import { selectVoice, fetchVoiceList, fetchVoiceDetail, deleteVoice, } from '@/api/records'
+import RecordDetail from '@/components/Record/RecordDetail.vue'
+import AddRecord from '@/components/Record/AddRecord.vue'
 
 export default {
   name: 'Record',
   data() {
     return {
-      basicVoices: ['김영희의 음성', '김철수의 음성', '이잼민의 음성'],
+      basicVoices: [{id: 0, name: '김영희의 음성'}, 
+                    {id: 1, name: '김철수의 음성'},
+                    {id: 2, name: '이잼민의 음성'}
+                  ],
       recordedVoices: [],
       is_modal_valid: false,
       activeModal: null,
@@ -56,44 +65,65 @@ export default {
     }
   },
   components: {
-    RecordDetail
+    RecordDetail,
+    AddRecord
   },
-  computed: {
+  methods: {
     onSuccess(response){
         console.log(response.data)
       },
     onFail(error){
         console.error(error)
       },
-  },
-  methods: {
-    toggleVoice(voice) {
-      voice.isActive = !voice.isActive;
-    },
-    async openModal(component = RecordDetail, itemData = null) {
-      try {
-        const detailedRecord = await fetchVoiceDetail(itemData.id)
-        this.currentItem = detailedRecord
-      } catch (error) {
-        console.error('Error fetching record detail:', error);
-        return;
+    async toggleVoice(voice) {
+          if (!voice.isActive) {
+        voice.isActive = true;
+        this.recordedVoices.forEach(v => {
+          if (v.id !== voice.id) v.isActive = false;
+        });
+
+        try {
+          await selectVoice(voice.id, this.onSuccess, this.onFail);
+        } catch (error) {
+          console.error('Error selecting voice:', error);
+        }
       }
-      this.is_modal_valid = true
-      this.activeModal = component
-      this.currentItem = itemData
+    },
+    async openModal(component = 'RecordDetail', itemData = null) {
+      if (component === 'RecordDetail' && itemData) {
+        try {
+          const detailedRecord = await fetchVoiceDetail(itemData.id);
+          this.currentItem = detailedRecord;
+        } catch (error) {
+          console.error('Error fetching record detail:', error);
+          return;
+        }
+      } else if (component === 'AddRecord') {
+        console.log('AddRecord is going to be opened...')
+      }
+    
+      this.is_modal_valid = true;
+      this.activeModal = component;
+      this.currentItem = itemData;
+    },
+    async closeModal() {
+      this.is_modal_valid = false;
+      this.activeModal= null;
+      this.currentItem = null;
     },
     async fetchRecords() {
+      console.log("fetchRecords 실행")
       try {
-        this.recordedVoices = await fetchVoiceList(onSuccess, onFail);
+        this.recordedVoices = await fetchVoiceList({ success: this.onSuccess, fail: this.onFail});
       } catch(error) {
         console.log('Error fetching records:', error)
       }
     },
-    async fnDelete(voiceId) {
+    async fnDelete(RecordId) {
       const confirmed = window.confirm('정말 삭제하시겠습니까?');
       if (confirmed){
         try {
-          await deleteVoice(voiceId)
+          await deleteVoice({RecordId, success: this.onSuccess, fail: this.onFail})
         } catch (error) {
           console.error('Error deleting voice', error)
         }
@@ -159,6 +189,19 @@ export default {
   color: white;
 }
 
+.black-bg {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  top: 0;
+  left: 0;
+}
+
 .delete-button {
   cursor: pointer;
   background: #ff3333; /* 삭제 버튼 색상은 사용자에게 명확하게 나타내기 위해 변경 가능 */
@@ -169,4 +212,14 @@ export default {
   margin-left: 10px; /* 삭제 버튼 간격 조절 가능 */
   color: white;
 }
-</style>@/api/records
+
+.add-button {
+  font-size: 20px;
+  background-color: #ffffff;
+  color: #000; /* 검정색 텍스트 색상 */
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 5px; /* 내용물과 버튼 사이의 간격 조절을 위한 패딩 */
+}
+</style>

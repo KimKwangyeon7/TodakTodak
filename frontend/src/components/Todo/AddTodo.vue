@@ -11,7 +11,7 @@
           <label for="selectedGoal">목표:</label>
           <select v-model="selectedGoal" id="selectedGoal" class="form-control">
             <option v-for="goal in goals" :key="goal.id" :value="goal">
-              {{ goal.goalContent }}
+              {{ goal.content }}
             </option>
           </select>
         </div>
@@ -78,22 +78,17 @@
   
     data() {
       return {
-        // todo-list
-        selectedGoal: '',
-        todoId: '',
-        todoTitle: '',
-        todoContent: '',
-        todoDate: '',
-        isImportant: false,
-        // alarm(알람 설정할 때만 필요한 영역)
-        isAlarmed: false,
-        day: '',
+        title: '',
+        content: '',
+        color: '',
         time: '',
-        isOutside: false,
-        isChecked: false,
-        isCompleted: false,
-        
-        goals: [] // 목표
+        important: false,
+        outside: false,
+        alarmed: false,
+        checked: false,
+        completed: false,
+        todoDate: '',
+        goals: []
       };
     },
     methods: {
@@ -102,6 +97,7 @@
       },
 
       async fetchGoals() {
+        console.log("fetchGoals 실행")
         try {
           this.goals = await getGoalList();
         } catch (error) {
@@ -109,6 +105,11 @@
         }
       },
   
+      fourDigitTime(t) {
+        const [hours, minutes] = t.split(':')
+        return hours + minutes   
+      },
+
       eightDigitDate(d) {
         const currentDate = new Date();
         const yyyy = currentDate.getFullYear();
@@ -118,31 +119,24 @@
         return curDate
       },
   
-      fourDigitTime(t) {
-        const [hours, minutes] = t.split(':')
-        return hours + minutes   
-      },
-  
       fnAdd() {  
-        // 우선 오늘 날짜로 테스트
-        const d = new Date()
-        this.day = (d.getDay() + 6) % 7 // 이렇게 하여 0을 월요일로 바꿈
         const t = this.time
-        const setTime = this.fourDigitTime(t)
-        this.time = setTime
+        this.time = this.fourDigitTime(t)
+
+        const d = this.todoDate
+        this.todoDate = this.eightDigitDate(d)
   
         addTodo({
-          goalId: this.selectedGoal.id,
-          todoTitle: this.todoTitle,
-          todoContent: this.todoContent,
-          todoDate: this.eightDigitDate(d),
-          isImportant: this.isImportant,
-          day: this.day,
-          time: this.time, 
-          isOutside: this.isOutside,
-          isAlarmed: this.isAlarmed,
-          isChecked: this.isChecked,
-          isCompleted: this.isCompleted,
+          title: this.title,
+          content: this.content,
+          color: this.color,
+          time: this.time,
+          important: this.important,
+          outside: this.outside,
+          alarmed: this.alarmed,
+          checked: this.checked,
+          completed: this.completed,
+          todoDate: this.todoDate,
         });
   
         this.closeModal()

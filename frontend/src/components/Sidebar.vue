@@ -36,7 +36,7 @@
             <router-link to="/habit" class="nav-link">
               <img src="@/assets/sidebar/habit.png" alt=""> 습관
             </router-link>
-            <router-link to="/voice" class="nav-link">
+            <router-link to="/records" class="nav-link">
               <img src="@/assets/sidebar/voice.png" alt=""> 음성
             </router-link>
             <router-link to="/mypage" class="nav-link">

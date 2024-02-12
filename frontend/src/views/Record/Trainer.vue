@@ -49,34 +49,23 @@
         </div>
       </div>
       <div>
-          <div>
-              <label for="sound-name">Name:</label>
-              <input id="sound-name" type="text" v-model="name" required placeholder="Enter Sound Name">
-          </div>
-          <div>
-              <label for="sound-memo">Memo:</label>
-              <input id="sound-memo" type="text" v-model="memo" placeholder="Enter Memo">
-          </div>
         <button class="mr-4" @click="record">
           {{ recordingStatus }}
         </button>
-        <button color="primary" @click="recordSave" :disabled="!isAllRecordingsDone">Save</button>
+        <button color="primary" @click="fnFinish" :disabled="!isAllRecordingsDone">녹음 완료</button>
       </div>
     </div>
-    
+
     <br>
     <p class="voice-title">학습 중인 음성</p>
     <div class="voice-box">
-      <div v-for="record in records" :key="record.id">
-          <div>name: {{ record.name }} / 총 녹음 시간 {{ totalRecordingTime }}초</div>
-      </div>
     </div>    
   </div>
 </template>
 
 <script>
 import { ref, computed } from 'vue'
-  import { createNewVoice, saveRecord, saveAudio } from '@/api/records'
+import { clickStop, saveRecord, saveAudio } from '@/api/records'
 import { loadKoreanCorpus } from '@/stores/koreanCorpus'
 
 export default {
@@ -98,7 +87,6 @@ export default {
     return {
       recordingStatus: "Record Sound",
       recording: false,
-      records: [],
       recordHistory: [],
       name: "",
       memo: "",
@@ -128,9 +116,15 @@ export default {
     },
     nameExists() {
       return this.records.some(record => record.name === this.name)
-    }
+    },
   },
   methods: {
+    onSuccess(response){
+        console.log(response.data)
+    },
+    onFail(error){
+        console.error(error)
+    },
     prevSentence() {
         if (this.currentSentenceId > 0) {
         this.currentSentenceId--;
@@ -160,9 +154,6 @@ export default {
       
       if (!this.nameExists) {
           this.records.push({ id: this.currentSentenceId, name: this.name });
-          // 음성 생성 api(post)
-          console.log("createNewVoice({ name: this.name, memo: this.memo }")
-          createNewVoice({ name: this.name, memo: this.memo })
       }
 
       if (this.recording) {
@@ -214,12 +205,12 @@ export default {
       recorder.onComplete = (recorder, blob) => {
         this.recordingStatus = "Record Sound";
         this.blob = blob;
-        this.recordHistory.push({ 
-          id: this.currentSentenceId,
-          promptNum: this.currentSentenceId + 1,
-          elapsedTime: this.elapsedTime });
+        saveRecord({ promptNum: this.currentSentenceId + 1, 
+          duration: this.elapsedTime,
+          success: this.onSuccess,
+          fail: this.onFail
+        })  
       };
-
       this.recorder = recorder;
     },
 
@@ -234,16 +225,17 @@ export default {
       this.elapsedTime = duration;
       this.recordingStartTime = null;
 
-      console.log("Current sentence ID:", this.currentSentenceId);
-
-      console.log("recordHistory", this.recordHistory)
-
-      saveRecord({ promptNum: this.current})
+      clickStop({success: this.success, fail: this.fail})
     },
 
-    recordSave() {
-      saveAudio
-    },
+    async fnFinish() {
+      saveAudio({
+        promptNum: this.sentences.length,
+        success: this.onSuccess,
+        fail: this.onFail
+      })
+      this.$router.push({name: 'Record'})
+    }
   },
 };
 

@@ -10,6 +10,7 @@
       <input v-model="item.memo" type="text" id="todoTitle" class="form-control" required>
     </div> 
     <button class="" @click="fnSave">저장</button>
+    <button class="" @click="recordCont">이어 녹음하기</button>
   </div>
 </template>
 
@@ -25,19 +26,31 @@ export default {
     }
   },
   methods: {
+    onSuccess(response){
+      console.log(response.data)
+    },
+    onFail(error){
+        console.error(error)
+      },
     closeModal() {
       this.$emit('close-modal');
     },
     async fnSave() {
       try {
-        await modifyVoice(this.item.id, this.item.name, this.item.memo); 
+        await modifyVoice(this.item.id, 
+                          this.item.name, 
+                          this.item.memo,
+                          this.onSuccess,
+                          this.onFail); 
         this.$emit('close-modal'); 
       } catch (error) {
-        console.error('Error updating habit:', error);
+        console.error('Error updating voice:', error);
       }
     },
-    async finish(){
-
+    async recordCont() {
+      this.$router.push({ path: '/voice/trainer' }).catch(err => {
+          console.error(err);
+      });
     }
   },
 };
@@ -67,3 +80,5 @@ font-size: 12px;
   padding-left: 10px;
 }
 </style>
+
+
