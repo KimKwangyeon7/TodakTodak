@@ -6,7 +6,7 @@
         <button class="create-chat-button btn" @click="toggleSearch">
           <div class="search"><img src="@/assets/search.png" alt=""></div>
         </button>
-        <button class="create-chat-button btn" @click="showCreateRoomModal">
+        <button class="create-chat-button btn" @click="showFriendRequestList">
           <img src="@/assets/user-plus.png" alt=""></button>
         <CreateRoomModal v-if="showModal" @close="closeCreateRoomModal" @create="createRoom" />
       </div>
@@ -38,6 +38,7 @@ import { useRouter } from 'vue-router'
 
 import FriendProfile from '@/components/Friend/FriendProfile.vue'
 import Chat from '@/components/Friend/Chat.vue'
+import FriendRequestList from '@/components/Friend/FriendRequestList.vue' // FriendRequestList 컴포넌트 추가
 
 const router = useRouter()
 
@@ -90,6 +91,10 @@ const toggleSearch = () => {
   if (!showSearch.value) {
     searchQuery.value = ''
   }
+}
+
+const showFriendRequestList = () => { // showFriendRequestList 메서드 추가
+  router.push('/friendRequestList'); // FriendRequestList 컴포넌트로 이동
 }
 </script>
 

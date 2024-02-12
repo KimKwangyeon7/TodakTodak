@@ -6,6 +6,7 @@ import AddGoal from '@/views/Goal/AddGoal.vue'
 import Board from '@/views/Board.vue'
 import Calendar from '@/views/Calendar.vue'
 import Friend from '@/views/Friend.vue'
+import FriendRequestList from '@/components/Friend/FriendRequestList.vue'
 import Chat from '@/components/Friend/Chat.vue'
 import Meeting from '@/views/Meeting.vue'
 import Meet from '@/components/Meeting/MeetingRoom.vue'
@@ -65,6 +66,11 @@ const router = createRouter({
 		name: 'friend',
 		path: '/friend',
 		component: Friend,
+	},
+	{
+		name: 'friendRequestList',
+		path: '/friendRequestList',
+		component: FriendRequestList,
 	},
 	{
 		name: 'chat',
