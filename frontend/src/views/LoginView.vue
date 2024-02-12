@@ -2,10 +2,14 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
+import { storeToRefs } from "pinia";
 import { useRoute, useRouter } from "vue-router";
 import { useMemberStore } from "@/stores/auth";
 
-const { userLogin, isLogin } = useMemberStore();
+const memberStore = useMemberStore();
+const { userLogin, isLogin } = memberStore;
+const { userInfo } = storeToRefs(memberStore);
+
 const route = useRoute();
 const router = useRouter();
 

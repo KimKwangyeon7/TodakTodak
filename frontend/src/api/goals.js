@@ -12,6 +12,7 @@ function addGoal(goal, success, fail) {
   local.post(`${url}`, JSON.stringify(goal)).then(success).catch(fail);
 }
 
+<<<<<<< HEAD
 async function getGoalList() {
   try {
     const response = await apiClient.get();
@@ -21,6 +22,12 @@ async function getGoalList() {
     console.error("Error fetching goal list:", error);
     return null; // 오류 발생 시 null 반환
   }
+=======
+function getGoalList(success, fail) {
+  console.log("goalList 실행");
+  local.defaults.headers.Authorization = 'Bearer '+ localStorage.getItem("accessToken");
+  local.get(`/goals`).then(success).catch(fail);
+>>>>>>> 06ab3a56ff074d45bb90a1f1f97a06a80e596c9d
 }
 
 async function getGoalDetail(goalId) {
