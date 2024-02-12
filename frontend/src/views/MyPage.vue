@@ -3,8 +3,8 @@
         <button class="settings-button btn" @click="goToSettings"><img src="@/assets/settings.png" alt=""></button>
       <UserInfo :userData="userData" />
       <SuccessRate :successRate="successRate" />
-      <GoalSuccessRate :goalRate="goalRate" />
       <SuccessChart :successChart="successChart"/>
+      <GoalSuccessRate :goalRate="goalRate" />
     </div>
 </template>
 
