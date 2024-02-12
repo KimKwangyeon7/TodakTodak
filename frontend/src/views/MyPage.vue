@@ -4,6 +4,7 @@
       <UserInfo :userData="userData" />
       <SuccessRate :successRate="successRate" />
       <GoalSuccessRate :goalRate="goalRate" />
+      <SuccessChart :successChart="successChart"/>
     </div>
 </template>
 
@@ -11,18 +12,21 @@
 import UserInfo from '@/components/MyPage/UserInfo.vue'
 import SuccessRate from '@/components/MyPage/SuccessRate.vue'
 import GoalSuccessRate from '@/components/MyPage/GoalSuccessRate.vue'
+import SuccessChart from '@/components/MyPage/SuccessChart.vue'
 
 export default {
 components: {
     UserInfo,
     SuccessRate,
     GoalSuccessRate,
+    SuccessChart
 },
 data() {
     return {
     userData: null,
     successRate: null,
     goalRate: null,
+    successChart: null,
     };
 },
 mounted() {

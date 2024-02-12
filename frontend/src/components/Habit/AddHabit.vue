@@ -8,27 +8,39 @@
   
         <!-- 내용 입력 -->
         <div class="form-group">
-          <label for="habitContent">내용:</label>
-          <textarea v-model="habitContent" id="habitContent" class="form-control" rows="3"></textarea>
+          <label for="content">내용:</label>
+          <textarea v-model="content" id="content" class="form-control" rows="3"></textarea>
         </div>
   
         <!-- 알람 여부 선택 -->
-        <!-- isAlarmed -->
+        <!-- alarmed -->
         <div class="form-group">
           <label>알람 여부:</label>
           <div class="custom-control custom-switch">
             
             <div class="form-check form-switch">
-              <input v-model="isAlarmed" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
+              <input v-model="alarmed" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
               <label class="form-check-label" for="flexSwitchCheckChecked"></label>
             </div>
           </div>
         </div>
   
-        <!-- 알람 시간 입력 -->
-        <div class="form-group" v-if="isAlarmed">
-          <label for="time">알람 시간:</label>
-          <input v-model="time" type="time" id="time" class="form-control">
+        <!-- 알람 시간 및 요일 입력 부분 -->
+        <div class="form-group" v-if="alarmed">
+          <label>알람 시간 및 요일:</label>
+          <div v-for="(alarm, index) in alarmDtoList" :key="index">
+            <input v-model="alarm.time" type="time" class="form-control">
+            <select v-model="alarm.day" class="form-control">
+              <option value=0>월요일</option>
+              <option value=1>화요일</option>
+              <option value=2>수요일</option>
+              <option value=3>목요일</option>
+              <option value=4>금요일</option>
+              <option value=5>토요일</option>
+              <option value=6>일요일</option>
+            </select>
+          </div>
+          <button @click="addAlarmInput" type="button" class="btn btn-secondary">알람 추가</button>
         </div>
   
         <button type="submit" class="btn btn-primary" @click="fnAdd">저장</button>
@@ -43,14 +55,13 @@
   
     data() {
       return {
-        habitContent: '',
-        // 알람 설정
-        isAlarmed: false,
-        day: '',
-        time: '',
-        isOutside: false,
-        isChecked: false,
-        isCompleted: false,
+        content: '',
+        important: false,
+        outside: false,
+        alarmed: false,
+        alarmDtoList: [],
+        checked: false,
+        completed: false,
       };
     },
     methods: {
@@ -62,23 +73,25 @@
         const [hours, minutes] = t.split(':')
         return hours + minutes   
       },
+
+      addAlarmInput() {
+      this.alarmDtoList.push({ day: '', time: '' }); // 새로운 알람 입력 필드 추가
+    },
   
       fnAdd() {
-        // 우선 오늘 날짜로 테스트
-        const d = new Date()
-        this.day = (d.getDay() + 6) % 7 // 이렇게 하여 0을 월요일로 바꿈
-        const t = this.time
-        const setTime = this.fourDigitTime(t)
-        this.time = setTime
 
+        this.alarmDtoList.forEach(alarm => {
+          alarm.time = this.fourDigitTime(alarm.time); // 각 알람의 시간을 변환
+        });
+        
         addHabit({ 
-          habitContent: this.habitContent,
-          day: this.day,
-          time: this.time, 
-          isOutside: this.isOutside,
-          isAlarmed: this.isAlarmed,
-          isChecked: this.isChecked,
-          isCompleted: this.isCompleted,
+          content: this.content,
+          important: this.important,
+          outside: this.outside,
+          alarmed: this.alarmed,
+          alarmDtoList: this.alarmDtoList,
+          checked: this.checked,
+          completed: this.completed,
         });
         
         this.closeModal() 

@@ -1,5 +1,9 @@
 <template>
+<<<<<<< HEAD
   
+=======
+  <div class="m-3">
+>>>>>>> 303ee358e04ccb666ebee7aec46018ca2ff1cf62
     <main class="calendar-wrapper">
       
         <div md="8">
@@ -56,7 +60,11 @@
         </div>
       
     </main>
+<<<<<<< HEAD
   
+=======
+  </div>
+>>>>>>> 303ee358e04ccb666ebee7aec46018ca2ff1cf62
 </template>
 
 <script>
@@ -401,7 +409,8 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+
 .calendar-wrapper {
   display: flex;
   margin: 2.5em 0;
@@ -409,13 +418,16 @@ export default {
   height: 500px;
 }
 
+<<<<<<< HEAD
 .calendar-body {
   width: 330px !important;
   height: 500px !important;
 }
 
+=======
+>>>>>>> 303ee358e04ccb666ebee7aec46018ca2ff1cf62
 .calendar-header {
-  margin-bottom: 2rem;
+  margin-bottom: 20px;
 }
 
 .calendar-header .month {

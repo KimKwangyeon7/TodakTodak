@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav class="navbar fixed-top">
+    <nav class="navbar bg-white fixed-top">
       <div class="container-fluid d-flex justify-content-between align-items-center">
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -36,13 +36,12 @@
             <router-link to="/habit" class="nav-link">
               <img src="@/assets/sidebar/habit.png" alt=""> 습관
             </router-link>
-            <router-link to="/voice" class="nav-link">
+            <router-link to="/records" class="nav-link">
               <img src="@/assets/sidebar/voice.png" alt=""> 음성
             </router-link>
             <router-link to="/mypage" class="nav-link">
               <img src="@/assets/sidebar/profile.png" alt=""> 마이페이지
             </router-link>
-            <p style="color:red">잠깐 아래 부분 푸시 알림 테스트 용도로 쓸게요!!</p>
             <router-link to="/subscribe" class="nav-link" style="color:red"><span class="emoji"></span> subscribe</router-link>
             <router-link to="/pushnotify" class="nav-link" style="color:red"><span class="emoji"></span> pushnotify</router-link>
           </div>
@@ -73,8 +72,8 @@ import Notifications from '@/components/Notifications.vue'
   max-width: 100px;
 }
 .offcanvas-title {
-  font-size: 25px;
-  font-weight: bold;
+  font-size: 24px;
+  font-weight: 400;
   margin-left: 10px;
   font-family: 'SUITE-Regular';
 }
@@ -91,7 +90,7 @@ import Notifications from '@/components/Notifications.vue'
   display: flex;
   align-items: center;
   padding: 10px;
-  margin-left: 10px;
+  margin-left: 20px;
 }
 
 .offcanvas-body img {
