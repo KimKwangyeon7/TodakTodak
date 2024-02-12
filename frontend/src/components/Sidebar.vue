@@ -98,6 +98,11 @@ import Notifications from '@/components/Notifications.vue'
   max-width: 30px; 
 }
 
+.navbar-toggler:focus {
+  outline: none; /* 포커스 시 아웃라인 제거 */
+  box-shadow: none; /* 포커스 시 박스 쉐도우 제거 */
+}
+
 @font-face {
     font-family: 'SUITE-Regular';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/SUITE-Regular.woff2') format('woff2');

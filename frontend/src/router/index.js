@@ -12,10 +12,11 @@ import Meet from '@/components/Meeting/MeetingRoom.vue'
 import MyPage from '@/views/MyPage.vue'
 import MyPageSettings from '@/components/MyPage/MypageSettings.vue'
 import UserInfoEdit from '@/components/MyPage/UserInfoEdit.vue'
-import Habit from '@/views/Habit/HabitList.vue'
+import Habit from '@/views/Habit.vue'
 import Voice from '@/views/Voice/Voice.vue'
 import VoiceTrainer from '@/views/Voice/VoiceTrainer.vue'
 import TodoList from '@/views/Todo/TodoList.vue'
+import HabitList from '@/views/Habit/HabitList.vue'
 import CalendarDetail from '@/views/CalendarDetail.vue'
 import Notification from '@/components/Notifications.vue'
 import subscribe from '@/components/subscribe_page.vue'
@@ -34,6 +35,16 @@ const router = createRouter({
 		name: 'main',
 		path: '/main',
 		component: Main,
+	},
+	{
+		name: 'todoList',
+		path: '/todoList',
+		component: TodoList,
+	},
+	{
+		name: 'habitList',
+		path: '/habitList',
+		component: HabitList,
 	},
 	{
 		name: 'goal',

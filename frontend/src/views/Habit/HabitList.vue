@@ -1,15 +1,14 @@
 <template>
     <div>
-      <div class="habit">습관</div>
     <!-- 모달 -->
     <div class="black-bg" v-if="is_modal_valid">
       <component :is="activeModal" :item="currentItem" @close-modal="closeModal" />
     </div>
 
-  
     <!-- 투두리스트 -->
     <div class="todo-section">
       <div class="todo-date">
+        <div style="margin-bottom: 5px; margin-top: 5px; font-weight: bold;">습관</div>
         <span>{{ today }}</span>
         <!-- Todo 생성버튼 -->
         <button class="add-button" @click="openModal('AddHabit')">+</button>
@@ -72,9 +71,6 @@ export default {
   </script>
 
 <style scoped>
-.habit {
-  font-size: 25px;
-}
 
 /* 상단 바 스타일링 */
 .top-bar {
