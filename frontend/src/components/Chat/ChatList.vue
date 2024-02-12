@@ -21,6 +21,7 @@ const getChatRoomList = () => {
       console.log("채팅목록리스트");
       console.log(data);
       chatRooms.value = data;
+      console.log(chatRooms.value);
     },
     (error) => {
       console.log(error);
