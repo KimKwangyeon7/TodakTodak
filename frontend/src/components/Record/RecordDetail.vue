@@ -48,11 +48,14 @@ export default {
       }
     },
     async recordCont() {
-      this.$router.push({ name: 'Trainer', params: { recordId: this.item.id } });
-          console.error(err);
+      try {
+        this.$router.push({ name: 'Trainer', params: { recordId: this.item.id } });
+      } catch (error) {
+        console.error('Error navigating to Trainer:', error);
       }
     }
   }
+}
 </script>
 
 <style scoped>

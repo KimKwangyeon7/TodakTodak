@@ -145,4 +145,4 @@ function registerMember() {
   width: 150px;
   text-align: end;
 }
-</style>
+</style>@/records.js/auth

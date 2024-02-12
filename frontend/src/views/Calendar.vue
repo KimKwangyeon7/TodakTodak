@@ -520,4 +520,4 @@ export default {
   display: inline-block; /* 상자를 인라인 요소처럼 배치 */
   margin-right: 4px; /* 상자 사이의 간격 */
 }
-</style>
+</style>@/records.js/goals

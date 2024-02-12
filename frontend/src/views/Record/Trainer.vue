@@ -21,17 +21,17 @@
     <p class="voice-title">음성 녹음</p>
 
     <div class="voice-box">
-        <div v-if="recordHistory.length > 0">
-            <div v-for="record in recordHistory" :key="record.id">
-              <div v-if="record.elapsedTime > 60">
-                <div>{{ record.id+ 1  }}번 녹음 시간: {{ Math.floor(record.elapsedTime / 60) }} 분 {{ record.elapsedTime % 60 }} 초</div>
-              </div>
-              <div v-else>
-                <div>{{ record.id+ 1  }}번 녹음 시간: {{ record.elapsedTime }} 초</div>
-              </div>
+      <div v-if="currentRecordHistory.length > 0">
+        <div v-for="record in currentRecordHistory" :key="record.id">
+          <div v-if="record.elapsedTime > 60">
+            <div>{{ record.id + 1 }}번 녹음 시간: {{ Math.floor(record.elapsedTime / 60) }} 분 {{ record.elapsedTime % 60 }} 초</div>
           </div>
+          <div v-else>
+            <div>{{ record.id + 1 }}번 녹음 시간: {{ record.elapsedTime }} 초</div>
+          </div>
+        </div>
       </div>
-    
+        
       <div v-if="recording">
           <div v-if="elapsedTime > 60">
               <div>{{ currentSentenceId + 1}}번 녹음 시간: {{ Math.floor(elapsedTime / 60) }} 분 {{ elapsedTime % 60 }} 초</div>
@@ -56,10 +56,10 @@
       </div>
     </div>
 
-    <br>
+    <!-- <br>
     <p class="voice-title">학습 중인 음성</p>
     <div class="voice-box">
-    </div>    
+    </div>     -->
   </div>
 </template>
 
@@ -67,12 +67,19 @@
 import { ref, computed } from 'vue'
 import { saveRecord, saveAudio } from '@/api/records'
 import { loadKoreanCorpus } from '@/stores/koreanCorpus'
+import { useRecordHistorystore } from '@/stores/recordHistory'
+import { useRoute } from 'vue-router'
+
+
 
 export default {
   name: 'VoiceTrainer',
   setup() {
-    const currentSentenceId = ref(0);
+    const route = useRoute()
+    const recordId = ref(route.params.recordId)
+    const recordHistoryStore = useRecordHistorystore();
     const sentences = ref([]);
+    const currentSentenceId = ref(0);
     const currentSentence = computed(() => sentences.value[currentSentenceId.value] || '');
 
     loadKoreanCorpus().then(sentencesArray => {
@@ -82,11 +89,11 @@ export default {
       console.error('Error loading Korean corpus:', error);
     });
 
-    return { sentences, currentSentenceId, currentSentence, };
+    return { recordHistoryStore, recordId, sentences, currentSentenceId, currentSentence };
   },
   created() {
-    // When the component is created, get the recordId from the URL
-    const recordId = this.$route.params.recordId;
+    const route = useRoute()
+    const recordId = ref(route.params.recordId)
     if (recordId) {
       // If recordId is available, do something with it
       console.log('The recordId from URL is:', recordId);
@@ -100,7 +107,6 @@ export default {
     return {
       recordingStatus: "Record Sound",
       recording: false,
-      recordHistory: [],
       recorder: null,
       blob: null,
       stream: null,
@@ -114,17 +120,36 @@ export default {
     };
   },
   computed: {
+    currentRecordHistory() {
+      return this.recordHistoryStore.histories[this.recordId.toString()] || [];
+    },
     cantSave() {
       return this.name === "" || !this.blob;
     },
+    recordHistory() {
+      return this.recordHistoryStore.recordHistory;
+    },
     isAllRecordingsDone() {
-      return this.recordHistory.length === this.sentences.length;
+      return this.recordHistoryStore.recordHistory?.length === this.sentences?.length;
     },
     totalRecordingTime() {
-      return this.recordingDurations.reduce((total, duration) => total + duration, 0);
+      const recordHistory = this.recordHistoryStore.histories[this.recordId];
+      console.log('Record History:', recordHistory); // Check if record history is available
+      if (recordHistory && recordHistory.durations) {
+        const totalDuration = recordHistory.durations.reduce((total, duration) => total + duration, 0);
+        console.log('Total Duration:', totalDuration); // Check the calculated total duration
+        return totalDuration;
+      }
+      console.log('No record history or durations found.'); // Log if there's no record history or durations
+      return 0; // If there's no history or durations, return 0
     },
+
     hasRecordedCurrent() {
-      return this.recordHistory.some(record => record.id  === this.currentSentenceId);
+      const currentHistory = this.recordHistoryStore.histories[this.recordId];
+      if (Array.isArray(currentHistory)) {
+        return currentHistory.some(record => record.id === this.currentSentenceId);
+      }
+      return false;
     },
     nameExists() {
       return this.records.some(record => record.name === this.name)
@@ -211,8 +236,13 @@ export default {
 
       recorder.onComplete = (recorder, blob) => {
         console.log('onCompleteblob: ', blob)
-        this.recordingStatus = "Record Sound";
+        this.recordHistoryStore.addRecord(this.recordId, {
+          id: this.currentSentenceId, // Assuming this is the correct id to use
+          promptNum: this.currentSentenceId + 1,
+          elapsedTime: this.elapsedTime,
+        });
         this.blob = blob;
+        console.log("recordHistory", this.recordHistory)
 
 
         if (this.blob) {
@@ -242,6 +272,7 @@ export default {
       clearInterval(this.timer);
       const duration = Math.round((Date.now() - this.recordingStartTime) / 1000);
       this.recordingDurations.push(duration);
+      this.recordHistoryStore.addRecordingDuration(this.recordId, duration);
       this.elapsedTime = duration;
       this.recordingStartTime = null;
     },

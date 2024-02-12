@@ -123,3 +123,4 @@ const connect = () => {
     </v-expansion-panel>
   </v-container>
 </template>
+@/records.js/auth

@@ -298,3 +298,4 @@ input[type="checkbox"] {
   margin-left: auto; /* Push the checkbox to the far right */
 }
 </style>
+@/records.js/auth
