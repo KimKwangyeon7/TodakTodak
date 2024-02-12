@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 import { localAxios } from "@/util/http-commons";
-import apiClient from "./goalsApiClient";
 
 const local = localAxios(); // axios instance
 
@@ -12,50 +11,53 @@ function addGoal(goal, success, fail) {
   local.post(`${url}`, JSON.stringify(goal)).then(success).catch(fail);
 }
 
-<<<<<<< HEAD
-async function getGoalList() {
-  try {
-    const response = await apiClient.get();
-    console.log("Goal List:", response.data);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching goal list:", error);
-    return null; // 오류 발생 시 null 반환
-  }
-=======
+// async function getGoalList() {
+
+//   try {
+//     const response = await apiClient.get();
+//     console.log("Goal List:", response.data);
+//     return response.data;
+//   } catch (error) {
+//     console.error("Error fetching goal list:", error);
+//     return null; // 오류 발생 시 null 반환
+//   }
+// }
+
+// async function getGoalDetail(goalId) {
+
+//   try {
+//     const response = await apiClient.get();
+//     console.log("Goal List:", response.data);
+//     return response.data;
+//   } catch (error) {
+//     console.error("Error fetching goal list:", error);
+//     return null; // 오류 발생 시 null 반환
+//   }
+// }
+
 function getGoalList(success, fail) {
   console.log("goalList 실행");
-  local.defaults.headers.Authorization = 'Bearer '+ localStorage.getItem("accessToken");
-  local.get(`/goals`).then(success).catch(fail);
->>>>>>> 06ab3a56ff074d45bb90a1f1f97a06a80e596c9d
+  local.defaults.headers.Authorization = 'Bearer ' + localStorage.getItem("accessToken");
+  local.get(`${url}`).then(success).catch(fail);
+
 }
 
-async function getGoalDetail(goalId) {
-  try {
-    const response = await apiClient.get(`/${goalId}`);
-    console.log("Goal details:", response.data);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching goal detail:", error);
-  }
+async function getGoalDetail(goalId, success, fail) {
+  console.log("getGoalDetail 실행");
+  local.defaults.headers.Authorization = 'Bearer ' + localStorage.getItem("accessToken")
+  local.get(`${url}/${goalId}`).then(success).catch(fail) 
 }
 
-async function updateGoal(goalId, goalUpdateInfo) {
-  try {
-    await apiClient.put(`/${goalId}`, goalUpdateInfo);
-    console.log("Goal updated successfully");
-  } catch (error) {
-    console.error("Error updating goal:", error);
-  }
+async function updateGoal(goalId, content, color, success, fail) {
+  console.log("updateGoal 실행")
+  local.defaults.headers.Authorization = 'Bearer ' + localStorage.getItem("accessToken")
+  local.get(`${url}/${goalId}`, JSON.stringify(content, color)).then(success).catch(fail) 
 }
 
 async function deleteGoal(goalId) {
-  try {
-    await apiClient.delete(`/${goalId}`);
-    console.log("Goal deleted successfully");
-  } catch (error) {
-    console.error("Error deleting goal:", error);
-  }
+  console.log("deleteGoal 실행")
+  local.defaults.headers.Authorization = 'Bearer ' + localStorage.getItem("accessToken")
+  local.delete(`${url}/${goalId}`).then(success).catch(fail)
 }
 
 export { addGoal, getGoalList, getGoalDetail, updateGoal, deleteGoal };

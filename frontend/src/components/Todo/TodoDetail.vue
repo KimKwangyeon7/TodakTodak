@@ -1,151 +1,184 @@
 <template>
-    <div class="modal-content">
-      <button type="button" class="btn-close" aria-label="Close" @click="closeModal"></button>
-      <div class="form-group">
-        <label for="selectedGoal">목표:</label>
-        <select v-model="localSelectedGoal" id="selectedGoal" class="form-control">
-          <option v-for="goal in goals" :key="goal.id" :value="goal.id">
-            {{ goal.goalContent }}
-          </option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="todoTitle">제목:</label>
-        <input v-model="item.todoTitle" type="text" id="todoTitle" class="form-control" required>
-      </div>
-      <div class="form-group">
-        <label for="todoContent">내용:</label>
-        <textarea v-model="item.todoContent" id="todoContent" class="form-control" rows="3"></textarea>
-      </div>
-      <div class="form-group">
-        <label>중요여부:</label>
-        <div class="form-check form-switch">
-          <input v-model="item.isImportant" class="form-check-input" type="checkbox" role="switch" id="importantSwitch">
-          <label class="form-check-label" for="importantSwitch"></label>
+  <div class="calendar-wrapper" style="margin-top: 70px;">
+    <main class="calendar-body">
+      <div class="calendar-weekdays">
+        <div
+          v-for="(date, index) in weekDate"
+          :key="index"
+          class="date"
+        >
+          {{ date }}
         </div>
       </div>
-      <div class="form-group">
-        <label>외출 여부:</label>
-        <div class="form-check form-switch">
-          <input v-model="item.isOutside" class="form-check-input" type="checkbox" role="switch" id="outsideSwitch">
-          <label class="form-check-label" for="outsideSwitch"></label>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>알람 여부:</label>
-        <div class="custom-control custom-switch">
-          <div class="form-check form-switch">
-            <input v-model="item.isAlarmed" class="form-check-input" type="checkbox" role="switch" id="alarmSwitch">
-            <label class="form-check-label" for="alarmSwitch"></label>
-          </div>
-        </div>   
-      </div>
-      <div class="form-group" v-if="item.isAlarmed">
-        <label for="time">알람 시간:</label>
-        <input v-model="alarmTime" type="time" id="time" class="form-control">
-      </div>
-      <button class="" @click="fnDelete">삭제</button>
-      <button class="" @click="fnSave">저장</button>
-      <div class="form-group">
-        <label>완료 여부:</label>
-        <div class="custom-control custom-switch">
-          <div class="form-check form-switch">
-            <input v-model="isChecked" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
-            <label class="form-check-label" for="flexSwitchCheckChecked"></label>
+      <div class="calendar-dates">
+        <div
+          v-for="(day, index) in weekDates"
+          :key="index"
+          class="date text-center"
+        >
+          <span class="day">{{ day }}</span>
+          <div v-for="todo in weekTodos" :key="todo.id">
+            <span>{{ todo.title }}</span>
           </div>
         </div>
+        <ul>
+          <li v-for="todo in todos" :key="todo.id">{{ todo.content }}</li>
+        </ul>
       </div>
-    </div>
-  </template>
-  
-  <script>
-  import { getGoalList } from '@/api/goals';
-  import { updateTodo, deleteTodo, isTodoCompleted } from '@/api/todos';
-  
-  export default {
-    data() {
-      return {
-        originalItem: {},
+    </main>
+  </div>
+</template>
+
+<script>
+import { useTodoStore } from '@/stores/todoList';
+import { ref, onMounted } from 'vue';
+import { getTodoList } from '@/api/todos'
+import { useRoute } from 'vue-router';
+
+import moment from 'moment';
+
+
+
+
+export default {
+  name: 'Calendar',
+  data() {
+    return {
+      selectedDate: this.$route.params.selectedDate,
+      weekDates: [],
+      weekDate: ['월', '화', '수', '목', '금', '토', '일']
+    };
+  },
+
+  setup() {
+    const todos = ref([])
+    const route = useRoute(); // 현재 라우트에 접근
+    const selectedDate = ref(route.params.selectedDate || moment().format('YYYY-MM-DD')); // URL 파라미터에서 selectedDate 가져오거나 기본값 설정
+    onMounted(async () => {
+      
+      try {
+        const formattedDate = moment(selectedDate.value).format('YYYYMMDD')
+        console.log('formattedDate:', formattedDate)
+        const response = await getTodoList(formattedDate); // API 호출을 통해 Todo 목록을 가져옴
+        todos.value = response; // 가져온 Todo 목록으로 로컬 상태 업데이트
+        console.log('todos:', todos.value)
+      } catch (error) {
+        console.error('Error fetching todos:', error); // 에러 처리
       }
-    },
-    created() {
-      this.originalItem = {...this.item}
-    },
-    props: {
-      item: {
-        type: Object,
-        required: true
-      }
-    },
-    computed: {
-      async goals() {
-        // This will reactively update when the store's state changes
-        this.goals = await getGoalList()
-      },
-      localSelectedGoal: {
-        get() {
-          // If the goal is already selected, use it; otherwise, use the first goal
-          return this.item.selectedGoal || this.goals[0]?.id;
-        },
-        set(newValue) {
-          // Update the local item's selected goal when changed
-          this.item.selectedGoal = newValue;
-        }
-      },
-    },
-    methods: {
-      closeModal() {
-        Object.assign(this.item, this.originalItem)
-        this.editableItem = {...this.item};
-        if (item.isChecked === true) {
-          isTodoCompleted(alarm.id, todo.id)
-        }
-        this.$emit('close-modal');    
-      },
-      async fnDelete() {
-        try {
-          await deleteTodo(this.item.id);
-          this.$emit('close-modal');
-        } catch (error) {
-          console.error('Error deleting todo:', error);
-        }
-      },
-      async fnSave() {
-        try {
-          await updateTodo(this.item.id, this.item); 
-          this.$emit('close-modal'); 
-        } catch (error) {
-          console.error('Error updating todo:', error);
-        }
-      },
-    }
-  };
-  </script>
+    });
+
+    return {
+      todos, // 템플릿에서 사용할 수 있도록 반환
+    };
+  },
+  created() {
+    this.calculateWeekDates();
+    const todoStore = useTodoStore();
+    todoStore.fetchTodos();
+    console.log('Selected Date:', this.selectedDate);
+    console.log('Week Dates:', this.weekDates);
+  },
+  computed: {
+    // todos() {
+    //   const todoStore = useTodoStore();
+    //   console.log('todos', todoStore.todos)
+    //   return todoStore.todos;
+    // },
+    weekTodos() {
+    return this.todos.filter(todo => {
+      // Todo 항목의 날짜가 현재 주의 날짜 배열(weekDates)에 포함되는지 확인
+      const todoDate = moment(todo.date, 'YYYY-MM-DD');
+      return this.weekDates.some(weekDate => {
+        const weekDateMoment = moment(this.selectedDate, 'YYYY-MM-DD').startOf('week').add(weekDate - 1, 'days');
+        return todoDate.isSame(weekDateMoment, 'day');
+      });
+    });
+  },
+  },
+  methods: {
   
-  <style scoped>
-  .modal-content {
-    background: #EAF3F9;
-    border-radius: 8px;
-    padding: 20px;
+    calculateWeekDates() {
+  let selectedMoment = moment(this.selectedDate, 'YYYY-MM-DD');
+  let startOfWeek = selectedMoment.clone().startOf('week');
+
+  for (let i = 1; i < 8; i++) {
+    let day = startOfWeek.clone().add(i, 'days');
+    this.weekDates.push(day.format('D'));
   }
-  
-  .btn-close {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    width: 20px;
-    height: 20px;
-    background-color: #ccc;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 12px;
+}
   }
-  
-  .form-group {
-    text-align: left;
-    margin-left: 10px;
-    margin-right: 10px;
-  }
-  </style>
-  
+};
+</script>
+
+<style>
+.calendar-wrapper {
+  display: flex;
+  margin: 2.5em 0;
+  overflow: auto;
+}
+
+.calendar-body {
+  width: 384px;
+  height: 394px;
+}
+
+.calendar-weekdays {
+  display: flex;
+  margin-bottom: 1.25rem;
+  color: #2091a2;
+  font-size: 16px;
+}
+
+.calendar-weekdays .date {
+  width: calc(100% / 7);
+  font-size: 16px;
+  line-height: 1.25;
+  text-align: center;
+  color: #2091a2;
+}
+
+.calendar-dates {
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+.date:hover {
+  cursor: pointer;
+}
+
+.calendar-dates .date {
+  font-weight: 200;
+  padding: 0.25rem 0.5rem;
+  position: relative;
+  width: calc(100% / 7);
+  margin-top: 1px;
+}
+
+.calendar-dates .date.blank {
+  color: #949ba4;
+}
+
+.calendar-dates .date.today {
+  background-color: #45b7c1;
+  color: white !important;
+}
+
+.date.today:first-child,
+:not(.today)+.today {
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+
+.date.today+.date.today+.date.today+.date.today+.date.today {
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.calendar-dates .date.now {
+  border: 1px solid #45b7c1;
+  border-radius: 100px;
+  color: #45b7c1;
+  margin-top: -1px;
+}
+</style>

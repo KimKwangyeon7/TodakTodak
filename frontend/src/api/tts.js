@@ -1,22 +1,15 @@
-import apiClient from './ttsApiClient'
+import { localAxios } from '@/util/htp-commons'
 
-async function sendAudioToBackend(audioFile) {
-  let formData = new FormData();
+const local = localAxios()
+const url = '/tts/infer'
+
+async function sendAudioToBackend(audioFile, success, fail) {
+  let formData = new FormData()
   formData.append('file', audioFile, audioFile.name);
+  local.defaults.headers.Authorization = "Bearer " + localStorage.getItem("accessToken");
+  local.post(`${url}`, formData).then(success).catch(fail)
+}
 
-  try {
-    const response = await apiClient.post(formData, {
-    });
-
-    if (response.status === 200) {
-        console.log(response)
-        return response.data; 
-    } else {
-      console.error('Error sending audio to backend:', error);
-      return null; 
-    }
-  } catch (error) {
-    console.error('Error sending audio to backend:', error);
-    throw error; 
-  }
-};
+export{
+  sendAudioToBackend
+}

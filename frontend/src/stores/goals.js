@@ -17,7 +17,7 @@ export const useGoalsStore = defineStore({
 
     logGoals() {
       this.goals.forEach(goal => {
-        console.log(`id: ${goal.id}, goalContent: ${goal.goalContent}, color: ${goal.color}`);
+        console.log(`id: ${goal.id}, content: ${goal.content}, color: ${goal.color}`);
       });
     },
 

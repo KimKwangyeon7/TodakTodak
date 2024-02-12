@@ -117,8 +117,8 @@ export default {
         }
       } else if (component === "AddTodo") {
         try {
-          const goalList = await getGoalList(this.today.value);
-          if (goalList.length === 0) {
+          console.log('goalList', this.goalList)
+          if (this.goals.length === 0) {
             alert("최소 한 가지 목표를 먼저 설정하세요 :)");
             return;
           }
@@ -212,7 +212,7 @@ export default {
 }
 
 .quote {
-  font-size: 20px;
+  font-size: 16px;
 }
 
 /* 할 일 목록 스타일링 */
