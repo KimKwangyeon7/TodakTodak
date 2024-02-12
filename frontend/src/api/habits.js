@@ -1,78 +1,68 @@
-import apiClient from './habitsApiClient';
+import { localAxios } from '@/util/http-commons'
 import { alarm } from './alarms'
 
-async function addHabit(newHabit) {
-  try {
-    // 습관 넣기
-    const response = await apiClient.post(newHabit);
-    console.log("Habit added:", response.data);
-    // 푸시 알림
-    if (newHabit.isAlarmed === true) {
-        const preparedData = JSON.stringify({
-        alarmTitle: newHabit.habitContent, alarmContent: ""
-      })
-      alarm(preparedData)
-    }    
-  } catch (error) {
-    console.error('Error creating habit:', error);
-  }
+const local = localAxios()
+const url = "/goals/habits"
+
+async function addHabit(content, important, outside, alarmed, alarmDtoList, checked, completed, success, fail) {
+  console.log("addHabit 실행")
+  local.defaults.headers.Authorization = "Bearer " + localStorage.getItem("accessToken");
+  local.post(`${url}`, 
+    JSON.stringify(
+      content, 
+      important,
+      outside,
+      alarmed,
+      alarmDtoList)).then(success).catch(fail);
+
+  if (alarmed === true) {
+      const preparedData = JSON.stringify({
+      alarmTitle: content, alarmContent: ""
+    })
+    preparedData += {checked, completed}
+    alarm(preparedData)
+  }    
 }
 
-async function getHabitList() {
-  try {
-    const response = await apiClient.get();
-    console.log("Habits fetched:", response.data);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching habits:', error);
-  }
+async function getHabitList(success, fail) {
+  console.log("getHabitlList 실행");
+  local.defaults.headers.Authorization = 'Bearer ' + localStorage.getItem("accessToken");
+  local.get(`${url}`).then(success).catch(fail);
 }
 
-async function getHabitListByDay(day) {
-  try {
-    const response = await apiClient.get(`/day/${day}`);
-    console.log("Habits by day:", response.data);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching habits by day:', error);
-  }
+async function getHabitListByDay(day){
+  console.log("getHabitListByDay 실행")
+  local.defaults.headers.Authorization = 'Bearer ' + localStorage.getItem("accessToken");
+  local.get(`${url}/day/${day}`).then(success).catch(fail)
 }
 
-async function isHabitCompleted(habitId, alarmId) {
-  try {
-    const response = await apiClient.patch(`/${habitId}/${alarmId}/complete`);
-    console.log("Habit completion updated:", response.data);
-  } catch (error) {
-    console.error('Error completing habit:', error);
-  }
+async function isHabitCompleted(habitId, alarmId, success, fail) {
+  console.log("isHabitCompleted 실행")
+  local.defaults.headers.Authorization = 'Bearer ' + localStorage.getItem("accessToken");
+  local.patch(`${url}/${habitId}/${alarmId}/complete`).then(success).catch(fail)
 }
 
-async function getHabitDetail(habitId) {
-  try {
-    const response = await apiClient.get(`/${habitId}`);
-    console.log("Habit details:", response.data);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching habit detail:', error);
-  }
+async function getHabitDetail(habitId, success, fail) {
+  console.log("getHabitDetail 실행")
+  local.defaults.headers.Authorization = 'Bearer ' + localStorage.getItem("accessToken");
+  local.get(`${url}/${habitId}`).then(success).catch(fail)
 }
 
-async function updateHabit(habitId, habitUpdateInfo) {
-  try {
-    const response = await apiClient.put(`/${habitId}`, habitUpdateInfo);
-    console.log("Habit updated:", response.data);
-  } catch (error) {
-    console.error('Error updating habit:', error);
-  }
+async function updateHabit(habitId, content, important, outside, alarmed, alarmDtoList, success, fail) {
+  console.log("updateHabit 실행")
+  local.defaults.headers.Authorization = 'Bearer ' + localStorage.getItem("accessToken");
+  local.put(`${url}/${habitId}`, JSON.stringify(
+    content, 
+    important,
+    outside,
+    alarmed,
+    alarmDtoList)).then(success).catch(fail);
 }
 
-async function deleteHabit(habitId) {
-  try {
-    const response = await apiClient.delete(`/${habitId}`);
-    console.log("Habit deleted:", response.data);
-  } catch (error) {
-    console.error('Error deleting habit:', error);
-  }
+async function deleteHabit(habitId, success, fail) {
+  console.log("deletHabit 실행") 
+  local.defaults.headers.Authorization = 'Bearer ' + localStorage.getItem("accessToken");
+  local.delete(`${url}/${habitId}`).then(success).catch(fail)
 }
 
 export {

@@ -13,7 +13,7 @@ import MyPageSettings from "@/components/MyPage/MypageSettings.vue";
 import UserInfoEdit from "@/components/MyPage/UserInfoEdit.vue";
 import Habit from "@/views/Habit.vue";
 // import Voice from '@/views/Voice.vue'
-import Record from "@/views/Record/Record.vue";
+import Records from "@/views/Record/Record.vue";
 // import VoiceTrainer from '@/views/Voice/VoiceTrainer.vue'
 import Trainer from "@/views/Record/Trainer.vue";
 import CalendarDetail from "@/views/CalendarDetail.vue";
@@ -107,9 +107,9 @@ const router = createRouter({
       component: UserInfoEdit,
     },
     {
-      path: "/record",
-      name: "Record",
-      component: Record,
+      path: "/records",
+      name: "Records",
+      component: Records,
     },
     {
       path: "/record/trainer",

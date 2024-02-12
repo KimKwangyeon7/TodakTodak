@@ -1,82 +1,73 @@
-import apiClient from './recordsApiClient';
+import { localAxios } from "@/util/http-commons";
 
+const local = localAxios();
+const url = "/records"
 
-async function fetchVoiceList() {
-  try {
-    const response = await apiClient.get();
-    console.log("Voice List:", response.data);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching voice list:', error);
-  }
+async function clickStop(recordId, success, fail) {
+  await local.post(`${url}/${recordId}/save/member`, { recordId }).then(success).catch(fail)
+  console.log(`${recordId}번 녹음 중 중지 버튼 누름`)
 }
 
-async function createNewVoice(newRecord) {
-  try {
-    const response = await apiClient.post(newRecord);
-    console.log("Voice created:", response.data)
-  } catch (error) {
-    console.error("Error creating new voice:", error);
-  }
+async function getUser(recordId, success, fail) {
+  local.defaults.headers.Autorization =
+    "Bearer " + localStorage.getItem("accessToken");
+  await local.get(`${url}/${recordId}/prompt`).then(success).catch(fail)
 }
 
-async function fetchVoiceDetail(recordId) {
-  try {
-    const response = await apiClient.get(`${recordId}`);
-    voiceDetail = response.data;
-  } catch (error) {
-    console.error('Error fetching voice detail:', error);
-  }
+async function fetchVoiceList(success, fail) {
+  console.log("fetchVoiceList 실행")
+  await local.get(`${url}`).then(success).catch(fail);
+  console.log("음성 목록 불러오기 성공")
 }
 
-async function modifyVoice(recordId, updatedName, updatedMemo) {
-  const payload = {
-    name: updatedName,
-    memo: updatedMemo
-  };
-  try {
-    const response = await apiClient.put(`/${recordId}`, payload);
-    if (response.status === 200) {
-      console.log("Voice modified successfully");
-    } else {
-      throw new Error(`Error: ${response.statusText}`);
-    }
-  } catch (error) {
-    console.error('Error modifying voice:', error);
-  }
+async function fetchVoiceDetail(recordId, success, fail) {
+  await local.get(`${url}/${recordId}`).then(success).catch(fail)
+  console.log(`음성 ${recordId}번 세부 내용 불러오기 성공 `)
 }
+  
+// async function createNewVoice(name, memo, success, fail) {
+//   console.log("name", name)
+//   console.log("memo", memo)
+//   await local.post(`${url}`, name, memo).then(success).catch(fail)
+//   console.log("새로운 음성 생성 성공")
+// }
 
-async function deleteVoice(recordId) {
-  try {
-    const response = await apiClient.delete(`/${recordId}`);
-    if (response.status === 200) {
-      console.log("Voice deleted successfully");
-    } else {
-      throw new Error(`Error: ${response.statusText}`);
-    }
-  } catch (error) {
-    console.error('Error deleting voice:', error);
-  }
+// async function createNewVoice(name, memo, success, fail) {
+//   const payload = { name, memo }; // Create a payload object
+//   console.log("payload", payload);
+//   await local.post(`${url}`, payload).then(success).catch(fail)
+//   .catch((error) => {
+//     console.error("새로운 음성 생성 실패", error);
+//   });
+// }
+
+async function createNewVoice(data, success, fail) {
+  local.defaults.headers.Autorization =
+    "Bearer " + localStorage.getItem("accessToken");
+  console.log(local.defaults.headers.Autorization)
+  console.log("Creating new voice with data:", data);
+  await local.post(`${url}`, data).then(success).catch(fail);
 }
-
-// 알림 소리로 사용할 음성 고르기
-// 한 버튼만 활성화만 활성화하기
-// 다른 버튼 눌러도 어차피 백에서 하나만 설정되게 하니까 프론트가 신경쓸 것 없음
-async function selectVoice(recordId) {
-  try {
-    const response = await apiClient.put(`use`, { recordId });
-    if (response.status === 200) {
-      console.log("Voice selected successfully");
-    } else {
-      throw new Error(`Error: ${response.statusText}`);
-    }
-  } catch (error) {
-    console.error('Error selecting voice:', error);
-  }
+  
+async function modifyVoice(recordId, name, memo, success, fail) {
+  console.log("modified name", name)
+  console.log("modified memo", memo)
+  await local.put(`${url}/${recordId}`, name, memo).then(success).catch(fail) 
+  console.log("음성 내용 수정 성공")
 }
-
+  
+async function deleteVoice(recordId, success, fail) {
+  await local.delete(`${url}/${recordId}`).then(success).catch(fail)
+  console.log("음성 삭제 성공")
+}
+  
+async function selectVoice(recordId, success, fail) {
+  await local.put(`${url}/use`, { recordId }).then(success).catch(fail)
+  console.log(`${recordId}번 선택 완료`)
+}
+  
 // 저장할 때마다 녹음 길이, 프롬프트 넘버
-async function saveRecord(promptNum, duration) {
+async function saveRecord(recordId, prompt, duration, success, fail) {
   if (!blob) {
     console.error("No recording available to save");
     return;
@@ -92,41 +83,25 @@ async function saveRecord(promptNum, duration) {
   window.URL.revokeObjectURL(url);
   document.body.removeChild(a);
 
-  try {
-    await apiClient.post('/save/member', { promptNum, a });
-    console.log("Record saved successfully");
-  } catch (error) {
-    console.error('Error saving record:', error);
-  }
+  await local.post(`${url}/${recordId}/save/member`, prompt, duration, a).then(success).catch(fail)
+  console.log(`${prompt}번 녹음 완료`)
 }
 
-async function saveAudio(prompt, promptNum) {
-  // prompt 한 문장
-  // promptNum 한 문장의 번호
-  
-
-  try {
-    const response = await apiClient.post('/save/audio', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    });
-    nextPrompt = response.data;
-  } catch (error) {
-    console.error('Error saving audio:', error);
-  }
+async function saveAudio(recordId, promptNum, success, fail) {
+  await local.post(`/records/${recordId}/save/member`, promptNum).then(success).catch(fail)
 }
 
 
 // Export all the actions
 export {
-  // fetchCurrentSentence,
+  selectVoice,
+  clickStop,
+  getUser,
   fetchVoiceList,
   createNewVoice,
   fetchVoiceDetail,
   modifyVoice,
   deleteVoice,
-  selectVoice,
   saveRecord,
   saveAudio,
 };
