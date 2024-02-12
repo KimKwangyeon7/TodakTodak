@@ -20,8 +20,8 @@
   </div>
   <div v-else>
     <div>
-      <RouterLink :to="{ name: 'SignUpView' }">SignUp</RouterLink>
       <RouterLink :to="{ name: 'LoginView' }">Login</RouterLink>
+      <RouterLink :to="{ name: 'SignUpView' }">SignUp</RouterLink>
     </div>
   </div>
   <RouterView />

@@ -42,8 +42,11 @@ async function fetchVoiceDetail(recordId, success, fail) {
 // }
 
 async function createNewVoice(data, success, fail) {
+  local.defaults.headers.Autorization =
+    "Bearer " + localStorage.getItem("accessToken");
+  console.log(local.defaults.headers.Autorization)
   console.log("Creating new voice with data:", data);
-  await local.post(`${url}`, JSON.stringify(data)).then(success).catch(fail);
+  await local.post(`${url}`, data).then(success).catch(fail);
 }
   
 async function modifyVoice(recordId, name, memo, success, fail) {

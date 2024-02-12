@@ -13,9 +13,8 @@
             <div class="profile-name">{{ friend.name }}</div>
             <div class="profile-memo">{{ friend.memo }}</div>
             <button class="friend-add btn btn-success btn-sm ml-2"
-              @click.stop="followFriend(friend)"
-              :class="{ 'following': friend.following }">
-              {{ friend.following ? '친구!' : '친구 신청' }}
+              @click.stop="toggleFriendship">
+              {{ buttonText }}
             </button>
           </div>
         </div>
@@ -32,24 +31,43 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-// import friends from '@/data/friends' 
-
-function goBack() {
-  window.history.back()
-}
+import { ref, watch } from 'vue'
 
 const friend = ref({
   name: '김싸피',
   memo: '오늘만 살자',
   profilePicture: '/src/assets/damgom.png',
   goals: ['와플대학 입학', '청년카페 취업', '김밥천국 승천'],
-  following: false  // 친구 추가 여부에 따라 초기값 설정
+  following: false
 })
 
-const followFriend = (friend) => {
-  friend.following = !friend.following
+const buttonText = ref('친구 신청')
+
+const goBack = () => {
+  window.history.back()
 }
+
+const toggleFriendship = () => {
+  if (!friend.value.following) {
+    // 모달 창 표시
+    if (confirm("친구 신청하겠습니까?")) {
+      friend.value.following = !friend.value.following
+      buttonText.value = '친구 신청 중'
+    }
+  } else if (friend.value.following && !friend.value.accepted) {
+    // 친구 삭제 모달 창 표시
+    if (confirm("친구를 삭제하시겠습니까?")) {
+      friend.value.following = !friend.value.following
+      buttonText.value = '친구 신청'
+    }
+  }
+}
+
+watch(() => friend.value.following, (newValue) => {
+  if (newValue && friend.value.accepted) {
+    buttonText.value = '친구!'
+  }
+})
 </script>
 
 <style scoped>
