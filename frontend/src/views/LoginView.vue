@@ -1,29 +1,20 @@
 <template>
-
-  <div>
-  <div class="loginbox"  >
-    <div style="display: flex; border-radius: 10px; color: black ; background-color: aliceblue; align-items: center; justify-content: center;" class="z-2">
-      <img src="@/assets/sleepcat.gif" alt="logo" style=" width: auto; height: 350px; border-radius: 10px;">
-      <form @submit.prevent="logIn" >
-        <div class="containtext">
-          <div>
-            <label for="email">email :    </label>
-          </div>
-          <input type="text" name="email" id="email" v-model.trim="email"> 
+  <div class="login-container">
+    <div class="loginbox">
+      <img src="@/assets/sleepcat.gif" alt="logo" class="login-img">
+      <form @submit.prevent="logIn" class="login-form">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="text" name="email" id="email" v-model.trim="email">
         </div>
-        <div class="containtext">
-          <div>
-            <label for="password">password : </label>
-          </div>
+        <div class="form-group">
+          <label for="password">Password</label>
           <input type="password" name="password" id="password" v-model.trim="password">
         </div>
-        <input style="border-radius: 5px; margin-left: 55px ; " type="submit" value="로그인">
+        <button type="submit" class="login-button">로그인</button>
       </form>
     </div>
   </div>
-</div>
-
-
 </template>
 
 <script setup>
@@ -64,25 +55,58 @@ const logIn = async function () {
 </script>
 
 
-<style>
-.loginbox{
-flex-direction: column;  
-display: flex; 
-justify-content: center; 
-align-items: center;
-margin-top: 10%;
-}
-.containtext {
-display: flex; 
-justify-content: space-around;
+<style scoped>
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.containtext > input {
-width: 60%  ;
-border-radius: 3px;
+.loginbox {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 300px;
 }
-.containtext > div {
-width:  150px  ;
-text-align: end;
+
+.login-img {
+  display: block;
+  margin: 0 auto 20px;
+  max-width: 100%;
+}
+
+.login-form .form-group {
+  margin-bottom: 20px;
+}
+
+.login-form label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.login-button {
+  background-color: #2196F3;
+  border: none;
+  border-radius: 5px;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 10px;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+  background-color: #0d8bf9;
 }
 </style>
