@@ -10,7 +10,8 @@ function listChatRoom(success, fail) {
 
 // 채팅방 생성 POST
 function createChatRoom(param, success, fail) {
-  local.defaults.headers.Authorization = "Bearer " + localStorage.getItem("accessToken");
+  local.defaults.headers.Authorization =
+    "Bearer " + localStorage.getItem("accessToken");
   local.post(`/chat/rooms`, JSON.stringify(param)).then(success).catch(fail);
   console.log("채팅방 생성 성공");
 }
@@ -35,10 +36,26 @@ async function loadMessages(chatRoomId, success, fail) {
   console.log("채팅방 조회 성공");
 }
 
+// 채팅 보내기 POST
+async function sendMessageToFriend(room_id, friend_id, message, success, fail) {
+  const requestData = {
+    member_id: friend_id,
+    room_id: room_id,
+    message_type: "text",
+    message: message,
+  };
+  await local
+    .post(`chat/${room_id}/message`, requestData)
+    .then(success)
+    .catch(fail);
+  console.log("채팅 보내기 성공");
+}
+
 export {
   listChatRoom,
   createChatRoom,
   leaveChatRoom,
   deleteChatRoom,
   loadMessages,
+  sendMessageToFriend,
 };
