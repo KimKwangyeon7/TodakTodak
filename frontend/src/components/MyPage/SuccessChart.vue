@@ -1,54 +1,90 @@
 <template>
   <div class="goal-success-rate">
-    <p class="goal-success-rate-title">월 별 성취율</p>
+    <div class="goal-success-rate-title">월 별 진행률</div>
 
-    <!-- 현재 선택된 목표의 월 별 성취율을 수평 막대 그래프로 동적으로 출력 -->
+    <!-- Chart.js를 사용하여 현재 선택된 목표의 월 별 성취율을 수평 막대 그래프로 동적으로 출력 -->
     <div class="goal-chart">
-      <div class="goal-item">
-        <p class="goal-name">{{ currentGoal.name }}</p>
-        <div class="progress-bar">
-          <div class="progress" v-for="(rate, index) in currentGoal.successRate" :key="index" :style="{ width: rate + '%' }">
-            {{ rate }}%
-          </div>
-        </div>
-      </div>
+      <canvas id="goalChart"></canvas>
     </div>
 
     <!-- 좌우 화살표로 목표를 변경할 수 있는 슬라이더 -->
     <div class="slider">
-      <button @click="prevGoal" :disabled="currentGoalIndex === 0">←</button>
-      <button @click="nextGoal" :disabled="currentGoalIndex === goals.length - 1">→</button>
+      <button class='btn' @click="prevGoal" :disabled="currentGoalIndex === 0">
+        <img src="@/assets/voice/arrow-left.png" alt=""> 
+      </button>
+      <button class='btn' @click="nextGoal" :disabled="currentGoalIndex === goals.length - 1">
+        <img src="@/assets/voice/arrow-right.png" alt="">
+      </button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { Chart, registerables } from 'chart.js';
+Chart.register(...registerables);
 
 const goals = ref([
-  { name: '정보처리기사 자격증 획득', successRate: [80, 70, 90] },
-  { name: '삼성전자 취업', successRate: [60, 50, 70] },
-  { name: '공동 프로젝트 앱 완성', successRate: [70, 80, 60] },
+  { name: '정보처리기사 자격증 획득', successRate: [20, 70, 90] },
+  { name: '삼성전자 취업', successRate: [30, 50, 70] },
+  { name: '공동 프로젝트 앱 완성', successRate: [70, 80, 90] },
   // 추가 목표는 필요에 따라 계속해서 추가
 ]);
 
-const currentGoalIndex = ref(0); // 현재 선택된 목표의 인덱스
+const currentGoalIndex = ref(0);
+
+const currentGoal = computed(() => {
+  return goals.value[currentGoalIndex.value];
+});
+
+let chartInstance = null;
+
+onMounted(() => {
+  updateChart();
+});
 
 function prevGoal() {
   if (currentGoalIndex.value > 0) {
     currentGoalIndex.value--;
+    updateChart();
   }
 }
 
 function nextGoal() {
   if (currentGoalIndex.value < goals.value.length - 1) {
     currentGoalIndex.value++;
+    updateChart();
   }
 }
 
-const currentGoal = computed(() => {
-  return goals.value[currentGoalIndex.value];
-});
+function updateChart() {
+  if (chartInstance) {
+    chartInstance.destroy();
+  }
+  const ctx = document.getElementById('goalChart').getContext('2d');
+  chartInstance = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: currentGoal.value.successRate.map((_, index) => `${index + 1}월`),
+      datasets: [{
+        label: currentGoal.value.name,
+        data: currentGoal.value.successRate,
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      indexAxis: 'x',
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      },
+      aspectRatio: 2,
+    }
+  });
+}
 </script>
 
 <style scoped>
@@ -69,51 +105,23 @@ const currentGoal = computed(() => {
 }
 
 .goal-chart {
-  width: 80%;
+  width: 100%;
   margin-top: 20px;
-}
-
-.goal-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.goal-name {
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.progress-bar {
-  width: 100%; /* 막대의 너비 설정 */
-  height: 40px; /* 그래프의 높이 설정 */
-  background-color: #ddd;
-}
-
-.progress {
-  height: 100%;
-  background-color: #4CAF50; /* 성취율에 따라 색상 변경 가능 */
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-}
-
-.progress-bar .progress {
-  color: white;
-  padding-left: 5px;
 }
 
 .slider {
-  margin-top: 20px;
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  padding: 5px;
 }
 
 .slider button {
-  font-size: 20px;
-  padding: 5px 10px;
-  margin: 0 10px;
+  padding: 10px 20px;
   cursor: pointer;
+  color: white;
   border: none;
-  background-color: #ddd;
+  border-radius: 5px;
 }
 
 .slider button:disabled {

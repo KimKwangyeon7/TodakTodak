@@ -90,16 +90,13 @@
         isAlarmed: false,
         day: '',
         time: '',
-        important: false,
-        outside: false,
-        alarmed: false,
-        checked: false,
-        completed: false,
-        todoDate: '',
-        goals: []
+        isOutside: false,
+        isChecked: false,
+        isCompleted: false,
+        
+        goals: [] // 목표
       };
     },
-    
     methods: {
       closeModal() {
         this.$emit('close-modal');
@@ -144,30 +141,15 @@
       }
     },
       async fetchGoals() {
-        console.log("fetchGoals 실행")
         try {
-          getGoalList(
-        ({ data }) => {
-          console.log("채팅목록리스트");
-          console.log(data);
-          this.goals = data;
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-          console.log('goals', this.goals)
+          const goalList = await getGoalList()
+          this.goals = goalList
           // this.goals = await getGoalList();
         } catch (error) {
           console.error('Error fetching goals:', error);
         }
       },
   
-      fourDigitTime(t) {
-        const [hours, minutes] = t.split(':')
-        return hours + minutes   
-      },
-
       eightDigitDate(d) {
         const currentDate = new Date();
         const yyyy = currentDate.getFullYear();
@@ -177,7 +159,6 @@
         return curDate
       },
   
-
       fourDigitTime(t) {
         const [hours, minutes] = t.split(':')
         return hours + minutes   
@@ -212,29 +193,6 @@
     // 에러 처리 로직 (예: 사용자에게 에러 메시지 표시)
   }
 }
-      // fnAdd() {  
-      //   const t = this.time
-      //   this.time = this.fourDigitTime(t)
-
-      //   const d = this.todoDate
-      //   this.todoDate = this.eightDigitDate(d)
-  
-      //   addTodo({
-      //     title: this.title,
-      //     content: this.content,
-      //     color: this.color,
-      //     time: this.time,
-      //     important: this.important,
-      //     outside: this.outside,
-      //     alarmed: this.alarmed,
-      //     checked: this.checked,
-      //     completed: this.completed,
-      //     todoDate: this.todoDate,
-      //   });
-  
-      //   this.closeModal()
-      // },
-
     },
     mounted() {
       this.fetchGoals();

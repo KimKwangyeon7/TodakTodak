@@ -140,7 +140,7 @@ async function q(a, e, t, s) {
       return a.match(c, s);
   }
 }
-class j {
+class D {
   /**
    * Creates a promise and exposes its resolve and reject functions as methods.
    */
@@ -150,9 +150,9 @@ class j {
     });
   }
 }
-const D = /* @__PURE__ */ new Set();
+const j = /* @__PURE__ */ new Set();
 async function F() {
-  for (const a of D)
+  for (const a of j)
     await a();
 }
 function H(a) {
@@ -183,7 +183,7 @@ class B {
    *     {@link workbox-routing~matchCallback} (if applicable).
    */
   constructor(e, t) {
-    this._cacheKeys = {}, Object.assign(this, t), this.event = t.event, this._strategy = e, this._handlerDeferred = new j(), this._extendLifetimePromises = [], this._plugins = [...e.plugins], this._pluginStateMap = /* @__PURE__ */ new Map();
+    this._cacheKeys = {}, Object.assign(this, t), this.event = t.event, this._strategy = e, this._handlerDeferred = new D(), this._extendLifetimePromises = [], this._plugins = [...e.plugins], this._pluginStateMap = /* @__PURE__ */ new Map();
     for (const s of this._plugins)
       this._pluginStateMap.set(s, {});
     this.event.waitUntil(this._handlerDeferred.promise);
@@ -1223,7 +1223,7 @@ self.addEventListener("push", function(a) {
     image: "/img/push-news.jpg",
     actions: [{
       action: "info",
-      title: "에듀싸피 ㄱ?",
+      // title: '에듀싸피 ㄱ?',
       icon: "/img/push-info.png"
     }],
     vibrate: [500, 100, 500]
@@ -1234,5 +1234,5 @@ self.addEventListener("push", function(a) {
   );
 });
 self.addEventListener("notificationclick", function(a) {
-  a.action == "like" ? clients.openWindow("https://www.ssafy.com/ksp/jsp/swp/swpMain.jsp") : a.action == "info" && clients.openWindow("https://edu.ssafy.com/comm/login/SecurityLoginForm.do"), a.notification.close();
+  a.action == "like" || a.action == "info", a.notification.close();
 }, !1);

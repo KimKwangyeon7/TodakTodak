@@ -1,47 +1,74 @@
 // router/index.js
-import { createRouter, createWebHistory } from "vue-router";
-import Main from "@/views/Main.vue";
-import AddGoal from "@/components/Goal/AddGoal.vue";
-import Board from "@/views/Board.vue";
-import Calendar from "@/views/Calendar.vue";
-import Friend from "@/views/Friend.vue";
-import Chat from "@/components/Friend/Chat.vue";
-import Meeting from "@/views/Meeting.vue";
-import Meet from "@/components/Meeting/MeetingRoom.vue";
-import MyPage from "@/views/MyPage.vue";
-import MyPageSettings from "@/components/MyPage/MypageSettings.vue";
-import UserInfoEdit from "@/components/MyPage/UserInfoEdit.vue";
-import Habit from "@/views/Habit.vue";
+import { createRouter, createWebHistory } from 'vue-router'
+import Main from '@/views/Main.vue'
+import AddGoal from '@/views/Goal/AddGoal.vue'
+import Board from '@/views/Board.vue'
+import Calendar from '@/views/Calendar.vue'
+import Friend from '@/views/Friend.vue'
+import FriendRequestList from '@/components/Friend/FriendRequestList.vue'
+import Chat from '@/components/Friend/Chat.vue'
+import Meeting from '@/views/Meeting.vue'
+import Meet from '@/components/Meeting/MeetingRoom.vue'
+import MyPage from '@/views/MyPage.vue'
+import MyPageSettings from '@/components/MyPage/MypageSettings.vue'
+import UserInfoEdit from '@/components/MyPage/UserInfoEdit.vue'
+import Habit from '@/views/Habit.vue'
+import TodoList from '@/components/Todo/TodoList.vue'
+import HabitList from '@/components/Habit/HabitList.vue'
+import CalendarDetail from '@/views/CalendarDetail.vue'
+import subscribe from '@/components/subscribe_page.vue'
+import pushnotify from '@/components/pushnotify_page.vue'
+import FriendProfile from '@/components/Friend/FriendProfile.vue'
+import LoginView from '@/views/LoginView.vue'
+import SignupView from '@/views/SignupView.vue'
 // import Voice from '@/views/Voice.vue'
 import Records from "@/views/Record/Record.vue";
 // import VoiceTrainer from '@/views/Voice/VoiceTrainer.vue'
 import Trainer from "@/views/Record/Trainer.vue";
-import CalendarDetail from "@/views/CalendarDetail.vue";
-import Notification from "@/components/Notifications.vue";
-import subscribe from "@/components/subscribe_page.vue";
-import pushnotify from "@/components/pushnotify_page.vue";
-import FriendProfile from "@/components/Friend/FriendProfile.vue";
-import LoginView from "@/views/LoginView.vue";
-import SignupView from "@/views/SignupView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+	{
+		name: '',
+		path: '/',
+		component: Main,
+	},
+	{
+		name: 'main',
+		path: '/main',
+		component: Main,
+	},
+	{
+		name: 'todoList',
+		path: '/todoList',
+		component: TodoList,
+	},
+	{
+		name: 'habitList',
+		path: '/habitList',
+		component: HabitList,
+	},
+	{
+		name: 'goal',
+		path: '/goal',
+		component: AddGoal,
+	},
     {
-      name: "",
-      path: "/",
-      component: Main,
-    },
-    {
-      name: "main",
-      path: "/main",
-      component: Main,
-    },
-    {
-      name: "goal",
-      path: "/goal",
-      component: AddGoal,
-    },
+		name: 'friend',
+		path: '/friend',
+		component: Friend,
+	},
+	{
+		name: 'friendRequestList',
+		path: '/friendRequestList',
+		component: FriendRequestList,
+	},
+	{
+		name: 'chat',
+		path: '/chat',
+		component: Chat,
+	},
     {
       name: "board",
       path: "/board",

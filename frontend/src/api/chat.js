@@ -2,15 +2,16 @@ import { localAxios } from "@/util/http-commons";
 
 const local = localAxios();
 
-
 function listChatRoom(success, fail) {
-  local.defaults.headers.Authorization = 'Bearer '+ localStorage.getItem("accessToken");
+  local.defaults.headers.Authorization =
+    "Bearer " + localStorage.getItem("accessToken");
   local.get(`/chat/rooms`).then(success).catch(fail);
 }
 
 // 채팅방 생성 POST
 function createChatRoom(param, success, fail) {
-  local.defaults.headers.Authorization = 'Bearer '+ localStorage.getItem("accessToken");
+  local.defaults.headers.Authorization =
+    "Bearer " + localStorage.getItem("accessToken");
   local.post(`/chat/rooms`, JSON.stringify(param)).then(success).catch(fail);
   console.log("채팅방 생성 성공");
 }
@@ -28,8 +29,10 @@ async function deleteChatRoom(room_id, success, fail) {
 }
 
 // 채팅방 조회 GET
-async function fetchChatRoom(room_id, success, fail) {
-  await local.get(`/chat/rooms/${room_id}`).then(success).catch(fail);
+async function loadMessages(chatRoomId, success, fail) {
+  local.defaults.headers.Authorization =
+    "Bearer " + localStorage.getItem("accessToken");
+  await local.get(`/chat/rooms/${chatRoomId}/message`).then(success).catch(fail);
   console.log("채팅방 조회 성공");
 }
 
@@ -48,12 +51,11 @@ async function sendMessageToFriend(room_id, friend_id, message, success, fail) {
   console.log("채팅 보내기 성공");
 }
 
-
 export {
-    listChatRoom,
-    createChatRoom,
-    leaveChatRoom,
-    deleteChatRoom,
-    fetchChatRoom,
-    sendMessageToFriend,
+  listChatRoom,
+  createChatRoom,
+  leaveChatRoom,
+  deleteChatRoom,
+  loadMessages,
+  sendMessageToFriend,
 };
