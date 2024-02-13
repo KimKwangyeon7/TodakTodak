@@ -7,7 +7,7 @@
         @close-modal="closeModal"
       />
     </div>
-    div
+    
   <div class="calendar-wrapper m-3" style="margin-top: 70px;">
     <main class="calendar-body">
       <div class="button-container">
@@ -15,7 +15,6 @@
           <img src="@/assets/back.png" alt="">
         </button>
         
-        <div>아이템:{{ JSON.stringify(currentItem) }}</div>
         <button class="add-button" @click="openModal('CalendarAddTodo')">+</button>
       </div>
       <div class="calendar-weekdays">

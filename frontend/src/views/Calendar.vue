@@ -42,19 +42,19 @@
 >
   <span class="day">{{ date.dayNumber }}</span>
   <!-- 선형 바를 날짜 div 안에 추가 -->
-  <div v-if="isToday(date) && today" class="color-bars">
+  <div v-if="todosForDate(date).length" class="color-bars">
     <div
-      v-for="color in uniqueColors"
-      :key="color"
-      class="color-bar"
-      :style="{ backgroundColor: color }"
-    ></div>
-  </div>
+    v-for="color in uniqueColorsForDate(date)"
+    :key="color"
+    class="color-bar"
+    :style="{ backgroundColor: color }"
+  ></div>
+</div>
 </div>
 </div>
         </div>
+  
       </div>
-    
   </main>
 
 </template>
@@ -62,9 +62,10 @@
 <script>
 import { useGoalsStore } from '@/stores/goals';
 // import { getTodosByMonth } from "@/api/calendar"
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import { useRoute } from 'vue-router';
 import { getTodoList } from '@/api/todos'
+import { getTodoListByMonth } from '@/api/todos'
 
 import moment from 'moment'
 
@@ -74,13 +75,24 @@ name: 'Calendar',
 //   this.fetchTodos(); // 컴포넌트가 마운트될 때 fetchTodos 호출
 // },
 setup() {
+  const fullDate = ref(moment()); // fullDate를 반응형 데이터로 선언
+
+  watch(fullDate, (newValue, oldValue) => {
+    // fullDate가 변경될 때 수행할 작업
+    console.log(`fullDate가 ${oldValue}에서 ${newValue}로 변경되었습니다.`);
+    // 필요한 로직 추가
+  });
+
   const goalsStore = useGoalsStore();
 
 // 모든 목표의 색상 정보를 배열로 반환하는 계산된 속성
   const goalColors = computed(() => goalsStore.goals.map(goal => goal.color));
   console.log("가져온색상:", goalColors.value);
-
+  const monthTodos = ref([])
   const todos = ref([])
+  const nowMonth = ref('')
+  const currentMonth = moment().format('MM');
+  nowMonth.value = currentMonth;
   const route = useRoute(); // 현재 라우트에 접근
   const selectedDate = ref(route.params.selectedDate || moment().format('YYYY-MM-DD')); // URL 파라미터에서 selectedDate 가져오거나 기본값 설정
   onMounted(async () => {
@@ -94,38 +106,55 @@ setup() {
     } catch (error) {
       console.error('Error fetching todos:', error); // 에러 처리
     }
+    try {
+      const formattedMonth = moment(selectedDate.value).format('MM')
+      // console.log('formattedMonth:', formattedMonth)
+      const response = await getTodoListByMonth(formattedMonth); // API 호출을 통해 Todo 목록을 가져옴
+      monthTodos.value = response; // 가져온 Todo 목록으로 로컬 상태 업데이트
+      // console.log('todos2:', monthTodos.value)
+    } catch (error) {
+      console.error('Error fetching todos:', error); // 에러 처리
+    }
   });
+
   const uniqueColors = computed(() => {
     const colors = todos.value.map(todo => todo.color);
     return [...new Set(colors)]; // Set을 사용하여 중복 제거 후, 다시 배열로 변환
   });
+
   return { 
     goalColors,
     todos,
-    uniqueColors
+    uniqueColors,
+    monthTodos,
+    nowMonth,
+    fullDate
    };
 },
 data() {
   return {
     monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+    monthIntNames: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
     today: moment(),
     dateContext: moment(),
     selectedDate: moment(),
     days: ["월", "화", "수", "목", "금", "토", "일"],
     fixtureDate: [],
     activeDates: [],
-    isStyleCurrentDate: true
+    isStyleCurrentDate: true,
+    currentMonth: this.dateContext ? this.dateContext.format('MM') : null
   }
 },
 props: {
   selectedColor: String
 },
 computed: {
-  goalColors() {
-    const goalsStore = useGoalsStore();
-    // 목표 배열에서 각 목표의 색상만 추출하여 배열로 반환
-    return goalsStore.goals.map(goal => goal.color);
-  },
+  // goalColors() {
+  //   const goalsStore = useGoalsStore();
+  //   // 목표 배열에서 각 목표의 색상만 추출하여 배열로 반환
+  //   return goalsStore.goals.map(goal => goal.color);
+  // },
+
   monthNumber: function () {
   // 월 이름을 숫자로 변환
   return this.monthNames.indexOf(this.month) + 1;
@@ -209,9 +238,10 @@ computed: {
 
       dateList[countDayInCurrentMonth] = {
         key: countDayInCurrentMonth,
-        dayNumber: formattedDay,
+        dayNumber: formattedDay, 
         blank: false,
         today: false,
+        dates: moment({year: this.year, month: this.monthIntNames, day: day}).format('YYYYMMDD'), // YYYYMMDD 형식의 문자열
         now:
           formattedDay === this.initialDate &&
           this.todayInCurrentMonthAndYear,
@@ -273,17 +303,77 @@ computed: {
   }
 },
 methods: {
-  // fetchTodos() {
-  //   const month = this.dateContext.format('YYYY-MM')
-  //   getTodosByMonth(month,
-  //   (response) => {
-  //     console.log("성공적인 투두가져오기:", response.data)
-  //   },
-  //   (error) => {
-  //     console.error("투두가져오는거 실패:", error)
-  //   }
-  //   )
-  // },
+  // 이전달로 이동
+  subtractMonth() {
+    this.dateContext = moment(this.dateContext).subtract(1, "month");
+    this.fullDate = moment(this.dateContext).startOf('month'); // 해당 달의 첫 번째 날로 fullDate 설정
+    this.updateMonthTodos(); // 투두 목록 업데이트
+  },
+
+  // 다음 달로 이동
+  addMonth() {
+    this.dateContext = moment(this.dateContext).add(1, "month");
+    this.fullDate = moment(this.dateContext).startOf('month'); // 해당 달의 첫 번째 날로 fullDate 설정
+    this.updateMonthTodos(); // 투두 목록 업데이트
+  },
+
+  // 달을 넘길 때 호출되는 메서드
+  updateMonthTodos() {
+    const currentMonth = this.dateContext.format('MM');
+    getTodoListByMonth(currentMonth)
+      .then(response => {
+        this.monthTodos = response;
+        // console.log('새로불러온달투두', this.monthTodos)
+      })
+      .catch(error => {
+        console.error('Error fetching todos:', error);
+      });
+  },
+  // 음 해당 날짜에 투두가 있는지 확인
+//   todosForDate(date) {
+//   const fullDate = moment(date.dates, 'YYYYMMDD');
+//   const currentMonth = this.dateContext.format('MM');
+
+//   return this.monthTodos.filter(todo => {
+//     const todoDate = moment(todo.todoDate, 'YYYYMMDD');
+//     const isSameDayAndMonth = todoDate.isSame(fullDate, 'day') && todoDate.format('MM') === currentMonth;
+//     if (isSameDayAndMonth) {
+//         console.log('Matching date:', todoDate.format('YYYY-MM-DD'));
+//     }
+//     return isSameDayAndMonth;
+//   });
+// },
+  todosForDate(date) {
+    const fullDate = moment(date.dates, 'YYYYMMDD');
+    // console.log('fullDate:', fullDate)
+    const currentMonth = this.dateContext.format('MM');
+    
+    // 특정 날짜에 해당하는 투두들을 필터링하고, 해당 달에 속하는지도 확인
+    return this.monthTodos.filter(todo => {
+      // console.log('새로변한 monthTodos:', this.monthTodos)
+      // console.log('dateContext:', currentMonth)
+      const todoDate = moment(todo.todoDate, 'YYYYMMDD');
+      // console.log('todoDate:', todoDate.format('MM'))
+      console.log()
+      // return todoDate.isSame(fullDate, 'day') && todoDate.format('MM') === currentMonth;
+      return todoDate.format('DD') === fullDate.format('DD') && todoDate.format('MM') === currentMonth;
+
+    });
+  },
+
+  uniqueColorsForDate(date) {
+    const todos = this.todosForDate(date);
+    const colors = todos.map(todo => todo.color);
+    return [...new Set(colors)]; // 중복 제거
+  },
+
+  hasTodos(date) {
+    const fullDate = moment(date.dates, 'YYYYMMDD');
+    return this.monthTodos.some(todo => {
+      return moment(todo.todoDate, 'YYYYMMDD').isSame(fullDate, 'day');
+    });
+  },
+  
   isToday(date) {
     const today = moment();
     // console.log('today:', today)
@@ -301,12 +391,12 @@ methods: {
           this.setSelectedDate(date, index);
       }
   },
-  addMonth: function () {
-    this.dateContext = this.nextMonth;
-  },
-  subtractMonth: function () {
-    this.dateContext = this.previousMonth;
-  },
+  // addMonth: function () {
+  //   this.dateContext = this.nextMonth;
+  // },
+  // subtractMonth: function () {
+  //   this.dateContext = this.previousMonth;
+  // },
   setSelectedDate: function (date, index) {
     console.log('Year:', this.year);  // 수정된 부분: date에서 year를 바로 가져오도록 변경
     console.log('Month:', this.month);
