@@ -5,13 +5,15 @@
     </p>
 
     <div class="sentence-box">
-      <p>다음 문장을 소리내어 읽으세요.</p>
-      <p>{{ currentSentence.sentence || '문장을 불러오는 중...' }}</p>
-      <p>{{ this.currentSentenceId + 1 }} / {{ sentences.length }}</p>
-      <div class="buttons">
+      <div class="inner-box">
+        <p class="inner-instruction-box">다음 문장을 소리내어 읽으세요.</p>
+        <p style="font-size: 16px">{{ currentSentence.sentence || '문장을 불러오는 중...' }}</p>
+      </div>
+      <div class="buttons inner-buttons-box">
         <button class="btn left-btn" @click="prevSentence" :disabled="currentSentenceId === 0">
           <img src="@/assets/voice/arrow-left.png" alt="">
         </button>
+        <p>{{ this.currentSentenceId + 1 }} / {{ sentences.length }}</p>
         <button class="btn right-btn" @click="nextSentence" :disabled="currentSentenceId === sentences.length - 1">
           <img src="@/assets/voice/arrow-right.png" alt="">
         </button>
@@ -21,38 +23,40 @@
     <p class="voice-title">음성 녹음</p>
 
     <div class="voice-box">
-      <div v-if="currentRecordHistory.length > 0">
-        <div v-for="record in currentRecordHistory" :key="record.id">
-          <div v-if="record.elapsedTime > 60">
-            <div>{{ record.promptNum }}번 녹음 시간: {{ Math.floor(record.elapsedTime / 60) }} 분 {{ record.elapsedTime % 60 }} 초</div>
+      <div class="inner-box-3">
+        <div v-if="currentRecordHistory.length > 0">
+          <div v-for="record in currentRecordHistory" :key="record.id">
+            <div v-if="record.elapsedTime > 60">
+              <div>{{ record.promptNum }}번 녹음 시간: {{ Math.floor(record.elapsedTime / 60) }} 분 {{ record.elapsedTime % 60 }} 초</div>
+            </div>
+            <div v-else>
+              <div>{{ record.promptNum }}번 녹음 시간: {{ record.elapsedTime }} 초</div>
+            </div>
+          </div>
+        </div>
+          
+        <div v-if="recording">
+            <div v-if="elapsedTime > 60">
+                <div>{{ currentSentenceId + 1 }}번 녹음 시간: {{ Math.floor(elapsedTime / 60) }} 분 {{ elapsedTime % 60 }} 초</div>
+            </div>
+            <div v-else>
+                <div>{{ currentSentenceId + 1 }}번 녹음 시간: {{ elapsedTime }} 초</div>
+            </div>
+        </div>
+      </div>
+      <div class="inner-box-4">
+          <div v-if="totalRecordingTime > 60">
+            <div>총 녹음 시간: {{ Math.floor(totalRecordingTime / 60) }} 분 {{ totalRecordingTime }} 초</div>
           </div>
           <div v-else>
-            <div>{{ record.promptNum }}번 녹음 시간: {{ record.elapsedTime }} 초</div>
+            <div>총 녹음 시간: {{ totalRecordingTime }} 초</div>
           </div>
         </div>
-      </div>
-        
-      <div v-if="recording">
-          <div v-if="elapsedTime > 60">
-              <div>{{ currentSentenceId + 1 }}번 녹음 시간: {{ Math.floor(elapsedTime / 60) }} 분 {{ elapsedTime % 60 }} 초</div>
-          </div>
-          <div v-else>
-              <div>{{ currentSentenceId + 1 }}번 녹음 시간: {{ elapsedTime }} 초</div>
-          </div>
-      </div>
-      <div>
-        <div v-if="totalRecordingTime > 60">
-          <div>총 녹음 시간: {{ Math.floor(totalRecordingTime / 60) }} 분 {{ totalRecordingTime }} 초</div>
-        </div>
-        <div v-else>
-          <div>총 녹음 시간: {{ totalRecordingTime }} 초</div>
-        </div>
-      </div>
       <div>
         <button class="mr-4" @click="record">
-          {{ recordingStatus }}
+          <img :src="recordingStatus === 'Record Sound' ? recordSoundImage : stopRecordingImage" alt="Recording Status" />
+          <!-- {{ recordingStatus }} -->
         </button>
-        <button color="primary" @click="fnFinish" :disabled="!isAllRecordingsDone">녹음 완료</button>
       </div>
     </div>
 
@@ -69,6 +73,10 @@ import { getUser, saveRecord, goOutFromTrainer } from '@/api/records'
 import { loadKoreanCorpus } from '@/stores/koreanCorpus'
 import { useRecordHistorystore } from '@/stores/recordHistory'
 import { useRoute } from 'vue-router'
+import { startLearning } from '@/api/learning'
+
+import recordSoundImage from '@/assets/voice/record_sound.png';
+import stopRecordingImage from '@/assets/voice/stop_recording.png';
 
 
 export default {
@@ -82,7 +90,7 @@ export default {
     const currentSentence = computed(() => sentences.value[currentSentenceId.value] || '');
 
     loadKoreanCorpus().then(sentencesArray => {
-      sentences.value = sentencesArray.slice(0, 5); // 4000천 개의 문장 중에 우선 5개만
+      sentences.value = sentencesArray.slice(0, 3); // 4000천 개의 문장 중에 우선 5개만
       console.log('sentences: ', sentences.value)
     }).catch(error => {
       console.error('Error loading Korean corpus:', error);
@@ -120,7 +128,9 @@ export default {
       recordingStartTime: null,
       elapsedTime: 0,
       recordingDurations: [],
-      recordId: null
+      recordId: null,
+      recordSoundImage,
+      stopRecordingImage,
     };
   },
   computed: {
@@ -134,9 +144,6 @@ export default {
     },
     recordHistory() {
       return this.recordHistoryStore.recordHistory;
-    },
-    isAllRecordingsDone() {
-      return this.recordHistoryStore.recordHistory?.length === this.sentences?.length;
     },
     totalRecordingTime() {
       const recordHistory = this.recordHistoryStore.histories[this.recordId];
@@ -181,6 +188,18 @@ export default {
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
+      }
+    },
+    async checkAllRecordingsDone() {
+      if (this.currentRecordHistory.length === this.sentences.length) {
+        const learning = window.confirm('모든 문장 녹음이 끝났으니 음성 모델을 학습합니다!')
+        if (learning) {
+          try {
+            await startLearning(this.recordId);
+          } catch (error) {
+            console.error(error);
+          }
+        }
       }
     },
     handleBackButton() {
@@ -267,15 +286,13 @@ export default {
 
       recorder.onComplete = (recorder, blob) => {
         console.log('onCompleteblob: ', blob)
+        this.blob = blob;
         this.recordHistoryStore.addRecord(this.recordId, {
           id: this.currentSentenceId, // Assuming this is the correct id to use
           promptNum: this.currentSentenceId + 1,
           elapsedTime: this.elapsedTime,
         });
-        this.blob = blob;
-        console.log("recordHistory", this.recordHistory)
-
-
+ 
         if (this.blob) {
         saveRecord(
           this.recordId,
@@ -283,6 +300,7 @@ export default {
           // this.onSuccess, // pass the onSuccess callback
           // this.onFail    // pass the onFail callback
         );
+        this.checkAllRecordingsDone()
       } else {
         console.error('Blob is not defined at the time of stopping the recording.');
       }
@@ -332,18 +350,61 @@ export default {
 <style scoped>
 .sentence-box {
   /* overflow: auto; */
-  overflow-y: scroll; /* 오직 수직 스크롤만 활성화 */
-  max-height: 500px; /* 적절한 최대 높이 설정 */
+  /* overflow-y: scroll;  */
+  /* 오직 수직 스크롤만 활성화 */
+  /* max-height: 500px; 적절한 최대 높이 설정 */
   justify-content: space-between;
   text-align: center;
   background-color: #EAF3F9;
   padding: 10px;
   margin: 10px 0;
-  height: 260px;
+  height: 380px;
   border-radius: 24px;
   box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.25);
   font-size: 20px;
   position: relative;
+}
+
+.inner-box-3 {
+  border: 1px solid #e0e0e0; /* 테두리 색 */
+  border-radius: 24px; /* 모서리 둥글게 */
+  padding: 40px; /* 내부 여백 */
+  background-color: #f9f9f9; /* 배경색 */
+  height: 10px; /* 고정 높이 설정 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* 세로축 중앙 정렬 */
+  overflow-y: auto; /* 내용이 넘칠 경우 스크롤바 생성 */
+}
+
+.inner-box-4 {
+  border: 1px solid #e0e0e0; /* 테두리 색 */
+  border-radius: 24px; /* 모서리 둥글게 */
+  padding: 40px; /* 내부 여백 */
+  background-color: #f9f9f9; /* 배경색 */
+  height: 8px; /* 고정 높이 설정 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* 세로축 중앙 정렬 */
+}
+
+.inner-buttons-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* This ensures vertical centering */
+  border: 1px solid #e0e0e0; /* Keep your styling */
+  border-radius: 24px; /* Keep your styling */
+  padding: 30px; /* Adjust as necessary */
+  background-color: #f9f9f9; /* Keep your styling */
+}
+
+
+
+.inner-buttons-box {
+  border: 1px solid #e0e0e0; /* 테두리 색 */
+  border-radius: 24px; /* 모서리 둥글게 */
+  padding: 30px; /* 내부 여백 */
+  background-color: #f9f9f9; /* 배경색 */
 }
 
 .sentence-btn {
@@ -376,10 +437,10 @@ export default {
 }
 
 
-.left-btn {
+/* .left-btn {
   width: 180px;
   left: 0;
-}
+} */
 
 .right-btn {
   width: 180px;
