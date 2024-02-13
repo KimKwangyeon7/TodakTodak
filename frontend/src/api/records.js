@@ -84,72 +84,6 @@ async function selectVoice(recordId, success, fail) {
             fail(error); // 실패 콜백 호출
          });
 }
-  
-// async function saveRecord(recordId, blob, prompt, duration) {
-//   console.log('saveRecord recordId', recordId);
-//   console.log('saveRecord blob', blob);
-//   console.log('saveRecord prompt', prompt);
-//   console.log('saveRecord duration', duration);
-
-//   local.defaults.headers.Authorization = "Bearer " + localStorage.getItem("accessToken");
-//   if (!blob) {
-//     console.error("No recording available to save");
-//     return;
-//   }
-
-//   // Prepare form data to send the file through a POST request
-//   const formData = new FormData();
-//   formData.append('audio', blob, `${recordId}.wav`); // Make sure to include the file name
-//   formData.append('prompt', prompt);
-//   formData.append('duration', duration);
-  
-//   try {
-//     const response = await local.post(`${url}/${recordId}/save/audio`, formData, {
-//       headers: {
-//         // Add any specific headers your server might require for file uploads
-//         'Content-Type': 'multipart/form-data'
-//       }
-//     });
-//     console.log(`${prompt}번 녹음 완료`, response.data);
-//   } catch (error) {
-//     console.error('Error saving record:', error);
-//   }
-// }
-
-// -----------------------------------------------------------------------------
-
-// async function saveRecord(recordId, blob, prompt, duration) {
-//   console.log('saveRecord recordId', recordId);
-//   console.log('saveRecord blob', blob);
-
-//   if (!blob) {
-//     console.error("No recording available to save");
-//     return;
-//   }
-
-//   // Prepare form data to send the file through a POST request
-//   const formData = new FormData();
-//   formData.append('audio', blob, `${recordId}.wav`); // Make sure to include the file name
-//   formData.append('prompt', prompt); // 'prompt' 값을 추가합니다.
-//   formData.append('duration', duration.toString()); // 'duration' 값을 추가합니다. 숫자를 문자열로 변환할 수 있습니다.
-//   console.log('formData', formData, prompt, duration)
-
-//   try {
-//     const response = await local.post(`${url}/${recordId}/save/audio`, formData, {
-//       headers: {
-//         'Authorization': "Bearer " + localStorage.getItem("accessToken"),
-//         // 'Content-Type': 'multipart/form-data' This is not necessary as it's set automatically
-//       }
-//     });
-//     console.log('Recording saved successfully:', response.data);
-//     console.log('response: ', response)
-//     console.log('response.status: ', response.status)
-//     console.log(`${prompt}번 녹음 완료! (${duration}초 소요)`)
-//   } catch (error) {
-//     console.error('Error saving record:', error);
-//   }
-// }
-
 
 async function saveRecord(recordId, audioBlob) {
   if (!audioBlob) {
@@ -175,7 +109,7 @@ async function saveRecord(recordId, audioBlob) {
 }
 
 
-async function saveAudio(recordId, prompt, time, success, fail) {
+async function goOutFromTrainer(recordId, prompt, time, success, fail) {
   console.log('saveAudiorecordId', recordId)
   console.log('saveAudioprompt', prompt)
   console.log('saveAudiotime', time)
@@ -222,5 +156,5 @@ export {
   modifyVoice,
   deleteVoice,
   saveRecord,
-  saveAudio,
+  goOutFromTrainer,
 };

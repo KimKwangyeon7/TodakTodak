@@ -66,7 +66,7 @@
 
 <script>
 import { ref, computed } from 'vue'
-import { saveRecord, saveAudio } from '@/api/records'
+import { saveRecord, goOutFromTrainer } from '@/api/records'
 import { loadKoreanCorpus } from '@/stores/koreanCorpus'
 import { useRecordHistorystore } from '@/stores/recordHistory'
 import { useRoute } from 'vue-router'
@@ -285,11 +285,13 @@ export default {
       console.log('goOuttime: ', this.totalRecordingTime)
       console.log('goOutsuccess: ', this.onSuccess)
       console.log('goOutfail: ', this.onFail)
-      saveAudio(this.recordId, 
-                this.currentSentenceId + 1,
-                this.totalRecordingTime,
-                this.onSuccess,
-                this.onFail)
+      goOutFromTrainer(
+        this.recordId, 
+        this.currentSentenceId + 1,
+        this.totalRecordingTime,
+        this.onSuccess,
+        this.onFail
+      )
       this.$router.push({name: 'Records'})
     }
   },
