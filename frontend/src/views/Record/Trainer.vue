@@ -7,7 +7,7 @@
     <div class="sentence-box">
       <p>다음 문장을 소리내어 읽으세요.</p>
       <p>{{ currentSentence.sentence || '문장을 불러오는 중...' }}</p>
-      <p>{{ currentSentenceId + 1 }} / {{ sentences.length }}</p>
+      <p>{{ this.currentSentenceId + 1 }} / {{ sentences.length }}</p>
       <div class="buttons">
         <button class="btn left-btn" @click="prevSentence" :disabled="currentSentenceId === 0">
           <img src="@/assets/voice/arrow-left.png" alt="">
@@ -34,10 +34,10 @@
         
       <div v-if="recording">
           <div v-if="elapsedTime > 60">
-              <div>{{ currentSentenceId + 1}}번 녹음 시간: {{ Math.floor(elapsedTime / 60) }} 분 {{ elapsedTime % 60 }} 초</div>
+              <div>{{ currentSentenceId + 1 }}번 녹음 시간: {{ Math.floor(elapsedTime / 60) }} 분 {{ elapsedTime % 60 }} 초</div>
           </div>
           <div v-else>
-              <div>{{ currentSentenceId + 1}}번 녹음 시간: {{ elapsedTime }} 초</div>
+              <div>{{ currentSentenceId + 1 }}번 녹음 시간: {{ elapsedTime }} 초</div>
           </div>
       </div>
       <div>
@@ -169,7 +169,12 @@ export default {
         if (userData) {
           console.log('userData.prompt: ', userData.prompt)
           console.log('userData.time: ', userData.time)
-          this.currentSentenceId = parseInt(userData.prompt) - 1; // getUser에서 받은 prompt 값을 현재 문장 ID로 설정
+          
+          if (parseInt(userData.prompt) - 1 >= this.sentences.length) {
+            this.currentSentenceId = this.sentences.length; // getUser에서 받은 prompt 값을 현재 문장 ID로 설정
+          } else {
+            this.currentSentenceId = parseInt(userData.prompt) - 1; // getUser에서 받은 prompt 값을 현재 문장 ID로 설정
+          }
           this.totalRecordingTime = parseInt(userData.time); // getUser에서 받은 time 값을 총 녹음 시간으로 설정
           console.log('loadUserData this.currentSentenceId: ', this.currentSentenceId)
           console.log('loadUserData this.totalRecordingTime: ', this.totalRecordingTime)
@@ -309,7 +314,7 @@ export default {
       console.log('goOutfail: ', this.onFail)
       goOutFromTrainer(
         this.recordId, 
-        this.currentSentenceId + 1,
+        this.currentSentenceId,
         this.totalRecordingTime,
         this.onSuccess,
         this.onFail
