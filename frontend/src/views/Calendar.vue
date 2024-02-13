@@ -325,13 +325,19 @@ this.selectedDate = moment({
   day: formattedDay
 });
 
-console.log('Formatted Date2:', this.selectedDate.format('YYYY-MM-DD'));
+console.log('Formatted Date2:', this.selectedDate.format('YYYYMMDD'));
 
 if (!this.selectedDate.isValid()) {
   console.error('Invalid Date!');
 }
 this.$router.push({
-  name: 'CalendarDetail',
+  name: 'CalendarDetail', 
+  params: {
+    selectedDate: this.selectedDate.isValid() ? this.selectedDate.format('YYYY-MM-DD') : null,
+  },
+});
+this.$router.push({
+  name: 'CalendarAddTodo', 
   params: {
     selectedDate: this.selectedDate.isValid() ? this.selectedDate.format('YYYY-MM-DD') : null,
   },
