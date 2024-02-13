@@ -47,7 +47,7 @@ export default {
         console.error('Error updating voice:', error);
       }
     },
-    async recordCont() {
+    recordCont() {
       try {
         this.$router.push({ name: 'Trainer', params: { recordId: this.item.id } });
       } catch (error) {

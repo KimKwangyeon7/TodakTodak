@@ -1,7 +1,8 @@
 <template>
   <div class="app mt-5">
     <p class="voice-title">음성 학습
-      <button class='btn' @click="$router.back()">back</button>
+      <!-- <button class='btn' @click="$router.go(-1)">back</button> -->
+      <button class='btn' @click="goOut">back</button>
     </p>
 
     <div class="sentence-box">
@@ -71,7 +72,6 @@ import { useRecordHistorystore } from '@/stores/recordHistory'
 import { useRoute } from 'vue-router'
 
 
-
 export default {
   name: 'VoiceTrainer',
   setup() {
@@ -102,6 +102,7 @@ export default {
     } else {
       console.error('RecordId is not defined in the URL');
     }
+
   },
   data() {
     return {
@@ -252,10 +253,8 @@ export default {
         saveRecord(
           this.recordId,
           this.blob,
-          this.currentSentenceId + 1,
-          this.elapsedTime,
-          this.onSuccess, // pass the onSuccess callback
-          this.onFail    // pass the onFail callback
+          // this.onSuccess, // pass the onSuccess callback
+          // this.onFail    // pass the onFail callback
         );
       } else {
         console.error('Blob is not defined at the time of stopping the recording.');
@@ -280,14 +279,18 @@ export default {
       this.recordingStartTime = null;
     },
 
-
-    async fnFinish() {
-      saveAudio({
-        promptNum: this.sentences.length,
-        success: this.onSuccess,
-        fail: this.onFail
-      })
-      this.$router.push({name: 'Record'})
+    async goOut() {
+      console.log('goOutrecordId: ', this.recordId)
+      console.log('goOutprompt: ', this.currentSentenceId + 1)
+      console.log('goOuttime: ', this.totalRecordingTime)
+      console.log('goOutsuccess: ', this.onSuccess)
+      console.log('goOutfail: ', this.onFail)
+      saveAudio(this.recordId, 
+                this.currentSentenceId + 1,
+                this.totalRecordingTime,
+                this.onSuccess,
+                this.onFail)
+      this.$router.push({name: 'Records'})
     }
   },
 };

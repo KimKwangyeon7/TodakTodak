@@ -175,20 +175,36 @@ async function saveRecord(recordId, audioBlob) {
 }
 
 
-async function saveAudio(recordId, promptNum, time, success, fail) {
-  local.defaults.headers.Authorization = "Bearer " + localStorage.getItem("accessToken");
+async function saveAudio(recordId, prompt, time, success, fail) {
+  console.log('saveAudiorecordId', recordId)
+  console.log('saveAudioprompt', prompt)
+  console.log('saveAudiotime', time)
+  console.log('saveAudiosuccess', success)
+  console.log('saveAudiofail', fail)
 
   // Prepare the request payload
   const payload = {
-    promptNum: promptNum,
+    prompt: prompt,
     time: time
   };
 
+  console.log(payload)
+
   try {
-    // Send the POST request
-    const response = await local.post(`${url}/${recordId}/save/member`, payload);
+    local.defaults.headers.Authorization = "Bearer " + localStorage.getItem("accessToken");
+    // const response = await local.post(`${url}/${recordId}/save/member`, payload);
+    // Construct the query parameters
+    const queryParams = new URLSearchParams({ promptNum: prompt, time: time }).toString();
+    // Make the POST request to the server with query params
+    const response = await local.post(`${url}/${recordId}/save/member?${queryParams}`);
+    
     console.log('Audio save record response:', response.data);
     if (success) success(response);
+    console.log('recordId', recordId)
+    console.log('prompt', prompt)
+    console.log('time', time)
+    console.log('success', success)
+    console.log('fail', fail)
   } catch (error) {
     console.error('Error saving audio record:', error);
     if (fail) fail(error);
