@@ -23,6 +23,7 @@ app.use(setupCalendar, {})
 
 const memberStore = useMemberStore()
 memberStore.initializeAuth()
+// app.config.globalProperties.$messaging = firebaseMessaging
 
 app.mount('#app')
 
