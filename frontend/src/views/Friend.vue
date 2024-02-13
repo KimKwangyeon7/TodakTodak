@@ -37,7 +37,6 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 
 import FriendProfile from '@/components/Friend/FriendProfile.vue'
-import Chat from '@/components/Friend/Chat.vue'
 import FriendRequestList from '@/components/Friend/FriendRequestList.vue'
 
 const router = useRouter()
