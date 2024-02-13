@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { modifyVoice } from '@/api/records'
+import { modifyVoice, getUser } from '@/api/records'
 
 
 export default {
@@ -48,11 +48,7 @@ export default {
       }
     },
     recordCont() {
-      try {
         this.$router.push({ name: 'Trainer', params: { recordId: this.item.id } });
-      } catch (error) {
-        console.error('Error navigating to Trainer:', error);
-      }
     }
   }
 }

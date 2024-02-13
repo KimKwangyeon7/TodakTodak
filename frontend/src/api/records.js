@@ -4,9 +4,17 @@ const local = localAxios();
 const url = "/records"
 
 async function getUser(recordId, success, fail) {
-  console.log('getUser executed')
+  console.log('getUser 실행')
   local.defaults.headers.Authorization = "Bearer " + localStorage.getItem("accessToken");
-  await local.get(`${url}/${recordId}/prompt`).then(success).catch(fail)
+
+  try {
+    const response = await local.get(`${url}/${recordId}/prompt`)
+    console.log('success: ', success)
+    console.log('getUser response: ', response.data)  
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 async function fetchVoiceList() {
