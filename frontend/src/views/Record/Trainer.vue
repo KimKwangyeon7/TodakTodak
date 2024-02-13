@@ -1,14 +1,13 @@
 <template>
   <div class="app mt-5">
     <p class="voice-title">음성 학습
-      <!-- <button class='btn' @click="$router.go(-1)">back</button> -->
-      <button class='btn' @click="goOut">back</button>
+      <button class='btn' @click="handleBackButton">back</button>
     </p>
 
     <div class="sentence-box">
       <p>다음 문장을 소리내어 읽으세요.</p>
       <p>{{ currentSentence.sentence || '문장을 불러오는 중...' }}</p>
-      <p>{{ currentSentenceId + 1 }} / {{ sentences.length }}</p>
+      <p>{{ this.currentSentenceId + 1 }} / {{ sentences.length }}</p>
       <div class="buttons">
         <button class="btn left-btn" @click="prevSentence" :disabled="currentSentenceId === 0">
           <img src="@/assets/voice/arrow-left.png" alt="">
@@ -35,10 +34,10 @@
         
       <div v-if="recording">
           <div v-if="elapsedTime > 60">
-              <div>{{ currentSentenceId + 1}}번 녹음 시간: {{ Math.floor(elapsedTime / 60) }} 분 {{ elapsedTime % 60 }} 초</div>
+              <div>{{ currentSentenceId + 1 }}번 녹음 시간: {{ Math.floor(elapsedTime / 60) }} 분 {{ elapsedTime % 60 }} 초</div>
           </div>
           <div v-else>
-              <div>{{ currentSentenceId + 1}}번 녹음 시간: {{ elapsedTime }} 초</div>
+              <div>{{ currentSentenceId + 1 }}번 녹음 시간: {{ elapsedTime }} 초</div>
           </div>
       </div>
       <div>
@@ -66,7 +65,7 @@
 
 <script>
 import { ref, computed } from 'vue'
-import { saveRecord, goOutFromTrainer } from '@/api/records'
+import { getUser, saveRecord, goOutFromTrainer } from '@/api/records'
 import { loadKoreanCorpus } from '@/stores/koreanCorpus'
 import { useRecordHistorystore } from '@/stores/recordHistory'
 import { useRoute } from 'vue-router'
@@ -102,7 +101,11 @@ export default {
     } else {
       console.error('RecordId is not defined in the URL');
     }
-
+    window.addEventListener('beforeunload', this.goOut);
+    this.loadUserData();
+  },
+  unmounted() {
+    window.removeEventListener('beforeunload', this.goOut);
   },
   data() {
     return {
@@ -160,6 +163,30 @@ export default {
     },
   },
   methods: {
+    async loadUserData() {
+      try {
+        const userData = await getUser(this.recordId);
+        if (userData) {
+          console.log('userData.prompt: ', userData.prompt)
+          console.log('userData.time: ', userData.time)
+          
+          if (parseInt(userData.prompt) - 1 >= this.sentences.length) {
+            this.currentSentenceId = this.sentences.length; // getUser에서 받은 prompt 값을 현재 문장 ID로 설정
+          } else {
+            this.currentSentenceId = parseInt(userData.prompt) - 1; // getUser에서 받은 prompt 값을 현재 문장 ID로 설정
+          }
+          this.totalRecordingTime = parseInt(userData.time); // getUser에서 받은 time 값을 총 녹음 시간으로 설정
+          console.log('loadUserData this.currentSentenceId: ', this.currentSentenceId)
+          console.log('loadUserData this.totalRecordingTime: ', this.totalRecordingTime)
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    },
+    handleBackButton() {
+      this.goOut();
+      this.$router.go(-1);
+    },
     onSuccess(response) {
       console.log('Recording saved successfully:', response);
       // Handle the successful response, e.g., navigate to another page or show a message
@@ -287,14 +314,17 @@ export default {
       console.log('goOutfail: ', this.onFail)
       goOutFromTrainer(
         this.recordId, 
-        this.currentSentenceId + 1,
+        this.currentSentenceId,
         this.totalRecordingTime,
         this.onSuccess,
         this.onFail
       )
-      this.$router.push({name: 'Records'})
     }
   },
+  beforeRouteLeave(to, from, next) {
+    this.goOut()
+    next()
+  }
 };
 
 </script>
@@ -359,7 +389,6 @@ export default {
 .left-btn {
   left: 0;
 }
-
 
 .voice-title {
   display: flex; 

@@ -10,13 +10,13 @@
       <!-- Color Input using Bootstrap classes -->
       <div class="form-group">
         <label for="color">목표 색상:</label>
-        <button @click.prevent="openColorDetailModal" class="btn btn-primary">색상 선택</button>
+        <button @click.prevent="openColorDetailModal" class="btn">색상 선택</button>
       </div>
       <div v-if="selectedColor" class="selected-color">
         <p>선택한 색상: {{ selectedColor }}</p>
         <div :key="color" class="color-option" :style="{ backgroundColor: color }"></div>
       </div>
-      <button @click.prevent="submitGoal" class="btn btn-primary">저장</button>
+      <button @click.prevent="submitGoal" class="btn goal-save">저장</button>
 
       <!-- Color Detail Modal -->
       <div v-if="showColorDetailModal" class="color-modal">
@@ -24,8 +24,8 @@
           <div class="color-options">
             <div v-for="color in colorOptions" :key="color" @click="selectColor(color)" class="color-option" :style="{ backgroundColor: color }"></div>
           </div>
+          <button @click="closeColorDetailModal" class="btn color-select">닫기</button>
         </div>
-        <button @click="closeColorDetailModal" class="btn btn-primary">닫기</button>
       </div>
     </form>
   </div>
@@ -91,6 +91,27 @@ export default {
 </script>
 
 <style scoped>
+.modal-content {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #EAF3F9;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.goal-save{
+  display: flex;
+  margin-left: auto;
+}
+
+.selected-color {
+  margin-top: 10px;
+}
+
 .color-modal {
   position: fixed;
   top: 0;
@@ -122,8 +143,9 @@ export default {
   height: 30px;
   cursor: pointer;
 }
-
-.selected-color {
+.color-select {
+  display: flex;
   margin-top: 10px;
+  margin-left: auto;
 }
 </style>@/records.js/goals
