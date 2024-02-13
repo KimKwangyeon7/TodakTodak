@@ -12,6 +12,10 @@
             <input v-model="userData.name" type="text" id="name" class="form-control" required>
           </div>
           <div class="form-group">
+            <label for="nickname">닉네임:</label>
+            <input v-model="userData.nickname" type="text" id="nickname" class="form-control" required>
+          </div>
+          <div class="form-group">
             <label for="memo">메모:</label>
             <textarea v-model="userData.memo" id="memo" class="form-control"></textarea>
           </div>
@@ -33,6 +37,7 @@
   
   const userData = ref({
     name: '김철수',
+    nickname: '빵빵이',
     memo: '오늘도 힘내요',
     profilePicture: '/src/assets/damgom.png',
   })

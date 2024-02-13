@@ -1,5 +1,5 @@
 <template>
-  <div class="app mt-5">
+  <div class="voice-trainer mt-5">
       
     <!-- 음성 학습 -->
     <p class="voice-title">음성 학습
@@ -7,16 +7,21 @@
     </p>
   
     <div class="sentence-box">
-      <p>다음 문장을 소리내어 읽으세요.</p>
-      <p>{{ currentSentence ? currentSentence.sentence : '문장을 불러오는 중...' }}</p>
-      <p p>{{ currentSentenceId + 1 }} / {{ sentences.length }}</p>
-      <div class="buttons">
-        <button class="btn" @click="prevSentence" :disabled="currentSentenceIndex === 0"><</button>
-        <button class="btn" @click="nextSentence" :disabled="currentSentenceIndex === sentences.length - 1">></button>
+      <p class="sentence-head">다음 문장을 소리내어 읽으세요.</p>
+      <p class="sentence-text">{{ currentSentence ? currentSentence.sentence : '문장을 불러오는 중...' }}</p>
+      <!-- <p class="sentence-text">{{ currentSentenceId }} / {{ sentences.length }}</p> -->
+      
+      <div class="sentence-btn">
+        <button class="btn left-btn" @click="prevSentence" :disabled="currentSentenceIndex === 0">
+          <img src="@/assets/voice/arrow-left.png" alt="">
+        </button>
+        <button class="btn right-btn" @click="nextSentence" :disabled="currentSentenceIndex === sentences.length - 1">
+          <img src="@/assets/voice/arrow-right.png" alt="">
+        </button>
       </div>
     </div>    
-
-    <div id="app">
+    
+    <div id="voice-training">
       <div>
         <input type="text" label="Sound Name" required v-model="title" />
         <button class="mr-4" @click="record">
@@ -31,13 +36,12 @@
         <button color="primary" @click="recordSave" :disabled="cantSave">Save</button>
       </div>
     </div>
-
     
     <br>
+    
     <!-- 학습 중인 음성 -->
     <p class="voice-title">학습 중인 음성</p>
     <div class="voice-box">
-      
     </div>    
 
   </div>
@@ -400,44 +404,61 @@ async startLearning() {
 
 <style scoped>
 .sentence-box {
-  /* overflow: auto; 요소 갯수에 알맞게 자동으로 높이 조절하는 역할 */
+  /* overflow: auto; */
   overflow-y: scroll; /* 오직 수직 스크롤만 활성화 */
   max-height: 500px; /* 적절한 최대 높이 설정 */
   justify-content: space-between;
   text-align: center;
-  align-items: right;
-  flex-shrink: 0;
   background-color: #EAF3F9;
   padding: 10px;
   margin: 10px 0;
-  height: 300px;
+  height: 220px;
   border-radius: 24px;
   box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.25);
-  font-size: 20px;
+  font-size: 17px;
   position: relative;
 }
 
-.sentence-box button {
-  font-size: 30px;
+.sentence-btn {
+  position: absolute;
+  top: 90%;
+  transform: translateY(-50%);
+}
+
+.sentence-text {
+  font-weight: bold;
+  margin-top: 35px;
+}
+.left-btn img,
+.right-btn img {
+  width: 30px; /* 원하는 크기로 조정 */
+  height: 30px; /* 원하는 크기로 조정 */
+}
+
+.left-btn {
+  width: 180px;
+  left: 0;
+}
+
+.right-btn {
+  width: 180px;
+  right: 0;
 }
 
 .voice-title {
-  display: flex; /* Flexbox 레이아웃을 사용하여 내부 요소들을 가로로 배치 */
-  justify-content: space-between; /* 요소들을 양 끝에 정렬 */
-  align-items: center; /* 요소들을 세로로 가운데 정렬 */
-  padding: 8px; /* 내부 여백 설정 */
-  font-size: 30px; /* 폰트 크기 설정 (모바일 화면에서 크기 조절) */
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  padding: 8px; 
+  font-size: 25px; 
 }
 
 .voice-title button {
   font-size: 20px;
 }
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #e47932;
-  margin-top: 60px;
 }
 </style>

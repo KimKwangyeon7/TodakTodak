@@ -6,16 +6,18 @@ import AddGoal from '@/views/Goal/AddGoal.vue'
 import Board from '@/views/Board.vue'
 import Calendar from '@/views/Calendar.vue'
 import Friend from '@/views/Friend.vue'
+import FriendRequestList from '@/components/Friend/FriendRequestList.vue'
 import Chat from '@/components/Friend/Chat.vue'
 import Meeting from '@/views/Meeting.vue'
 import Meet from '@/components/Meeting/MeetingRoom.vue'
 import MyPage from '@/views/MyPage.vue'
 import MyPageSettings from '@/components/MyPage/MypageSettings.vue'
 import UserInfoEdit from '@/components/MyPage/UserInfoEdit.vue'
-import Habit from '@/views/Habit/HabitList.vue'
+import Habit from '@/views/Habit.vue'
 import Voice from '@/views/Voice/Voice.vue'
 import VoiceTrainer from '@/views/Voice/VoiceTrainer.vue'
 import TodoList from '@/views/Todo/TodoList.vue'
+import HabitList from '@/views/Habit/HabitList.vue'
 import CalendarDetail from '@/views/CalendarDetail.vue'
 import Notification from '@/components/Notifications.vue'
 import subscribe from '@/components/subscribe_page.vue'
@@ -38,6 +40,16 @@ const router = createRouter({
 		component: Main,
 	},
 	{
+		name: 'todoList',
+		path: '/todoList',
+		component: TodoList,
+	},
+	{
+		name: 'habitList',
+		path: '/habitList',
+		component: HabitList,
+	},
+	{
 		name: 'goal',
 		path: '/goal',
 		component: AddGoal,
@@ -56,6 +68,11 @@ const router = createRouter({
 		name: 'friend',
 		path: '/friend',
 		component: Friend,
+	},
+	{
+		name: 'friendRequestList',
+		path: '/friendRequestList',
+		component: FriendRequestList,
 	},
 	{
 		name: 'chat',

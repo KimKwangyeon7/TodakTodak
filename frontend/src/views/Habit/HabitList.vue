@@ -5,10 +5,10 @@
       <component :is="activeModal" :item="currentItem" @close-modal="closeModal" />
     </div>
 
-  
     <!-- 투두리스트 -->
     <div class="todo-section">
       <div class="todo-date">
+        <div style="margin-bottom: 5px; margin-top: 5px; font-weight: bold;">습관</div>
         <span>{{ today }}</span>
         <!-- Todo 생성버튼 -->
         <button class="add-button" @click="openModal('AddHabit')">+</button>
@@ -71,14 +71,6 @@ export default {
   </script>
 
 <style scoped>
-/* 전체 앱 스타일링 */
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
 
 /* 상단 바 스타일링 */
 .top-bar {

@@ -6,7 +6,7 @@
         <button class="create-chat-button btn" @click="toggleSearch">
           <div class="search"><img src="@/assets/search.png" alt=""></div>
         </button>
-        <button class="create-chat-button btn" @click="showCreateRoomModal">
+        <button class="create-chat-button btn" @click="showFriendRequestList">
           <img src="@/assets/user-plus.png" alt=""></button>
         <CreateRoomModal v-if="showModal" @close="closeCreateRoomModal" @create="createRoom" />
       </div>
@@ -19,8 +19,8 @@
     <ul class="list-group">
       <li v-for="friend in filteredFriends" :key="friend.id" class="list-group-item" @click="showProfile(friend)">
         <div class="friend-item">
-          <img :src="friend.profilePicture" alt="프로필 이미지" class="profile-image mr-2">
-          <span>{{ friend.name }}</span>
+          <img :src="getProfilePicture" alt="프로필 이미지" class="profile-image mr-2">
+          <span class="friend-name">{{ friend.name }}</span>
         </div>
         <div class="buttons">
           <button class="btn btn-sm" @click.stop="startChat(friend)">
@@ -38,6 +38,7 @@ import { useRouter } from 'vue-router'
 
 import FriendProfile from '@/components/Friend/FriendProfile.vue'
 import Chat from '@/components/Friend/Chat.vue'
+import FriendRequestList from '@/components/Friend/FriendRequestList.vue' // FriendRequestList 컴포넌트 추가
 
 const router = useRouter()
 
@@ -56,15 +57,16 @@ const showSearch = ref(false)
 const searchQuery = ref('')
 
 const friends = ref([
-  { id: 1, name: '김철수', age: 25 },
-  { id: 2, name: '김영희', age: 30 },
-  { id: 3, name: '김싸피', age: 28 },
-  { id: 4, name: '손흥민', age: 25 },
-  { id: 5, name: '봉준호', age: 30 },
-  { id: 6, name: '김준호', age: 28 },
-  { id: 7, name: '카리나', age: 25 },
-  { id: 8, name: '공유', age: 30 },
-  { id: 9, name: '황정민', age: 28 },
+  { id: 1, name: '김철수', age: 25, profilePicture: '@/assets/profile-default.jpg' },
+  { id: 2, name: '김영희', age: 30, profilePicture: '@/assets/profile-default.jpg'  },
+  { id: 3, name: '김싸피', age: 28, profilePicture: '@/assets/profile-default.jpg'  },
+  { id: 4, name: '손흥민', age: 25, profilePicture: '@/assets/profile-default.jpg'  },
+  { id: 5, name: '봉준호', age: 30, profilePicture: '@/assets/profile-default.jpg' },
+  { id: 6, name: '김준호', age: 28, profilePicture: '@/assets/profile-default.jpg'  },
+  { id: 7, name: '카리나', age: 25, profilePicture: '@/assets/profile-default.jpg'  },
+  { id: 8, name: '공유', age: 30, profilePicture: '@/assets/profile-default.jpg'  },
+  { id: 9, name: '황정민', age: 28, profilePicture: '@/assets/profile-default.jpg'  },
+  { id: 10, name: '윈터', age: 25, profilePicture: '@/assets/profile-default.jpg'  },
 ])
 
 const filteredFriends = computed(() => {
@@ -88,6 +90,14 @@ const toggleSearch = () => {
     searchQuery.value = ''
   }
 }
+
+const showFriendRequestList = () => { // showFriendRequestList 메서드 추가
+  router.push('/friendRequestList'); // FriendRequestList 컴포넌트로 이동
+}
+
+const getProfilePicture = (friend) => {
+  return friend.profilePicture || '@/assets/profile-default.jpg';
+}
 </script>
 
 <style scoped>
@@ -99,6 +109,10 @@ const toggleSearch = () => {
 .modal-content {
   background-color: #EAF3F9;
   color: black;
+}
+
+.friend-name {
+  margin-left: 10px;
 }
 
 .profile-image {
@@ -134,6 +148,8 @@ const toggleSearch = () => {
   border-radius: 24px;
   justify-content: space-between;
   align-items: center;
+  overflow-y: auto;
+  
 }
 
 .friend-item {
@@ -166,12 +182,13 @@ const toggleSearch = () => {
   align-items: center;
   margin-bottom: 10px;
 }
+
 .friend-buttons {
   display: flex;
   margin-left: auto;
 }
 
 .friend {
-  font-size: 30px;
+  font-size: 25px;
 }
 </style>
