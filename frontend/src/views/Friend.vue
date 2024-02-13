@@ -3,12 +3,12 @@
     <div class="friend-header">
       <div class="friend">친구</div>
       <div class="friend-buttons">
-        <button class="create-chat-button btn" @click="toggleSearch">
+        <button class="btn" @click="toggleSearch">
           <div class="search"><img src="@/assets/search.png" alt=""></div>
         </button>
-        <button class="create-chat-button btn" @click="showFriendRequestList">
-          <img src="@/assets/user-plus.png" alt=""></button>
-        <CreateRoomModal v-if="showModal" @close="closeCreateRoomModal" @create="createRoom" />
+        <button class="btn" @click="showFriendRequestList">
+          <img src="@/assets/user-plus.png" alt="">
+        </button>
       </div>
     </div>
 
@@ -38,7 +38,7 @@ import { useRouter } from 'vue-router'
 
 import FriendProfile from '@/components/Friend/FriendProfile.vue'
 import Chat from '@/components/Friend/Chat.vue'
-import FriendRequestList from '@/components/Friend/FriendRequestList.vue' // FriendRequestList 컴포넌트 추가
+import FriendRequestList from '@/components/Friend/FriendRequestList.vue'
 
 const router = useRouter()
 
@@ -91,8 +91,8 @@ const toggleSearch = () => {
   }
 }
 
-const showFriendRequestList = () => { // showFriendRequestList 메서드 추가
-  router.push('/friendRequestList'); // FriendRequestList 컴포넌트로 이동
+const showFriendRequestList = () => { 
+  router.push('/friendRequestList'); 
 }
 
 const getProfilePicture = (friend) => {
@@ -106,11 +106,6 @@ const getProfilePicture = (friend) => {
   margin: auto;
 }
 
-.modal-content {
-  background-color: #EAF3F9;
-  color: black;
-}
-
 .friend-name {
   margin-left: 10px;
 }
@@ -120,22 +115,6 @@ const getProfilePicture = (friend) => {
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
-}
-
-/* 모달 배경 */
-.modal.show {
-  display: flex !important;
-  align-items: center;
-  justify-content: center;
-}
-
-.modal-background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .list-group-item {
