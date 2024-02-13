@@ -1,8 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: 'http://your-backend-api-url',
-  withCredentials: false,
+  baseURL: 'http://i10c210.p.ssafy.io:8080//tts/infer',
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
@@ -10,7 +9,7 @@ const apiClient = axios.create({
 });
 
 apiClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem('jwtToken');
+  const token = localStorage.getItem('accessToken');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }

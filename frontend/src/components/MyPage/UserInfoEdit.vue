@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="userData">
         <button class="settings-back-button btn" @click="goBack">
           <img src="@/assets/back.png" alt="">
         </button>
@@ -30,18 +30,21 @@
   </template>
   
   <script setup>
-  import { ref } from 'vue'
+  import { ref, onMounted } from 'vue'
   import { useRouter } from 'vue-router'
+  import { useMemberStore } from '@/stores/auth'
   
   const router = useRouter()
   
-  const userData = ref({
-    name: '김철수',
-    nickname: '빵빵이',
-    memo: '오늘도 힘내요',
-    profilePicture: '/src/assets/damgom.png',
-  })
-  
+  const userData = ref(null);
+  const memberStore = useMemberStore();
+
+  onMounted(async () => {
+  const token = localStorage.getItem("accessToken");
+  userData.value = await memberStore.getUserInfo(token); // 사용자 정보를 가져옴
+  console.log('userData111:', userData);
+});
+
   const saveProfile = () => {
     console.log('프로필이 저장되었습니다.')
     router.push('/mypage')

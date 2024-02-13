@@ -2,8 +2,8 @@
   <div class="modal-content">
     <button type="button" class="btn-close" aria-label="Close" @click="closeModal"></button>
       <div class="form-group">
-          <label for="goalContent">목표 내용:</label>
-          <input v-model="item.goalContent" type="text" id="goalContent" class="form-control" required>
+          <label for="content">목표 내용:</label>
+          <input v-model="item.content" type="text" id="content" class="form-control" required>
       </div>
       <div class="form-group">
         <label for="selectedColor">목표 색상:</label>
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { useGoalsStore } from '@/stores/goals';
+import { deleteGoal, updateGoal } from '@/api/goals';
 
 export default {
   data() {
@@ -38,8 +38,8 @@ export default {
     }
   },
   computed: {
-    goals() {
-      return useGoalsStore().goals
+    async goals() {
+      this.goals = await getGoalList()
     },
     get() {
       return this.item.selectedColor || this.goals[0]?.id;
@@ -56,8 +56,7 @@ export default {
     },
     async fnDelete() {
       try {
-        const goalStore = useGoalsStore();
-        await goalStore.deleteGoal(this.item.id);
+        await deleteGoal(this.item.id);
         this.$emit('close-modal');
       } catch (error) {
         console.error('Error deleting goal:', error);
@@ -65,8 +64,7 @@ export default {
     },
     async fnSave() {
       try {
-        const todoStore = useGoalsStore(); 
-        await todoStore.updateGoal(this.item.id, this.item); 
+        await updateGoal(this.item.id, this.item); 
         this.$emit('close-modal'); 
       } catch (error) {
         console.error('Error updating goal:', error);

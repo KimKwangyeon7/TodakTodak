@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import apiClient from './apiClient';
+// import axios from 'axios'
 
 export const useGoalsStore = defineStore({
   id: 'goals', // The unique ID of the store across your application
@@ -7,64 +7,17 @@ export const useGoalsStore = defineStore({
     goals: [],
     nextId: 1, // This does not need to be a ref since it's primitive and you are not using it in a template
   }),
-
+  // const API_URL
+  // const token
   actions: {
-    async addGoal(newGoal) {
-      try {
-          // const response = await apiClient.post('/goals', newGoal);
-          // this.goals.push(response.data); 
-          const goalWithId = { id: this.nextId++, ...newGoal }
-          this.goals.push(goalWithId)
-          console.log("Goal added:", response.data);
-      } catch (error) {
-          console.error("Error adding goal:", error);
-      }
-    },
-
-    async getGoalLIst() {
-      try {
-          const response = await apiClient.get('/goals');
-          console.log("Goal List:", response.data);
-      } catch (error) {
-          console.error("Error searching goal:", error);
-      }
-    },
-
-    async getGoalDetail(goalId) {
-      try {
-          const response = await apiClient.get(`/goals/${goalId}`);
-          console.log("Goal details:", response.data);
-      } catch (error) {
-          console.error("Error searching goal:", error);
-      }
-    },
-
-    async updateGoal(goalId, goalUpdateInfo) {
-        try {
-          const response = await apiClient.put(`/goals/${goalId}`, goalUpdateInfo);
-          console.log(response.data);
-        } catch (error) {
-            console.error(error);
-      }
-    },
-
-    async deleteGoal(goalId) {
-      try {
-        // const response = await apiClient.delete(`/goals/${goalId}`);
-        const index = this.goals.findIndex(goal => goal.id === goalId);
-        if (index !== -1) {
-          // Remove the deleted todo from the this.todos array using splice
-          this.goals.splice(index, 1);
-        }
-        console.log(response.data);
-      } catch (error) {
-          console.error(error);
-      }
+    addGoal(newGoal) {
+      const goalWithId = { id: this.nextId++, ...newGoal }; // Assign an ID to the new goal
+      this.goals.push(goalWithId);
     },
 
     logGoals() {
       this.goals.forEach(goal => {
-        console.log(`id: ${goal.id}, goalContent: ${goal.goalContent}, color: ${goal.color}`);
+        console.log(`id: ${goal.id}, content: ${goal.content}, color: ${goal.color}`);
       });
     },
 
@@ -73,7 +26,6 @@ export const useGoalsStore = defineStore({
       this.nextId = 1; // Reset the ID as well
     },
   },
-
   persist: {
     enabled: true,
     strategies: [

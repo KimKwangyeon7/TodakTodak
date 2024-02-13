@@ -10,19 +10,18 @@
       <RouterLink to="/Calendar" class="nav-item">
         <img class='nav-icon' src="@/assets/sidebar/calendar.png" alt=""> Calendar
       </RouterLink>
-      <RouterLink to="/Friend" class="nav-item">
+      <RouterLink to="/friends" class="nav-item">
         <img class='nav-icon' src="@/assets/bottom-nav/Lucide.png" alt=""> Friends
       </RouterLink>
       <RouterLink to="/mypage" class="nav-item">
         <img class='nav-icon' src="@/assets/bottom-nav/profile.png" alt=""> MyPage
       </RouterLink>
     </div>
-    <RouterView />
   </div>
   <div v-else>
     <div>
-      <RouterLink :to="{ name: 'SignUpView' }">SignUp</RouterLink>
       <RouterLink :to="{ name: 'LoginView' }">Login</RouterLink>
+      <RouterLink :to="{ name: 'SignUpView' }">SignUp</RouterLink>
     </div>
   </div>
   <RouterView />
@@ -30,12 +29,11 @@
 
 <script>
 import Sidebar from '@/components/Sidebar.vue'
-import TodoList from '@/views/Todo/TodoList.vue'
 import Main from '@/views/Main.vue'
 import MyPage from '@/views/MyPage.vue'
 
 import { RouterLink, RouterView } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
+import { useMemberStore } from '@/stores/auth'
 
 
 let today = new Date()
@@ -49,7 +47,7 @@ export default {
     }
   },
   setup() {
-    const authStore = useAuthStore()
+    const authStore = useMemberStore()
 
     return {
       authStore,
@@ -57,7 +55,6 @@ export default {
   },
   components: {
     Sidebar,
-    TodoList,
     Main,
     MyPage,
     RouterView,

@@ -10,12 +10,11 @@
 </template>
 
 <script>
-// import { useGoalsStore } from '@/stores/goals'; // Adjust the path if necessary
 
 export default {
   data() {
     return {
-      goalContent: '',
+      content: '',
       color: '#ff0000', // Default color, you can set it to any default color you want
     };
   },
@@ -57,8 +56,7 @@ export default {
     border-radius: 8px;
     padding: 20px;
   }
-
-  .close-button {
+.close-button {
   position: absolute;
   top: 5px;
   left: 5px;
