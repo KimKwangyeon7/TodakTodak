@@ -16,7 +16,7 @@ async function addHabit(content, important, outside, alarmed, alarmDtoList, chec
       alarmDtoList)).then(success).catch(fail);
 
   if (alarmed === true) {
-      const preparedData = JSON.stringify({
+      let preparedData = JSON.stringify({
       alarmTitle: content, alarmContent: ""
     })
     preparedData += {checked, completed}
