@@ -65,10 +65,11 @@ const startChat = (friend) => {
     (response) => {
       let msg = "채팅방 생성에 문제 발생했습니다";
       if (response.status == 200) {
-        msg = "채팅방 생성 완료되었습니다.";
+        msg = "채팅방 입장 완료되었습니다.";
         roomid.value = response.data.chatRoomId;
+        console.log(roomid.value);
         alert(msg);
-        router.push({ name: "chat-view" , params: { roomid } });
+        router.push({ name: "chat-view" , params: { roomid : roomid.value } });
       } 
       else {
         alert(msg);

@@ -17,9 +17,15 @@ pinia.use(piniaPluginPersist);
 
 const app = createApp(App);
 
+<<<<<<< HEAD
+app.use(pinia)
+app.use(router)
+app.use(setupCalendar, {})
+=======
 app.use(pinia);
 app.use(router);
 app.use(setupCalendar, {});
+>>>>>>> dc236b114173158445046248e288320843a14931
 
 const memberStore = useMemberStore()
 memberStore.initializeAuth()
