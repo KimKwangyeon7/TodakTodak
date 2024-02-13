@@ -17,7 +17,7 @@ const selectedFriend = ref(null);
 const showSearch = ref(false);
 const searchQuery = ref("");
 const friends = ref([]);
-const roomid = ref('');
+const roomid = ref("");
 
 onMounted(() => {
   getFriendList();
@@ -69,9 +69,8 @@ const startChat = (friend) => {
         roomid.value = response.data.chatRoomId;
         console.log(roomid.value);
         alert(msg);
-        router.push({ name: "chat-view" , params: { roomid : roomid.value } });
-      } 
-      else {
+        router.push({ name: "chat-view", params: { roomid: roomid.value } });
+      } else {
         alert(msg);
       }
     },
@@ -95,8 +94,8 @@ const toggleSearch = () => {
         <button class="create-chat-button btn" @click="toggleSearch">
           <div class="search"><img src="@/assets/search.png" alt="" /></div>
         </button>
-        <button class="create-chat-button btn" @click="showCreateRoomModal">
-          <img src="" alt="" />
+        <button class="create-chat-button btn" @click="showFriendRequestList">
+          <img src="@/assets/user-plus.png" alt="" />
         </button>
         <CreateRoomModal
           v-if="showModal"
@@ -105,6 +104,7 @@ const toggleSearch = () => {
         />
       </div>
     </div>
+    <!-- =============================== -->
 
     <div class="friend-search mb-3" v-show="showSearch">
       <input

@@ -42,7 +42,8 @@ exports.storePushData = functions.https.onRequest((request, response) => {
             })
         })
         response.status(201).json({ message: '완료!' }); // 완료코드 201 반환하고 종료
-      }).catch(err => {
+      })
+      .catch(err => {
         console.log('구독자 정보를 읽지 못했습니다!', err)
         response.status(500).send({
           message:'구독자 정보를 읽지 못했습니다!', error: err.response
