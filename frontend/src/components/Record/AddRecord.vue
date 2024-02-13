@@ -60,13 +60,33 @@
           voiceData,
           (response) => {
             console.log("Voice created successfully:", response.data);
+            console.log('response.data :', response.data)
+            // If you need to use the recordId from the created voice, you should get it from the response
+            const createdRecordId = response.data; // Assuming the response data has the id of the created record
+            
+
+            // Now you can use getUser with the createdRecordId
+            getUser(
+              createdRecordId,
+              (response) => {
+                console.log("getUser Okay:", response.data);
+                this.$emit('add-voice', voiceData);
+                this.$router.push({ name: 'Trainer', params: { recordId: createdRecordId } });
+                console.log('User data:', response.data);
+              },
+              (error) => {
+                // Handle error
+                console.error("Error getting user:", error);
+              }
+            );
+
             this.$emit('add-voice', voiceData);
-            this.$router.push({ path: '/voice/trainer' }).catch(console.error);
           },
           (error) => {
             console.error("Error creating new voice:", error);
           }
         );
+
       }
     }  
   }

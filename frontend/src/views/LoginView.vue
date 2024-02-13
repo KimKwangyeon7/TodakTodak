@@ -115,3 +115,4 @@ const login = async () => {
   background-color: #0d8bf9;
 }
 </style>
+@/records.js/auth

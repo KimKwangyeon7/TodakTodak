@@ -176,4 +176,4 @@ function registerMember() {
 .signup-button:hover {
   background-color: #0d8bf9;
 }
-</style>
+</style>@/records.js/auth

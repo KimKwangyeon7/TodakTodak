@@ -154,4 +154,4 @@ div {
     font-weight: 400;
     font-style: normal;
 }
-</style>
+</style>@/records.js/auth

@@ -136,3 +136,4 @@ export default {
   margin-left: auto;
 }
 </style>
+@/records.js/goals

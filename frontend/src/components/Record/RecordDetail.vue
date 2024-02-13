@@ -47,13 +47,15 @@ export default {
         console.error('Error updating voice:', error);
       }
     },
-    async recordCont() {
-      this.$router.push({ path: '/voice/trainer' }).catch(err => {
-          console.error(err);
-      });
+    recordCont() {
+      try {
+        this.$router.push({ name: 'Trainer', params: { recordId: this.item.id } });
+      } catch (error) {
+        console.error('Error navigating to Trainer:', error);
+      }
     }
-  },
-};
+  }
+}
 </script>
 
 <style scoped>

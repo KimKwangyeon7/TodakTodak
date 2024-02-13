@@ -126,4 +126,4 @@ export default {
 .selected-color {
   margin-top: 10px;
 }
-</style>
+</style>@/records.js/goals

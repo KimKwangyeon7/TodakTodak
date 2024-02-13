@@ -76,13 +76,16 @@ export default {
         console.error(error)
       },
     async toggleVoice(voice) {
-          if (!voice.isActive) {
+      if (!voice.isActive) {
         voice.isActive = true;
         this.recordedVoices.forEach(v => {
           if (v.id !== voice.id) v.isActive = false;
+          console.log('voice.id: ', voice.id)
+          console.log('v.id: ', v.id)
         });
 
         try {
+          // Use voice.id instead of recordId
           await selectVoice(voice.id, this.onSuccess, this.onFail);
         } catch (error) {
           console.error('Error selecting voice:', error);
@@ -112,20 +115,26 @@ export default {
       this.currentItem = null;
     },
     async fetchRecords() {
-      console.log("fetchRecords 실행")
+      console.log("fetchRecords 실행");
       try {
-        this.recordedVoices = await fetchVoiceList({ success: this.onSuccess, fail: this.onFail});
-      } catch(error) {
-        console.log('Error fetching records:', error)
+        const voices = await fetchVoiceList();
+        console.log('Fetched Voices:', voices);
+        this.recordedVoices = voices || []; // Fallback to an empty array if undefined
+      } catch (error) {
+        console.error('Error fetching records:', error);
+        this.recordedVoices = []; // Fallback to an empty array in case of catch
       }
     },
-    async fnDelete(RecordId) {
+    async fnDelete(recordId) {
       const confirmed = window.confirm('정말 삭제하시겠습니까?');
       if (confirmed){
         try {
-          await deleteVoice({RecordId, success: this.onSuccess, fail: this.onFail})
+          // Ensure you're passing an object with the property `recordId`
+          await deleteVoice(recordId, this.onSuccess, this.onFail);
+          // After a successful delete, remove the voice from the local list as well
+          this.recordedVoices = this.recordedVoices.filter(voice => voice.id !== recordId);
         } catch (error) {
-          console.error('Error deleting voice', error)
+          console.error('Error deleting voice', error);
         }
       }
     },

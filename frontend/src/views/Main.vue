@@ -76,3 +76,4 @@ export default {
   width: 100%;
 }
 </style>
+@/records.js/auth
