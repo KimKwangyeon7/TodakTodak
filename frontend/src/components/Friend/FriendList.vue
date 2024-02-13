@@ -5,6 +5,7 @@ import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import { useMemberStore } from "@/stores/auth";
 import FriendProfile from "@/components/Friend/FriendProfile.vue";
+// import Chat from "@/components/Friend/Chat.vue";
 import { fetchFriends, sendFriendRequest } from "@/api/friend";
 import { createChatRoom } from "@/api/chat";
 

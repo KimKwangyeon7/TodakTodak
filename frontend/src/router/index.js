@@ -1,7 +1,7 @@
 // router/index.js
 import { createRouter, createWebHistory } from "vue-router";
 import Main from "@/views/Main.vue";
-import AddGoal from "@/views/Goal/AddGoal.vue";
+import AddGoal from "@/components/Goal/AddGoal.vue";
 import Board from "@/views/Board.vue";
 import Calendar from "@/views/Calendar.vue";
 import Friend from "@/views/Friend.vue";

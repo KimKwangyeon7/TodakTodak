@@ -1,7 +1,7 @@
 <template>
   <div v-if="authStore.isLogin">
     <!-- Modal -->
-    <div class="black-b" v-if="is_modal_valid">
+    <div class="black-bg" v-if="is_modal_valid">
       <component
         :is="activeModal"
         :item="currentItem"
@@ -12,7 +12,7 @@
     <!-- Todo List -->
     <div class="todo-section">
       <div class="todo-date">
-        <span>{{ today }}</span>
+        <span style="font-weight: bold;">{{ today }}</span>
         <button class="add-button" @click="openModal('AddTodo')">+</button>
       </div>
       <div class="todo-items">
@@ -32,7 +32,7 @@
     <!-- Goals -->
     <div class="todo-section">
       <div class="todo-date">
-        <div style="margin-bottom: 5px; margin-top: 5px">목표</div>
+        <div style="margin-bottom: 5px; margin-top: 5px; font-weight: bold;">목표</div>
       </div>
       <div class="todo-item" v-for="goal in goals" :key="goal.id">
         <div
@@ -52,6 +52,7 @@
 import { getGoalList, getGoalDetail } from "@/api/goals";
 import { getTodoListByDate, getTodoDetail } from "@/api/todos";
 import { useMemberStore } from "@/stores/auth";
+import { useTodoStore } from '@/stores/todoList';
 
 import TodoDetail from "@/components/Todo/TodoDetail.vue";
 import AddTodo from "@/components/Todo/AddTodo.vue";
@@ -72,9 +73,14 @@ export default {
   },
   setup() {
     const authStore = useMemberStore();
-
+    const todoStore = useTodoStore()
+    const addTodoToStore = (newTodo) => {
+      todoStore.addTodo(newTodo);
+      // Todo 추가 후 필요한 로직 처리 (예: 알림 표시, 폼 초기화 등)
+    };
     return {
       authStore,
+      addTodoToStore
     };
   },
   components: {
@@ -103,8 +109,8 @@ export default {
         }
       } else if (component === "AddTodo") {
         try {
-          const goalList = await getGoalList(this.today.value);
-          if (goalList.length === 0) {
+          console.log('goalList', this.goalList)
+          if (this.goals.length === 0) {
             alert("최소 한 가지 목표를 먼저 설정하세요 :)");
             return;
           }
@@ -188,6 +194,7 @@ export default {
 };
 </script>
 
+
 <style scoped>
 .top-bar {
   display: flex;
@@ -249,7 +256,7 @@ export default {
 }
 
 /* 모달 스타일링 */
-.black-b {
+.black-bg {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
