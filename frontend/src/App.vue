@@ -1,86 +1,63 @@
 <template>
   <div v-if="authStore.isLogin" class="mt-5">
     <Sidebar />
-
     <!-- 하단 네비게이션 바 -->
     <div class="bottom-nav">
       <RouterLink to="/Main" class="nav-item">
-        <img class='nav-icon' src="@/assets/bottom-nav/home.png" alt=""> Home
+        <img class="nav-icon" src="@/assets/bottom-nav/home.png" alt=""> Home
       </RouterLink>
       <RouterLink to="/Calendar" class="nav-item">
-        <img class='nav-icon' src="@/assets/sidebar/calendar.png" alt=""> Calendar
+        <img class="nav-icon" src="@/assets/sidebar/calendar.png" alt=""> Calendar
       </RouterLink>
       <RouterLink to="/friends" class="nav-item">
-        <img class='nav-icon' src="@/assets/bottom-nav/Lucide.png" alt=""> Friends
+        <img class="nav-icon" src="@/assets/bottom-nav/Lucide.png" alt=""> Friends
       </RouterLink>
       <RouterLink to="/mypage" class="nav-item">
-        <img class='nav-icon' src="@/assets/bottom-nav/profile.png" alt=""> MyPage
+        <img class="nav-icon" src="@/assets/bottom-nav/profile.png" alt=""> MyPage
       </RouterLink>
     </div>
   </div>
   <div v-else>
     <div>
-      <RouterLink :to="{ name: 'LoginView' }">Login</RouterLink>
       <RouterLink :to="{ name: 'SignUpView' }">SignUp</RouterLink>
+      <RouterLink :to="{ name: 'LoginView' }">Login</RouterLink>
     </div>
   </div>
   <RouterView />
 </template>
 
-<script>
+<script setup>
 import Sidebar from '@/components/Sidebar.vue'
 import Main from '@/views/Main.vue'
 import MyPage from '@/views/MyPage.vue'
-
 import { RouterLink, RouterView } from 'vue-router'
 import { useMemberStore } from '@/stores/auth'
-
 
 let today = new Date()
 console.log(today)
 
-export default {
-  name: 'App',
-  data() {
-    return {
-      is_modal_valid: false,
-    }
-  },
-  setup() {
-    const authStore = useMemberStore()
+const authStore = useMemberStore()
 
-    return {
-      authStore,
-    }
-  },
-  components: {
-    Sidebar,
-    Main,
-    MyPage,
-    RouterView,
-    RouterLink,
-},
-  methods: {
-    closeModal() {
-      this.is_modal_valid = false
-    },
-    handleLoginClick() {
-      console.log(this.authStore.isLogin);
-      // 여기에서 로그인 상태 확인
-    }
-  }
+const closeModal = () => {
+  is_modal_valid.value = false
 }
+
+const handleLoginClick = () => {
+  console.log(authStore.isLogin)
+  // 여기에서 로그인 상태 확인
+}
+
 </script>
 
 <style>
 /* 전체 앱 스타일링 */
 #app {
-    font-family: 'SUITE-Regular';
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    color: #2c3e50;
-    padding-top: 25px;
-    padding-bottom: 90px;
+  font-family: 'SUITE-Regular';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #2c3e50;
+  padding-top: 25px;
+  padding-bottom: 90px;
 }
 
 /* 상단 바 스타일링 */
@@ -95,7 +72,6 @@ export default {
 .quote {
   font-size: 10px;
 }
-
 
 /* 할 일 목록 스타일링 */
 
@@ -137,21 +113,24 @@ div {
 }
 
 .black-bg {
-  width: 100%; height: 100%;
+  width: 100%;
+  height: 100%;
   background: rgba(0, 0, 0, 0, 5);
-  position: fixed; padding: 20px;
+  position: fixed;
+  padding: 20px;
 }
 
 .white-bg {
-  width: 100%; background: white;
+  width: 100%;
+  background: white;
   border-radius: 8px;
   padding: 20px;
 }
 
 @font-face {
-    font-family: 'SUITE-Regular';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/SUITE-Regular.woff2') format('woff2');
-    font-weight: 400;
-    font-style: normal;
+  font-family: 'SUITE-Regular';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/SUITE-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
 }
-</style>@/records.js/auth
+</style>
