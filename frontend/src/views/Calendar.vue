@@ -401,168 +401,151 @@ this.$router.push({
 }
 </script>
 
-<style>
+<style scoped>
 .calendar-wrapper {
-display: flex;
-margin: 2.5em 0;
-overflow: auto;
-height: 700px;
-}
-
-.calendar-body {
-width: 330px !important;
-height: 500px !important;
+  display: flex;
+  margin: 2.5em 0;
+  overflow: auto;
 }
 
 .calendar-header {
-margin-bottom: 2rem;
+  margin-bottom: 20px;
 }
 
 .calendar-header .month {
-font-family: Lato;
-font-size: 20px;
-font-weight: bold;
-font-style: normal;
-font-stretch: normal;
-line-height: normal;
-letter-spacing: 0.5px;
-color: #222350;
+  font-family: Lato;
+  font-size: 20px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: 0.5px;
+  color: #222350;
 }
 
 .calendar-header .year {
-font-size: 1.5em;
-font-weight: 600;
-margin-bottom: 1rem;
-color: red;
+  font-size: 1.5em;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: red;
 }
 
-/* .calendar-weekdays {
-width: 100%;
-display: flex;
-margin-bottom: 1.25rem;
-color: #2091a2;
-font-size: 16px;
-} */
+.calendar-weekdays {
+  display: flex;
+  margin-bottom: 1.25rem;
+  color: #2091a2;
+  font-size: 16px;
+}
 
 .calendar-weekdays .weekday {
-width: calc(100% / 7);
-font-size: 16px;
-line-height: 1.25;
-text-align: center;
-color: #2091a2;
+  width: calc(100% / 7);
+  font-size: 16px;
+  line-height: 1.25;
+  text-align: center;
+  color: #2091a2;
 }
 
 .calendar-dates {
-width: 100%;
-display: flex;
-flex-wrap: wrap;
-position: relative;
-height: 395px;
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
 }
 
 .day:hover {
-cursor: pointer;
+  cursor: pointer;
 }
 
 .calendar-dates .date {
-padding: 0.5rem; /* 상하좌우 패딩을 늘림 */
-margin-bottom: 1rem; /* 하단 마진을 늘림 */
-height: auto; /* 높이를 자동으로 조정하여 내용에 맞게 함 */
+  font-weight: 200;
+  padding: 0.25rem 0.5rem;
+  position: relative;
+  width: calc(100% / 7);
+  margin-top: 1px;
 }
 
-/* .calendar-dates .date.blank {
-color: #949ba4;
+.calendar-dates .date.blank {
+  color: #949ba4;
 }
 
 .calendar-dates .date.no-border-right {
-border-right: none;
-} */
+  border-right: none;
+}
 
-
+.calendar-dates .date.today {
+  background-color: #45b7c1;
+  color: white !important;
+}
 
 .date.today:first-child,
 :not(.today)+.today {
-border-top-left-radius: 20px;
-border-bottom-left-radius: 20px;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
 }
 
 .date.today+.date.today+.date.today+.date.today+.date.today {
-border-top-right-radius: 20px;
-border-bottom-right-radius: 20px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
 }
 
-/* .calendar-dates .date.now {
-border: 1px solid #45b7c1;
-border-radius: 100px;
-color: #45b7c1;
-margin-top: -1px;
-} */
+.calendar-dates .date.now {
+  border: 1px solid #45b7c1;
+  border-radius: 100px;
+  color: #45b7c1;
+  margin-top: -1px;
+}
 
-/* .calendar-dates .date .weekday {
-display: none;
-} */
+.calendar-dates .date .weekday {
+  display: none;
+}
 
 .arrow-left {
-margin-left: 90px;
+  margin-left: 90px;
 }
 
 .arrow-right {
-margin-right: 90px;
+  margin-right: 90px;
 }
 
 .arrow-left,
 .arrow-right:hover {
-cursor: pointer;
+  cursor: pointer;
 }
 
-/* .btn-accept {
-width: 75px;
-height: 35px;
-background-color: #45b7c1;
-color: #ffffff;
-border: none;
-border-radius: 7px;
-font-size: 14px;
-text-align: center;
-float: right;
-} */
+.btn-accept {
+  width: 75px;
+  height: 35px;
+  background-color: #45b7c1;
+  color: #ffffff;
+  border: none;
+  border-radius: 7px;
+  font-size: 14px;
+  text-align: center;
+  float: right;
+}
 
 .c-hr {
-border: none;
-height: 1px;
-background-color: #949ba4;
-opacity: 0.61;
+  border: none;
+  height: 1px;
+  background-color: #949ba4;
+  opacity: 0.61;
 }
 
 .calendar-footer {
-margin-top: 30px;
+  margin-top: 30px;
 }
 
 .calendar-title {
-font-size: 20px;
-color: #222350;
-text-align: center;
+  font-size: 20px;
+  color: #222350;
+  text-align: center;
 }
 
 .weekend {
-color: #222350;
+  color: #222350;
 }
 
-/* .vcal-date:hover {
-background-color: #3498db;
-color: #ffffff;
-} */
-
-.color-box {
-width: 20px; /* 상자의 너비 */
-height: 20px; /* 상자의 높이 */
-display: inline-block; /* 상자를 인라인 요소처럼 배치 */
-margin-right: 4px; /* 상자 사이의 간격 */
-}
-
-.color-bar {
-height: 5px; /* 색상 바의 높이 */
-width: 100%; /* 색상 바의 너비 */
-margin-top: 2px; /* 색상 바 위의 마진 */
+.vcal-date:hover {
+  background-color: #3498db;
+  color: #ffffff;
 }
 </style>

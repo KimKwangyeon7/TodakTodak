@@ -10,13 +10,10 @@
             <router-link to="/calendar" class="nav-link">
               알림 관리
             </router-link>
-            <router-link to="/meet" class="nav-link">
-              친구 관리
-            </router-link>
             <router-link to="/board" class="nav-link">
               일반 설정
             </router-link>
-            <router-link to="/Friend" class="nav-link">
+            <router-link to="/meet" class="nav-link">
               앱 정보
             </router-link>
         </div>

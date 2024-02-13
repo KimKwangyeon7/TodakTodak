@@ -7,6 +7,8 @@ import { login, findByToken } from "@/api/member";
 
 import { httpStatusCode } from "@/util/http-status";
 
+import axios from 'axios'
+
 export const useMemberStore = defineStore("memberStore", () => {
   const router = useRouter();
 
@@ -92,6 +94,19 @@ export const useMemberStore = defineStore("memberStore", () => {
     );
     return userInfo.value;
   };
+  const updateUserInfo = async (updatedUserInfo) => {
+    try {
+      const response = await axios.put('@/api/member', updatedUserInfo); // updateUser는 사용자 정보 업데이트를 위한 API 호출입니다.
+      if (response.status === httpStatusCode.OK) {
+        userInfo.value = updatedUserInfo;
+        console.log("사용자 정보가 성공적으로 업데이트되었습니다.");
+      } else {
+        console.error("사용자 정보 업데이트 실패:", response);
+      }
+    } catch (error) {
+      console.error("사용자 정보 업데이트 중 오류 발생:", error);
+    }
+  };
 
 
 
@@ -103,6 +118,7 @@ export const useMemberStore = defineStore("memberStore", () => {
     userInfo,
     userLogin,
     getUserInfo,
-    initializeAuth
+    initializeAuth,
+    updateUserInfo
   };
 });
