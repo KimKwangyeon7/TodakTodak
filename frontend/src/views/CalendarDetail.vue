@@ -1,133 +1,112 @@
 <template>
-  <div class="modal-content" style="border-radius: 10px;">
+  <div class="black-bg" v-if="isModalValid">
+    <component
+      :is="activeModal"
+      :item="currentItem"
+      :formattedDate="formattedDate.valueOf"
+      @close-modal="closeModal"
+    />
+  </div>
 
-    <div class="modal-title">
-      <button type="button" class="btn-close" aria-label="Close" @click="closeModal"></button>
-    </div>
-    <form>
+  <div class="calendar-wrapper m-3" style="margin-top: 70px">
+    <main class="calendar-body">
+      <div class="button-container">
+        <button class="btn" @click="$router.back()">
+          <img src="@/assets/back.png" alt="" />
+        </button>
 
-      <!-- 상속 목표 -->
-      <div class="form-group">
-        <label for="selectedGoal">목표:</label>
-        <select v-model="selectedGoal" id="selectedGoal" class="form-control">
-          <option v-for="goal in goals" :key="goal.id" :value="goal">
-            {{ goal.content }}
-          </option>
-        </select>
+        <button class="add-button" @click="openModal('CalendarAddTodo')">
+          +
+        </button>
       </div>
-      <!-- 제목 입력 -->
-      <div class="form-group">
-        <label for="todoTitle">제목:</label>
-        <input v-model="todoTitle" type="text" id="todoTitle" class="form-control" required>
-      </div>
-
-      <!-- 내용 입력 -->
-      <div class="form-group">
-        <label for="todoContent">내용:</label>
-        <textarea v-model="todoContent" id="todoContent" class="form-control" rows="3"></textarea>
-      </div>
-      
-
-      <!-- is_important -->
-      <div class="form-group">
-        <label>중요여부:</label>
-        <div class="form-check form-switch">
-          <input v-model="isImportant" class="form-check-input" type="checkbox" role="switch" id="importantSwitch">
-          <label class="form-check-label" for="importantSwitch"></label>
+      <div class="calendar-weekdays">
+        <div
+          v-for="(date, index) in weekDate"
+          :key="index"
+          class="date"
+          :class="{ bold: index < 7 }"
+        >
+          {{ date }}
         </div>
       </div>
-
-      <!-- isOutside -->
-      <div class="form-group">
-        <label>외출 여부:</label>
-        <div class="form-check form-switch">
-          <input v-model="isOutside" class="form-check-input" type="checkbox" role="switch" id="outsideSwitch">
-          <label class="form-check-label" for="outsideSwitch"></label>
-        </div>
-      </div>
-
-      <!-- 알람 여부 선택 -->
-      <!-- isAlarmed -->
-      <div class="form-group">
-        <label>알람 여부:</label>
-        <div class="custom-control custom-switch">
-          
-          <div class="form-check form-switch">
-            <input v-model="isAlarmed" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
-            <label class="form-check-label" for="flexSwitchCheckChecked"></label>
+      <div class="calendar-dates">
+        <div
+          v-for="(day, index) in weekDates"
+          :key="index"
+          class="date text-center"
+        >
+          <span class="day">{{ day }}</span>
+          <div v-for="todo in weekTodos" :key="todo.id">
+            <span>{{ todo.title }}</span>
           </div>
         </div>
+        <ul>
+          <li v-for="todo in todos" :key="todo.id">{{ todo.content }}</li>
+        </ul>
       </div>
-
-      <!-- 알람 시간 입력 -->
-      <div class="form-group" v-if="isAlarmed">
-        <label for="time">알람 시간:</label>
-        <input v-model="time" type="time" id="time" class="form-control">
-      </div>
-      <!-- <p>Formatted Date: {{ formattedDate }}</p> -->
-      <button type="submit" class="btn btn-primary" @click.prevent="addTodo()">저장</button>
-      <div>
-  </div>
-    </form>
+    </main>
   </div>
 </template>
 
 <script>
-import { addTodo } from '@/api/todos';
-import { getGoalList } from '@/api/goals'; 
-import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useTodoStore } from "@/stores/todoList";
+import { ref, onMounted } from "vue";
+import { getTodoList } from "@/api/todos";
+import { useRoute } from "vue-router";
 
-import moment from 'moment';
+import moment from "moment";
+import CalendarAddTodo from "./CalendarAddTodo.vue";
 
 export default {
-  props: {
-    formattedDate: Object,
-    item: Object
-  },
+  name: "Calendar",
   data() {
     return {
-      // todo-list
-      selectedGoal: null,
-      todoId: '',
-      todoTitle: '',
-      todoContent: '',
-      todoDate: '',
-      isImportant: false,
-      // alarm(알람 설정할 때만 필요한 영역)
-      isAlarmed: false,
-      day: '',
-      time: '',
-      important: false,
-      outside: false,
-      alarmed: false,
-      checked: false,
-      completed: false,
-      goals: [],
+      // 모달이 열려 있는지 여부
+      currentItem: null,
       selectedDate: this.$route.params.selectedDate,
-      
+      weekDates: [],
+      weekDate: ["월", "화", "수", "목", "금", "토", "일"],
     };
   },
+
   setup() {
     const todos = ref([]);
     const route = useRoute();
-    const selectedDate = ref(route.params.selectedDate || moment().format('YYYY-MM-DD'));
-    const formattedDate = ref('');
+    const selectedDate = ref(
+      route.params.selectedDate || moment().format("YYYY-MM-DD")
+    );
+    const formattedDate = ref("");
     const isModalValid = ref(false);
     const activeModal = ref(null);
-    const currentItem = ref('')
+    const currentItem = ref("");
+
     onMounted(async () => {
-      formattedDate.value = moment(selectedDate.value).format('YYYYMMDD');
-      
+      formattedDate.value = moment(selectedDate.value).format("YYYYMMDD");
+      console.log("formattedDate:", formattedDate);
+      try {
+        getTodoList(
+          formattedDate.value,
+          ({ data }) => {
+            console.log("선택한 날 투두 리스트 목록");
+            console.log(data);
+            todos.value = data;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      } catch (error) {
+        console.error("Error fetching todos:", error);
+      }
     });
 
     const openModal = (component) => {
       if (component === "CalendarAddTodo") {
-        console.log('formattedDate in openModal:', formattedDate.value);
+        console.log("formattedDate in openModal:", formattedDate.value);
         isModalValid.value = true;
         activeModal.value = component;
-        currentItem.value = { formattedDate: formattedDate.value }
-        console.log('currentItem:', currentItem.value)
+        currentItem.value = { formattedDate: formattedDate.value };
+        console.log("currentItem:", currentItem.value);
       }
     };
 
@@ -142,171 +121,159 @@ export default {
       isModalValid,
       activeModal,
       openModal,
-      closeModal
+      closeModal,
     };
   },
-
-  methods: {
-    async addTodo() {
-      try {
-        const goalColor = this.selectedGoal.color
-        console.log('goalColor:', goalColor)
-        const goalId = this.selectedGoal.id
-        console.log('goalId:', goalId)
-        // console.log('selectedDate:', this.selectedDate)
-        console.log('formattedDate:', this.formattedDate)
-        // selectedGoal 객체에서 goalId를 가져옵니다.
-        const response = await apiClient.post(`/${goalId}/todos`, 
-        {
-          title: this.todoTitle, // 제목
-          content: this.todoContent, // 내용
-          color: goalColor, // 색상
-          important: this.isImportant, // 중요여부
-          outside: this.isOutside, // 외출여부
-          alarmed: this.time, // 알람시간
-        },
-        ({ params: { todoDate: this.formattedDate } })
-        )
-
-        console.log("Todo added:", response.data);
-      } catch (error) {
-        console.error('Error creating todo:', error);
-      }
-    },
-    closeModal() {
-      this.$emit('close-modal');
-    },
-
-    async fetchGoals() {
-      console.log("fetchGoals 실행")
-      try {
-        getGoalList(
-      ({ data }) => {
-        console.log("채팅목록리스트");
-        console.log(data);
-        this.goals = data;
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-        console.log('goals', this.goals)
-        // this.goals = await getGoalList();
-      } catch (error) {
-        console.error('Error fetching goals:', error);
-      }
-    },
-
-    fourDigitTime(t) {
-      const [hours, minutes] = t.split(':')
-      return hours + minutes   
-    },
-
-    eightDigitDate(d) {
-      const currentDate = new Date();
-      const yyyy = currentDate.getFullYear();
-      const mm = String(currentDate.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 1을 더하고 2자리로 만듭니다.
-      const dd = String(currentDate.getDate()).padStart(2, '0'); // 날짜를 2자리로 만듭니다.
-      const curDate= `${yyyy}${mm}${dd}`;
-      return curDate
-    },
-
-
-    fourDigitTime(t) {
-      const [hours, minutes] = t.split(':')
-      return hours + minutes   
-    },
-
-    async fnAdd(event) {
-event.preventDefault(); // 폼의 기본 제출 동작 방지
-
-// 오늘 날짜와 시간 설정
-const d = new Date();
-this.day = (d.getDay() + 6) % 7; // 월요일을 0으로 설정
-const setTime = this.fourDigitTime(this.time);
-this.time = setTime;
-
-try {
-  const todoData = {
-  title: this.todoTitle, // 제목
-  content: this.todoContent, // 내용
-  color: this.isImportant, // 중요 여부
-  important: this.isImportant, // 외출 여부
-  outside: this.isOutside, // 알람 여부
-  alarmed: this.time, // 알람 시간 (서버가 요구하는 필드명과 일치하는지 확인 필요)
-  goalId: this.selectedGoal.id, // selectedGoal에서 goalId 추출
-};
-
-// addTodo 함수를 호출하고 todoData 객체를 인자로 전달
-await addTodo(todoData);
-
-  this.closeModal(); // 모달 닫기
-} catch (error) {
-  console.error('Error adding todo:', error);
-  // 에러 처리 로직 (예: 사용자에게 에러 메시지 표시)
-}
-}
-    // fnAdd() {  
-    //   const t = this.time
-    //   this.time = this.fourDigitTime(t)
-
-    //   const d = this.todoDate
-    //   this.todoDate = this.eightDigitDate(d)
-
-    //   addTodo({
-    //     title: this.title,
-    //     content: this.content,
-    //     color: this.color,
-    //     time: this.time,
-    //     important: this.important,
-    //     outside: this.outside,
-    //     alarmed: this.alarmed,
-    //     checked: this.checked,
-    //     completed: this.completed,
-    //     todoDate: this.todoDate,
-    //   });
-
-    //   this.closeModal()
-    // },
-
+  created() {
+    this.calculateWeekDates();
+    const todoStore = useTodoStore();
+    todoStore.fetchTodos();
+    console.log("Selected Date:", this.selectedDate);
+    console.log("Week Dates:", this.weekDates);
   },
-  mounted() {
-    this.fetchGoals();
-  }  
-}
+  computed: {
+    weekTodos() {
+      return this.todos.filter((todo) => {
+        // Todo 항목의 날짜가 현재 주의 날짜 배열(weekDates)에 포함되는지 확인
+        const todoDate = moment(todo.date, "YYYY-MM-DD");
+        return this.weekDates.some((weekDate) => {
+          const weekDateMoment = moment(this.selectedDate, "YYYY-MM-DD")
+            .startOf("week")
+            .add(weekDate - 1, "days");
+          return todoDate.isSame(weekDateMoment, "day");
+        });
+      });
+    },
+  },
+  components: {
+    CalendarAddTodo,
+  },
+  methods: {
+    calculateWeekDates() {
+      let selectedMoment = moment(this.selectedDate, "YYYY-MM-DD");
+      let startOfWeek = selectedMoment.clone().startOf("week");
+
+      for (let i = 1; i < 8; i++) {
+        let day = startOfWeek.clone().add(i, "days");
+        this.weekDates.push(day.format("D"));
+      }
+    },
+  },
+};
 </script>
 
 <style scoped>
-.modal-content {
-  background: #fff; /* 나머지 부분은 하얀색 배경 */
+.black-bg {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  top: 0;
+  left: 0;
+}
+.calendar-wrapper {
+  display: flex;
+  margin: 2.5em 0;
+  overflow: auto;
 }
 
-.modal-title {
-  background: #EAF3F9; /* 제목 부분에만 #EAF3F9 배경 색상 적용 */
-  padding: 10px; /* 여백 추가 */
-  border-radius: 8px;
-  margin-bottom: 20px; /* 여백 추가 */
-  display: flex; /* Flexbox 사용 */
-  align-items: center; /* 수직 가운데 정렬 */
+.calendar-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 70px auto 0; /* 상단 여백 조정 및 가운데 정렬 */
+  overflow: auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+  border-radius: 8px; /* 테두리 둥글게 */
 }
 
-.btn-close {
-  width: 20px;
-  height: 20px;
-  background-color: #EAF3F9; /* 배경 색상 수정 */
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 12px;
-  margin-right: auto; /* 나머지 공간을 최대한 차지하여 왼쪽으로 이동 */
-}
-.form-group {
-  text-align: left;
-  margin-left: 10px;
-  margin-right: 10px;
+.calendar-body {
+  width: 100%; /* 전체 너비 사용 */
+  max-width: 500px; /* 최대 너비 설정 */
+  background-color: #ffffff; /* 배경색 설정 */
+  padding: 1rem; /* 패딩 추가 */
+  max-height: 800px; /* 최소 높이 설정 */
 }
 
-.custom-control-label {
-  padding-left: 10px;
+.calendar-body button {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 1rem; /* 버튼 하단 여백 조정 */
+  background: none; /* 버튼 배경 투명화 */
+  border: none; /* 테두리 제거 */
+  cursor: pointer; /* 커서 포인터로 변경 */
+}
+
+.calendar-weekdays {
+  display: flex;
+  margin-bottom: 1rem; /* 하단 여백 조정 */
+  color: #2091a2; /* 주요 색상 설정 */
+}
+
+.calendar-weekdays .date {
+  flex: 1; /* 평등하게 공간 분배 */
+  text-align: center;
+  padding: 0.5rem 0; /* 패딩 추가 */
+}
+
+.calendar-weekdays .date.bold {
+  font-weight: bold; /* 폰트 굵게 */
+}
+
+.calendar-dates {
+  display: flex;
+  flex-wrap: wrap;
+  height: 500px;
+}
+
+.calendar-dates .date {
+  width: 14.28%; /* 7일에 맞게 너비 조정 */
+  padding: 0.5rem; /* 패딩 추가 */
+  text-align: center; /* 텍스트 가운데 정렬 */
+  border-radius: 4px; /* 테두리 둥글게 */
+  transition: background-color 0.3s, color 0.3s; /* 배경 및 글자 색상 전환 효과 */
+}
+
+.date:hover {
+  background-color: #e8f0f2; /* 호버 시 배경색 변경 */
+  color: #333; /* 호버 시 글자 색상 변경 */
+}
+
+.calendar-dates .date.today {
+  background-color: #45b7c1; /* 오늘 날짜 배경색 */
+  color: white; /* 오늘 날짜 글자색 */
+  font-weight: bold; /* 오늘 날짜 굵게 */
+}
+
+.calendar-dates .date.now {
+  border: 2px solid #45b7c1; /* 현재 시간 테두리 */
+  color: #45b7c1; /* 현재 시간 글자색 */
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%; /* 컨테이너 너비를 최대로 설정 */
+  margin-bottom: 1rem; /* 버튼 하단 여백 */
+}
+
+.btn,
+.add-button {
+  cursor: pointer; /* 커서 포인터로 변경 */
+  background: none; /* 배경 투명화 */
+  border: none; /* 테두리 제거 */
+}
+
+.add-button {
+  font-size: 1.5rem; /* + 버튼의 글자 크기를 키움 */
+  padding: 0.5rem 1rem; /* 패딩 추가로 버튼 크기 조정 */
+  border-radius: 50%; /* 원형으로 만듬 */
+  line-height: 1; /* 라인 높이 조정 */
+  margin-left: auto; /* 왼쪽 자동 마진으로 오른쪽 정렬 */
 }
 </style>
