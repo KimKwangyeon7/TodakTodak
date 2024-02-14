@@ -118,7 +118,8 @@
           day = "0" + day;
         }
         const todoDate = year + "" + month + "" + day;
-        
+        const alarmTime = this.fourDigitTime(this.time);
+
         console.log('todoDate:', todoDate)
         
         const goalColor = this.selectedGoal.color
@@ -133,7 +134,8 @@
           color: goalColor, // 색상
           important: this.isImportant, // 중요여부
           outside: this.isOutside, // 외출여부
-          alarmed: this.time, // 알람시간
+          alarmed: this.isAlarmded, // 알람여부
+          time: alarmTime // 알람시간
         },
         ({ params: { todoDate: todoDate } })
         )
