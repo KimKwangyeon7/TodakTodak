@@ -91,7 +91,7 @@ export default {
     const sentences = ref([]);
     const currentSentenceId = ref(0);
     const currentSentence = computed(() => sentences.value[currentSentenceId.value] || '');
-    const sentenceLength = 3 // 4000천 개의 문장 중에 우선 5개만
+    const sentenceLength = 250 // 4000천 개의 문장 중에 우선 5개만
 
     loadKoreanCorpus().then(sentencesArray => {
       sentences.value = sentencesArray.slice(0, sentenceLength); 
@@ -202,12 +202,9 @@ export default {
       if (this.currentRecordHistory.length === this.sentenceLength) {
         const learning = window.confirm('모든 문장 녹음이 끝났으니 음성 모델 학습을해주세요!')
         if (learning) {
-          try {
-            await startLearning(this.recordId);
-            
-          } catch (error) {
-            console.error(error);
-          }
+          startLearning(this.recordId).catch(error => {
+
+          })
         }
       }
     },
@@ -318,6 +315,7 @@ export default {
           // this.onSuccess, // pass the onSuccess callback
           // this.onFail    // pass the onFail callback
         );
+        this.checkAllRecordingsDone()
       } else {
         console.error('Blob is not defined at the time of stopping the recording.');
       }
@@ -339,7 +337,6 @@ export default {
       this.recordHistoryStore.addRecordingDuration(this.recordId, duration);
       this.elapsedTime = duration;
       this.recordingStartTime = null;
-      this.checkAllRecordingsDone()
     },
 
     async goOut() {
