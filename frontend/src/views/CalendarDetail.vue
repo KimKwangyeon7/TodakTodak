@@ -74,8 +74,6 @@ import { useRoute } from 'vue-router';
 
 import moment from 'moment';
 import CalendarAddTodo from './CalendarAddTodo.vue';
-import apiClient from '@/api/todosApiClient';
-
 
 
 export default {

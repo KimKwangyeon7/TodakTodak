@@ -73,14 +73,14 @@
 </template>
 
 <script>
-import { addTodo } from '@/api/todos';
+import { addTodo, getTodoList } from '@/api/todos';
 import { getGoalList } from '@/api/goals'; 
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
 import moment from 'moment';
 
-import apiClient from '@/api/todosApiClient';
+
 export default {
   props: {
     formattedDate: Object,
