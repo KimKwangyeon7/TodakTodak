@@ -29,6 +29,8 @@
         </div>
       </li>
     </ul>
+
+    <FriendRecommend />
   </div>
 </template>
 
@@ -37,7 +39,7 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 
 import FriendProfile from '@/components/Friend/FriendProfile.vue'
-import FriendRequestList from '@/components/Friend/FriendRequestList.vue'
+import FriendRecommend from '@/components/Friend/FriendRecommend.vue'
 
 const router = useRouter()
 

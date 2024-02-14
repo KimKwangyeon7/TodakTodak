@@ -21,8 +21,8 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { Chart, registerables } from 'chart.js';
-Chart.register(...registerables);
+import { Chart, registerables } from 'chart.js'
+Chart.register(...registerables)
 
 const goals = ref([
   { name: '정보처리기사 자격증 획득', successRate: [20, 70, 90] },

@@ -12,7 +12,7 @@
     <div class="button-group">
       <button class="edit-button" @click="fnSave">수정</button>
       <button class="continue-button" @click="recordCont">이어 녹음하기</button>
-      <button class="learning-button" @click="learningVoice">
+      <button class="learning-button" @click="learningVoice" :disabled="!this.isRecorded">
         {{ isLearning ? '학습 중' : '학습하기' }}
       </button>
     </div>
@@ -22,6 +22,7 @@
 <script>
 import { modifyVoice, getUser } from '@/api/records'
 import { startLearning } from '@/api/learning'
+import { onMounted } from 'vue'
 
 
 export default {
@@ -34,6 +35,12 @@ export default {
   data(){
     return {
       isLearning: false, // 학습 상태를 추적하는 새로운 속성
+      isRecorded: null, // Holds the availability status of the recording
+    }
+  },
+  computed: {
+    isRecorded() {
+      return this.isRecordingAvailable; // Corrected to return the data property
     }
   },
   methods: {
@@ -45,6 +52,11 @@ export default {
       },
     closeModal() {
       this.$emit('close-modal');
+    },
+    handleRecordCompleted(recordId) {
+      if (this.item.id === recordId) {
+        this.recordingCompleted = true
+      }
     },
     async fnSave() {
       try {
@@ -69,7 +81,20 @@ export default {
     },
     recordCont() {
         this.$router.push({ name: 'Trainer', params: { recordId: this.item.id } });
+    },
+    async checkRecording() {
+      try {
+        const userData = await getUser(this.item.id);
+        this.isRecorded = userData.time !== 0; // Corrected syntax and refactored
+      } catch (error) {
+        console.error(error);
+        this.isRecorded = false;
+        // Optionally, handle error state in UI
+      }
     }
+  },  
+  mounted() {
+    this.checkRecording();
   }
 }
 </script>

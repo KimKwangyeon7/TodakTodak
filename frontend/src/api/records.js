@@ -77,20 +77,35 @@ async function deleteVoice(recordId, success, fail) {
     });
 }
   
+// async function selectVoice(recordId, success, fail) {
+//   local.defaults.headers.Authorization = "Bearer " + localStorage.getItem("accessToken");
+//   await local.patch(`${url}/use?recordId=${recordId}`) // recordId를 쿼리 매개변수로 전달
+//          .then(response => {
+//             if (response.status === 200){
+//               console.log(response.status)
+//               console.log(`${recordId}번 선택 완료`);
+//               success(response); // 성공 콜백 호출
+//             }
+//          })
+//          .catch(error => {
+//             console.error(`오류 발생: ${error}`);
+//             fail(error); // 실패 콜백 호출
+//          });
+// }
+
+
 async function selectVoice(recordId, success, fail) {
   local.defaults.headers.Authorization = "Bearer " + localStorage.getItem("accessToken");
-  await local.patch(`${url}/use?recordId=${recordId}`) // recordId를 쿼리 매개변수로 전달
-         .then(response => {
-            if (response.status === 200){
-              console.log(response.status)
-              console.log(`${recordId}번 선택 완료`);
-              success(response); // 성공 콜백 호출
-            }
-         })
-         .catch(error => {
-            console.error(`오류 발생: ${error}`);
-            fail(error); // 실패 콜백 호출
-         });
+  try {
+    const response = await local.patch(`${url}/use/${recordId}`);
+    if (response.status === 200) {
+      console.log(`${recordId}번 선택 완료`);
+      success(response);
+    }
+  } catch (error) {
+    console.error(`오류 발생: ${error}`);
+    fail(error);
+  }
 }
 
 async function saveRecord(recordId, audioBlob) {

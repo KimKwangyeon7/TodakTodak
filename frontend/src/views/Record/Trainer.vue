@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { getUser, saveRecord, goOutFromTrainer } from '@/api/records'
 import { loadKoreanCorpus } from '@/stores/koreanCorpus'
 import { useRecordHistorystore } from '@/stores/recordHistory'

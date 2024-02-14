@@ -7,6 +7,7 @@
         <div class="quote">짐  론</div>
       </div>
 
+      <!-- <Example :example="example" /> -->
       <TodoList :todoList="todoList" />
       <HabitList :habitList="habitList" />
 
@@ -28,11 +29,13 @@
 <script>
 import TodoList from '@/components/Todo/TodoList.vue'
 import HabitList from '@/components/Habit/HabitList.vue'
+import { useMemberStore } from '@/stores/auth'
 
 export default {
   components: {
       TodoList,
       HabitList,
+      // Example,
   },
   data() {
       return {
@@ -48,6 +51,23 @@ export default {
     }
   },
   methods: {
+    async fetchQuote() {
+      try {
+        const response = await fetch("/members/quote");
+        if (!response.ok) {
+          throw new Error("Failed to fetch quote");
+        }
+        const data = await response.json();
+        if (!Array.isArray(data) || data.length !== 2) {
+          throw new Error("Invalid quote data format");
+        }
+        this.randomQuote = data[0];
+        this.quoteAuthor = data[1];
+      } catch (error) {
+        console.error("Error fetching quote:", error);
+        this.quoteError = true; // 에러 발생 시 플래그 설정
+      }
+    },
     handleLoginClick() {
       console.log(this.authStore.isLogin);
       // 여기에서 로그인 상태 확인
