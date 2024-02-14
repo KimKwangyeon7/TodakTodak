@@ -166,7 +166,7 @@ def sendGlow(url, record_id):
 
 # hifi 결과 S3에 업로드 -> url 스프링부트로 전송
 def uploadHifi(member_id, record_id):
-    DRIVE_FOLDER_PATH = root + 'content/data/hifigan-v2/'
+    DRIVE_FOLDER_PATH = 'home/ubuntu/AIFlask/S10P12C210/content/data/hifigan-v2/'
 
     # 필터링된 파일 목록을 담을 리스트
     selected_files = []
