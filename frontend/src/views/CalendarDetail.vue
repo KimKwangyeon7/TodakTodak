@@ -1,140 +1,312 @@
 <template>
-  <div class="calendar-wrapper m-3" style="margin-top: 70px;">
-    <main class="calendar-body">
-      <button class='btn' @click="$router.back()">
-       <img src="@/assets/back.png" alt="">
-      </button>
-      <div class="calendar-weekdays">
-        <div
-          v-for="(date, index) in weekDate"
-          :key="index"
-          class="date"
-          :class="{ 'bold': index < 7 }"
-        >
-          {{ date }}
+  <div class="modal-content" style="border-radius: 10px;">
+
+    <div class="modal-title">
+      <button type="button" class="btn-close" aria-label="Close" @click="closeModal"></button>
+    </div>
+    <form>
+
+      <!-- 상속 목표 -->
+      <div class="form-group">
+        <label for="selectedGoal">목표:</label>
+        <select v-model="selectedGoal" id="selectedGoal" class="form-control">
+          <option v-for="goal in goals" :key="goal.id" :value="goal">
+            {{ goal.content }}
+          </option>
+        </select>
+      </div>
+      <!-- 제목 입력 -->
+      <div class="form-group">
+        <label for="todoTitle">제목:</label>
+        <input v-model="todoTitle" type="text" id="todoTitle" class="form-control" required>
+      </div>
+
+      <!-- 내용 입력 -->
+      <div class="form-group">
+        <label for="todoContent">내용:</label>
+        <textarea v-model="todoContent" id="todoContent" class="form-control" rows="3"></textarea>
+      </div>
+      
+
+      <!-- is_important -->
+      <div class="form-group">
+        <label>중요여부:</label>
+        <div class="form-check form-switch">
+          <input v-model="isImportant" class="form-check-input" type="checkbox" role="switch" id="importantSwitch">
+          <label class="form-check-label" for="importantSwitch"></label>
         </div>
       </div>
-      <div class="calendar-dates">
-        <div
-          v-for="(day, index) in weekDates"
-          :key="index"
-          class="date text-center"
-        >
-          <span class="day">{{ day }}</span>
+
+      <!-- isOutside -->
+      <div class="form-group">
+        <label>외출 여부:</label>
+        <div class="form-check form-switch">
+          <input v-model="isOutside" class="form-check-input" type="checkbox" role="switch" id="outsideSwitch">
+          <label class="form-check-label" for="outsideSwitch"></label>
         </div>
       </div>
-    </main>
+
+      <!-- 알람 여부 선택 -->
+      <!-- isAlarmed -->
+      <div class="form-group">
+        <label>알람 여부:</label>
+        <div class="custom-control custom-switch">
+          
+          <div class="form-check form-switch">
+            <input v-model="isAlarmed" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
+            <label class="form-check-label" for="flexSwitchCheckChecked"></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 알람 시간 입력 -->
+      <div class="form-group" v-if="isAlarmed">
+        <label for="time">알람 시간:</label>
+        <input v-model="time" type="time" id="time" class="form-control">
+      </div>
+      <!-- <p>Formatted Date: {{ formattedDate }}</p> -->
+      <button type="submit" class="btn btn-primary" @click.prevent="addTodo()">저장</button>
+      <div>
+  </div>
+    </form>
   </div>
 </template>
 
 <script>
+import { addTodo } from '@/api/todos';
+import { getGoalList } from '@/api/goals'; 
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+
 import moment from 'moment';
 
 export default {
-  name: 'Calendar',
+  props: {
+    formattedDate: Object,
+    item: Object
+  },
   data() {
     return {
+      // todo-list
+      selectedGoal: null,
+      todoId: '',
+      todoTitle: '',
+      todoContent: '',
+      todoDate: '',
+      isImportant: false,
+      // alarm(알람 설정할 때만 필요한 영역)
+      isAlarmed: false,
+      day: '',
+      time: '',
+      important: false,
+      outside: false,
+      alarmed: false,
+      checked: false,
+      completed: false,
+      goals: [],
       selectedDate: this.$route.params.selectedDate,
-      weekDates: [],
-      weekDate: ['월', '화', '수', '목', '금', '토', '일']
+      
     };
   },
-  created() {
-    this.calculateWeekDates();
-    console.log('Selected Date:', this.selectedDate);
-    console.log('Week Dates:', this.weekDates);
-  },
-  methods: {
-    calculateWeekDates() {
-  let selectedMoment = moment(this.selectedDate, 'YYYY-MM-DD');
-  let startOfWeek = selectedMoment.clone().startOf('week');
+  setup() {
+    const todos = ref([]);
+    const route = useRoute();
+    const selectedDate = ref(route.params.selectedDate || moment().format('YYYY-MM-DD'));
+    const formattedDate = ref('');
+    const isModalValid = ref(false);
+    const activeModal = ref(null);
+    const currentItem = ref('')
+    onMounted(async () => {
+      formattedDate.value = moment(selectedDate.value).format('YYYYMMDD');
+      
+    });
 
-  for (let i = 1; i < 8; i++) {
-    let day = startOfWeek.clone().add(i, 'days');
-    this.weekDates.push(day.format('D'));
-  }
-}
-  }
+    const openModal = (component) => {
+      if (component === "CalendarAddTodo") {
+        console.log('formattedDate in openModal:', formattedDate.value);
+        isModalValid.value = true;
+        activeModal.value = component;
+        currentItem.value = { formattedDate: formattedDate.value }
+        console.log('currentItem:', currentItem.value)
+      }
+    };
+
+    const closeModal = () => {
+      isModalValid.value = false;
+      activeModal.value = null;
+    };
+
+    return {
+      todos,
+      formattedDate,
+      isModalValid,
+      activeModal,
+      openModal,
+      closeModal
+    };
+  },
+
+  methods: {
+    async addTodo() {
+      try {
+        const goalColor = this.selectedGoal.color
+        console.log('goalColor:', goalColor)
+        const goalId = this.selectedGoal.id
+        console.log('goalId:', goalId)
+        // console.log('selectedDate:', this.selectedDate)
+        console.log('formattedDate:', this.formattedDate)
+        // selectedGoal 객체에서 goalId를 가져옵니다.
+        const response = await apiClient.post(`/${goalId}/todos`, 
+        {
+          title: this.todoTitle, // 제목
+          content: this.todoContent, // 내용
+          color: goalColor, // 색상
+          important: this.isImportant, // 중요여부
+          outside: this.isOutside, // 외출여부
+          alarmed: this.time, // 알람시간
+        },
+        ({ params: { todoDate: this.formattedDate } })
+        )
+
+        console.log("Todo added:", response.data);
+      } catch (error) {
+        console.error('Error creating todo:', error);
+      }
+    },
+    closeModal() {
+      this.$emit('close-modal');
+    },
+
+    async fetchGoals() {
+      console.log("fetchGoals 실행")
+      try {
+        getGoalList(
+      ({ data }) => {
+        console.log("채팅목록리스트");
+        console.log(data);
+        this.goals = data;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+        console.log('goals', this.goals)
+        // this.goals = await getGoalList();
+      } catch (error) {
+        console.error('Error fetching goals:', error);
+      }
+    },
+
+    fourDigitTime(t) {
+      const [hours, minutes] = t.split(':')
+      return hours + minutes   
+    },
+
+    eightDigitDate(d) {
+      const currentDate = new Date();
+      const yyyy = currentDate.getFullYear();
+      const mm = String(currentDate.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 1을 더하고 2자리로 만듭니다.
+      const dd = String(currentDate.getDate()).padStart(2, '0'); // 날짜를 2자리로 만듭니다.
+      const curDate= `${yyyy}${mm}${dd}`;
+      return curDate
+    },
+
+
+    fourDigitTime(t) {
+      const [hours, minutes] = t.split(':')
+      return hours + minutes   
+    },
+
+    async fnAdd(event) {
+event.preventDefault(); // 폼의 기본 제출 동작 방지
+
+// 오늘 날짜와 시간 설정
+const d = new Date();
+this.day = (d.getDay() + 6) % 7; // 월요일을 0으로 설정
+const setTime = this.fourDigitTime(this.time);
+this.time = setTime;
+
+try {
+  const todoData = {
+  title: this.todoTitle, // 제목
+  content: this.todoContent, // 내용
+  color: this.isImportant, // 중요 여부
+  important: this.isImportant, // 외출 여부
+  outside: this.isOutside, // 알람 여부
+  alarmed: this.time, // 알람 시간 (서버가 요구하는 필드명과 일치하는지 확인 필요)
+  goalId: this.selectedGoal.id, // selectedGoal에서 goalId 추출
 };
+
+// addTodo 함수를 호출하고 todoData 객체를 인자로 전달
+await addTodo(todoData);
+
+  this.closeModal(); // 모달 닫기
+} catch (error) {
+  console.error('Error adding todo:', error);
+  // 에러 처리 로직 (예: 사용자에게 에러 메시지 표시)
+}
+}
+    // fnAdd() {  
+    //   const t = this.time
+    //   this.time = this.fourDigitTime(t)
+
+    //   const d = this.todoDate
+    //   this.todoDate = this.eightDigitDate(d)
+
+    //   addTodo({
+    //     title: this.title,
+    //     content: this.content,
+    //     color: this.color,
+    //     time: this.time,
+    //     important: this.important,
+    //     outside: this.outside,
+    //     alarmed: this.alarmed,
+    //     checked: this.checked,
+    //     completed: this.completed,
+    //     todoDate: this.todoDate,
+    //   });
+
+    //   this.closeModal()
+    // },
+
+  },
+  mounted() {
+    this.fetchGoals();
+  }  
+}
 </script>
 
 <style scoped>
-.calendar-wrapper {
-  display: flex;
-  margin: 2.5em 0;
-  overflow: auto;
+.modal-content {
+  background: #fff; /* 나머지 부분은 하얀색 배경 */
 }
 
-.calendar-body {
-  width: 384px;
-  height: 394px;
+.modal-title {
+  background: #EAF3F9; /* 제목 부분에만 #EAF3F9 배경 색상 적용 */
+  padding: 10px; /* 여백 추가 */
+  border-radius: 8px;
+  margin-bottom: 20px; /* 여백 추가 */
+  display: flex; /* Flexbox 사용 */
+  align-items: center; /* 수직 가운데 정렬 */
 }
 
-.calendar-body button {
-  margin-bottom: 7px;
-}
-
-.calendar-weekdays {
-  display: flex;
-  margin-bottom: 1.25rem;
-  color: #2091a2;
-  font-size: 16px;
-}
-
-.calendar-weekdays .date {
-  width: calc(100% / 7);
-  font-size: 16px;
-  line-height: 1.25;
-  text-align: center;
-  color: #2091a2;
-}
-
-.calendar-weekdays .date.bold {  /* Add this block */
-  font-weight: bold;
-}
-
-.calendar-dates {
-  display: flex;
-  flex-wrap: wrap;
-  position: relative;
-}
-
-.date:hover {
+.btn-close {
+  width: 20px;
+  height: 20px;
+  background-color: #EAF3F9; /* 배경 색상 수정 */
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
+  font-size: 12px;
+  margin-right: auto; /* 나머지 공간을 최대한 차지하여 왼쪽으로 이동 */
+}
+.form-group {
+  text-align: left;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
-.calendar-dates .date {
-  font-weight: 200;
-  padding: 0.25rem 0.5rem;
-  position: relative;
-  width: calc(100% / 7);
-  margin-top: 1px;
-}
-
-.calendar-dates .date.blank {
-  color: #949ba4;
-}
-
-.calendar-dates .date.today {
-  background-color: #45b7c1;
-  color: white !important;
-}
-
-.date.today:first-child,
-:not(.today)+.today {
-  border-top-left-radius: 20px;
-  border-bottom-left-radius: 20px;
-}
-
-.date.today+.date.today+.date.today+.date.today+.date.today {
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
-}
-
-.calendar-dates .date.now {
-  border: 1px solid #45b7c1;
-  border-radius: 100px;
-  color: #45b7c1;
-  margin-top: -1px;
+.custom-control-label {
+  padding-left: 10px;
 }
 </style>

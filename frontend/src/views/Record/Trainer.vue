@@ -1,13 +1,13 @@
 <template>
   <div class="app mt-5">
     <p class="voice-title">음성 학습
-      <button class='btn' @click="handleBackButton">back</button>
+      <button class='btn' @click.prevent="handleBackButton">back</button>
     </p>
 
     <div class="sentence-box">
       <div class="inner-box">
         <p class="inner-instruction-box">다음 문장을 소리내어 읽으세요.</p>
-        <p style="font-size: 16px">{{ currentSentence.sentence || '문장을 불러오는 중...' }}</p>
+        <p class="inner-box-1">{{ currentSentence.sentence || '문장을 불러오는 중...' }}</p>
       </div>
       <div class="buttons inner-buttons-box">
         <button class="btn left-btn" @click="prevSentence" :disabled="currentSentenceId === 0">
@@ -17,10 +17,18 @@
         <button class="btn right-btn" @click="nextSentence" :disabled="currentSentenceId === sentences.length - 1">
           <img src="@/assets/voice/arrow-right.png" alt="">
         </button>
+        <!-- <button class="learning-button" @click="learningVoice">
+          {{ isLearning ? '학습 중' : '학습하기' }}
+        </button> -->
       </div>
     </div>  
 
-    <p class="voice-title">음성 녹음</p>
+    <p class="voice-title">음성 녹음
+      <button class="mr-4" @click="record">
+        <img :src="recordingStatus === 'Record Sound' ? recordSoundImage : stopRecordingImage" alt="Recording Status" />
+        <!-- {{ recordingStatus }} -->
+      </button>
+    </p>
 
     <div class="voice-box">
       <div class="inner-box-3">
@@ -53,10 +61,7 @@
           </div>
         </div>
       <div>
-        <button class="mr-4" @click="record">
-          <img :src="recordingStatus === 'Record Sound' ? recordSoundImage : stopRecordingImage" alt="Recording Status" />
-          <!-- {{ recordingStatus }} -->
-        </button>
+        
       </div>
     </div>
 
@@ -68,7 +73,7 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { getUser, saveRecord, goOutFromTrainer } from '@/api/records'
 import { loadKoreanCorpus } from '@/stores/koreanCorpus'
 import { useRecordHistorystore } from '@/stores/recordHistory'
@@ -88,15 +93,16 @@ export default {
     const sentences = ref([]);
     const currentSentenceId = ref(0);
     const currentSentence = computed(() => sentences.value[currentSentenceId.value] || '');
+    const sentenceLength = 250 // 4000천 개의 문장 중에 우선 5개만
 
     loadKoreanCorpus().then(sentencesArray => {
-      sentences.value = sentencesArray.slice(0, 3); // 4000천 개의 문장 중에 우선 5개만
+      sentences.value = sentencesArray.slice(0, sentenceLength); 
       console.log('sentences: ', sentences.value)
     }).catch(error => {
       console.error('Error loading Korean corpus:', error);
     });
 
-    return { recordHistoryStore, recordId, sentences, currentSentenceId, currentSentence };
+    return { recordHistoryStore, recordId, sentences, currentSentenceId, currentSentence, sentenceLength };
   },
   created() {
     const route = useRoute()
@@ -131,6 +137,7 @@ export default {
       recordId: null,
       recordSoundImage,
       stopRecordingImage,
+      isLearning: false, // 학습 상태를 추적하는 새로운 속성
     };
   },
   computed: {
@@ -191,15 +198,25 @@ export default {
       }
     },
     async checkAllRecordingsDone() {
-      if (this.currentRecordHistory.length === this.sentences.length) {
-        const learning = window.confirm('모든 문장 녹음이 끝났으니 음성 모델을 학습합니다!')
+      console.log('All this.currentRecordHistory: ',this.currentRecordHistory)
+      console.log('All this.currentRecordHistory.length', this.currentRecordHistory.length)
+      console.log('All this.sentenceLength', this.sentenceLength)
+      if (this.currentRecordHistory.length === this.sentenceLength) {
+        const learning = window.confirm('모든 문장 녹음이 끝났으니 음성 모델 학습을해주세요!')
         if (learning) {
-          try {
-            await startLearning(this.recordId);
-          } catch (error) {
-            console.error(error);
-          }
+          startLearning(this.recordId).catch(error => {
+
+          })
         }
+      }
+    },
+    async learningVoice() {
+      this.isLearning = true; // 학습 시작 시
+      try {
+        await startLearning(this.recordId)
+        console.log(`${this.recordId}번 음성 학습 중`)
+      } catch (error) {
+        console.error('Error learning voice:', error)
       }
     },
     handleBackButton() {
@@ -342,6 +359,9 @@ export default {
   beforeRouteLeave(to, from, next) {
     this.goOut()
     next()
+  },
+  mounted() {
+    this.checkAllRecordingsDone()
   }
 };
 
@@ -365,6 +385,83 @@ export default {
   position: relative;
 }
 
+.inner-instruction-box {
+  position: absolute; /* 또는 absolute, 상황에 따라 */
+  top: 60%; /* 상위 요소나 브라우저 창 기준 중앙으로 설정 */
+  left: 50%; /* 상위 요소나 브라우저 창 기준 중앙으로 설정 */
+  transform: translate(-50%, -50%); /* 정확한 중앙으로 이동 */
+  width: calc(100% - 20px); /* padding을 고려한 너비 설정 */
+  border-radius: 24px;
+  margin: 0; /* 필요시 마진 제거 */
+  background-color: #e6f5fd;
+  font-size: 17px;
+}
+
+.inner-box-1 {
+  position: absolute; /* 또는 absolute, 상황에 따라 */
+  top: 30%; /* 상위 요소나 브라우저 창 기준 중앙으로 설정 */
+  left: 50%; /* 상위 요소나 브라우저 창 기준 중앙으로 설정 */
+  transform: translate(-50%, -50%); /* 정확한 중앙으로 이동 */
+  width: calc(100% - 20px); /* padding을 고려한 너비 설정 */
+  margin: 0; /* 필요시 마진 제거 */
+  height: 180px;
+  border-radius: 24px;
+  padding: 30px; /* 내부 여백 */
+  background-color: #fdfdfd;
+}
+
+
+.inner-buttons-box {
+
+white-space: nowrap; /* This will prevent the content from wrapping to the next line */
+overflow: hidden; /* Ensures that the text doesn't spill out of the container */
+text-overflow: ellipsis; /* Adds an ellipsis if the text is too long to fit */
+position: absolute;
+bottom: 10px; /* 내부 박스 하단에서 얼마나 떨어져 있을지 설정 */
+left: 50%; /* 부모 컨테이너의 가운데 */
+transform: translateX(-50%); /* 왼쪽으로 자기 자신의 너비의 50% 만큼 이동하여 가운데 정렬 */
+width: 90%; /* 버튼들이 차지할 너비. 필요에 따라 조정 */
+justify-content: center; /* 버튼들을 가운데 정렬 */
+align-items: center; /* 버튼들을 세로 중앙 정렬 */
+padding: 10px; /* 내부 여백 */
+border: 1px solid #e0e0e0; /* 테두리 */
+border-radius: 24px; /* 둥근 모서리 */
+background-color: #f9f9f9; /* 배경색 */
+display: flex; /* Flexbox를 사용하여 내부 요소들을 정렬 */
+white-space: nowrap; /* This will prevent the content from wrapping to the next line */
+
+text-overflow: ellipsis; /* Adds an ellipsis if the text is too long to fit */
+
+}
+
+
+.sentence-btn {
+  position: absolute;
+  top: 90%;
+  transform: translateY(-50%);
+}
+
+.sentence-text {
+  font-weight: bold;
+  margin-top: 35px;
+}
+
+.voice-box {
+  
+  /* overflow-y: scroll; */
+  max-height: 500px;
+  position: relative;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  background-color: #EAF3F9;
+  padding: 10px;
+  border-radius: 24px;
+  font-size: 13px;
+  box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.25);
+}
+
+
 .inner-box-3 {
   border: 1px solid #e0e0e0; /* 테두리 색 */
   border-radius: 24px; /* 모서리 둥글게 */
@@ -382,52 +479,21 @@ export default {
   border-radius: 24px; /* 모서리 둥글게 */
   padding: 40px; /* 내부 여백 */
   background-color: #f9f9f9; /* 배경색 */
-  height: 8px; /* 고정 높이 설정 */
+  height: 2px; /* 고정 높이 설정 */
   display: flex;
   flex-direction: column;
   justify-content: center; /* 세로축 중앙 정렬 */
 }
 
-.inner-buttons-box {
-  display: flex;
-  justify-content: space-between;
-  align-items: center; /* This ensures vertical centering */
-  border: 1px solid #e0e0e0; /* Keep your styling */
-  border-radius: 24px; /* Keep your styling */
-  padding: 30px; /* Adjust as necessary */
-  background-color: #f9f9f9; /* Keep your styling */
-}
-
-
-
-.inner-buttons-box {
-  border: 1px solid #e0e0e0; /* 테두리 색 */
-  border-radius: 24px; /* 모서리 둥글게 */
-  padding: 30px; /* 내부 여백 */
-  background-color: #f9f9f9; /* 배경색 */
-}
-
-.sentence-btn {
-  position: absolute;
-  top: 90%;
-  transform: translateY(-50%);
-}
-
-.sentence-text {
-  font-weight: bold;
-  margin-top: 35px;
-}
-
-.voice-box {
-  overflow-y: scroll;
-  max-height: 500px;
-  justify-content: space-between;
-  align-items: center;
-  flex-shrink: 0;
-  background-color: #EAF3F9;
-  padding: 10px;
-  border-radius: 24px;
-  box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.25);
+.learning-button {
+  cursor: pointer;
+  background: #23db12; 
+  border: none;
+  border-radius: 16px;
+  padding: 5px 10px;
+  font-size: 14px;
+  margin-left: 10px; /* 삭제 버튼 간격 조절 가능 */
+  color: white;
 }
 
 .left-btn img,

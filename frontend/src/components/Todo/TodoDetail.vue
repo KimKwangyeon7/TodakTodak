@@ -96,9 +96,9 @@ export default {
   methods: {
     closeModal() {
       Object.assign(this.item, this.originalItem)
-      this.editableItem = {...this.item};
-      if (item.isChecked === true) {
-        isTodoCompleted(item.id)
+      // this.editableItem = {...this.item};
+      if (this.item.isChecked === true) {
+        isTodoCompleted(this.item.id)
       }
       this.$emit('close-modal');    
     },

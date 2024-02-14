@@ -11,12 +11,12 @@ export default defineConfig({
     include: [/^index\.html$/, /\.css$/, /\.js$/, /^manifest\.json$/, /\.png$/],
     exclude: []
   },
-  publicPath: '/',
+  publicPath: '/public',
   plugins: [
     vue(),
     VitePWA({
-      srcDir: 'src',
-      filename: 'sw.js',
+      srcDir: 'public',
+      filename: 'firebase-messaging-sw.js',
       devOptions: {
         enabled: true,
         type: 'module',

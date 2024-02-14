@@ -33,6 +33,7 @@
     <div class="todo-section">
       <div class="todo-date">
         <div style="margin-bottom: 5px; margin-top: 5px; font-weight: bold;">목표</div>
+        <button class="add-button" @click="goToAddGoalPage">+</button>
       </div>
       <div class="todo-item" v-for="goal in goals" :key="goal.id">
         <div
@@ -50,7 +51,7 @@
 
 <script>
 import { getGoalList, getGoalDetail } from "@/api/goals";
-import { getTodoListByDate, getTodoDetail } from "@/api/todos";
+import { getTodoList, getTodoDetail } from "@/api/todos";
 import { useMemberStore } from "@/stores/auth";
 import { useTodoStore } from '@/stores/todoList';
 
@@ -163,7 +164,7 @@ export default {
         // 여기서 사용할 변수명 수정
         const todayString = year + "" + month + "" + day;
 
-        this.todos = await getTodoListByDate(todayString);
+        this.todos = await getTodoList(todayString);
       } catch (error) {
         console.error("Error fetching todos:", error);
       }
@@ -183,7 +184,9 @@ export default {
       this.is_modal_valid = false;
       this.activeModal = null;
     },
-    // Other methods remain the same
+    goToAddGoalPage() {
+    this.$router.push('/goal'); // 라우터 이름을 'AddGoal'로 변경해야 합니다.
+    }
   },
 
   mounted() {
