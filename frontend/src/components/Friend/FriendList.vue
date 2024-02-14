@@ -78,6 +78,11 @@ const startChat = (friend) => {
   );
 };
 
+const showFriendRequestList = () => { 
+  router.push('/friendRequestList'); 
+}
+
+
 const toggleSearch = () => {
   showSearch.value = !showSearch.value;
   if (!showSearch.value) {

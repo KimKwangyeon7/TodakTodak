@@ -18,6 +18,7 @@ async function findByNickname(nickname, success, fail) {
   local.defaults.headers.Authorization =
     "Bearer " + localStorage.getItem("accessToken");
   await local.get(`/members/${nickname}`).then(success).catch(fail);
+  console.log("친구닉네임조회성공");
 }
 
 async function findByToken(success, fail) {

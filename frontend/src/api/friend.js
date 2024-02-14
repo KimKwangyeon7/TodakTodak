@@ -24,6 +24,7 @@ async function friendsProfile(friendId, success, fail) {
 
 // 친구 요청 보내기 POST
 async function sendFriendRequest(sender, success, fail) {
+  local.defaults.headers.Authorization = "Bearer " + localStorage.getItem("accessToken");
   await local.post(`/friends/request`, sender).then(success).catch(fail);
   console.log("친구 요청 보내기 성공");
 }
