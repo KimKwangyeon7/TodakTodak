@@ -7,13 +7,13 @@ import MyPage from "@/views/MyPage.vue";
 import { RouterLink, RouterView } from "vue-router";
 import { useMemberStore } from "@/stores/auth";
 
-import { initializeApp } from "firebase/app";
-import {
-  getMessaging,
-  getToken,
-  onMessage,
-  isSupported,
-} from "firebase/messaging";
+// import { initializeApp } from "firebase/app";
+// import {
+//   getMessaging,
+//   getToken,
+//   onMessage,
+//   isSupported,
+// } from "firebase/messaging";
 
 let today = new Date();
 console.log(today);
@@ -29,39 +29,39 @@ const handleLoginClick = () => {
   // 여기에서 로그인 상태 확인
 };
 
-if (isSupported) {
-  try {
-    const firebaseConfig = {
-      apiKey: "AIzaSyCF2s8lAwrDHDwgHFfJnSM5XV_O1tGPadA",
-      authDomain: "c210-67728.firebaseapp.com",
-      databaseURL: "https://c210-67728-default-rtdb.firebaseio.com",
-      projectId: "c210-67728",
-      storageBucket: "c210-67728.appspot.com",
-      messagingSenderId: "1085114030378",
-      appId: "1:1085114030378:web:ca44737c5db69c513a6653",
-    };
+// if (isSupported) {
+//   try {
+//     const firebaseConfig = {
+//       apiKey: "AIzaSyCF2s8lAwrDHDwgHFfJnSM5XV_O1tGPadA",
+//       authDomain: "c210-67728.firebaseapp.com",
+//       databaseURL: "https://c210-67728-default-rtdb.firebaseio.com",
+//       projectId: "c210-67728",
+//       storageBucket: "c210-67728.appspot.com",
+//       messagingSenderId: "1085114030378",
+//       appId: "1:1085114030378:web:ca44737c5db69c513a6653",
+//     };
 
-    const app = initializeApp(firebaseConfig);
-    const messaging = getMessaging(app);
+//     const app = initializeApp(firebaseConfig);
+//     const messaging = getMessaging(app);
 
-    getToken(messaging, { vapidKey: "<YOUR_PUBLIC_VAPID_KEY_HERE>" })
-      .then((currentToken) => {
-        if (currentToken) {
-          // Send the token to your server and update the UI if necessary
-          console.log("Token is: ", currentToken);
-          // ...
-        } else {
-          // Show permission request UI
-          console.log(
-            "No registration token available. Request permission to generate one."
-          );
-          // ...
-        }
-      })
-      .catch((err) => {
-        console.log("An error occurred while retrieving token. ", err);
-        // ...
-      });
+//     getToken(messaging, { vapidKey: "<YOUR_PUBLIC_VAPID_KEY_HERE>" })
+//       .then((currentToken) => {
+//         if (currentToken) {
+//           // Send the token to your server and update the UI if necessary
+//           console.log("Token is: ", currentToken);
+//           // ...
+//         } else {
+//           // Show permission request UI
+//           console.log(
+//             "No registration token available. Request permission to generate one."
+//           );
+//           // ...
+//         }
+//       })
+//       .catch((err) => {
+//         console.log("An error occurred while retrieving token. ", err);
+//         // ...
+//       });
     // messaging
     //   .requestPermission()
     //   .then(function () {
@@ -95,13 +95,13 @@ if (isSupported) {
     //   .catch(function (err) {
     //     console.log("Error Occured");
     //   });
-  } catch (error) {
-    console.error("fcm is error : ", error);
-  }
-  console.log("brower supported");
-} else {
-  console.log("brower not supported");
-}
+//   } catch (error) {
+//     console.error("fcm is error : ", error);
+//   }
+//   console.log("brower supported");
+// } else {
+//   console.log("brower not supported");
+// }
 </script>
 
 <template>

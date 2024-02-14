@@ -73,13 +73,12 @@
 </template>
 
 <script>
-import { addTodo, getTodoList } from '@/api/todos';
+import { addTodo } from '@/api/todos';
 import { getGoalList } from '@/api/goals'; 
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
 import moment from 'moment';
-
 
 export default {
   props: {
@@ -310,6 +309,4 @@ await addTodo(todoData);
 .custom-control-label {
   padding-left: 10px;
 }
-
-
 </style>

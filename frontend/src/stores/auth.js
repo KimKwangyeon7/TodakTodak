@@ -121,7 +121,6 @@ export const useMemberStore = defineStore("memberStore", () => {
 
           sessionStorage.removeItem("accessToken");
           sessionStorage.removeItem("refreshToken");
-          cookies.remove("id");
           console.log("Logout successful");
 
           msg = "로그아웃 되었습니다.";
