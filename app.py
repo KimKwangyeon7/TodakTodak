@@ -5,6 +5,9 @@ import requests
 import traceback, boto3
 from zipfile import ZipFile
 import time
+from glow import learnGlowTTS
+from hifi import learnHifiGAN
+
 
 app = Flask(__name__)
 
@@ -24,6 +27,7 @@ SECRET_KEY = 'Tp7WKthQXqlz2G2IB44cT4XnLH8aRscd1M6g7KsO'
  # S3 버킷 이름
 BUCKET_NAME = 'todaktodak'
 
+root = 'home/ubuntu/AIFlask/S10P12C210/'
 
 # 스프링부트에서 녹음 파일이 저장된 S3 url 받음 - 학습 시작
 @app.route('/learning-server/get', methods=['POST'])
@@ -67,7 +71,7 @@ def downloadZipFile(s3_url):
     print("s3 url: " + s3_url)
 
     # 임시 파일 저장 경로
-    TEMP_DIR = 'C:/Users/SSAFY/Desktop/1차프로젝트/AIflask/MyDrive/Colab Notebooks/data/'
+    TEMP_DIR = root + 'content/data/'
 
 
     # 파일 이름 추출
@@ -87,7 +91,7 @@ def learnHifiGAN():
 
 
 def uploadGlow(member_id, record_id):
-    DRIVE_FOLDER_PATH = 'C:/Users/SSAFY/Desktop/1차프로젝트/AIflask/MyDrive/Colab Notebooks/data/glowtts-v2/'
+    DRIVE_FOLDER_PATH = root + 'content/data/glowtts-v2/'
 
     # 필터링된 파일 목록을 담을 리스트
     selected_files = []
@@ -127,7 +131,7 @@ def uploadGlow(member_id, record_id):
 
     # time.sleep(35)  # 35초 동안 일시 정지
 
-    return uploadS3(ZIP_NAME, 'C:/Users/SSAFY/Desktop/1차프로젝트/AIflask/MyDrive/Colab Notebooks/data/glowtts-v2/'+ZIP_NAME)
+    return uploadS3(ZIP_NAME, root + 'content/data/glowtts-v2/'+ZIP_NAME)
 
 
 def sendGlow(url, record_id):
@@ -160,7 +164,7 @@ def sendGlow(url, record_id):
 
 # hifi 결과 S3에 업로드 -> url 스프링부트로 전송
 def uploadHifi(member_id, record_id):
-    DRIVE_FOLDER_PATH = 'C:/Users/SSAFY/Desktop/1차프로젝트/AIflask/MyDrive/Colab Notebooks/data/hifigan-v2/'
+    DRIVE_FOLDER_PATH = root + 'content/data/hifigan-v2/'
 
     # 필터링된 파일 목록을 담을 리스트
     selected_files = []
@@ -196,7 +200,7 @@ def uploadHifi(member_id, record_id):
 
     # time.sleep(35)  # 35초 동안 일시 정지
 
-    return uploadS3(ZIP_NAME, 'C:/Users/SSAFY/Desktop/1차프로젝트/AIflask/MyDrive/Colab Notebooks/data/hifigan-v2/'+ZIP_NAME)
+    return uploadS3(ZIP_NAME, root + 'content/data/hifigan-v2/'+ZIP_NAME)
 
 
 def sendHifi(url, record_id):
