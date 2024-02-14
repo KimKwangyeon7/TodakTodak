@@ -109,11 +109,7 @@ const send = () => {
 };
 
 const connect = () => {
-<<<<<<< HEAD
-  const serverURL = "ws://i10c210.p.ssafy.io/ws-stomp";
-=======
   const serverURL = "wss://i10c210.p.ssafy.io:8080/ws-stomp";
->>>>>>> 25164df58ab5e13f0caa2b41417de54eec1ab8a0
 
   stomp = Stomp.client(serverURL);
   // stomp.reconnect_delay = 5000;

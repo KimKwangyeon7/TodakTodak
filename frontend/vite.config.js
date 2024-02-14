@@ -11,7 +11,7 @@ export default defineConfig({
     include: [/^index\.html$/, /\.css$/, /\.js$/, /^manifest\.json$/, /\.png$/],
     exclude: []
   },
-  publicPath: '/',
+  publicPath: '/public',
   plugins: [
     vue(),
     VitePWA({

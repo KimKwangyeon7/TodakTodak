@@ -1,5 +1,4 @@
-import apiClient from './todosApiClient';
-import { alarm } from './alarms'
+import { localAxios } from "@/util/http-commons";
 
 const local = localAxios();
 
@@ -64,11 +63,10 @@ function deleteTodo(todoId, success, fail) {
 export {
   addTodo,
   getTodoList,
-  getTodoListByDate,
   getTodoListByGoal,
   getTodoListByMonth,
   isTodoCompleted,
   getTodoDetail,
   updateTodo,
-  deleteTodo
+  deleteTodo,
 };
