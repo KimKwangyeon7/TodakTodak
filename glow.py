@@ -3,17 +3,18 @@ from zipfile import ZipFile
 from shutil import copyfile, rmtree
 import requests
 from pathlib import Path
+import subprocess
 
 def learnGlowTTS():
     print("******************************** glow 학습 시작! ***********************************")
 
     # 현재 작업 디렉토리를 '/content/TTS'로 변경
-    os.chdir('/content/TTS')
+    os.chdir('home/ubuntu/AIFlask/S10P12C210/content/TTS')
 
-    root = "home/ubuntu/AIFlask/S10P12C210/"
+    # root = "home/ubuntu/AIFlask/S10P12C210/"
 
     # Google 드라이브에서 파일을 복사하여 로컬 디렉토리로 이동
-    source_path = root+ "content/data/filelists.zip"
+    source_path = "home/ubuntu/AIFlask/S10P12C210/content/data/filelists.zip"
     destination_path = "./filelists.zip"
 
     if os.path.exists(source_path):
@@ -66,15 +67,15 @@ def learnGlowTTS():
     #     os.remove("glowtts-v2.zip")
     #     shutil.rmtree("./glowtts-v2")
         
-        with open("/content/TTS/test_sentences.txt", mode="w") as f:
-            f.write("""이 문장들은 모델 학습을 위해 사용하지 않은 문장들입니다.
-                    서울특별시 특허허가과 허가과장 허과장.
-                    경찰청 철창살은 외철창살이고 검찰청 철창살은 쌍철창살이다.
-                    지향을 지양으로 오기하는 일을 지양하는 언어 습관을 지향해야 한다.
-                    그러니까 외계인이 우리 생각을 읽고 우리 생각을 우리가 다시 생각토록 해서 그 생각이 마치 우리가 생각한 것인 것처럼 속였다는 거냐?""")
+    with open("/content/TTS/test_sentences.txt", mode="w") as f:
+        f.write("""이 문장들은 모델 학습을 위해 사용하지 않은 문장들입니다.
+                서울특별시 특허허가과 허가과장 허과장.
+                경찰청 철창살은 외철창살이고 검찰청 철창살은 쌍철창살이다.
+                지향을 지양으로 오기하는 일을 지양하는 언어 습관을 지향해야 한다.
+                그러니까 외계인이 우리 생각을 읽고 우리 생각을 우리가 다시 생각토록 해서 그 생각이 마치 우리가 생각한 것인 것처럼 속였다는 거냐?""")
 
     # 파일 경로 지정
-    file_path = root + 'content/TTS/TTS/bin/train_glow_tts.py'
+    file_path = 'home/ubuntu/AIFlask/S10P12C210/content/TTS/TTS/bin/train_glow_tts.py'
 
     # 수정할 텍스트
     old_text = 'with open(config.test_sentences_file, "r") as f:'
@@ -94,19 +95,18 @@ def learnGlowTTS():
     with open(file_path, 'w', encoding='utf-8') as f:
         f.writelines(modified_lines)
 
-    import subprocess
 
     # 실행할 명령어
     command = [
-        'python', 'TTS/bin/train_glow_tts.py',
-        '--config_path', '/content/data/glowtts-v2/config.json',
-        '--coqpit.datasets.0.path', '/content/TTS/filelists',
-        '--coqpit.audio.stats_path', '/content/drive/My Drive/Colab Notebooks/data/glowtts-v2/scale_stats_new.npy',
-        '--coqpit.test_sentences_file', '/content/TTS/test_sentences.txt',
-        '--coqpit.output_path', '/content/drive/data/glowtts-v2/',
+        'python', 'home/ubuntu/AIFlask/S10P12C210/TTS/TTS/bin/train_glow_tts.py',
+        '--config_path', 'home/ubuntu/AIFlask/S10P12C210/content/data/glowtts-v2/config.json',
+        '--coqpit.datasets.0.path', 'home/ubuntu/AIFlask/S10P12C210/content/TTS/filelists',
+        '--coqpit.audio.stats_path', 'home/ubuntu/AIFlask/S10P12C210/content/data/glowtts-v2/scale_stats_new.npy',
+        '--coqpit.test_sentences_file', 'home/ubuntu/AIFlask/S10P12C210/content/TTS/test_sentences.txt',
+        '--coqpit.output_path', 'home/ubuntu/AIFlask/S10P12C210/content/data/glowtts-v2/',
         '--coqpit.num_loader_workers', '2',
         '--coqpit.num_val_loader_workers', '2',
-        '--restore_path', '/content/data/glowtts-v2/model_file.pth.tar'
+        '--restore_path', 'home/ubuntu/AIFlask/S10P12C210/content/data/glowtts-v2/model_file.pth.tar'
     ]
 
     # 명령어 실행
