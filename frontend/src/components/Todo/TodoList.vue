@@ -35,7 +35,7 @@
         <div style="margin-bottom: 5px; margin-top: 5px; font-weight: bold">
           목표
         </div>
-        <button class="add-button" @click="openModal('AddGoal')">+</button>
+        <button class="add-button" @click="openAddGoalPage">+</button>
       </div>
       <div class="todo-item" v-for="goal in goals" :key="goal.id">
         <div
@@ -111,22 +111,14 @@ export default {
           console.error("Error fetching todo detail:", error);
           return;
         }
-      } else if (component === "AddTodo") {
-        try {
-          console.log("goalList", this.goalList);
-          if (this.goals.length === 0) {
-            alert("최소 한 가지 목표를 먼저 설정하세요 :)");
-            return;
-          }
-        } catch (error) {
-          console.error("Error fetching goal list:", error);
-          return;
-        }
       }
 
       this.is_modal_valid = true;
       this.activeModal = component;
       this.currentItem = itemData;
+    },
+    async openAddGoalPage() {
+      this.$router.push('/goal');
     },
     fetchGoals() {
       // API 호출

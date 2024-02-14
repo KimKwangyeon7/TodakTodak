@@ -1,42 +1,59 @@
-<!-- App.vue -->
 <template>
-    <div>
-      <div v-if="weatherIcon">
-        <i :class="weatherIcon"></i>
-      </div>
-      <div v-else>
-        <p>날씨 정보를 불러오는 중입니다...</p>
-      </div>
+  <div>
+    <!-- 날씨 정보를 표시할 영역 -->
+    <div v-if="weatherData" class="weather-container">
+      <p>온도: {{ weatherData.temperature }}</p>
+      <p>날씨: {{ weatherData.description }}</p>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    data() {
-      return {
-        weatherIcon: null
-      };
-    },
-    created() {
-      this.getWeather();
-    },
-    methods: {
-      async getWeather() {
-        try {
-          const response = await fetch('/goals/weather');
-          const data = await response.json();
-          if (data && data.icon) {
-            this.weatherIcon = 'fas fa-' + data.icon;
-          }
+
+    <!-- 데이터 가져오기 버튼 -->
+    <button @click="fetchData">데이터 가져오기</button>
+  </div>
+</template>
+
+<script>
+import { ref } from 'vue';
+import axios from 'axios';
+
+export default {
+  setup() {
+    const weatherData = ref(null);
+    const quotes = ref(null);
+
+    const fetchData = async () => {
+      try {
+          local.defaults.headers.Authorization = "Bearer " + localStorage.getItem("accessToken");
+          // const response = await local.post(`${url}/${recordId}/save/member`, payload);
+          // Construct the query parameters
+          const queryParams = new URLSearchParams({ promptNum: prompt, time: time }).toString();
+          // Make the POST request to the server with query params
+          const response = await local.post(`${url}/${recordId}/save/member?${queryParams}`);
+          
+          console.log('Audio save record response:', response.data);
+          if (success) success(response);
+          console.log('recordId', recordId)
+          console.log('prompt', prompt)
+          console.log('time', time)
+          console.log('success', success)
+          console.log('fail', fail)
         } catch (error) {
-          console.error('날씨 정보를 불러오는 동안 오류가 발생했습니다:', error);
+          console.error('Error saving audio record:', error);
+          if (fail) fail(error);
         }
       }
-    }
-  };
-  </script>
-  
-  <style scoped>
-  /* 여기에 스타일을 추가하세요 */
-  </style>
-  
+
+    fetchData();
+
+    return {
+      weatherData,
+      quotes,
+    };
+  },
+};
+</script>
+
+<style scoped>
+.weather-container, .quote-container {
+  margin-bottom: 20px;
+}
+</style>

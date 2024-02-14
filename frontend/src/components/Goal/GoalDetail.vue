@@ -1,21 +1,22 @@
 <template>
   <div class="modal-content">
     <button type="button" class="btn-close" aria-label="Close" @click="closeModal"></button>
-      <div class="form-group">
-          <label for="content">목표 내용:</label>
-          <input v-model="item.content" type="text" id="content" class="form-control" required>
-      </div>
-      <div class="form-group">
-        <label for="selectedColor">목표 색상:</label>
-          <select v-model="localSelectedColor" id="selectedColor" class="form-control">
-            <option v-for="goal in goals" :key="goal.id" :value="goal.id">
-              {{ goal.color }}
-            </option>
-        </select>
+    <div class="form-group">
+      <label for="content">목표 내용:</label>
+      <input v-model="item.content" type="text" id="content" class="form-control" required>
     </div>
-    <button class="" @click="fnDelete">삭제</button>
-    <button class="" @click="fnSave">저장</button>
-
+    <div class="form-group">
+      <label for="selectedColor">목표 색상:</label>
+      <select v-model="localSelectedColor" id="selectedColor" class="form-control">
+        <option v-for="goal in goals" :key="goal.id" :value="goal.id">
+          {{ goal.color }}
+        </option>
+      </select>
+    </div>
+    <div class="button-group">
+      <button class="btn" @click="fnDelete">삭제</button>
+      <button class="btn" @click="fnSave">저장</button>
+    </div>
   </div>
 </template>
 
@@ -75,22 +76,26 @@ export default {
 </script>
 
 <style scoped>
+.btn-close {
+  display: flex;
+  margin-left: auto;
+}
+
 .modal-content {
   background: #EAF3F9;
   border-radius: 8px;
   padding: 20px;
 }
 
-.close-button {
-position: absolute;
-top: 5px;
-left: 5px;
-width: 20px;
-height: 20px;
-background-color: #ccc;
-border: none;
-border-radius: 4px;
-cursor: pointer;
-font-size: 12px;
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.button-group button {
+  flex: 1;
+  margin-right: 10px; /* 버튼 간격 조절 */
 }
 </style>
