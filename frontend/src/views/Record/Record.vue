@@ -119,7 +119,10 @@ export default {
       try {
         const voices = await fetchVoiceList();
         console.log('Fetched Voices:', voices);
-        this.recordedVoices = voices || []; // Fallback to an empty array if undefined
+        this.recordedVoices = voices.map(voice => ({
+          ...voice,
+          isActive: voice.used // 서버로부터 받은 isActive 상태를 현재 상태에 반영
+        }));
       } catch (error) {
         console.error('Error fetching records:', error);
         this.recordedVoices = []; // Fallback to an empty array in case of catch
