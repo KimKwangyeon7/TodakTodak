@@ -1,1 +1,0 @@
-import{_ as t,y as o,b as c,d as n,h as r}from"./index-CgSAy-IO.js";const s={},a={class:"container text-center mt-3"};function _(i,d){const e=o("router-view");return c(),n("div",a,[r(e)])}const f=t(s,[["render",_]]);export{f as default};
