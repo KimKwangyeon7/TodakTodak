@@ -12,10 +12,10 @@ app = Flask(__name__)
 ALLOWED_EXTENSIONS = {'zip'}
 
 # 주피터 허브 url => 수정 ************ 
-jupyter_hub_url = "http://70.12.130.121:8888"
+#jupyter_hub_url = "http://70.12.130.121:8888"
 
 # 스프링부트 url
-spring_boot_url = "http://localhost:8080"
+spring_boot_url = "http://i10c210.p.ssafy.io:8080"
 
 # AWS 계정의 액세스 키와 시크릿 키 설정
 ACCESS_KEY = 'AKIAZI2LJFA7IEBRH2O5'
