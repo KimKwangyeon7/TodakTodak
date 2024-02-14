@@ -27,7 +27,7 @@ async function findByToken(success, fail) {
 }
 
 async function logout(userEmail, success, fail) {
-  await local.get(`/api/logout/${userEmail}`).then(success).catch(fail);
+  local.delete(`/api/logout/${userEmail}`).then(success).catch(fail);
 }
 
 function modifyUser(user, success, fail) {

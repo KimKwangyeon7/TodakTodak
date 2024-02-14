@@ -1,54 +1,53 @@
 <template>
   <div>
-    <div class="singupbox">
-      <div style="display: flex; border-radius: 10px; color: black; background-color: aliceblue; align-items: center; justify-content: center;" class="z-2">
-        <form @submit.prevent="signUp">
+    <div class="signup-container">
+      <div class="signup-box">
+        <form @submit.prevent="signUp" class="signup-form">
           <!-- 추가된 부분 -->
-          <div class="containtext">
+          <div class="form-group">
             <div>
               <label for="name">이름 :</label>
             </div>
             <input type="text" id="name" v-model.trim="name" @input="updateUser">
           </div>
-          <div class="containtext">
+          <div class="form-group">
             <div>
               <label for="email">이메일 :</label>
             </div>
             <input type="email" id="email" v-model.trim="email" @input="updateUser">
           </div>
-          <div class="containtext">
+          <div class="form-group">
             <div>
               <label for="password1">비밀번호 :</label>
             </div>
             <input type="password" id="password1" v-model.trim="password" @input="updateUser">
           </div>
-          <div class="containtext">
+          <div class="form-group">
             <div>
               <label for="nickname">닉네임 :</label>
             </div>
             <input type="text" id="nickname" v-model.trim="nickname" @input="updateUser">
           </div>
-          <div class="containtext">
+          <div class="form-group">
             <div>
               <label for="gender">성별 :</label>
             </div>
             <input type="text" id="gender" v-model.trim="gender" @input="updateUser">
           </div>
-          <div class="containtext">
+          <div class="form-group">
             <div>
               <label for="phone">전화번호 :</label>
             </div>
             <input type="tel" id="phone" v-model.trim="phone" @input="updateUser">
           </div>
-          <div class="containtext">
+          <div class="form-group">
             <div>
               <label for="birthday">생일 :</label>
             </div>
             <input type="date" id="birthday" v-model.trim="birthday" @input="updateUser">
           </div>
           <!-- 기존 부분 유지 -->
-          <input style="border-radius: 5px; margin-left: 55px;" 
-          type="submit" value="가입하기" @click="registerMember">
+          <input type="submit" value="가입하기" class="signup-button" @click="registerMember">
         </form>
       </div>
     </div>
@@ -122,27 +121,59 @@ function registerMember() {
 
 </script>
 
-<style>
-.singupbox {
-  flex-direction: column;
+<style scoped>
+.signup-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 10%;
+  margin-top: 20px;
 }
 
-.containtext {
-  display: flex;
-  justify-content: space-around;
+.signup-box {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 300px;
 }
 
-.containtext > input {
-  width: 60%;
-  border-radius: 3px;
+.signup-img {
+  display: block;
+  margin: 0 auto 20px;
+  max-width: 100%;
 }
 
-.containtext > div {
-  width: 150px;
-  text-align: end;
+.signup-form .form-group {
+  margin-bottom: 20px;
 }
-</style>
+
+.signup-form label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.signup-form input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.signup-button {
+  background-color: #2196F3;
+  border: none;
+  border-radius: 5px;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 10px;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+.signup-button:hover {
+  background-color: #0d8bf9;
+}
+</style>@/records.js/auth

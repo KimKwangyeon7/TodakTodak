@@ -3,9 +3,12 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { defineStore } from "pinia";
 
-import { login, findByToken } from "@/api/member";
+import { login, logout, findByToken } from "@/api/member";
 
 import { httpStatusCode } from "@/util/http-status";
+
+import axios from 'axios'
+
 
 export const useMemberStore = defineStore("memberStore", () => {
   const router = useRouter();
@@ -15,6 +18,7 @@ export const useMemberStore = defineStore("memberStore", () => {
   const nickname = ref(null);
   const token = ref(null);
   const userInfo = ref(null);
+  const isValidToken = ref(false);
 
   const initializeAuth = () => {
     const accessToken = localStorage.getItem('accessToken')
@@ -92,6 +96,44 @@ export const useMemberStore = defineStore("memberStore", () => {
     );
     return userInfo.value;
   };
+  const updateUserInfo = async (updatedUserInfo) => {
+    try {
+      const response = await axios.put('@/api/member', updatedUserInfo); // updateUser는 사용자 정보 업데이트를 위한 API 호출입니다.
+      if (response.status === httpStatusCode.OK) {
+        userInfo.value = updatedUserInfo;
+        console.log("사용자 정보가 성공적으로 업데이트되었습니다.");
+      } else {
+        console.error("사용자 정보 업데이트 실패:", response);
+      }
+    } catch (error) {
+      console.error("사용자 정보 업데이트 중 오류 발생:", error);
+    }
+  }
+  const userLogout = async (userEmail) => {
+    await logout(
+      userEmail,
+      (response) => {
+        let msg = "로그아웃 중 에러 발생했습니다..";
+        if (response.status === httpStatusCode.OK) {
+          isLogin.value = false;
+          userInfo.value = null;
+          isValidToken.value = false;
+
+          sessionStorage.removeItem("accessToken");
+          sessionStorage.removeItem("refreshToken");
+          cookies.remove("id");
+          console.log("Logout successful");
+
+          msg = "로그아웃 되었습니다.";
+          alert(msg);
+        } 
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  };
+
 
 
 
@@ -103,6 +145,8 @@ export const useMemberStore = defineStore("memberStore", () => {
     userInfo,
     userLogin,
     getUserInfo,
-    initializeAuth
+    initializeAuth,
+    updateUserInfo,
+    userLogout,
   };
 });

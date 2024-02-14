@@ -57,3 +57,4 @@ const goToProfileEdit = () => {
   object-fit: cover;
 }
 </style>
+@/records.js/auth

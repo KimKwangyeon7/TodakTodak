@@ -40,10 +40,10 @@
               <option value=6>일요일</option>
             </select>
           </div>
-          <button @click="addAlarmInput" type="button" class="btn btn-secondary">알람 추가</button>
+          <button @click="addAlarmInput" type="button" class="btn">알람 추가</button>
         </div>
   
-        <button type="submit" class="btn btn-primary" @click="fnAdd">저장</button>
+        <button type="submit" class="btn habit-save" @click="fnAdd">저장</button>
       </form>
     </div>
   </template>
@@ -121,8 +121,7 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 12px;
-    margin-right: auto; /* 나머지 공간을 최대한 차지하여 왼쪽으로 이동 */
+    margin-left: auto;
   }
   .form-group {
     text-align: left;
@@ -130,7 +129,13 @@
     margin-right: 10px;
   }
   
-  .custom-control-label {
-    padding-left: 10px;
+  .form-control {
+    display: flex;
+    margin-left: auto;
+  }
+
+  .habit-save {
+    display: flex;
+    margin-left: auto;
   }
   </style>
