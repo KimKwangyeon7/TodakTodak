@@ -1,7 +1,7 @@
 <template>
   <div v-if="authStore.isLogin">
     <!-- Modal -->
-    <div class="black-bg" v-if="is_modal_valid" @click="closeModal">
+    <div class="black-bg" v-if="is_modal_valid">
       <component
         :is="activeModal"
         :item="currentItem"
@@ -33,7 +33,7 @@
     <div class="todo-section">
       <div class="todo-date">
         <div style="margin-bottom: 5px; margin-top: 5px; font-weight: bold;">목표</div>
-        <button class="add-button" @click="openModal('AddGoal')">+</button>
+        <button class="add-button" @click="goToAddGoalPage">+</button>
       </div>
       <div class="todo-item" v-for="goal in goals" :key="goal.id">
         <div
@@ -186,7 +186,9 @@ export default {
       this.is_modal_valid = false;
       this.activeModal = null;
     },
-    // Other methods remain the same
+    goToAddGoalPage() {
+    this.$router.push('/goal'); // 라우터 이름을 'AddGoal'로 변경해야 합니다.
+    }
   },
 
   mounted() {

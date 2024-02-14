@@ -9,6 +9,8 @@ import FriendProfile from "@/components/Friend/FriendProfile.vue";
 import { fetchFriends, sendFriendRequest } from "@/api/friend";
 import { createChatRoom } from "@/api/chat";
 
+import FriendRecommend from '@/components/Friend/FriendRecommend.vue'
+
 const router = useRouter();
 const memberStore = useMemberStore();
 const { userInfo } = storeToRefs(memberStore);
@@ -78,6 +80,10 @@ const startChat = (friend) => {
   );
 };
 
+const showFriendRequestList = () => { 
+  router.push('/friendRequestList'); 
+}
+
 const toggleSearch = () => {
   showSearch.value = !showSearch.value;
   if (!showSearch.value) {
@@ -97,11 +103,11 @@ const toggleSearch = () => {
         <button class="create-chat-button btn" @click="showFriendRequestList">
           <img src="@/assets/user-plus.png" alt="" />
         </button>
-        <CreateRoomModal
+        <!-- <CreateRoomModal
           v-if="showModal"
           @close="closeCreateRoomModal"
           @create="createRoom"
-        />
+        /> -->
       </div>
     </div>
     <!-- =============================== -->
@@ -114,6 +120,8 @@ const toggleSearch = () => {
         placeholder="친구 검색"
       />
     </div>
+
+    <FriendRecommend />
 
     <ul class="list-group">
       <li

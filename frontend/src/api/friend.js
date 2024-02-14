@@ -51,6 +51,19 @@ async function deleteFriend(friendId, success, fail) {
   console.log("친구 삭제 성공");
 }
 
+// 무작위 친구 가져오기
+async function getRandomUsers(count, success, fail) {
+  try {
+    // 서버에서 사용자 목록을 가져옵니다.
+    const response = await local.get(`/friends`);
+    // 요청이 성공하면 사용자 목록을 반환합니다.
+    success(response.data);
+  } catch (error) {
+    // 요청이 실패하면 실패 함수를 호출합니다.
+    fail(error);
+  }
+}
+
 
 export {
   fetchFriends,
@@ -60,4 +73,5 @@ export {
   acceptFriendRequest,
   rejectFriendRequest,
   deleteFriend,
+  getRandomUsers
 };

@@ -40,6 +40,11 @@ function deleteMember(userEmail, success, fail) {
   local.delete(`api/member/${userEmail}`).then(success).catch(fail);
 }
 
+async function updateUser(user, success, fail) {
+  local.defaults.headers.Authorization = "Bearer " + localStorage.getItem("accessToken");
+  await local.put(`/members`, user).then(success).catch(fail);
+}
+
 
 export {
   signup,
@@ -49,4 +54,5 @@ export {
   logout,
   modifyUser,
   deleteMember,
+  updateUser,
 };

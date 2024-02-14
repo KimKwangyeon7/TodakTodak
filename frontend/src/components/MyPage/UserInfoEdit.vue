@@ -1,5 +1,5 @@
 <template>
-  <div v-if="userData">
+  <div v-if="userInfo">
     <button class="settings-back-button btn" @click="goBack">
       <img src="@/assets/back.png" alt="뒤로 가기">
     </button>
@@ -9,19 +9,19 @@
       <form @submit.prevent="saveProfile">
         <div class="form-group">
           <label for="name">이름:</label>
-          <input v-model="userData.name" type="text" id="name" class="form-control" required>
+          <input v-model="userInfo.name" type="text" id="name" class="form-control" required>
         </div>
         <div class="form-group">
           <label for="nickname">닉네임:</label>
-          <input v-model="userData.nickname" type="text" id="nickname" class="form-control" required>
+          <input v-model="userInfo.nickname" type="text" id="nickname" class="form-control" required>
         </div>
         <div class="form-group">
           <label for="memo">메모:</label>
-          <textarea v-model="userData.memo" id="memo" class="form-control"></textarea>
+          <textarea v-model="userInfo.memo" id="memo" class="form-control"></textarea>
         </div>
         <div class="form-group">
           <label for="profilePicture">프로필 이미지:</label>
-          <input v-model="userData.profilePicture" type="text" id="profilePicture" class="form-control">
+          <input v-model="userInfo.profilePicture" type="text" id="profilePicture" class="form-control">
         </div>
         <button type="submit" class="profile-save-btn btn">저장</button>
       </form>
@@ -33,22 +33,39 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useMemberStore } from '@/stores/auth'
+import { updateUser } from '@/api/member'
 
 const router = useRouter()
 const memberStore = useMemberStore()
 
-const userData = ref(null)
+const userInfo = ref({
+  name: '',
+  nickname: '',
+  memo: '',
+  profileUrl: ''
+})
 
 onMounted(async () => {
-  const token = localStorage.getItem("accessToken")
-  userData.value = await memberStore.getUserInfo(token)
+  try {
+    const token = localStorage.getItem("accessToken")
+    const userData = await memberStore.getUserInfo(token)
+    // 사용자 정보를 userInfo에 할당합니다.
+    userInfo.value = { ...userData }
+  } catch (error) {
+    console.error('사용자 정보를 가져오는 도중 에러가 발생했습니다:', error)
+  }
 })
 
 const saveProfile = async () => {
-  // 사용자 정보 업데이트
-  await memberStore.updateUserInfo(userData.value)
-  console.log('프로필이 저장되었습니다.')
-  router.push('/mypage')
+  try {
+    const token = localStorage.getItem("accessToken")
+    // 사용자 정보를 업데이트합니다.
+    await updateUser(token, userInfo.value)
+    console.log('프로필이 저장되었습니다.')
+    router.push('/mypage')
+  } catch (error) {
+    console.error('프로필을 저장하는 도중 에러가 발생했습니다:', error)
+  }
 }
 
 function goBack() {
