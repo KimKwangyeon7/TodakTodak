@@ -85,11 +85,11 @@ def downloadZipFile(s3_url):
     with open(file_path, 'wb') as f:
         f.write(response.content)
 
-def learnGlowTTS():
-    print("Glow 학습!")
+# def learnGlowTTS():
+#    print("Glow 학습!")
 
-# def learnHifiGAN():
-#     print("Hifi 학습!")
+#def learnHifiGAN():
+#    print("Hifi 학습!")
 
 
 def uploadGlow(member_id, record_id):
@@ -133,7 +133,7 @@ def uploadGlow(member_id, record_id):
 
     # time.sleep(35)  # 35초 동안 일시 정지
 
-    return uploadS3(ZIP_NAME, 'home/ubuntu/AIFlask/S10P12C210/content/data/glowtts-v2/'+ZIP_NAME)
+    return uploadS3(ZIP_NAME, root + 'content/data/glowtts-v2/'+ZIP_NAME)
 
 
 def sendGlow(url, record_id):
@@ -166,7 +166,8 @@ def sendGlow(url, record_id):
 
 # hifi 결과 S3에 업로드 -> url 스프링부트로 전송
 def uploadHifi(member_id, record_id):
-    DRIVE_FOLDER_PATH = 'home/ubuntu/AIFlask/S10P12C210/content/data/hifigan-v2/'
+    root = 'home/ubuntu/AIFlask/S10P12C210/'
+    DRIVE_FOLDER_PATH = root + 'content/data/hifigan-v2/'
 
     # 필터링된 파일 목록을 담을 리스트
     selected_files = []
@@ -202,7 +203,7 @@ def uploadHifi(member_id, record_id):
 
     # time.sleep(35)  # 35초 동안 일시 정지
 
-    return uploadS3(ZIP_NAME, 'home/ubuntu/AIFlask/S10P12C210/content/data/hifigan-v2/'+ZIP_NAME)
+    return uploadS3(ZIP_NAME, root + 'content/data/hifigan-v2/'+ZIP_NAME)
 
 
 def sendHifi(url, record_id):
