@@ -1,7 +1,7 @@
 <template>
   <div class="app mt-5">
     <p class="voice-title">음성 학습
-      <button class='btn' @click="handleBackButton">back</button>
+      <button class='btn' @click.prevent="handleBackButton">back</button>
     </p>
 
     <div class="sentence-box">
@@ -16,6 +16,9 @@
         <p>{{ this.currentSentenceId + 1 }} / {{ sentences.length }}</p>
         <button class="btn right-btn" @click="nextSentence" :disabled="currentSentenceId === sentences.length - 1">
           <img src="@/assets/voice/arrow-right.png" alt="">
+        </button>
+        <button class="learning-button" @click="learningVoice">
+          {{ isLearning ? '학습 중' : '학습하기' }}
         </button>
       </div>
     </div>  
@@ -88,15 +91,16 @@ export default {
     const sentences = ref([]);
     const currentSentenceId = ref(0);
     const currentSentence = computed(() => sentences.value[currentSentenceId.value] || '');
+    const sentenceLength = 3 // 4000천 개의 문장 중에 우선 5개만
 
     loadKoreanCorpus().then(sentencesArray => {
-      sentences.value = sentencesArray.slice(0, 3); // 4000천 개의 문장 중에 우선 5개만
+      sentences.value = sentencesArray.slice(0, sentenceLength); 
       console.log('sentences: ', sentences.value)
     }).catch(error => {
       console.error('Error loading Korean corpus:', error);
     });
 
-    return { recordHistoryStore, recordId, sentences, currentSentenceId, currentSentence };
+    return { recordHistoryStore, recordId, sentences, currentSentenceId, currentSentence, sentenceLength };
   },
   created() {
     const route = useRoute()
@@ -131,6 +135,7 @@ export default {
       recordId: null,
       recordSoundImage,
       stopRecordingImage,
+      isLearning: false, // 학습 상태를 추적하는 새로운 속성
     };
   },
   computed: {
@@ -191,15 +196,28 @@ export default {
       }
     },
     async checkAllRecordingsDone() {
-      if (this.currentRecordHistory.length === this.sentences.length) {
-        const learning = window.confirm('모든 문장 녹음이 끝났으니 음성 모델을 학습합니다!')
+      console.log('All this.currentRecordHistory: ',this.currentRecordHistory)
+      console.log('All this.currentRecordHistory.length', this.currentRecordHistory.length)
+      console.log('All this.sentenceLength', this.sentenceLength)
+      if (this.currentRecordHistory.length === this.sentenceLength) {
+        const learning = window.confirm('모든 문장 녹음이 끝났으니 음성 모델 학습을해주세요!')
         if (learning) {
           try {
             await startLearning(this.recordId);
+            
           } catch (error) {
             console.error(error);
           }
         }
+      }
+    },
+    async learningVoice() {
+      this.isLearning = true; // 학습 시작 시
+      try {
+        await startLearning(this.recordId)
+        console.log(`${this.recordId}번 음성 학습 중`)
+      } catch (error) {
+        console.error('Error learning voice:', error)
       }
     },
     handleBackButton() {
@@ -300,7 +318,6 @@ export default {
           // this.onSuccess, // pass the onSuccess callback
           // this.onFail    // pass the onFail callback
         );
-        this.checkAllRecordingsDone()
       } else {
         console.error('Blob is not defined at the time of stopping the recording.');
       }
@@ -322,6 +339,7 @@ export default {
       this.recordHistoryStore.addRecordingDuration(this.recordId, duration);
       this.elapsedTime = duration;
       this.recordingStartTime = null;
+      this.checkAllRecordingsDone()
     },
 
     async goOut() {
@@ -342,6 +360,9 @@ export default {
   beforeRouteLeave(to, from, next) {
     this.goOut()
     next()
+  },
+  mounted() {
+    this.checkAllRecordingsDone()
   }
 };
 
@@ -428,6 +449,17 @@ export default {
   padding: 10px;
   border-radius: 24px;
   box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.25);
+}
+
+.learning-button {
+  cursor: pointer;
+  background: #23db12; 
+  border: none;
+  border-radius: 16px;
+  padding: 5px 10px;
+  font-size: 14px;
+  margin-left: 10px; /* 삭제 버튼 간격 조절 가능 */
+  color: white;
 }
 
 .left-btn img,

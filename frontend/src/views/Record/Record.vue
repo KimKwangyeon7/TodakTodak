@@ -49,6 +49,7 @@
 import { selectVoice, fetchVoiceList, fetchVoiceDetail, deleteVoice, } from '@/api/records'
 import RecordDetail from '@/components/Record/RecordDetail.vue'
 import AddRecord from '@/components/Record/AddRecord.vue'
+import { startLearning } from '@/api/learning'
 
 export default {
   name: 'Record',
@@ -76,13 +77,13 @@ export default {
         console.error(error)
       },
     async toggleVoice(voice) {
-      if (!voice.isActive) {
-        voice.isActive = true;
-        this.recordedVoices.forEach(v => {
-          if (v.id !== voice.id) v.isActive = false;
-          console.log('voice.id: ', voice.id)
-          console.log('v.id: ', v.id)
-        });
+      // if (!voice.isActive) {
+      //   voice.isActive = true;
+      //   this.recordedVoices.forEach(v => {
+      //     if (v.id !== voice.id) v.isActive = false;
+      //     console.log('voice.id: ', voice.id)
+      //     console.log('v.id: ', v.id)
+      //   });
 
         try {
           // Use voice.id instead of recordId
@@ -90,7 +91,7 @@ export default {
         } catch (error) {
           console.error('Error selecting voice:', error);
         }
-      }
+      // }
     },
     async openModal(component = 'RecordDetail', itemData = null) {
       if (component === 'RecordDetail' && itemData) {
@@ -224,7 +225,6 @@ export default {
   margin-left: 10px; /* 삭제 버튼 간격 조절 가능 */
   color: white;
 }
-
 .add-button {
   font-size: 20px;
   background-color: #ffffff;

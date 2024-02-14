@@ -7,7 +7,8 @@ const url = "/learning";
 
 async function startLearning(recordId) {
     local.defaults.headers.Authorization = "Bearer " + localStorage.getItem("accessToken");
-    console.log(recordId)
+    console.log("startLearning 실행 중")
+    console.log("recordId", recordId)
     await local.post(`/learning/${recordId}`)
              .then(response => {
                  console.log(response);
