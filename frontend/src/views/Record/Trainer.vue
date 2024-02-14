@@ -387,19 +387,19 @@ export default {
 
 .inner-instruction-box {
   position: absolute; /* 또는 absolute, 상황에 따라 */
-  top: 8%; /* 상위 요소나 브라우저 창 기준 중앙으로 설정 */
+  top: 60%; /* 상위 요소나 브라우저 창 기준 중앙으로 설정 */
   left: 50%; /* 상위 요소나 브라우저 창 기준 중앙으로 설정 */
   transform: translate(-50%, -50%); /* 정확한 중앙으로 이동 */
   width: calc(100% - 20px); /* padding을 고려한 너비 설정 */
   border-radius: 24px;
   margin: 0; /* 필요시 마진 제거 */
-  background-color: #91bddb;
+  background-color: #e6f5fd;
   font-size: 17px;
 }
 
 .inner-box-1 {
   position: absolute; /* 또는 absolute, 상황에 따라 */
-  top: 40%; /* 상위 요소나 브라우저 창 기준 중앙으로 설정 */
+  top: 30%; /* 상위 요소나 브라우저 창 기준 중앙으로 설정 */
   left: 50%; /* 상위 요소나 브라우저 창 기준 중앙으로 설정 */
   transform: translate(-50%, -50%); /* 정확한 중앙으로 이동 */
   width: calc(100% - 20px); /* padding을 고려한 너비 설정 */
@@ -416,7 +416,6 @@ export default {
 white-space: nowrap; /* This will prevent the content from wrapping to the next line */
 overflow: hidden; /* Ensures that the text doesn't spill out of the container */
 text-overflow: ellipsis; /* Adds an ellipsis if the text is too long to fit */
-
 position: absolute;
 bottom: 10px; /* 내부 박스 하단에서 얼마나 떨어져 있을지 설정 */
 left: 50%; /* 부모 컨테이너의 가운데 */
