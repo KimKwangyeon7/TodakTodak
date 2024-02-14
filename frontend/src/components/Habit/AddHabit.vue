@@ -90,8 +90,8 @@
           outside: this.outside,
           alarmed: this.alarmed,
           alarmDtoList: this.alarmDtoList,
-          checked: this.checked,
-          completed: this.completed,
+          // checked: this.checked,
+          // completed: this.completed,
         });
         
         this.closeModal() 

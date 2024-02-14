@@ -79,7 +79,7 @@ async function deleteVoice(recordId, success, fail) {
   
 async function selectVoice(recordId, success, fail) {
   local.defaults.headers.Authorization = "Bearer " + localStorage.getItem("accessToken");
-  await local.put(`${url}/use?recordId=${recordId}`) // recordId를 쿼리 매개변수로 전달
+  await local.patch(`${url}/use?recordId=${recordId}`) // recordId를 쿼리 매개변수로 전달
          .then(response => {
             if (response.status === 200){
               console.log(response.status)

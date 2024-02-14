@@ -80,7 +80,6 @@ import { useRoute } from 'vue-router';
 
 import moment from 'moment';
 
-import apiClient from '@/api/todosApiClient';
 export default {
   props: {
     formattedDate: Object,
@@ -310,6 +309,4 @@ await addTodo(todoData);
 .custom-control-label {
   padding-left: 10px;
 }
-
-
 </style>

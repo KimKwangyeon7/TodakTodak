@@ -27,9 +27,17 @@
 </template>
 
 <script>
+import { getGoalList, getGoalDetail } from "@/api/goals";
+import { getTodoList, getTodoDetail } from "@/api/todos";
+import { useMemberStore } from "@/stores/auth";
+import { useTodoStore } from '@/stores/todoList';
+
+import TodoDetail from "@/components/Todo/TodoDetail.vue";
+import AddTodo from "@/components/Todo/AddTodo.vue";
+import GoalDetail from "@/components/Goal/GoalDetail.vue";
+import Habit from "@/views/Habit.vue";
 import TodoList from '@/components/Todo/TodoList.vue'
 import HabitList from '@/components/Habit/HabitList.vue'
-// import Example from '@/components/Todo/example.vue'
 import { useMemberStore } from '@/stores/auth'
 
 export default {
@@ -52,6 +60,23 @@ export default {
     }
   },
   methods: {
+    async fetchQuote() {
+      try {
+        const response = await fetch("/members/quote");
+        if (!response.ok) {
+          throw new Error("Failed to fetch quote");
+        }
+        const data = await response.json();
+        if (!Array.isArray(data) || data.length !== 2) {
+          throw new Error("Invalid quote data format");
+        }
+        this.randomQuote = data[0];
+        this.quoteAuthor = data[1];
+      } catch (error) {
+        console.error("Error fetching quote:", error);
+        this.quoteError = true; // 에러 발생 시 플래그 설정
+      }
+    },
     handleLoginClick() {
       console.log(this.authStore.isLogin);
       // 여기에서 로그인 상태 확인
