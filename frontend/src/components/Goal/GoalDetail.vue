@@ -26,6 +26,10 @@ export default {
   data() {
     return {
       originalItem: {},
+      item: {
+        selectedColor: null,
+      },
+      goals: [],
     };
   },
   created() {
@@ -38,18 +42,6 @@ export default {
     },
   },
   computed: {
-    async goals() {
-      getGoalList(
-        ({ data }) => {
-          console.log("목표 리스트 목록");
-          console.log(data);
-          this.goals = data;
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    },
     get() {
       return this.item.selectedColor || this.goals[0]?.id;
     },
@@ -79,6 +71,19 @@ export default {
         console.error("Error updating goal:", error);
       }
     },
+  },
+  mounted() {
+    getGoalList(
+      ({ data }) => {
+        console.log("목표 리스트 목록");
+        console.log(data);
+        this.goals = data;
+        this.item.selectedColor = this.goals[0]?.id;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   },
 };
 </script>
