@@ -24,7 +24,13 @@
           <span @click="openModal('TodoDetail', todo)" class="goal-content">{{
             todo.title
           }}</span>
-          <input type="checkbox" />
+          <div>
+            <input
+              type="checkbox"
+              v-model="todo.checked"
+              @change="handleTodoCheckboxChange(todo)"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -52,7 +58,7 @@
 
 <script>
 import { getGoalList, getGoalDetail } from "@/api/goals";
-import { getTodoList, getTodoDetail } from "@/api/todos";
+import { getTodoList, getTodoDetail, isTodoCompleted } from "@/api/todos";
 import { useMemberStore } from "@/stores/auth";
 import { useTodoStore } from "@/stores/todoList";
 
@@ -72,6 +78,7 @@ export default {
       activeModal: null,
       today: "",
       currentItem: null,
+      detailedTodo: null,
     };
   },
   setup() {
@@ -105,8 +112,18 @@ export default {
         }
       } else if (component === "TodoDetail" && itemData) {
         try {
-          const detailedTodo = await getTodoDetail(itemData.id);
-          this.currentItem = detailedTodo;
+          getTodoDetail(
+            itemData.id,
+            ({ data }) => {
+              console.log("목표 리스트 목록");
+              console.log(data);
+              this.detailedTodo = data;
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
+          this.currentItem = this.detailedTodo;
         } catch (error) {
           console.error("Error fetching todo detail:", error);
           return;
@@ -123,7 +140,6 @@ export default {
           return;
         }
       }
-
       this.is_modal_valid = true;
       this.activeModal = component;
       this.currentItem = itemData;
@@ -141,7 +157,7 @@ export default {
         }
       );
     },
-    async fetchTodos() {
+    fetchTodos() {
       try {
         const now = new Date();
         // 연도, 월, 일 추출
@@ -165,16 +181,17 @@ export default {
         // 여기서 사용할 변수명 수정
         const todayString = year + "" + month + "" + day;
 
-        getTodoList(todayString,
-        ({ data }) => {
-          console.log("투두리스트 목록");
-          console.log(data);
-          this.todos = data;
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+        getTodoList(
+          todayString,
+          ({ data }) => {
+            console.log("투두리스트 목록");
+            console.log(data);
+            this.todos = data;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
       } catch (error) {
         console.error("Error fetching todos:", error);
       }
@@ -194,9 +211,23 @@ export default {
       this.is_modal_valid = false;
       this.activeModal = null;
     },
-    // Other methods remain the same
+    handleTodoCheckboxChange(todo) {
+      // Checkbox가 변경될 때 호출되는 메서드
+      // 여기서 todo.checked 값이 변경됨
+      console.log(`Todo ID ${todo.id}의 체크박스 상태 변경: ${todo.checked}`);
+      isTodoCompleted(
+        todo.id,
+        ({ data }) => {
+          console.log("투두리스트 체크표시 업데이트");
+          console.log(data);
+          this.todos = data;
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
   },
-
   mounted() {
     this.updateToday();
     this.fetchGoals();

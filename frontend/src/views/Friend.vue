@@ -33,11 +33,30 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-
+import { findByNickname } from '@/api/member';
 import FriendProfile from '@/components/Friend/FriendProfile.vue'
-import FriendRequestList from '@/components/Friend/FriendRequestList.vue'
+// import FriendRequestList from '@/components/Friend/FriendRequestList.vue'
+
+onMounted(() => {
+  getMemberInfo()
+  // 여기에 DOM에 접근하거나 외부 API 호출 등의 로직을 작성할 수 있습니다.
+});
+
+// 사용자 정보를 저장할 반응형 참조
+const memberInfo = ref(null);
+
+// 닉네임을 기반으로 회원 정보를 조회하는 함수
+const getMemberInfo = async (nickname) => {
+  try {
+    const response = await findByNickname(nickname);
+    memberInfo.value = response.data;  // 조회된 회원 정보를 memberInfo에 저장
+    console.log('회원 정보 조회 성공', response.data);
+  } catch (error) {
+    console.error('회원 정보 조회 실패', error);
+  }
+};
 
 const router = useRouter()
 
@@ -55,18 +74,7 @@ const selectedFriend = ref(null)
 const showSearch = ref(false)
 const searchQuery = ref('')
 
-const friends = ref([
-  { id: 1, name: '김철수', age: 25, profilePicture: '@/assets/profile-default.jpg' },
-  { id: 2, name: '김영희', age: 30, profilePicture: '@/assets/profile-default.jpg'  },
-  { id: 3, name: '김싸피', age: 28, profilePicture: '@/assets/profile-default.jpg'  },
-  { id: 4, name: '손흥민', age: 25, profilePicture: '@/assets/profile-default.jpg'  },
-  { id: 5, name: '봉준호', age: 30, profilePicture: '@/assets/profile-default.jpg' },
-  { id: 6, name: '김준호', age: 28, profilePicture: '@/assets/profile-default.jpg'  },
-  { id: 7, name: '카리나', age: 25, profilePicture: '@/assets/profile-default.jpg'  },
-  { id: 8, name: '공유', age: 30, profilePicture: '@/assets/profile-default.jpg'  },
-  { id: 9, name: '황정민', age: 28, profilePicture: '@/assets/profile-default.jpg'  },
-  { id: 10, name: '윈터', age: 25, profilePicture: '@/assets/profile-default.jpg'  },
-])
+const friends = ref([])
 
 const filteredFriends = computed(() => {
   return friends.value.filter(friend =>

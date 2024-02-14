@@ -457,14 +457,14 @@ export default {
             : null,
         },
       });
-      this.$router.push({
-        name: "CalendarAddTodo",
-        params: {
-          selectedDate: this.selectedDate.isValid()
-            ? this.selectedDate.format("YYYY-MM-DD")
-            : null,
-        },
-      });
+      // this.$router.push({
+      //   name: "CalendarAddTodo",
+      //   params: {
+      //     selectedDate: this.selectedDate.isValid()
+      //       ? this.selectedDate.format("YYYY-MM-DD")
+      //       : null,
+      //   },
+      // });
       // reset last value
       this.fixtureDate.forEach((i) => {
         i.today = false;
