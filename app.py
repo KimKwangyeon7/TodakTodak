@@ -86,7 +86,9 @@ def downloadZipFile(s3_url):
         f.write(response.content)
 
 # def learnGlowTTS():
-#    print("Glow 학습!")
+
+# print("Glow 학습!")
+
 
 #def learnHifiGAN():
 #    print("Hifi 학습!")
