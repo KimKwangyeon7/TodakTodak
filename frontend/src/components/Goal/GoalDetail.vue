@@ -13,9 +13,10 @@
             </option>
         </select>
     </div>
-    <button class="" @click="fnDelete">삭제</button>
-    <button class="" @click="fnSave">저장</button>
-
+    <div class="button-group">
+      <button class="btn" @click="fnDelete">삭제</button>
+      <button class="btn" @click="fnSave">저장</button>
+    </div>
   </div>
 </template>
 
@@ -111,5 +112,16 @@ border: none;
 border-radius: 4px;
 cursor: pointer;
 font-size: 12px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.button-group button {
+  flex: 1;
+  margin-right: 10px; /* 버튼 간격 조절 */
 }
 </style>
