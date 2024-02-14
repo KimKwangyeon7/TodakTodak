@@ -18,7 +18,7 @@ ALLOWED_EXTENSIONS = {'zip'}
 #jupyter_hub_url = "http://70.12.130.121:8888"
 
 # 스프링부트 url
-spring_boot_url = "http://i10c210.p.ssafy.io:8080"
+spring_boot_url = "http://localhost:8080"
 
 # AWS 계정의 액세스 키와 시크릿 키 설정
 ACCESS_KEY = 'AKIAZI2LJFA7IEBRH2O5'
@@ -27,11 +27,12 @@ SECRET_KEY = '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'
  # S3 버킷 이름
 BUCKET_NAME = 'todaktodak'
 
-root = 'home/ubuntu/AIFlask/S10P12C210/'
+
 
 # 스프링부트에서 녹음 파일이 저장된 S3 url 받음 - 학습 시작
 @app.route('/learning-server/get', methods=['POST'])
 def receive_message():
+    root = 'home/ubuntu/AIFlask/S10P12C210/'
     # POST 요청에서 전송된 데이터 가져오기
     data = request.json
     
@@ -68,6 +69,7 @@ def receive_message():
     return '', 204
 
 def downloadZipFile(s3_url):
+    root = 'home/ubuntu/AIFlask/S10P12C210/'
     print("s3 url: " + s3_url)
 
     # 임시 파일 저장 경로
@@ -83,15 +85,15 @@ def downloadZipFile(s3_url):
     with open(file_path, 'wb') as f:
         f.write(response.content)
 
-def learnGlowTTS():
-    print("Glow 학습!")
+# def learnGlowTTS():
+#    print("Glow 학습!")
 
 def learnHifiGAN():
     print("Hifi 학습!")
 
 
 def uploadGlow(member_id, record_id):
-    DRIVE_FOLDER_PATH = root + 'content/data/glowtts-v2/'
+    DRIVE_FOLDER_PATH = 'home/ubuntu/AIFlask/S10P12C210/content/data/glowtts-v2/'
 
     # 필터링된 파일 목록을 담을 리스트
     selected_files = []
@@ -164,6 +166,7 @@ def sendGlow(url, record_id):
 
 # hifi 결과 S3에 업로드 -> url 스프링부트로 전송
 def uploadHifi(member_id, record_id):
+    root = 'home/ubuntu/AIFlask/S10P12C210/'
     DRIVE_FOLDER_PATH = root + 'content/data/hifigan-v2/'
 
     # 필터링된 파일 목록을 담을 리스트
