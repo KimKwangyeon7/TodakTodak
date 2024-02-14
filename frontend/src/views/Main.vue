@@ -58,7 +58,7 @@
 
 <script>
 import { getGoalList, getGoalDetail } from "@/api/goals";
-import { getTodoListByDate, getTodoDetail } from "@/api/todos";
+import { getTodoList, getTodoDetail } from "@/api/todos";
 import { useMemberStore } from "@/stores/auth";
 import { useTodoStore } from '@/stores/todoList';
 
@@ -171,7 +171,7 @@ export default {
         // 여기서 사용할 변수명 수정
         const todayString = year + "" + month + "" + day;
 
-        this.todos = await getTodoListByDate(todayString);
+        this.todos = await getTodoList(todayString);
       } catch (error) {
         console.error("Error fetching todos:", error);
       }
