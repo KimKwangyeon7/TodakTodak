@@ -1,7 +1,7 @@
 <template>
   <div v-if="authStore.isLogin">
     <!-- Modal -->
-    <div class="black-bg" v-if="is_modal_valid" @click="closeModal">
+    <div class="black-bg" v-if="is_modal_valid">
       <component
         :is="activeModal"
         :item="currentItem"
@@ -12,7 +12,7 @@
     <!-- Todo List -->
     <div class="todo-section">
       <div class="todo-date">
-        <span style="font-weight: bold;">{{ today }}</span>
+        <span style="font-weight: bold">{{ today }}</span>
         <button class="add-button" @click="openModal('AddTodo')">+</button>
       </div>
       <div class="todo-items">
@@ -32,7 +32,9 @@
     <!-- Goals -->
     <div class="todo-section">
       <div class="todo-date">
-        <div style="margin-bottom: 5px; margin-top: 5px; font-weight: bold;">목표</div>
+        <div style="margin-bottom: 5px; margin-top: 5px; font-weight: bold">
+          목표
+        </div>
         <button class="add-button" @click="openModal('AddGoal')">+</button>
       </div>
       <div class="todo-item" v-for="goal in goals" :key="goal.id">
@@ -43,7 +45,6 @@
         <span @click="openModal('GoalDetail', goal)" class="goal-content">{{
           goal.content
         }}</span>
-        <input type="checkbox" />
       </div>
     </div>
   </div>
@@ -53,7 +54,7 @@
 import { getGoalList, getGoalDetail } from "@/api/goals";
 import { getTodoList, getTodoDetail } from "@/api/todos";
 import { useMemberStore } from "@/stores/auth";
-import { useTodoStore } from '@/stores/todoList';
+import { useTodoStore } from "@/stores/todoList";
 
 import TodoDetail from "@/components/Todo/TodoDetail.vue";
 import AddTodo from "@/components/Todo/AddTodo.vue";
@@ -75,14 +76,14 @@ export default {
   },
   setup() {
     const authStore = useMemberStore();
-    const todoStore = useTodoStore()
+    const todoStore = useTodoStore();
     const addTodoToStore = (newTodo) => {
       todoStore.addTodo(newTodo);
       // Todo 추가 후 필요한 로직 처리 (예: 알림 표시, 폼 초기화 등)
     };
     return {
       authStore,
-      addTodoToStore
+      addTodoToStore,
     };
   },
   components: {
@@ -112,7 +113,7 @@ export default {
         }
       } else if (component === "AddTodo") {
         try {
-          console.log('goalList', this.goalList)
+          console.log("goalList", this.goalList);
           if (this.goals.length === 0) {
             alert("최소 한 가지 목표를 먼저 설정하세요 :)");
             return;
@@ -128,11 +129,10 @@ export default {
       this.currentItem = itemData;
     },
     fetchGoals() {
-      console.log("채팅 목록 가져오기");
       // API 호출
       getGoalList(
         ({ data }) => {
-          console.log("채팅목록리스트");
+          console.log("목표 리스트 목록");
           console.log(data);
           this.goals = data;
         },
@@ -144,7 +144,6 @@ export default {
     async fetchTodos() {
       try {
         const now = new Date();
-
         // 연도, 월, 일 추출
         var year = now.getFullYear().toString();
         var month = (now.getMonth() + 1).toString();
@@ -166,7 +165,16 @@ export default {
         // 여기서 사용할 변수명 수정
         const todayString = year + "" + month + "" + day;
 
-        this.todos = await getTodoList(todayString);
+        getTodoList(todayString,
+        ({ data }) => {
+          console.log("투두리스트 목록");
+          console.log(data);
+          this.todos = data;
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
       } catch (error) {
         console.error("Error fetching todos:", error);
       }
@@ -196,7 +204,6 @@ export default {
   },
 };
 </script>
-
 
 <style scoped>
 .top-bar {

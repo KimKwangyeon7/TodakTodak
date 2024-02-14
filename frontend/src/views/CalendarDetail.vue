@@ -1,28 +1,30 @@
 <template>
   <div class="black-bg" v-if="isModalValid">
-      <component
-        :is="activeModal"
-        :item="currentItem"
-        :formattedDate="formattedDate.valueOf"
-        @close-modal="closeModal"
-      />
-    </div>
-    
-  <div class="calendar-wrapper m-3" style="margin-top: 70px;">
+    <component
+      :is="activeModal"
+      :item="currentItem"
+      :formattedDate="formattedDate.valueOf"
+      @close-modal="closeModal"
+    />
+  </div>
+
+  <div class="calendar-wrapper m-3" style="margin-top: 70px">
     <main class="calendar-body">
       <div class="button-container">
-        <button class='btn' @click="$router.back()">
-          <img src="@/assets/back.png" alt="">
+        <button class="btn" @click="$router.back()">
+          <img src="@/assets/back.png" alt="" />
         </button>
-        
-        <button class="add-button" @click="openModal('CalendarAddTodo')">+</button>
+
+        <button class="add-button" @click="openModal('CalendarAddTodo')">
+          +
+        </button>
       </div>
       <div class="calendar-weekdays">
         <div
           v-for="(date, index) in weekDate"
           :key="index"
           class="date"
-          :class="{ 'bold': index < 7 }"
+          :class="{ bold: index < 7 }"
         >
           {{ date }}
         </div>
@@ -47,53 +49,63 @@
 </template>
 
 <script>
-import { useTodoStore } from '@/stores/todoList';
-import { ref, onMounted } from 'vue';
-import { getTodoList } from '@/api/todos'
-import { useRoute } from 'vue-router';
+import { useTodoStore } from "@/stores/todoList";
+import { ref, onMounted } from "vue";
+import { getTodoList } from "@/api/todos";
+import { useRoute } from "vue-router";
 
-
-import moment from 'moment';
-import CalendarAddTodo from './CalendarAddTodo.vue';
+import moment from "moment";
+import CalendarAddTodo from "./CalendarAddTodo.vue";
 
 export default {
-  name: 'Calendar',
+  name: "Calendar",
   data() {
     return {
       // 모달이 열려 있는지 여부
       currentItem: null,
       selectedDate: this.$route.params.selectedDate,
       weekDates: [],
-      weekDate: ['월', '화', '수', '목', '금', '토', '일'],
-      
+      weekDate: ["월", "화", "수", "목", "금", "토", "일"],
     };
   },
 
   setup() {
     const todos = ref([]);
     const route = useRoute();
-    const selectedDate = ref(route.params.selectedDate || moment().format('YYYY-MM-DD'));
-    const formattedDate = ref('');
+    const selectedDate = ref(
+      route.params.selectedDate || moment().format("YYYY-MM-DD")
+    );
+    const formattedDate = ref("");
     const isModalValid = ref(false);
     const activeModal = ref(null);
-    const currentItem = ref('')
+    const currentItem = ref("");
+    
     onMounted(async () => {
-      formattedDate.value = moment(selectedDate.value).format('YYYYMMDD');
+      formattedDate.value = moment(selectedDate.value).format("YYYYMMDD");
       try {
-        const response = await getTodoList(formattedDate.value);
-        todos.value = response;
+        getTodoList(
+          formattedDate,
+          ({ data }) => {
+            console.log("선택한 날 투두 리스트 목록");
+            console.log(data);
+            todos.value = data;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
       } catch (error) {
-        console.error('Error fetching todos:', error);
+        console.error("Error fetching todos:", error);
       }
     });
 
     const openModal = (component) => {
       if (component === "CalendarAddTodo") {
-        console.log('formattedDate in openModal:', formattedDate.value);
+        console.log("formattedDate in openModal:", formattedDate.value);
         isModalValid.value = true;
         activeModal.value = component;
-        currentItem.value = { formattedDate: formattedDate.value }
-        console.log('currentItem:', currentItem.value)
+        currentItem.value = { formattedDate: formattedDate.value };
+        console.log("currentItem:", currentItem.value);
       }
     };
 
@@ -108,15 +120,15 @@ export default {
       isModalValid,
       activeModal,
       openModal,
-      closeModal
+      closeModal,
     };
   },
   created() {
     this.calculateWeekDates();
     const todoStore = useTodoStore();
     todoStore.fetchTodos();
-    console.log('Selected Date:', this.selectedDate);
-    console.log('Week Dates:', this.weekDates);
+    console.log("Selected Date:", this.selectedDate);
+    console.log("Week Dates:", this.weekDates);
   },
   computed: {
     // todos() {
@@ -125,31 +137,32 @@ export default {
     //   return todoStore.todos;
     // },
     weekTodos() {
-    return this.todos.filter(todo => {
-      // Todo 항목의 날짜가 현재 주의 날짜 배열(weekDates)에 포함되는지 확인
-      const todoDate = moment(todo.date, 'YYYY-MM-DD');
-      return this.weekDates.some(weekDate => {
-        const weekDateMoment = moment(this.selectedDate, 'YYYY-MM-DD').startOf('week').add(weekDate - 1, 'days');
-        return todoDate.isSame(weekDateMoment, 'day');
+      return this.todos.filter((todo) => {
+        // Todo 항목의 날짜가 현재 주의 날짜 배열(weekDates)에 포함되는지 확인
+        const todoDate = moment(todo.date, "YYYY-MM-DD");
+        return this.weekDates.some((weekDate) => {
+          const weekDateMoment = moment(this.selectedDate, "YYYY-MM-DD")
+            .startOf("week")
+            .add(weekDate - 1, "days");
+          return todoDate.isSame(weekDateMoment, "day");
+        });
       });
-    });
-  },
+    },
   },
   components: {
     CalendarAddTodo,
   },
   methods: {
-
     calculateWeekDates() {
-  let selectedMoment = moment(this.selectedDate, 'YYYY-MM-DD');
-  let startOfWeek = selectedMoment.clone().startOf('week');
+      let selectedMoment = moment(this.selectedDate, "YYYY-MM-DD");
+      let startOfWeek = selectedMoment.clone().startOf("week");
 
-  for (let i = 1; i < 8; i++) {
-    let day = startOfWeek.clone().add(i, 'days');
-    this.weekDates.push(day.format('D'));
-  }
-}
-  }
+      for (let i = 1; i < 8; i++) {
+        let day = startOfWeek.clone().add(i, "days");
+        this.weekDates.push(day.format("D"));
+      }
+    },
+  },
 };
 </script>
 
@@ -187,7 +200,7 @@ export default {
   max-width: 500px; /* 최대 너비 설정 */
   background-color: #ffffff; /* 배경색 설정 */
   padding: 1rem; /* 패딩 추가 */
-  max-height:800px; /* 최소 높이 설정 */
+  max-height: 800px; /* 최소 높이 설정 */
 }
 
 .calendar-body button {
@@ -253,7 +266,8 @@ export default {
   margin-bottom: 1rem; /* 버튼 하단 여백 */
 }
 
-.btn, .add-button {
+.btn,
+.add-button {
   cursor: pointer; /* 커서 포인터로 변경 */
   background: none; /* 배경 투명화 */
   border: none; /* 테두리 제거 */

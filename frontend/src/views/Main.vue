@@ -77,7 +77,7 @@ export default {
         // 여기서 사용할 변수명 수정
         const todayString = year + "" + month + "" + day;
 
-        this.todos = await getTodoList(todayString);
+        this.todos = getTodoList(todayString);
         this.randomQuote = data[0];
         this.quoteAuthor = data[1];
       } catch (error) {
