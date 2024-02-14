@@ -28,7 +28,6 @@
 <script>
 import TodoList from '@/components/Todo/TodoList.vue'
 import HabitList from '@/components/Habit/HabitList.vue'
-import { useMemberStore } from '@/stores/auth'
 
 export default {
   components: {

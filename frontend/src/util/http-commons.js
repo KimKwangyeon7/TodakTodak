@@ -1,5 +1,4 @@
 import axios from "axios";
-import { httpStatusCode } from "./http-status";
 
 // local vue api axios instance
 function localAxios() {
@@ -15,7 +14,7 @@ function localAxios() {
   instance.defaults.headers.put["Content-Type"] = "application/json";
 
 
-  return instance;S
+  return instance;
 
 }
 
