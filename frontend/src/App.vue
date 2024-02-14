@@ -1,131 +1,86 @@
-<!-- eslint-disable no-unused-vars -->
-
-<script setup>
-import Sidebar from "@/components/Sidebar.vue";
-import Main from "@/views/Main.vue";
-import MyPage from "@/views/MyPage.vue";
-import { RouterLink, RouterView } from "vue-router";
-import { useMemberStore } from "@/stores/auth";
-
-import { initializeApp } from "firebase/app";
-import {
-  getMessaging,
-  getToken,
-  onMessage,
-  isSupported,
-} from "firebase/messaging";
-
-let today = new Date();
-console.log(today);
-
-const authStore = useMemberStore();
-
-const closeModal = () => {
-  is_modal_valid.value = false;
-};
-
-const handleLoginClick = () => {
-  console.log(authStore.isLogin);
-  // 여기에서 로그인 상태 확인
-};
-
-if (isSupported) {
-  try {
-    const firebaseConfig = {
-      apiKey: "AIzaSyCF2s8lAwrDHDwgHFfJnSM5XV_O1tGPadA",
-      authDomain: "c210-67728.firebaseapp.com",
-      databaseURL: "https://c210-67728-default-rtdb.firebaseio.com",
-      projectId: "c210-67728",
-      storageBucket: "c210-67728.appspot.com",
-      messagingSenderId: "1085114030378",
-      appId: "1:1085114030378:web:ca44737c5db69c513a6653",
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const messaging = getMessaging();
-    messaging
-      .requestPermission()
-      .then(function () {
-        return messaging.getToken();
-      })
-      .then(async function (token) {
-        console.log(token);
-        const fcmData = {
-          memberId: authStore.memberId,
-          title: "푸시 제목",
-          body: "푸시 본문",
-        };
-        await fetch("/notification", {
-          method: "post",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(fcmData),
-        });
-
-        messaging.onMessage((payload) => {
-          const title = payload.notification.title;
-          const options = {
-            body: payload.notification.body,
-          };
-          navigator.serviceWorker.ready.then((registration) => {
-            registration.showNotification(title, options);
-          });
-        });
-      })
-      .catch(function (err) {
-        console.log("Error Occured");
-      });
-  } catch (error) {
-    console.error("fcm is error : ", error);
-  }
-  console.log("brower supported");
-} else {
-  console.log("brower not supported");
-}
-
-</script>
-
 <template>
   <div v-if="authStore.isLogin" class="mt-5">
     <Sidebar />
+
     <!-- 하단 네비게이션 바 -->
     <div class="bottom-nav">
       <RouterLink to="/Main" class="nav-item">
-        <img class="nav-icon" src="@/assets/bottom-nav/home.png" alt="" /> Home
+        <img class='nav-icon' src="@/assets/bottom-nav/home.png" alt=""> Home
       </RouterLink>
       <RouterLink to="/Calendar" class="nav-item">
-        <img class="nav-icon" src="@/assets/sidebar/calendar.png" alt="" />
-        Calendar
+        <img class='nav-icon' src="@/assets/sidebar/calendar.png" alt=""> Calendar
       </RouterLink>
       <RouterLink to="/friends" class="nav-item">
-        <img class="nav-icon" src="@/assets/bottom-nav/Lucide.png" alt="" />
-        Friends
+        <img class='nav-icon' src="@/assets/bottom-nav/Lucide.png" alt=""> Friends
       </RouterLink>
       <RouterLink to="/mypage" class="nav-item">
-        <img class="nav-icon" src="@/assets/bottom-nav/profile.png" alt="" />
-        MyPage
+        <img class='nav-icon' src="@/assets/bottom-nav/profile.png" alt=""> MyPage
       </RouterLink>
     </div>
   </div>
   <div v-else>
     <div>
-      <RouterLink :to="{ name: 'SignUpView' }">SignUp</RouterLink>
       <RouterLink :to="{ name: 'LoginView' }">Login</RouterLink>
+      <RouterLink :to="{ name: 'SignUpView' }">SignUp</RouterLink>
     </div>
   </div>
   <RouterView />
 </template>
 
+<script>
+import Sidebar from '@/components/Sidebar.vue'
+import Main from '@/views/Main.vue'
+import MyPage from '@/views/MyPage.vue'
+
+import { RouterLink, RouterView } from 'vue-router'
+import { useMemberStore } from '@/stores/auth'
+
+
+let today = new Date()
+console.log(today)
+
+export default {
+  name: 'App',
+  data() {
+    return {
+      is_modal_valid: false,
+    }
+  },
+  setup() {
+    const authStore = useMemberStore()
+
+    return {
+      authStore,
+    }
+  },
+  components: {
+    Sidebar,
+    Main,
+    MyPage,
+    RouterView,
+    RouterLink,
+},
+  methods: {
+    closeModal() {
+      this.is_modal_valid = false
+    },
+    handleLoginClick() {
+      console.log(this.authStore.isLogin);
+      // 여기에서 로그인 상태 확인
+    }
+  }
+}
+</script>
+
 <style>
 /* 전체 앱 스타일링 */
 #app {
-  font-family: "SUITE-Regular";
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-  padding-top: 25px;
-  padding-bottom: 90px;
+    font-family: 'SUITE-Regular';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #2c3e50;
+    padding-top: 25px;
+    padding-bottom: 90px;
 }
 
 /* 상단 바 스타일링 */
@@ -141,6 +96,7 @@ if (isSupported) {
   font-size: 10px;
 }
 
+
 /* 할 일 목록 스타일링 */
 
 /* 하단 네비게이션 바 스타일링 */
@@ -153,7 +109,7 @@ if (isSupported) {
   display: flex;
   justify-content: space-around;
   align-items: center; /* 세로 가운데 정렬 추가 */
-  background-color: #eaf3f9;
+  background-color: #EAF3F9;
   padding: 10px;
   z-index: 999;
   height: 80px;
@@ -181,25 +137,21 @@ div {
 }
 
 .black-bg {
-  width: 100%;
-  height: 100%;
+  width: 100%; height: 100%;
   background: rgba(0, 0, 0, 0, 5);
-  position: fixed;
-  padding: 20px;
+  position: fixed; padding: 20px;
 }
 
 .white-bg {
-  width: 100%;
-  background: white;
+  width: 100%; background: white;
   border-radius: 8px;
   padding: 20px;
 }
 
 @font-face {
-  font-family: "SUITE-Regular";
-  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/SUITE-Regular.woff2")
-    format("woff2");
-  font-weight: 400;
-  font-style: normal;
+    font-family: 'SUITE-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/SUITE-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
 }
-</style>
+</style>@/records.js/auth

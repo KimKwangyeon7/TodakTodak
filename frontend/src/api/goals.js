@@ -39,6 +39,7 @@ function getGoalList(success, fail) {
   console.log("goalList 실행");
   local.defaults.headers.Authorization = 'Bearer ' + localStorage.getItem("accessToken");
   local.get(`${url}`).then(success).catch(fail);
+
 }
 
 async function getGoalDetail(goalId, success, fail) {
@@ -50,10 +51,10 @@ async function getGoalDetail(goalId, success, fail) {
 async function updateGoal(goalId, content, color, success, fail) {
   console.log("updateGoal 실행")
   local.defaults.headers.Authorization = 'Bearer ' + localStorage.getItem("accessToken")
-  local.put(`${url}/${goalId}`, JSON.stringify(content, color)).then(success).catch(fail) 
+  local.get(`${url}/${goalId}`, JSON.stringify(content, color)).then(success).catch(fail) 
 }
 
-async function deleteGoal(goalId , success, fail) {
+async function deleteGoal(goalId) {
   console.log("deleteGoal 실행")
   local.defaults.headers.Authorization = 'Bearer ' + localStorage.getItem("accessToken")
   local.delete(`${url}/${goalId}`).then(success).catch(fail)

@@ -30,7 +30,7 @@
             <router-link to="/meeting" class="nav-link">
               <img src="@/assets/sidebar/meeting.png" alt=""> 모임
             </router-link>
-            <router-link to="/friends" class="nav-link">
+            <router-link to="/Friend" class="nav-link">
               <img src="@/assets/sidebar/friend.png" alt=""> 친구
             </router-link>
             <router-link to="/habit" class="nav-link">
