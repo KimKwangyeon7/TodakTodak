@@ -7,9 +7,17 @@
           <div class="calendar-header">
             <b-row align-v="center">
               <div class="calendar-title">
-                <span class="arrow-left" style="margin-right: 15px;" @click="subtractMonth">&lt;</span> 
+                <span class="arrow-left" @click="subtractMonth">&lt;</span> 
                 {{ year }}년 {{ dateContext.format('M') }}월
-                <span class="arrow-right" style="margin-left: 15px;" @click="addMonth">&gt;</span>
+                <!-- <div v-for="todo in todos" :key="todo.id">
+                  <span>{{ todo.color }}</span>
+                </div> -->
+                <!-- <div v-for="color in uniqueColors" 
+                :key="color" 
+                :style="{ backgroundColor: color }">
+                <span>{{ color }}</span>
+                </div> -->
+                <span class="arrow-right" @click="addMonth">&gt;</span>
               </div>
             </b-row>
           </div>
@@ -489,7 +497,7 @@ this.$router.push({
 }
 </script>
 
-<style scope>
+<style>
 .calendar-wrapper {
 display: flex;
 margin: 2.5em 0;
@@ -497,252 +505,160 @@ overflow: auto;
 height: 700px;
 }
 
-/* .calendar-body {
-
-
-} */
+.calendar-body {
+width: 330px !important;
+height: 500px !important;
+}
 
 .calendar-header {
-margin-bottom: 3rem;
+margin-bottom: 2rem;
 }
 
 .calendar-header .month {
-  font-family: Lato;
-  font-size: 20px;
-  font-weight: bold;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: normal;
-  letter-spacing: 0.5px;
-  color: #222350;
+font-family: Lato;
+font-size: 20px;
+font-weight: bold;
+font-style: normal;
+font-stretch: normal;
+line-height: normal;
+letter-spacing: 0.5px;
+color: #222350;
 }
 
 .calendar-header .year {
-  font-size: 1.5em;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: red;
+font-size: 1.5em;
+font-weight: 600;
+margin-bottom: 1rem;
+color: red;
 }
 
-.calendar-weekdays {
-  display: flex;
-  margin-bottom: 1.25rem;
-  color: #2091a2;
-  font-size: 16px;
-}
+/* .calendar-weekdays {
+width: 100%;
+display: flex;
+margin-bottom: 1.25rem;
+color: #2091a2;
+font-size: 16px;
+} */
 
 .calendar-weekdays .weekday {
-  width: calc(100% / 7);
-  font-size: 16px;
-  line-height: 1.25;
-  text-align: center;
-  color: #2091a2;
+width: calc(100% / 7);
+font-size: 16px;
+line-height: 1.25;
+text-align: center;
+color: #2091a2;
 }
 
 .calendar-dates {
-  display: flex;
-  flex-wrap: wrap;
-  position: relative;
+width: 100%;
+display: flex;
+flex-wrap: wrap;
+position: relative;
+height: 395px;
 }
 
 .day:hover {
-  cursor: pointer;
+cursor: pointer;
 }
 
 .calendar-dates .date {
-  font-weight: 200;
-  padding: 0.25rem 0.5rem;
-  position: relative;
-  width: calc(100% / 7);
-  margin-top: 1px;
+padding: 0.5rem; /* 상하좌우 패딩을 늘림 */
+margin-bottom: 1rem; /* 하단 마진을 늘림 */
+height: auto; /* 높이를 자동으로 조정하여 내용에 맞게 함 */
 }
 
-.calendar-dates .date.blank {
-  color: #949ba4;
+/* .calendar-dates .date.blank {
+color: #949ba4;
 }
 
 .calendar-dates .date.no-border-right {
-  border-right: none;
-}
+border-right: none;
+} */
 
-.calendar-dates .date.today {
-  background-color: #45b7c1;
-  color: white !important;
-}
+
 
 .date.today:first-child,
 :not(.today)+.today {
-  border-top-left-radius: 20px;
-  border-bottom-left-radius: 20px;
+border-top-left-radius: 20px;
+border-bottom-left-radius: 20px;
 }
 
 .date.today+.date.today+.date.today+.date.today+.date.today {
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
+border-top-right-radius: 20px;
+border-bottom-right-radius: 20px;
 }
 
-.calendar-dates .date.now {
-  border: 1px solid #45b7c1;
-  border-radius: 100px;
-  color: #45b7c1;
-  margin-top: -1px;
-}
+/* .calendar-dates .date.now {
+border: 1px solid #45b7c1;
+border-radius: 100px;
+color: #45b7c1;
+margin-top: -1px;
+} */
 
-.calendar-dates .date .weekday {
-  display: none;
-}
+/* .calendar-dates .date .weekday {
+display: none;
+} */
 
 .arrow-left {
-  margin-left: 90px;
+margin-left: 90px;
 }
 
 .arrow-right {
-  margin-right: 90px;
+margin-right: 90px;
 }
 
 .arrow-left,
 .arrow-right:hover {
-  cursor: pointer;
+cursor: pointer;
 }
 
-.btn-accept {
-  width: 75px;
-  height: 35px;
-  background-color: #45b7c1;
-  color: #ffffff;
-  border: none;
-  border-radius: 7px;
-  font-size: 14px;
-  text-align: center;
-  float: right;
-}
+/* .btn-accept {
+width: 75px;
+height: 35px;
+background-color: #45b7c1;
+color: #ffffff;
+border: none;
+border-radius: 7px;
+font-size: 14px;
+text-align: center;
+float: right;
+} */
 
 .c-hr {
-  border: none;
-  height: 1px;
-  background-color: #949ba4;
-  opacity: 0.61;
+border: none;
+height: 1px;
+background-color: #949ba4;
+opacity: 0.61;
 }
 
 .calendar-footer {
-  margin-top: 30px;
+margin-top: 30px;
 }
 
 .calendar-title {
-  font-size: 20px;
-  color: #222350;
-  text-align: center;
+font-size: 20px;
+color: #222350;
+text-align: center;
 }
 
 .weekend {
-  color: #222350;
+color: #222350;
 }
 
-.vcal-date:hover {
-  background-color: #3498db;
-  color: #ffffff;
-}
+/* .vcal-date:hover {
+background-color: #3498db;
+color: #ffffff;
+} */
 
+.color-box {
+width: 20px; /* 상자의 너비 */
+height: 20px; /* 상자의 높이 */
+display: inline-block; /* 상자를 인라인 요소처럼 배치 */
+margin-right: 4px; /* 상자 사이의 간격 */
+}
 
 .color-bar {
 height: 5px; /* 색상 바의 높이 */
 width: 100%; /* 색상 바의 너비 */
 margin-top: 2px; /* 색상 바 위의 마진 */
-}
-
-
-.calendar-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 70px auto 0; /* 상단 여백 조정 및 가운데 정렬 */
-  overflow: auto;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
-  border-radius: 8px; /* 테두리 둥글게 */
-}
-
-.calendar-body {
-  width: 100%; /* 전체 너비 사용 */
-  max-width: 500px; /* 최대 너비 설정 */
-  background-color: #ffffff; /* 배경색 설정 */
-  padding: 1rem; /* 패딩 추가 */
-  max-height:800px; /* 최소 높이 설정 */
-}
-
-.calendar-body button {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  margin-bottom: 1rem; /* 버튼 하단 여백 조정 */
-  background: none; /* 버튼 배경 투명화 */
-  border: none; /* 테두리 제거 */
-  cursor: pointer; /* 커서 포인터로 변경 */
-}
-
-.calendar-weekdays {
-  display: flex;
-  margin-bottom: 1rem; /* 하단 여백 조정 */
-  color: #2091a2; /* 주요 색상 설정 */
-}
-
-.calendar-weekdays .date {
-  flex: 1; /* 평등하게 공간 분배 */
-  text-align: center;
-  padding: 0.5rem 0; /* 패딩 추가 */
-}
-
-.calendar-weekdays .date.bold {
-  font-weight: bold; /* 폰트 굵게 */
-}
-
-.calendar-dates {
-  display: flex;
-  flex-wrap: wrap;
-  height: 500px;
-}
-
-.calendar-dates .date {
-  width: 14.28%; /* 7일에 맞게 너비 조정 */
-  padding: 0.5rem; /* 패딩 추가 */
-  text-align: center; /* 텍스트 가운데 정렬 */
-  border-radius: 4px; /* 테두리 둥글게 */
-  transition: background-color 0.3s, color 0.3s; /* 배경 및 글자 색상 전환 효과 */
-}
-
-.date:hover {
-  background-color: #e8f0f2; /* 호버 시 배경색 변경 */
-  color: #333; /* 호버 시 글자 색상 변경 */
-}
-
-.calendar-dates .date.today {
-  background-color: #45b7c1; /* 오늘 날짜 배경색 */
-  color: white; /* 오늘 날짜 글자색 */
-  font-weight: bold; /* 오늘 날짜 굵게 */
-}
-
-.calendar-dates .date.now {
-  border: 2px solid #45b7c1; /* 현재 시간 테두리 */
-  color: #45b7c1; /* 현재 시간 글자색 */
-}
-
-.button-container {
-  display: flex;
-  justify-content: space-between;
-  width: 100%; /* 컨테이너 너비를 최대로 설정 */
-  margin-bottom: 1rem; /* 버튼 하단 여백 */
-}
-
-.btn, .add-button {
-  cursor: pointer; /* 커서 포인터로 변경 */
-  background: none; /* 배경 투명화 */
-  border: none; /* 테두리 제거 */
-}
-
-.add-button {
-  font-size: 1.5rem; /* + 버튼의 글자 크기를 키움 */
-  padding: 0.5rem 1rem; /* 패딩 추가로 버튼 크기 조정 */
-  border-radius: 50%; /* 원형으로 만듬 */
-  line-height: 1; /* 라인 높이 조정 */
-  margin-left: auto; /* 왼쪽 자동 마진으로 오른쪽 정렬 */
 }
 </style>

@@ -2,7 +2,6 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { defineStore } from "pinia";
-import { useCookies } from "vue3-cookies";
 
 import { login, logout, findByToken } from "@/api/member";
 
@@ -10,7 +9,6 @@ import { httpStatusCode } from "@/util/http-status";
 
 import axios from 'axios'
 
-const { cookies } = useCookies();
 
 export const useMemberStore = defineStore("memberStore", () => {
   const router = useRouter();

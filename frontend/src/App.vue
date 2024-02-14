@@ -42,40 +42,59 @@ if (isSupported) {
     };
 
     const app = initializeApp(firebaseConfig);
-    const messaging = getMessaging();
-    messaging
-      .requestPermission()
-      .then(function () {
-        return messaging.getToken();
-      })
-      .then(async function (token) {
-        console.log(token);
-        const fcmData = {
-          memberId: authStore.memberId,
-          title: "푸시 제목",
-          body: "푸시 본문",
-        };
-        await fetch("/notification", {
-          method: "post",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(fcmData),
-        });
+    const messaging = getMessaging(app);
 
-        messaging.onMessage((payload) => {
-          const title = payload.notification.title;
-          const options = {
-            body: payload.notification.body,
-          };
-          navigator.serviceWorker.ready.then((registration) => {
-            registration.showNotification(title, options);
-          });
-        });
+    getToken(messaging, { vapidKey: "<YOUR_PUBLIC_VAPID_KEY_HERE>" })
+      .then((currentToken) => {
+        if (currentToken) {
+          // Send the token to your server and update the UI if necessary
+          console.log("Token is: ", currentToken);
+          // ...
+        } else {
+          // Show permission request UI
+          console.log(
+            "No registration token available. Request permission to generate one."
+          );
+          // ...
+        }
       })
-      .catch(function (err) {
-        console.log("Error Occured");
+      .catch((err) => {
+        console.log("An error occurred while retrieving token. ", err);
+        // ...
       });
+    // messaging
+    //   .requestPermission()
+    //   .then(function () {
+    //     return messaging.getToken();
+    //   })
+    //   .then(async function (token) {
+    //     console.log(token);
+    //     const fcmData = {
+    //       memberId: authStore.memberId,
+    //       title: "푸시 제목",
+    //       body: "푸시 본문",
+    //     };
+    //     await fetch("/notification", {
+    //       method: "post",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //       body: JSON.stringify(fcmData),
+    //     });
+
+    //     messaging.onMessage((payload) => {
+    //       const title = payload.notification.title;
+    //       const options = {
+    //         body: payload.notification.body,
+    //       };
+    //       navigator.serviceWorker.ready.then((registration) => {
+    //         registration.showNotification(title, options);
+    //       });
+    //     });
+    //   })
+    //   .catch(function (err) {
+    //     console.log("Error Occured");
+    //   });
   } catch (error) {
     console.error("fcm is error : ", error);
   }
@@ -83,7 +102,6 @@ if (isSupported) {
 } else {
   console.log("brower not supported");
 }
-
 </script>
 
 <template>

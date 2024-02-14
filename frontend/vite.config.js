@@ -15,8 +15,8 @@ export default defineConfig({
   plugins: [
     vue(),
     VitePWA({
-      srcDir: 'src',
-      filename: 'sw.js',
+      srcDir: 'public',
+      filename: 'firebase-messaging-sw.js',
       devOptions: {
         enabled: true,
         type: 'module',
