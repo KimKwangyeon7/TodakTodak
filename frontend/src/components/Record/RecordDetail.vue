@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { modifyVoice } from '@/api/records'
+import { modifyVoice, getUser } from '@/api/records'
 
 
 export default {
@@ -47,13 +47,11 @@ export default {
         console.error('Error updating voice:', error);
       }
     },
-    async recordCont() {
-      this.$router.push({ path: '/voice/trainer' }).catch(err => {
-          console.error(err);
-      });
+    recordCont() {
+        this.$router.push({ name: 'Trainer', params: { recordId: this.item.id } });
     }
-  },
-};
+  }
+}
 </script>
 
 <style scoped>

@@ -5,7 +5,7 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <router-link to="/" class="todak-logo navbar-brand mx-auto">
+        <router-link to="/main" class="todak-logo navbar-brand mx-auto">
           <img src="@/assets/todak/todak-logo.png" alt="">
         </router-link>
         <button type="button" class="btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNotifications" aria-controls="offcanvasNotifications">
@@ -30,7 +30,7 @@
             <router-link to="/meeting" class="nav-link">
               <img src="@/assets/sidebar/meeting.png" alt=""> 모임
             </router-link>
-            <router-link to="/Friend" class="nav-link">
+            <router-link to="/friends" class="nav-link">
               <img src="@/assets/sidebar/friend.png" alt=""> 친구
             </router-link>
             <router-link to="/habit" class="nav-link">
@@ -96,6 +96,11 @@ import Notifications from '@/components/Notifications.vue'
 .offcanvas-body img {
   margin-right: 20px;
   max-width: 30px; 
+}
+
+.navbar-toggler:focus {
+  outline: none; /* 포커스 시 아웃라인 제거 */
+  box-shadow: none; /* 포커스 시 박스 쉐도우 제거 */
 }
 
 @font-face {

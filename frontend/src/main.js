@@ -1,11 +1,11 @@
 import "./assets/main.css";
-
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import piniaPluginPersist from 'pinia-plugin-persist'
 import { setupCalendar } from 'v-calendar';
 import { registerSW } from 'virtual:pwa-register'
 import { useMemberStore } from "@/stores/auth";
+// import firebaseMessaging from './firebase'
 
 import App from "./App.vue";
 import router from "./router";
@@ -23,6 +23,7 @@ app.use(setupCalendar, {})
 
 const memberStore = useMemberStore()
 memberStore.initializeAuth()
+// app.config.globalProperties.$messaging = firebaseMessaging
 
 app.mount('#app')
 
