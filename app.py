@@ -275,5 +275,5 @@ current_directory = os.getcwd()
 print("현재 작업 디렉토리:", current_directory)
 
 if __name__ == '__main__':
-    app.run(host='i10c210.p.ssafy.io', port=5050)
+    app.run(host='0.0.0.0', port=5050)
     
