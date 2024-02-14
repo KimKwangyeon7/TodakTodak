@@ -4,7 +4,8 @@ import { httpStatusCode } from "./http-status";
 // local vue api axios instance
 function localAxios() {
   const instance = axios.create({
-    baseURL: "https://i10c210.p.ssafy.io", //스프링 API 호출 포트
+    // baseURL: "https://i10c210.p.ssafy.io", // run build
+    baseURL: "http://i10c210.p.ssafy.io:8080", // run dev
   });
 
   const token = localStorage.getItem('accessToken');
@@ -14,7 +15,7 @@ function localAxios() {
   instance.defaults.headers.put["Content-Type"] = "application/json";
 
 
-  return instance;
+  return instance;S
 
 }
 
