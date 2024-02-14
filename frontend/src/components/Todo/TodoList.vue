@@ -1,7 +1,7 @@
 <template>
   <div v-if="authStore.isLogin">
     <!-- Modal -->
-    <div class="black-bg" v-if="is_modal_valid">
+    <div class="black-bg" v-if="is_modal_valid" @click="closeModal">
       <component
         :is="activeModal"
         :item="currentItem"
@@ -33,6 +33,7 @@
     <div class="todo-section">
       <div class="todo-date">
         <div style="margin-bottom: 5px; margin-top: 5px; font-weight: bold;">목표</div>
+        <button class="add-button" @click="openModal('AddGoal')">+</button>
       </div>
       <div class="todo-item" v-for="goal in goals" :key="goal.id">
         <div
@@ -56,6 +57,7 @@ import { useTodoStore } from '@/stores/todoList';
 
 import TodoDetail from "@/components/Todo/TodoDetail.vue";
 import AddTodo from "@/components/Todo/AddTodo.vue";
+import AddGoal from "@/components/Goal/AddGoal.vue";
 import GoalDetail from "@/components/Goal/GoalDetail.vue";
 import Habit from "@/views/Habit.vue";
 
@@ -87,6 +89,7 @@ export default {
     GoalDetail,
     TodoDetail,
     AddTodo,
+    AddGoal,
     Habit,
   },
   methods: {
