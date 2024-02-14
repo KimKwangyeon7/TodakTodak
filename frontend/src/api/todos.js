@@ -51,7 +51,7 @@ async function getTodoListByGoal(goalId) {
 
 async function getTodoListByMonth(month) {
   try {
-    const response = await apiClient.get(`/month/${month}`);
+    const response = await apiClient.get(`/todos/month/${month}`);
     console.log("Todos by month:", response.data);
     return response.data;
   } catch (error) {

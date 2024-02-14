@@ -64,7 +64,7 @@
         <label for="time">알람 시간:</label>
         <input v-model="time" type="time" id="time" class="form-control">
       </div>
-      <p>Formatted Date: {{ formattedDate }}</p>
+      <!-- <p>Formatted Date: {{ formattedDate }}</p> -->
       <button type="submit" class="btn btn-primary" @click.prevent="addTodo()">저장</button>
       <div>
   </div>
