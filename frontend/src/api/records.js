@@ -94,17 +94,15 @@ async function deleteVoice(recordId, success, fail) {
 // }
 
 
-async function selectVoice(recordId, success, fail) {
+async function selectVoice(recordId) {
   local.defaults.headers.Authorization = "Bearer " + localStorage.getItem("accessToken");
   try {
     const response = await local.patch(`${url}/use/${recordId}`);
     if (response.status === 200) {
       console.log(`${recordId}번 선택 완료`);
-      success(response);
     }
   } catch (error) {
     console.error(`오류 발생: ${error}`);
-    fail(error);
   }
 }
 
