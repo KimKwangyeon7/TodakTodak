@@ -2,4 +2,3 @@ C:UsersSSAFYDesktopAIFlaskcontentdataglowtts-v2model_fil.pth.tar filter=lfs diff
 C:UsersSSAFYDesktopAIFlaskcontentdatahifigan-v2model_fil.pth.tar filter=lfs diff=lfs merge=lfs -text
 C:UsersSSAFYDesktopAIFlaskcontentdataglowtts-v2glowtts_dafdaf filter=lfs diff=lfs merge=lfs -text
 C:UsersSSAFYDesktopAIFlaskcontentdatahifigan-v2hifigan_Afdafdf filter=lfs diff=lfs merge=lfs -text
-C:UsersSSAFYDesktopAIFlaskcontentdatahifigan-v2hifigan_Afdafdf.* filter=lfs diff=lfs merge=lfs -text
