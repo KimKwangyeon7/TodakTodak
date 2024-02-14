@@ -37,8 +37,13 @@
             <!-- <button class="reject-button" @click="rejectRequest(request.id)">거절</button> -->
           </div>
         </div>
+        <div class="request-buttons">
+          <button class="accept-button" @click="acceptRequest(request.id)">수락</button>
+          <button class="reject-button" @click="rejectRequest(request.id)">거절</button>
+        </div>
       </div>
     </div>
+  </div>
 </template>
 
 <script setup>
@@ -46,6 +51,7 @@ import { ref } from 'vue'
 import { findByNickname } from '@/api/member';
 import { sendFriendRequest } from '@/api/friend'
 import { acceptFriends } from '@/api/friend'
+
 
 
 // 사용자 정보를 저장할 반응형 참조
@@ -89,32 +95,32 @@ const friendRequests = ref([])
 
 // 친구 요청 수락 기능
 const acceptRequest = (requestId) => {
-  // 요청 수락 로직 구현
-  console.log(`친구 요청 ID ${requestId}를 수락했습니다.`)
-  friendRequests.value = friendRequests.value.filter(request => request.id !== requestId)
+// 요청 수락 로직 구현
+console.log(`친구 요청 ID ${requestId}를 수락했습니다.`)
+friendRequests.value = friendRequests.value.filter(request => request.id !== requestId)
 }
 
 // 친구 요청 거절 기능
 const rejectRequest = (requestId) => {
-  // 요청 거절 로직 구현
-  console.log(`친구 요청 ID ${requestId}를 거절했습니다.`)
-  friendRequests.value = friendRequests.value.filter(request => request.id !== requestId)
+// 요청 거절 로직 구현
+console.log(`친구 요청 ID ${requestId}를 거절했습니다.`)
+friendRequests.value = friendRequests.value.filter(request => request.id !== requestId)
 }
 
 
 
 const goBack = () => {
-  window.history.back()
+window.history.back()
 }
 </script>
 
 
 <style scoped>
 .friend-request-header {
-  padding: 5px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+padding: 5px;
+display: flex;
+justify-content: space-between;
+align-items: center;
 }
 
 .list-title {
@@ -184,4 +190,3 @@ background-color: #dc3545;
 color: white;
 }
 </style>
-  

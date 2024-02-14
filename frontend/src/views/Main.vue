@@ -77,7 +77,17 @@ export default {
         // 여기서 사용할 변수명 수정
         const todayString = year + "" + month + "" + day;
 
-        this.todos = getTodoList(todayString);
+        getTodoList(
+          todayString,
+          ({ data }) => {
+            console.log("투두리스트 목록");
+            console.log(data);
+            this.todos = data;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
         this.randomQuote = data[0];
         this.quoteAuthor = data[1];
       } catch (error) {

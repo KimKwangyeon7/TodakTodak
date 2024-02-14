@@ -79,12 +79,13 @@ export default {
     const isModalValid = ref(false);
     const activeModal = ref(null);
     const currentItem = ref("");
-    
+
     onMounted(async () => {
       formattedDate.value = moment(selectedDate.value).format("YYYYMMDD");
+      console.log("formattedDate:", formattedDate);
       try {
         getTodoList(
-          formattedDate,
+          formattedDate.value,
           ({ data }) => {
             console.log("선택한 날 투두 리스트 목록");
             console.log(data);
@@ -131,11 +132,6 @@ export default {
     console.log("Week Dates:", this.weekDates);
   },
   computed: {
-    // todos() {
-    //   const todoStore = useTodoStore();
-    //   console.log('todos', todoStore.todos)
-    //   return todoStore.todos;
-    // },
     weekTodos() {
       return this.todos.filter((todo) => {
         // Todo 항목의 날짜가 현재 주의 날짜 배열(weekDates)에 포함되는지 확인
