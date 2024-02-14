@@ -21,7 +21,7 @@
             class="color-bar"
             :style="{ backgroundColor: getGoalColor(todo) }"
           ></div>
-          <span @click="openModal('TodoDetail', todo)" class="goal-content">{{
+          <span :class="{ 'completed': todo.checked }" @click="openModal('TodoDetail', todo)" class="goal-content">{{
             todo.title
           }}</span>
           <div v-if="todo.id">
@@ -238,6 +238,9 @@ export default {
 </script>
 
 <style scoped>
+.completed {
+  text-decoration: line-through;
+}
 .top-bar {
   display: flex;
   justify-content: space-between;
@@ -334,5 +337,6 @@ export default {
 input[type="checkbox"] {
   margin-left: auto; /* Push the checkbox to the far right */
 }
+
 </style>
 @/records.js/auth
