@@ -6,6 +6,7 @@ import { storeToRefs } from "pinia";
 import { CompatClient, Stomp } from "@stomp/stompjs";
 import { useRoute, useRouter } from "vue-router";
 import { listChatRoom, loadMessages } from "@/api/chat";
+import { sendNotification } from "@/api/notification";
 import { useMemberStore } from "@/stores/auth";
 
 const memberStore = useMemberStore();
@@ -66,13 +67,24 @@ const scrollToBottom = () => {
 };
 
 // Methods
-const sendMessage = (e) => {
+const sendMessage = async (e) => {
   if (message.value !== "") {
     send();
     message.value = "";
     scrollToBottom();
   }
+  // Define the parameters for sendNotification
+  const receiveId = 1;
+  const type = 0;
+  const notificationTitle = '알림 제목';
+  const notificationBody = '알림 내용';
+
+  // Call sendNotification function with the specified parameters
+  await sendNotification(receiveId, type, notificationTitle, notificationBody);
+
 };
+
+
 
 const send = () => {
   console.log("Send message:" + message.value);
