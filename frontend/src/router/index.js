@@ -25,6 +25,7 @@ import Records from "@/views/Record/Record.vue";
 // import VoiceTrainer from '@/views/Voice/VoiceTrainer.vue'
 import Trainer from "@/views/Record/Trainer.vue";
 
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -141,6 +142,11 @@ const router = createRouter({
       path: "/calendar-detail/:selectedDate",
       name: "CalendarDetail",
       component: CalendarDetail,
+    },
+    {
+      path: "/calendar-detail/add/:selectedDate",
+      name: "CalendarAddTodo",
+      component: () => import("@/views/CalendarAddTodo.vue"),
     },
     {
       path: "/login",

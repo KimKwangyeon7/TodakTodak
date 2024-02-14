@@ -136,7 +136,7 @@ export default {
   border-radius: 4px;
   cursor: pointer;
   font-size: 12px;
-  margin-left: auto; /* 나머지 공간을 최대한 차지하여 왼쪽으로 이동 */
+  margin-right: auto; /* 나머지 공간을 최대한 차지하여 왼쪽으로 이동 */
 }
 .form-group {
   text-align: left;
@@ -153,5 +153,4 @@ export default {
     display: flex;
     margin-left: auto;
   }
-
 </style>

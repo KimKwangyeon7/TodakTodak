@@ -16,15 +16,11 @@
     </div>
     <div class="todo-items">
       <div class="todo-item" v-for="habit in habits" :key="habit.id">
-        <!-- class로 todo-content 만들어야 하지만 귀찮아서 안 만듦
-        어차피 속성값은 동일함 -->
+        {{ habit.content }}
         <span @click="openModal('HabitDetail', habit)" class="goal-content">{{ habit.habitContent }}</span>
-        <input type="checkbox">
+        <!-- <input type="checkbox"> -->
       </div>
     </div>
-  </div>
-  <div v-for="(habit, index) in habitDataList" :key="index">
-    {{ habit.content }}
   </div>
 </div>
 </template>
@@ -73,14 +69,17 @@ export default {
       this.activeModal = component;
       this.currentItem = itemData;
     },
-    async fetchHabits() {
-      try {
-        const response = await getHabitList()
-        this.habits = response.data
-        console.log('habits:', this.habits)
-      } catch (error) {
-        console.error('Error fetching habits:', error)
-      }
+    fetchHabits() {
+      getHabitList(
+        ({ data }) => {
+          console.log('습관 리스트 목록')
+          console.log(data)
+          this.habits = data
+        },
+        (error) => {
+          console.log(error)
+        }
+      )
     },
 
     closeModal() {
