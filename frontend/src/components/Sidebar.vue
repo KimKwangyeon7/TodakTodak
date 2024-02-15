@@ -39,8 +39,8 @@
             <router-link to="/mypage" class="nav-link">
               <img src="@/assets/sidebar/profile.png" alt=""> 마이페이지
             </router-link>
-            <router-link to="/subscribe" class="nav-link" style="color:red"><span class="emoji"></span> subscribe</router-link>
-            <router-link to="/pushnotify" class="nav-link" style="color:red"><span class="emoji"></span> pushnotify</router-link>
+            <!-- <router-link to="/subscribe" class="nav-link" style="color:red"><span class="emoji"></span> subscribe</router-link>
+            <router-link to="/pushnotify" class="nav-link" style="color:red"><span class="emoji"></span> pushnotify</router-link> -->
           </div>
         </div>
       </div>

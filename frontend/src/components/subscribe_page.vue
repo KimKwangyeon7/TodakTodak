@@ -8,8 +8,8 @@
       <img src="../assets/img/push-image.jpg" alt="Push Image" class="card-img-top">
 
       <div class="card-body">
-        <h1 class="card-title">C210</h1>
-        <p class="card-text">프론트 푸시 알람 구현. [알림허용] 단추를 클릭하시면 알림 정보를 받으실 수 있습니다.</p>
+        <h1 class="card-title">알림 제어</h1>
+        <p class="card-text">[알림허용] 단추를 클릭하시면 알림 정보를 받으실 수 있습니다.</p>
         
         <button class="btn btn-primary" @click="fnPushSubscribe">알림 허용</button>
         <button class="btn btn-secondary" @click="fnUnSubscription">알림 해제</button>
