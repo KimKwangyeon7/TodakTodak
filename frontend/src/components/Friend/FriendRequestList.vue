@@ -18,7 +18,7 @@
        >
     </div>
 
-      <div v-if="friendRequests.length === 0" class="empty-list-message">친구 요청이 없습니다.</div>
+      <div v-if="friendRequests.length === 0" class="empty-list-message">닉네임을 검색해주세요.</div>
       <div v-else>
         <div v-for="request in friendRequests" :key="request.id" class="friend-request">
           <div class="request-info">
@@ -37,13 +37,9 @@
             <!-- <button class="reject-button" @click="rejectRequest(request.id)">거절</button> -->
           </div>
         </div>
-        <div class="request-buttons">
-          <button class="accept-button" @click="acceptRequest(request.id)">수락</button>
-          <button class="reject-button" @click="rejectRequest(request.id)">거절</button>
-        </div>
       </div>
     </div>
-  </div>
+  
 </template>
 
 <script setup>
