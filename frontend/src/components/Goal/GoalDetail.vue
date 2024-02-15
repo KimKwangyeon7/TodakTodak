@@ -1,35 +1,22 @@
 <template>
   <div class="modal-content">
-    <button
-      type="button"
-      class="btn-close"
-      aria-label="Close"
-      @click="closeModal"
-    ></button>
-    <div class="form-group">
-      <label for="content">목표 내용:</label>
-      <input
-        v-model="item.content"
-        type="text"
-        id="content"
-        class="form-control"
-        required
-      />
+    <button type="button" class="btn-close" aria-label="Close" @click="closeModal"></button>
+      <div class="form-group">
+          <label for="content">목표 내용:</label>
+          <input v-model="item.content" type="text" id="content" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="selectedColor">목표 색상:</label>
+          <select v-model="localSelectedColor" id="selectedColor" class="form-control">
+            <option v-for="goal in goals" :key="goal.id" :value="goal.id">
+              {{ goal.color }}
+            </option>
+        </select>
     </div>
-    <div class="form-group">
-      <label for="selectedColor">목표 색상:</label>
-      <select
-        v-model="localSelectedColor"
-        id="selectedColor"
-        class="form-control"
-      >
-        <option v-for="goal in goals" :key="goal.id" :value="goal.id">
-          {{ goal.color }}
-        </option>
-      </select>
+    <div class="button-group">
+      <button class="btn" @click="fnDelete">삭제</button>
+      <button class="btn" @click="fnSave">저장</button>
     </div>
-    <button class="" @click="fnDelete">삭제</button>
-    <button class="" @click="fnSave">저장</button>
   </div>
 </template>
 
@@ -40,6 +27,10 @@ export default {
   data() {
     return {
       originalItem: {},
+      item: {
+        selectedColor: null,
+      },
+      goals: [],
     };
   },
   created() {
@@ -52,18 +43,6 @@ export default {
     },
   },
   computed: {
-    async goals() {
-      getGoalList(
-        ({ data }) => {
-          console.log("목표 리스트 목록");
-          console.log(data);
-          this.goals = data;
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    },
     get() {
       return this.item.selectedColor || this.goals[0]?.id;
     },
@@ -94,10 +73,28 @@ export default {
       }
     },
   },
+  mounted() {
+    getGoalList(
+      ({ data }) => {
+        console.log("목표 리스트 목록");
+        console.log(data);
+        this.goals = data;
+        this.item.selectedColor = this.goals[0]?.id;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  },
 };
 </script>
 
 <style scoped>
+.btn-close {
+  display: flex;
+  margin-left: auto;
+}
+
 .modal-content {
   background: #eaf3f9;
   border-radius: 8px;
@@ -105,15 +102,26 @@ export default {
 }
 
 .close-button {
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  width: 20px;
-  height: 20px;
-  background-color: #ccc;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 12px;
+position: absolute;
+top: 5px;
+left: 5px;
+width: 20px;
+height: 20px;
+background-color: #ccc;
+border: none;
+border-radius: 4px;
+cursor: pointer;
+font-size: 12px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.button-group button {
+  flex: 1;
+  margin-right: 10px; /* 버튼 간격 조절 */
 }
 </style>
