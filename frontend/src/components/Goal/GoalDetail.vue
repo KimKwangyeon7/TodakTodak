@@ -1,28 +1,50 @@
 <template>
   <div class="modal-content">
-    <button type="button" class="btn-close" aria-label="Close" @click="closeModal"></button>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      @click="closeModal"
+    ></button>
+    <div class="form-group">
+      <label for="content">목표 내용:</label>
+      <input
+        v-model="item.content"
+        type="text"
+        id="content"
+        class="form-control"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="selectedColor">목표 색상:</label>
       <div class="form-group">
-          <label for="content">목표 내용:</label>
-          <input v-model="item.content" type="text" id="content" class="form-control" required>
-      </div>
-      <div class="form-group">
-        <label for="selectedColor">목표 색상:</label>
-        <div class="form-group">
-        <button @click.prevent="openColorDetailModal" class="btn">색상 선택</button>
+        <button @click.prevent="openColorDetailModal" class="btn">
+          색상 선택
+        </button>
       </div>
       <div v-if="selectedColor" class="selected-color">
         <p>선택한 색상: {{ selectedColor }}</p>
-        <div :key="color" class="color-option" :style="{ backgroundColor: color }"></div>
+        <div
+          :key="color"
+          class="color-option"
+          :style="{ backgroundColor: color }"
+        ></div>
       </div>
       <div v-if="showColorDetailModal" class="color-modal">
         <div class="color-modal-content">
           <div class="color-options">
-            <div v-for="color in colorOptions" 
-            :key="color" @click="selectColor(color)"
-             class="color-option" :style="{ backgroundColor: color }">
-            </div>
+            <div
+              v-for="color in colorOptions"
+              :key="color"
+              @click="selectColor(color)"
+              class="color-option"
+              :style="{ backgroundColor: color }"
+            ></div>
           </div>
-          <button @click="closeColorDetailModal" class="btn color-select">닫기</button>
+          <button @click="closeColorDetailModal" class="btn color-select">
+            닫기
+          </button>
         </div>
       </div>
     </div>
@@ -42,13 +64,25 @@ export default {
       originalItem: {},
       selectedColor: null,
       goals: [],
-      content: '',
+      content: "",
       showColorDetailModal: false,
       colorOptions: [
-        '#fff56e', '#ffa500', '#ffdbc1', '#ffbc9b',
-        '#e6c178', '#dc9146', '#ffcfda', '#ff9e9b',
-        '#ff7493', '#ff96ff', '#75ffca', '#b4f0b4',
-        '#6dd66d', '#32bebe', '#9ab9ff', '#46beff'
+        "#fff56e",
+        "#ffa500",
+        "#ffdbc1",
+        "#ffbc9b",
+        "#e6c178",
+        "#dc9146",
+        "#ffcfda",
+        "#ff9e9b",
+        "#ff7493",
+        "#ff96ff",
+        "#75ffca",
+        "#b4f0b4",
+        "#6dd66d",
+        "#32bebe",
+        "#9ab9ff",
+        "#46beff",
       ],
     };
   },
@@ -72,7 +106,7 @@ export default {
   methods: {
     openColorDetailModal() {
       this.showColorDetailModal = true;
-      console.log(`Goal Content:',${this.content} `)
+      console.log(`Goal Content:',${this.content} `);
     },
     closeColorDetailModal() {
       this.showColorDetailModal = false;
@@ -98,15 +132,7 @@ export default {
     },
     async fnSave() {
       try {
-        updateGoal(this.item.id, this.item,
-      ({ data }) => {
-        console.log("목표 수정");
-        console.log(data);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+        await updateGoal(this.item.id, this.item);
         this.$emit("close-modal");
       } catch (error) {
         console.error("Error updating goal:", error);
@@ -143,16 +169,16 @@ export default {
 }
 
 .close-button {
-position: absolute;
-top: 5px;
-left: 5px;
-width: 20px;
-height: 20px;
-background-color: #ccc;
-border: none;
-border-radius: 4px;
-cursor: pointer;
-font-size: 12px;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 20px;
+  height: 20px;
+  background-color: #ccc;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
 }
 
 .button-group {
@@ -172,7 +198,7 @@ font-size: 12px;
 }
 
 .color-modal-content {
-  background-color: #EAF3F9;
+  background-color: #eaf3f9;
   border-radius: 20px;
   padding: 15px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

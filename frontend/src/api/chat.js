@@ -12,7 +12,7 @@ function listChatRoom(success, fail) {
 function createChatRoom(param, success, fail) {
   local.defaults.headers.Authorization =
     "Bearer " + localStorage.getItem("accessToken");
-  local.post(`/chat/rooms`, JSON.stringify(param)).then(success).catch(fail);
+  local.post(`/chat/rooms`, param).then(success).catch(fail);
   console.log("채팅방 생성 성공");
 }
 

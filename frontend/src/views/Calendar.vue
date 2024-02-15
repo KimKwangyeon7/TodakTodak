@@ -790,4 +790,9 @@ color: #ffffff;
   line-height: 1; /* 라인 높이 조정 */
   margin-left: auto; /* 왼쪽 자동 마진으로 오른쪽 정렬 */
 }
+
+.calendar-dates .date.previous-month,
+.calendar-dates .date.next-month {
+  color: #c8cacc; /* 회색 글자 */
+}
 </style>
