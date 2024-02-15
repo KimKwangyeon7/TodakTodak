@@ -4,16 +4,16 @@
           <img src="@/assets/back.png" alt="">
         </button>
         <div class="settings">
-          <router-link to="/goal" class="nav-link">
+          <router-link to="/userInfoEdit" class="nav-link">
               개인정보 변경
             </router-link>
-            <router-link to="/calendar" class="nav-link">
+            <router-link to="/subscribe" class="nav-link">
               알림 관리
             </router-link>
-            <router-link to="/board" class="nav-link">
+            <router-link to="/common" class="nav-link">
               일반 설정
             </router-link>
-            <router-link to="/meet" class="nav-link">
+            <router-link to="/appinfo" class="nav-link">
               앱 정보
             </router-link>
             <button class="logout-button btn" @click="confirmLogout">로그아웃</button>

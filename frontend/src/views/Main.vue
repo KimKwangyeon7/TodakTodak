@@ -1,14 +1,6 @@
 <template>
   <div v-if="authStore.isLogin" class="mt-5">
     <div>
-      <!-- 명언 -->
-      <div class="top-bar">
-        <div class="quote">{{ randomQuote }}</div>
-        <!-- 명언 작가 -->
-        <div class="author">{{ quoteAuthor }}</div>
-      </div>
-
-      <Example :example="example" />
       <TodoList :todoList="todoList" />
       <HabitList :habitList="habitList" />
 

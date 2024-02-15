@@ -1,17 +1,23 @@
 <template>
-  <div class="card">
-    <img src="../assets/img/push-image.jpg" alt="Push Image" class="card-img-top">
+  <div>
+    <button class="settings-back-button btn" @click="goBack">
+      <img src="@/assets/back.png" alt="">
+    </button>
 
-    <div class="card-body">
-      <h1 class="card-title">C210</h1>
-      <p class="card-text">프론트 푸시 알람 구현. [알림허용] 단추를 클릭하시면 알림 정보를 받으실 수 있습니다.</p>
-      
-      <button class="btn btn-primary" @click="fnPushSubscribe">알림 허용</button>
-      <button class="btn btn-secondary" @click="fnUnSubscription">알림 해제</button>
-    </div>
+    <div class="card">
+      <img src="../assets/img/push-image.jpg" alt="Push Image" class="card-img-top">
 
-    <div v-if="bMsg" class="alert alert-info">
-      푸시알림이 해제되었습니다. <button @click="bMsg = false">닫기</button>
+      <div class="card-body">
+        <h1 class="card-title">C210</h1>
+        <p class="card-text">프론트 푸시 알람 구현. [알림허용] 단추를 클릭하시면 알림 정보를 받으실 수 있습니다.</p>
+        
+        <button class="btn btn-primary" @click="fnPushSubscribe">알림 허용</button>
+        <button class="btn btn-secondary" @click="fnUnSubscription">알림 해제</button>
+      </div>
+
+      <div v-if="bMsg" class="alert alert-info">
+        푸시알림이 해제되었습니다. <button @click="bMsg = false">닫기</button>
+      </div>
     </div>
   </div>
 </template>
@@ -139,6 +145,9 @@
           const rawData = window.atob(base64)
           return Uint8Array.from([...rawData].map((char) =>
             char.charCodeAt(0)))
+        },
+        goBack() {
+          window.history.back();
         }
       }
     }

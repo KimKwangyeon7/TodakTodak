@@ -154,7 +154,6 @@ export default {
   right: 5px;
   width: 20px;
   height: 20px;
-  background-color: #ccc;
   border: none;
   border-radius: 4px;
   cursor: pointer;
