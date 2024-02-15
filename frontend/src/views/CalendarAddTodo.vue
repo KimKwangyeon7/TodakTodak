@@ -376,8 +376,4 @@ export default {
   display: flex;
   margin-left: auto;
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> 8e7bafff39d2e0130a6b254a4287fa2699bef15a
 </style>
