@@ -8,7 +8,7 @@
               개인정보 변경
             </router-link>
             <router-link to="/subscribe" class="nav-link">
-              알림 관리
+              알림 제어
             </router-link>
             <router-link to="/common" class="nav-link">
               일반 설정

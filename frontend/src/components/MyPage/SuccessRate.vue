@@ -113,7 +113,7 @@ const initChart = () => {
   chartInstance = new Chart(ctx, {
     type: 'doughnut',
     data: {
-      labels: ['완료', '미완료'],
+      labels: ['완료', '비완료'],
       datasets: [{
         label: '비율',
         data: [successRate, unsuccessRate],

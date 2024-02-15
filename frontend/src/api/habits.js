@@ -1,36 +1,22 @@
 import { localAxios } from '@/util/http-commons'
 import { alarm } from './alarms'
 
-const local = localAxios()
+const local = localAxios();
 const url = "/goals/habits"
 
-async function addHabit(content, important, outside, alarmed, alarmDtoList, checked, completed, success, fail) {
+async function addHabit(data, success, fail) {
   console.log("addHabit 실행")
   local.defaults.headers.Authorization = "Bearer " + localStorage.getItem("accessToken");
-  local.post(`${url}`, 
-    JSON.stringify(
-      content, 
-      important,
-      outside,
-      alarmed,
-      alarmDtoList)).then(success).catch(fail);
-
-  if (alarmed === true) {
-      let preparedData = JSON.stringify({
-      alarmTitle: content, alarmContent: ""
-    })
-    preparedData += {checked, completed}
-    alarm(preparedData)
-  }    
+  local.post(`/goals/habits`, data).then(success).catch(fail);
 }
 
 async function getHabitList(success, fail) {
-  console.log("getHabitlList 실행");
+  console.log("getHabitList 실행");
   local.defaults.headers.Authorization = 'Bearer ' + localStorage.getItem("accessToken");
   local.get(`${url}`).then(success).catch(fail);
 }
 
-async function getHabitListByDay(day){
+async function getHabitListByDay(day, success, fail){
   console.log("getHabitListByDay 실행")
   local.defaults.headers.Authorization = 'Bearer ' + localStorage.getItem("accessToken");
   local.get(`${url}/day/${day}`).then(success).catch(fail)

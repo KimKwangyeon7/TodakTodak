@@ -39,7 +39,7 @@ export default {
       activeModal: null,
       today: "",
       currentItem: null,
-      showHabitList: true,
+      showHabitList: false,
     };
   },
   components: {
@@ -91,6 +91,7 @@ export default {
 .habit {
   font-weight: bold;
   margin-bottom: 5px;
+  font-size: 18px;
   text-align: left;
   display: flex;
   justify-content: space-between; /* 요일과 버튼을 각각 왼쪽과 오른쪽에 배치 */
