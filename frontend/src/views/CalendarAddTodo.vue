@@ -154,6 +154,7 @@ export default {
     const isModalValid = ref(false);
     const activeModal = ref(null);
     const currentItem = ref("");
+
     onMounted(async () => {
       formattedDate.value = moment(selectedDate.value).format("YYYYMMDD");
     });

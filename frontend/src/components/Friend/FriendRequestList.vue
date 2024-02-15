@@ -48,7 +48,7 @@
       >
         <div class="request-info">
           <img
-            :src="request.profilePicture"
+            src="@/assets/profile-default.jpg"
             alt="프로필 사진"
             class="profile-picture"
           />
