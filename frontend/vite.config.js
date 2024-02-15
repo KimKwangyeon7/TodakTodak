@@ -30,13 +30,13 @@ export default defineConfig({
         "short_name": "c210",
         "icons": [
           {
-            "src": "/img/icons/android-chrome-192x192.png",
+            "src": "/logo/KakaoTalk_20240208_220849622.jpg",
             "sizes": "192x192",
             "type": "image/png",
             "purpose": "any"
           },
           {
-            "src": "/img/icons/android-chrome-512x512.png",
+            "src": "/logo/KakaoTalk_20240208_220849622.jpg",
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "maskable"
