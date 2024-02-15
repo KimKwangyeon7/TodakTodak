@@ -17,7 +17,7 @@
           <label for="memo">메모:</label>
           <input v-model="memo" type="text" id="memo" class="form-control" required>
         </div>
-        <button type="submit" class="btn btn-primary" @click.prevent="fnAdd">녹음 화면으로 가기</button>
+        <button type="submit" class="btn to-add-record" @click.prevent="fnAdd">녹음 화면으로 가기</button>
     </form>
     </div>
   </template>
@@ -106,7 +106,9 @@
     margin-right: 10px;
   }
   
-  .custom-control-label {
-    padding-left: 10px;
+  .to-add-record {
+    display: flex;
+    margin-left: auto;
+    padding: 20px;
   }
   </style>@/api/records

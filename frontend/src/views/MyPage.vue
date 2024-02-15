@@ -1,6 +1,5 @@
 <template>
     <div class="mt-5">
-        <button class="settings-button btn" @click="goToSettings"><img src="@/assets/settings.png" alt=""></button>
       <UserInfo :userData="userData" />
       <SuccessRate :successRate="successRate" />
       <SuccessChart :successChart="successChart"/>
@@ -47,11 +46,5 @@ methods: {
 
 
 <style scoped>
-.settings-button {
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-left: auto;
-  display: flex;
-}
+
 </style>

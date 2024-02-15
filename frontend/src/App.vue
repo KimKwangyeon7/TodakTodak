@@ -127,9 +127,12 @@ const handleLoginClick = () => {
     </div>
   </div>
   <div v-else>
-    <div>
-      <RouterLink :to="{ name: 'SignUpView' }">SignUp</RouterLink>
-      <RouterLink :to="{ name: 'LoginView' }">Login</RouterLink>
+    <div class="welcome-screen">
+      <h1 class="welcome-message">Todak Todak</h1>
+        <div class="auth-buttons">
+          <RouterLink to="/login" class="auth-button">로그인</RouterLink>
+          <RouterLink to="/signup" class="auth-button">회원가입</RouterLink>
+        </div>
     </div>
   </div>
   <RouterView />
@@ -220,4 +223,37 @@ div {
   font-weight: 400;
   font-style: normal;
 }
+
+.welcome-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.welcome-message {
+  font-size: 24px;
+  margin-bottom: 30px;
+}
+
+.auth-buttons {
+  display: flex;
+  flex-direction: row;
+}
+
+.auth-button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.auth-button:hover {
+  background-color: #2980b9;
+  transform: scale(1.05); /* 마우스를 올렸을 때 버튼이 확대되는 효과 */
+  transition: transform 0.3s ease; /* 부드러운 변화를 위한 transition 추가 */
+}
+
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <main class="calendar-wrapper">
+  <main class="calendar-wrapper mt-5">
     <div md="8">
       <div class="calendar-body">
         <div class="calendar-header">
@@ -535,7 +535,7 @@ export default {
 };
 </script>
 
-<style scope>
+<style scoped>
 .calendar-wrapper {
   display: flex;
   margin: 2.5em 0;

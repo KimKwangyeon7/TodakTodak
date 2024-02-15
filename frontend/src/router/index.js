@@ -7,7 +7,6 @@ import Calendar from "@/views/Calendar.vue";
 import Friend from "@/views/Friend.vue";
 import FriendRequestList from "@/components/Friend/FriendRequestList.vue";
 import Meeting from "@/views/Meeting.vue";
-import Meet from "@/components/Meeting/MeetingRoom.vue";
 import MyPage from "@/views/MyPage.vue";
 import MyPageSettings from "@/components/MyPage/MypageSettings.vue";
 import UserInfoEdit from "@/components/MyPage/UserInfoEdit.vue";
@@ -24,6 +23,8 @@ import SignupView from "@/views/SignupView.vue";
 import Records from "@/views/Record/Record.vue";
 // import VoiceTrainer from '@/views/Voice/VoiceTrainer.vue'
 import Trainer from "@/views/Record/Trainer.vue";
+import AppInfo from '@/components/MyPageSetting/app-info.vue'
+import Common from '@/components/MyPageSetting/common-setting.vue'
 
 
 const router = createRouter({
@@ -103,11 +104,6 @@ const router = createRouter({
       component: Meeting,
     },
     {
-      name: "meet",
-      path: "/meet",
-      component: Meet,
-    },
-    {
       name: "habit",
       path: "/habit",
       component: Habit,
@@ -181,6 +177,16 @@ const router = createRouter({
       path: "/signup",
       name: "SignUpView",
       component: SignupView,
+    },
+    {
+      path: "/appinfo",
+      name: "AppInfo",
+      component: AppInfo,
+    },
+    {
+      path: "/common",
+      name: "Common",
+      component: Common,
     },
   ],
 });

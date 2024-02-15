@@ -78,10 +78,9 @@ const startChat = (friend) => {
   );
 };
 
-const showFriendRequestList = () => { 
-  router.push('/friendRequestList'); 
-}
-
+const showFriendRequestList = () => {
+  router.push("/friendRequestList");
+};
 
 const toggleSearch = () => {
   showSearch.value = !showSearch.value;
@@ -89,6 +88,7 @@ const toggleSearch = () => {
     searchQuery.value = "";
   }
 };
+
 </script>
 
 <template>
@@ -129,11 +129,11 @@ const toggleSearch = () => {
       >
         <div class="friend-item">
           <img
-            :src="friend.profileUrl"
+            src="@/assets/profile-default.jpg"
             alt="프로필 이미지"
             class="profile-image mr-2"
           />
-          <span>{{ friend.nickname }}</span>
+          <span class="profile-nickname">{{ friend.nickname }}</span>
         </div>
         <div class="buttons">
           <button class="btn btn-sm" @click.stop="startChat(friend)">
@@ -200,6 +200,9 @@ const toggleSearch = () => {
   font-size: 18px;
 }
 
+.profile-nickname {
+  margin-left: 10px;
+}
 .buttons {
   position: absolute;
   top: 0;
