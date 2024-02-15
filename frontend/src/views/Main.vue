@@ -48,37 +48,37 @@ export default {
   },
   setup() {
     const authStore = useMemberStore()
-    // const audioUrl = ref(null)
+    const audioUrl = ref(null)
 
-    // const fetchAndPlayAudio = async () => {
-    //   try {
-    //     const audioFileName = 'audioFileName.mp3'; // 오디오 파일 이름
-    //     const response = await receiveAudioFromBackend(audioFileName);
+    const fetchAndPlayAudio = async () => {
+      try {
+        const audioFileName = 'audioFileName.mp3'; // 오디오 파일 이름
+        const response = await receiveAudioFromBackend(audioFileName);
         
-    //     // Blob 객체 생성 후 URL 설정
-    //     const audioBlob = new Blob([response.data], { type: 'audio/mp3' });
-    //     audioUrl.value = URL.createObjectURL(audioBlob);
+        // Blob 객체 생성 후 URL 설정
+        const audioBlob = new Blob([response.data], { type: 'audio/mp3' });
+        audioUrl.value = URL.createObjectURL(audioBlob);
 
-    //     // 오디오 재생
-    //     const audioPlayer = new Audio(audioUrl.value);
-    //     await audioPlayer.play();
-    //   } catch (error) {
-    //     console.error('Error fetching and playing audio:', error);
-    //   }
-    // };
+        // 오디오 재생
+        const audioPlayer = new Audio(audioUrl.value);
+        await audioPlayer.play();
+      } catch (error) {
+        console.error('Error fetching and playing audio:', error);
+      }
+    };
 
-    // const pollAudioAvailability = () => {
-    //   setInterval(() => {
-    //     fetchAndPlayAudio();
-    //   }, 60000); // 60초마다 폴링
-    // };
-    // onMounted(() => {
-    //   fetchAndPlayAudio();
-    //   pollAudioAvailability();
-    // })
+    const pollAudioAvailability = () => {
+      setInterval(() => {
+        fetchAndPlayAudio();
+      }, 60000); // 60초마다 폴링
+    };
+    onMounted(() => {
+      fetchAndPlayAudio();
+      pollAudioAvailability();
+    })
     return {
       authStore, 
-      // audioUrl
+      audioUrl
     }
   },
   methods: {

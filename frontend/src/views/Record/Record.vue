@@ -55,9 +55,8 @@ export default {
   name: 'Record',
   data() {
     return {
-      basicVoices: [{id: 0, name: '김영희의 음성'}, 
-                    {id: 1, name: '김철수의 음성'},
-                    {id: 2, name: '이잼민의 음성'}
+      basicVoices: [{id: 0, name: '기본 남성 음성'}, 
+                    {id: 1, name: '기본 여성 음성'},
                   ],
       recordedVoices: [],
       is_modal_valid: false,
