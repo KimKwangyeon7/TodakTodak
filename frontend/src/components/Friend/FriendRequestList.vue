@@ -13,9 +13,7 @@
     <div class="friend-request-header">
       <h2 class="list-title">사용자 검색</h2>
       <div class="friend-buttons">
-        <button class="btn" @click="toggleSearch">
-          <div class="search"><img src="@/assets/search.png" alt="" /></div>
-        </button>
+
       </div>
       <div class="todo-section">
     <div class="todo-date">
@@ -26,7 +24,7 @@
   </div>
 
     <!-- 닉네임검색 -->
-    <div class="friend-search mb-3" >
+    <div class="friend-search mb-3 input-group" >
       <input
         v-model="nickname"
         type="text"
@@ -34,6 +32,9 @@
         placeholder="친구 검색"
         @keyup.enter="getMemberInfo(nickname)"
       />
+      <button class="btn input-group-append" @click="getMemberInfo(nickname)">
+          <div class="search"><img src="@/assets/search.png" alt="" /></div>
+        </button>
     </div>
 
     <div v-if="friendRequests === 0" class="empty-list-message">
@@ -254,5 +255,19 @@ function closeModal() {
   /* 이미지 크기 조절 */
   width: 70%; /* 버튼 크기에 맞추어 이미지 크기 조절 */
   height: auto; /* 이미지 비율을 유지하면서 높이 조절 */
+}
+
+.friend-search {
+  display: flex;
+  width: 100%;
+}
+.input-group-append {
+  margin-left: -1px; /* 버튼을 input과 접하게 합니다 */
+}
+.search-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px; /* 버튼 내부의 여백 */
 }
 </style>

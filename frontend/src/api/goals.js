@@ -26,7 +26,7 @@ async function getGoalDetail(goalId, success, fail) {
 async function updateGoal(goalId, content, color, success, fail) {
   console.log("updateGoal 실행")
   local.defaults.headers.Authorization = 'Bearer ' + localStorage.getItem("accessToken")
-  local.put(`${url}/${goalId}`, JSON.stringify(content, color)).then(success).catch(fail) 
+  local.put(`${url}/${goalId}`, (content, color)).then(success).catch(fail) 
 }
 
 async function deleteGoal(goalId , success, fail) {

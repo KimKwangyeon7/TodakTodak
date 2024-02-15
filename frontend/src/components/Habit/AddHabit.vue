@@ -131,12 +131,12 @@ export default {
 .btn-close {
   width: 20px;
   height: 20px;
-  background-color: #EAF3F9; /* 배경 색상 수정 */
+  background-color: #eaf3f9; /* 배경 색상 수정 */
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 12px;
-  margin-right: auto; /* 나머지 공간을 최대한 차지하여 왼쪽으로 이동 */
+  margin-left: auto; /* 나머지 공간을 최대한 차지하여 왼쪽으로 이동 */
 }
 .form-group {
   text-align: left;

@@ -108,6 +108,15 @@ export default {
     Habit,
   },
   methods: {
+    convertTimeFormat(timeStr) {
+  // 문자열에서 시간과 분을 추출 (예: "1900" -> "19", "00")
+  const formattedHours = timeStr.substring(0, 2);
+  const formattedMinutes = timeStr.substring(2);
+
+  // "HH:MM" 형식의 문자열로 변환하여 반환
+  return `${formattedHours}:${formattedMinutes}`;
+},
+
     async openModal(component, itemData = null) {
       if (component === "GoalDetail" && itemData) {
         try {
@@ -123,8 +132,13 @@ export default {
             itemData.id,
             ({ data }) => {
               console.log("목표 리스트 목록");
-              console.log(data);
-              this.detailedTodo = data;
+              console.log('TodoData', data);
+              if (data.time) {
+            data.time = this.convertTimeFormat(data.time);
+          }
+          this.detailedTodo = data;
+          this.currentItem = this.detailedTodo; 
+          console.log('알람시간변경:', this.currentItem)
             },
             (error) => {
               console.log(error);
@@ -240,6 +254,7 @@ export default {
     toggleGoalList() {
       this.showGoalList = !this.showGoalList;
     },
+    
   },
   mounted() {
     this.updateToday();
