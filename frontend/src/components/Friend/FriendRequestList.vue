@@ -1,4 +1,14 @@
 <template>
+  <div>
+    <div class="black-bg" v-if="isModalValid">
+      <component
+        :is="activeModal"
+        :item="currentItem"
+        @close-modal="closeModal"
+      />
+    </div>
+
+  </div>
   <div class="friend-request-list mt-5">
     <div class="friend-request-header">
       <h2 class="list-title">친구 요청 리스트</h2>
@@ -6,6 +16,11 @@
         <button class="btn" @click="toggleSearch">
           <div class="search"><img src="@/assets/search.png" alt="" /></div>
         </button>
+        <div class="todo-section">
+      <div class="todo-date">
+        <button class="add-button" @click="openModal()">+</button>
+      </div>
+    </div>
       </div>
       <button class="back-button btn" @click="goBack">뒤로가기</button>
     </div>
@@ -60,6 +75,10 @@ import { ref } from "vue";
 import { findByNickname } from "@/api/member";
 import { sendFriendRequest } from "@/api/friend";
 import { acceptFriends } from "@/api/friend";
+import { acceptFriendRequest } from "@/api/friend";
+
+import AddFriendModal from "@/components/Friend/AddFriendModal.vue"; 
+
 
 // 사용자 정보를 저장할 반응형 참조
 const memberInfo = ref(null);
@@ -107,6 +126,7 @@ const acceptRequest = (requestId) => {
   );
 };
 
+
 // 친구 요청 거절 기능
 const rejectRequest = (requestId) => {
   // 요청 거절 로직 구현
@@ -119,6 +139,19 @@ const rejectRequest = (requestId) => {
 const goBack = () => {
   window.history.back();
 };
+
+const isModalValid = ref(false);
+const activeModal = ref(null);
+
+
+function openModal() {
+  activeModal.value = AddFriendModal ; // 활성 모달 컴포넌트 설정
+  isModalValid.value = true; // 모달 열기
+}
+
+function closeModal() {
+  isModalValid.value = false; // 모달 닫기
+}
 </script>
 
 <style scoped>
@@ -194,5 +227,18 @@ const goBack = () => {
 .reject-button {
   background-color: #dc3545;
   color: white;
+}
+
+.black-bg {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  top: 0;
+  left: 0;
 }
 </style>
