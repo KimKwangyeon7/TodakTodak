@@ -2,7 +2,11 @@
   <div>
     <div class="user-data" v-if="userData" @click="goToProfileEdit">
       <div class="user-photo">
-        <img :src="userData.profilePicture" alt="프로필 이미지" class="profile-image mr-2">
+        <img
+            src="@/assets/profile-default.jpg"
+            alt="프로필 이미지"
+            class="profile-image mr-2"
+          />
       </div>
       <div class="user-profile">
         <h3><strong>{{ userData.name }}</strong></h3>
@@ -46,6 +50,11 @@ const goToProfileEdit = () => {
 .user-data {
   display: flex;
   cursor: pointer; /* 클릭 가능한 요소로 커서 스타일 변경 */
+}
+
+.user-photo {
+  justify-content: space-between;
+  margin-left: 5px;
 }
 .user-profile {
   justify-content: space-between;
