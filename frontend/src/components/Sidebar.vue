@@ -8,8 +8,8 @@
         <router-link to="/main" class="todak-logo navbar-brand mx-auto">
           <img src="@/assets/todak/todak-logo.png" alt="">
         </router-link>
-        <button type="button" class="push-alarm btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNotifications" aria-controls="offcanvasNotifications">
-          <img src="@/assets/bell/bell.png" alt="">
+        <button type="button" class="btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNotifications" aria-controls="offcanvasNotifications">
+          <img src="@/assets/bell.png" alt="">
         </button>
         <!-- 수정된 부분: Notifications 컴포넌트 추가 -->
         <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel" data-bs-toggle="offcanvas">
@@ -27,10 +27,7 @@
             <router-link to="/calendar" class="nav-link">
               <img src="@/assets/sidebar/calendar.png" alt=""> 캘린더
             </router-link>
-            <router-link to="/meeting" class="nav-link">
-              <img src="@/assets/sidebar/meeting.png" alt=""> 모임
-            </router-link>
-            <router-link to="/Friend" class="nav-link">
+            <router-link to="/friends" class="nav-link">
               <img src="@/assets/sidebar/friend.png" alt=""> 친구
             </router-link>
             <router-link to="/habit" class="nav-link">

@@ -53,8 +53,10 @@
         </div>
       </div>
     </div>
-    <button class="" @click="fnDelete">삭제</button>
-    <button class="" @click="fnSave">저장</button>
+    <div class="button-group">
+      <button class="btn" @click="fnDelete">삭제</button>
+      <button class="btn" @click="fnSave">저장</button>
+    </div>
   </div>
 </template>
 
@@ -94,10 +96,7 @@ export default {
     closeModal() {
       Object.assign(this.item, this.originalItem)
       this.editableItem = {...this.item};
-      if (this.item.checked === true) {
-        isTodoCompleted(this.item.id)
-      }
-      this.$emit('close-modal');    
+      this.$emit('close-modal');
     },
     async fnDelete() {
       try {
@@ -166,5 +165,16 @@ export default {
   text-align: left;
   margin-left: 10px;
   margin-right: 10px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.button-group button {
+  flex: 1;
+  margin-right: 10px; /* 버튼 간격 조절 */
 }
 </style>

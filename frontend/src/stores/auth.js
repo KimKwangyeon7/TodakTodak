@@ -3,12 +3,11 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { defineStore } from "pinia";
 
-import { login, logout, findByToken } from "@/api/member";
+import { login, logout, findByToken, modifyUser } from "@/api/member";
 
 import { httpStatusCode } from "@/util/http-status";
 
-import axios from 'axios'
-
+import axios from "axios";
 
 export const useMemberStore = defineStore("memberStore", () => {
   const router = useRouter();
@@ -21,12 +20,12 @@ export const useMemberStore = defineStore("memberStore", () => {
   const isValidToken = ref(false);
 
   const initializeAuth = () => {
-    const accessToken = localStorage.getItem('accessToken')
+    const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
-      token.value = accessToken
-      isLogin.value = true
+      token.value = accessToken;
+      isLogin.value = true;
     }
-  }
+  };
 
   const userLogin = async (loginUser) => {
     await login(
@@ -98,17 +97,27 @@ export const useMemberStore = defineStore("memberStore", () => {
   };
   const updateUserInfo = async (updatedUserInfo) => {
     try {
-      const response = await axios.put('@/api/member', updatedUserInfo); // updateUser는 사용자 정보 업데이트를 위한 API 호출입니다.
-      if (response.status === httpStatusCode.OK) {
-        userInfo.value = updatedUserInfo;
-        console.log("사용자 정보가 성공적으로 업데이트되었습니다.");
-      } else {
-        console.error("사용자 정보 업데이트 실패:", response);
-      }
+      modifyUser(
+        updatedUserInfo,
+        (response) => {
+          let msg = "로그아웃 중 에러 발생했습니다..";
+          if (response.status === httpStatusCode.OK) {
+            msg = "사용자 정보가 성공적으로 업데이트되었습니다.";
+            userInfo.value = updatedUserInfo;
+            console.log("사용자 정보가 성공적으로 업데이트되었습니다.");
+            alert(msg);
+          } else {
+            console.error("사용자 정보 업데이트 실패:", response);
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     } catch (error) {
       console.error("사용자 정보 업데이트 중 오류 발생:", error);
     }
-  }
+  };
   const userLogout = async (userEmail) => {
     await logout(
       userEmail,
@@ -125,16 +134,13 @@ export const useMemberStore = defineStore("memberStore", () => {
 
           msg = "로그아웃 되었습니다.";
           alert(msg);
-        } 
+        }
       },
       (error) => {
         console.log(error);
       }
     );
   };
-
-
-
 
   return {
     isLogin,

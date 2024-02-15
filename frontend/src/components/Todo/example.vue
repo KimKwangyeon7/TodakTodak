@@ -6,11 +6,6 @@
       <p>날씨: {{ weatherData.description }}</p>
     </div>
 
-    <!-- 명언을 표시할 영역 -->
-    <div v-if="quotes" class="quote-container">
-      <p v-for="(quote, index) in quotes" :key="index"></p>
-    </div>
-
     <!-- 데이터 가져오기 버튼 -->
     <button @click="fetchData">데이터 가져오기</button>
   </div>
@@ -27,17 +22,25 @@ export default {
 
     const fetchData = async () => {
       try {
-        const weatherResponse = await axios.get('/goals/weather');
-        weatherData.value = weatherResponse.data;
-        console.log(weatherResponse)
-        console.log(weatherResponse.data)
-
-        const quoteResponse = await axios.get('/members/quote');
-        quotes.value = quoteResponse.data;
-      } catch (error) {
-        console.error('데이터를 가져오는 도중 에러가 발생했습니다:', error);
+          local.defaults.headers.Authorization = "Bearer " + localStorage.getItem("accessToken");
+          // const response = await local.post(`${url}/${recordId}/save/member`, payload);
+          // Construct the query parameters
+          const queryParams = new URLSearchParams({ promptNum: prompt, time: time }).toString();
+          // Make the POST request to the server with query params
+          const response = await local.post(`${url}/${recordId}/save/member?${queryParams}`);
+          
+          console.log('Audio save record response:', response.data);
+          if (success) success(response);
+          console.log('recordId', recordId)
+          console.log('prompt', prompt)
+          console.log('time', time)
+          console.log('success', success)
+          console.log('fail', fail)
+        } catch (error) {
+          console.error('Error saving audio record:', error);
+          if (fail) fail(error);
+        }
       }
-    };
 
     fetchData();
 

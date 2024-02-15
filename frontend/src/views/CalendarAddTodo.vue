@@ -65,9 +65,9 @@
         <input v-model="time" type="time" id="time" class="form-control">
       </div>
       <!-- <p>Formatted Date: {{ formattedDate }}</p> -->
-      <button type="submit" class="btn btn-primary" @click.prevent="addTodo()">저장</button>
       <div>
-  </div>
+      </div>
+      <button type="submit" class="btn calendar-save" @click.prevent="addTodo()">저장</button>
     </form>
   </div>
 </template>
@@ -298,7 +298,7 @@ await addTodo(todoData);
   border-radius: 4px;
   cursor: pointer;
   font-size: 12px;
-  margin-right: auto; /* 나머지 공간을 최대한 차지하여 왼쪽으로 이동 */
+  margin-left: auto; /* 나머지 공간을 최대한 차지하여 왼쪽으로 이동 */
 }
 .form-group {
   text-align: left;
@@ -310,5 +310,9 @@ await addTodo(todoData);
   padding-left: 10px;
 }
 
+.calendar-save {
+  display: flex;
+  margin-left: auto;
+}
 
 </style>

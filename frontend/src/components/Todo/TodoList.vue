@@ -21,10 +21,10 @@
             class="color-bar"
             :style="{ backgroundColor: getGoalColor(todo) }"
           ></div>
-          <span @click="openModal('TodoDetail', todo)" class="goal-content">{{
+          <span :class="{ 'completed': todo.checked }" @click="openModal('TodoDetail', todo)" class="goal-content">{{
             todo.title
           }}</span>
-          <div>
+          <div v-if="todo.id">
             <input
               type="checkbox"
               v-model="todo.checked"
@@ -41,7 +41,7 @@
         <div style="margin-bottom: 5px; margin-top: 5px; font-weight: bold">
           목표
         </div>
-        <button class="add-button" @click="openModal('AddGoal')">+</button>
+        <button class="add-button" @click="openAddGoalPage">+</button>
       </div>
       <div class="todo-item" v-for="goal in goals" :key="goal.id">
         <div
@@ -57,6 +57,7 @@
 </template>
 
 <script>
+import { reactive, toRefs } from "vue";
 import { getGoalList, getGoalDetail } from "@/api/goals";
 import { getTodoList, getTodoDetail, isTodoCompleted } from "@/api/todos";
 import { useMemberStore } from "@/stores/auth";
@@ -73,7 +74,7 @@ export default {
   data() {
     return {
       goals: [],
-      todos: [],
+      todos: reactive([]),
       is_modal_valid: false,
       activeModal: null,
       today: "",
@@ -128,21 +129,13 @@ export default {
           console.error("Error fetching todo detail:", error);
           return;
         }
-      } else if (component === "AddTodo") {
-        try {
-          console.log("goalList", this.goalList);
-          if (this.goals.length === 0) {
-            alert("최소 한 가지 목표를 먼저 설정하세요 :)");
-            return;
-          }
-        } catch (error) {
-          console.error("Error fetching goal list:", error);
-          return;
-        }
       }
       this.is_modal_valid = true;
       this.activeModal = component;
       this.currentItem = itemData;
+    },
+    async openAddGoalPage() {
+      this.$router.push('/goal');
     },
     fetchGoals() {
       // API 호출
@@ -213,14 +206,22 @@ export default {
     },
     handleTodoCheckboxChange(todo) {
       // Checkbox가 변경될 때 호출되는 메서드
-      // 여기서 todo.checked 값이 변경됨
       console.log(`Todo ID ${todo.id}의 체크박스 상태 변경: ${todo.checked}`);
       isTodoCompleted(
         todo.id,
         ({ data }) => {
           console.log("투두리스트 체크표시 업데이트");
           console.log(data);
-          this.todos = data;
+
+          // 배열에서 업데이트된 할 일의 인덱스 찾기
+          const index = this.todos.findIndex((t) => t.id === todo.id);
+          // 배열에서 할 일 업데이트
+          if (index !== -1) {
+            const todosRefs = toRefs(this.todos);
+            todosRefs[index].value = data;
+            // this.$set(this.todos, index, data); // $set을 사용하여 Vue.js 반응성 보장
+            // this.todos = data;
+          }
         },
         (error) => {
           console.log(error);
@@ -237,6 +238,9 @@ export default {
 </script>
 
 <style scoped>
+.completed {
+  text-decoration: line-through;
+}
 .top-bar {
   display: flex;
   justify-content: space-between;
@@ -333,5 +337,6 @@ export default {
 input[type="checkbox"] {
   margin-left: auto; /* Push the checkbox to the far right */
 }
+
 </style>
 @/records.js/auth
