@@ -19,10 +19,10 @@
   </div>
 
   <div v-else>
-    <div>
+    <!-- <div>
       <RouterLink :to="{ name: 'LoginView' }">Login</RouterLink>
       <RouterLink :to="{ name: 'SignUpView' }">SignUp</RouterLink>
-    </div>
+    </div> -->
   </div>
   <RouterView />
 </template>
@@ -33,10 +33,6 @@ import { getTodoList, getTodoDetail } from "@/api/todos";
 import { useMemberStore } from "@/stores/auth";
 import { useTodoStore } from '@/stores/todoList';
 
-import TodoDetail from "@/components/Todo/TodoDetail.vue";
-import AddTodo from "@/components/Todo/AddTodo.vue";
-import GoalDetail from "@/components/Goal/GoalDetail.vue";
-import Habit from "@/views/Habit.vue";
 import TodoList from '@/components/Todo/TodoList.vue'
 import Example from '@/components/Todo/example.vue'
 import HabitList from '@/components/Habit/HabitList.vue'
