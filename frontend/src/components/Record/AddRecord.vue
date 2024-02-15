@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { getUser, createNewVoice } from '@/api/records';
+import { createNewVoice } from '@/api/records';
 
 export default {
   data() {
