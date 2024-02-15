@@ -1,31 +1,37 @@
 <template>
   <div class="modal-content" style="border-radius: 10px">
     <div class="modal-title">
+      <div>친구요청함</div>
       <button type="button" class="btn-close" aria-label="Close" 
               @click="closeModal">
       </button>
     </div>
-    <div
-        v-for="request in friendRequests"
-        :key="request.id"
-        class="friend-request"
-      >
-        <div class="request-info">
-          <img
-            :src="request.profilePicture"
-            alt="프로필 사진"
-            class="profile-picture"
-          />
-          <div class="request-details">
-            <div class="request-memo">{{ request.nickname }}</div>
-            <div class="request-memo">{{ request.memo }}</div>
+    <div v-if="friendRequests && friendRequests.length > 0">
+      <div 
+          v-for="request in friendRequests"
+          :key="request.id"
+          class="friend-request"
+        >
+          <div class="request-info">
+            <img
+              :src="request.profilePicture"
+              alt="프로필 사진"
+              class="profile-picture"
+            />
+            <div class="request-details">
+              <div class="request-memo">{{ request.nickname }}</div>
+              <div class="request-memo">{{ request.memo }}</div>
+            </div>
           </div>
+          <div class="request-buttons">     
+            <button class="accept-button" @click="acceptFriend(request.nickname)">확인</button>
+            <button class="reject-button" @click="rejectFriend(request.nickname)">삭제</button>
+          </div> 
         </div>
-        <div class="request-buttons">     
-          <button class="accept-button" @click="acceptFriend(request.nickname)">확인</button>
-          <button class="reject-button" @click="rejectFriend(request.nickname)">삭제</button>
-        </div> 
-      </div>
+    </div>
+    <div v-else class="no-requests">
+      받은 친구 요청이 없습니다.
+    </div>
   </div>
 </template>
 
@@ -50,41 +56,38 @@ function closeModal() {
 
 const friendRequests = ref(null);
 
-// onMounted(async () => {
-//   try {
-//     const response = await acceptFriends(); // friendRequests API 호출
-//     console.log('friendData:', response.data);
-//     friendRequests.value = response.data; // friendRequests는 반응형 참조일 것으로 가정
-//     // 이 경우 friendRequests.value에 API 응답의 데이터를 할당합니다.
-//   } catch (error) {
-//     console.error("친구 요청 데이터 로딩 중 오류 발생:", error);
-//   }
-// });
-
 const sendToMeAcceptFriends = async () => {
   acceptFriends(({ data }) => {
     console.log("data: ", data);
     friendRequests.value = data;
-    friendRequests.value.push(data);
+    // friendRequests.value.push(data);
     console.log("friendRequests: ", friendRequests.value);
   });
 };
 
 const acceptfriendRequests = ref(false)
 
+// 친구요청 수락
 const acceptFriend = async (nickname) => {
   acceptFriendRequest(nickname, ({ data }) => {
     acceptfriendRequests.value = true;
     console.log("data: ", data);
+    friendRequests.value = friendRequests.value.filter(request => request.nickname !== nickname);
   });
 };
 
-const rejectFriend = async (friendNickname) => {
-  rejectFriendRequest(friendNickname, ({ data }) => {
+// 친구요청 거절
+const rejectFriend = async (nickname) => {
+  rejectFriendRequest(nickname, ({ data }) => {
     acceptfriendRequests.value = false;
     console.log("data: ", data);
+    friendRequests.value = friendRequests.value.filter(request => request.nickname !== nickname);
   });
 };
+
+// const handleRequestFriend = async () => {
+
+// }
 
 </script>
 
@@ -183,5 +186,12 @@ const rejectFriend = async (friendNickname) => {
 .reject-button {
   background-color: #dc3545;
   color: white;
+}
+
+.no-requests {
+  text-align: center; /* 글자 가운데 정렬 */
+  font-weight: bold; /* 글자 진하게 */
+  margin-top: 20px; /* 상단 여백 추가 */
+  margin-bottom: 40px;
 }
 </style>

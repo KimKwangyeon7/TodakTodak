@@ -11,23 +11,22 @@
   </div>
   <div class="friend-request-list mt-5">
     <div class="friend-request-header">
-      <h2 class="list-title">친구 요청 리스트</h2>
+      <h2 class="list-title">사용자 검색</h2>
       <div class="friend-buttons">
         <button class="btn" @click="toggleSearch">
           <div class="search"><img src="@/assets/search.png" alt="" /></div>
         </button>
-        <div class="todo-section">
-      <div class="todo-date">
-        <button class="add-button" @click="openModal()">+</button>
       </div>
+      <div class="todo-section">
+    <div class="todo-date">
+      <button class="add-button" @click="openModal()"><img src="@/assets/friendPicture.png" alt="" /></button>
     </div>
-      </div>
-      <button class="back-button btn" @click="goBack">뒤로가기</button>
+  </div>
     </div>
   </div>
 
     <!-- 닉네임검색 -->
-    <div class="friend-search mb-3" v-show="showSearch">
+    <div class="friend-search mb-3" >
       <input
         v-model="nickname"
         type="text"
@@ -37,8 +36,8 @@
       />
     </div>
 
-    <div v-if="friendRequests.length === 0" class="empty-list-message">
-      친구 요청이 없습니다.
+    <div v-if="friendRequests === 0" class="empty-list-message">
+      친구 닉네임을 입력하세요.
     </div>
     <div v-else>
       <div
@@ -69,6 +68,7 @@
     </div>
   
 </template>
+
 
 <script setup>
 import { ref } from "vue";
@@ -153,6 +153,7 @@ function closeModal() {
   isModalValid.value = false; // 모달 닫기
 }
 </script>
+
 
 <style scoped>
 .friend-request-header {
@@ -240,5 +241,18 @@ function closeModal() {
   z-index: 2;
   top: 0;
   left: 0;
+}
+
+.add-button {
+  background-color: transparent; /* 배경색을 투명하게 설정 */
+  border: none; /* 테두리 제거 */
+  width: 50px; /* 예시 크기, 필요에 따라 조정 */
+  height: 50px;
+}
+
+.add-button img {
+  /* 이미지 크기 조절 */
+  width: 70%; /* 버튼 크기에 맞추어 이미지 크기 조절 */
+  height: auto; /* 이미지 비율을 유지하면서 높이 조절 */
 }
 </style>
