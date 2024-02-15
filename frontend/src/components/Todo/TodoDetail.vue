@@ -18,6 +18,10 @@
       <textarea v-model="item.content" id="todoContent" class="form-control" rows="3"></textarea>
     </div>
     <div class="form-group">
+      <label for="todoContent">알림 문구:</label>
+      <textarea v-model="item.text" id="todoText" class="form-control" rows="1"></textarea>
+    </div>
+    <div class="form-group">
       <label>중요여부:</label>
       <div class="form-check form-switch">
         <input v-model="item.important" class="form-check-input" type="checkbox" role="switch" id="importantSwitch">
@@ -42,7 +46,7 @@
     </div>
     <div class="form-group" v-if="item.alarmed">
       <label for="time">알람 시간:</label>
-      <input v-model="alarmTime" type="time" id="time" class="form-control">
+      <input v-model="item.time" type="time" id="time" class="form-control">
     </div>
     <div class="form-group">
       <label>완료 여부:</label>
@@ -154,7 +158,6 @@ export default {
   right: 5px;
   width: 20px;
   height: 20px;
-  background-color: #ccc;
   border: none;
   border-radius: 4px;
   cursor: pointer;

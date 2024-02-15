@@ -1,14 +1,23 @@
 <template>
-  <div>
+  <div class="user-container">
     <div class="user-data" v-if="userData" @click="goToProfileEdit">
       <div class="user-photo">
-        <img :src="userData.profilePicture" alt="프로필 이미지" class="profile-image mr-2">
+        <img
+        src="@/assets/profile-default.jpg"
+        alt="프로필 이미지"
+        class="profile-image mr-2"
+        />
       </div>
       <div class="user-profile">
         <h3><strong>{{ userData.name }}</strong></h3>
         <p><strong>{{ userData.memo }}</strong></p>
       </div>
     </div>
+    
+    <!-- 설정 버튼 -->
+    <button class="settings-button btn" @click="goToSettings">
+      <img src="@/assets/settings.png" alt="">
+    </button>
   </div>
 </template>
 
@@ -40,12 +49,35 @@ const goToProfileEdit = () => {
   // 사용자 프로필 수정 페이지로 이동하는 라우터 링크
   router.push('/userInfoEdit')
 }
+
+const goToSettings = () => {
+  // 설정 페이지로 이동하는 메서드
+  router.push('/MypageSettings');
+}
+
 </script>
 
 <style scoped>
+.user-container {
+  display: flex;
+  align-items: center; /* 아이콘 및 텍스트 정렬을 위해 추가 */
+}
+.settings-button {
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: auto;
+  display: flex;
+  margin-bottom: 31px;
+}
 .user-data {
   display: flex;
   cursor: pointer; /* 클릭 가능한 요소로 커서 스타일 변경 */
+}
+
+.user-photo {
+  justify-content: space-between;
+  margin-left: 5px;
 }
 .user-profile {
   justify-content: space-between;

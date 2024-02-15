@@ -12,7 +12,9 @@ async function fetchFriends(success, fail) {
 
 // 친구 요청 목록 조회 GET
 async function acceptFriends(success, fail) {
-  await local.get(`/friends/accept`).then(success).catch(fail);
+  local.defaults.headers.Authorization =
+    "Bearer " + localStorage.getItem("accessToken");
+  await local.get(`/friends/request`).then(success).catch(fail);
   console.log("친구 요청 목록 조회 성공");
 }
 
@@ -31,18 +33,17 @@ async function sendFriendRequest(sender, success, fail) {
 
 // 친구 요청 받기 POST
 async function acceptFriendRequest(sender, success, fail) {
+  local.defaults.headers.Authorization = "Bearer " + localStorage.getItem("accessToken");
   const requestData = {
-    sender: sender,
-    is_friend: true,
-    accepted_date: new Date().toISOString(),
+    nickname: sender
   };
   await local.post(`/friends/accept`, requestData).then(success).catch(fail);
   console.log("친구 요청 받기 성공");
 }
 
 // 친구 요청 거절하기 DELETE
-async function rejectFriendRequest(friendId, success, fail) {
-  local.delete(`/friends/reject/${friendId}`).then(success).catch(fail);
+async function rejectFriendRequest(friendNickname, success, fail) {
+  local.delete(`/friends/reject/${friendNickname}`).then(success).catch(fail);
   console.log("친구 요청 삭제 성공");
 }
 

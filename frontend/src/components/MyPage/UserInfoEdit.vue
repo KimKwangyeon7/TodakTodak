@@ -62,14 +62,13 @@ const memberStore = useMemberStore();
 // const { updateUserInfo } = memberStore;
 // const { userInfo } = storeToRefs(memberStore);
 
-
 const userData = ref(null);
 const user = {
   name: userData.name,
   nickname: userData.nickname,
   memo: userData.memo,
-  profileUrl: userData.profileUrl
-}
+  profileUrl: userData.profileUrl,
+};
 
 onMounted(async () => {
   const token = localStorage.getItem("accessToken");
@@ -79,7 +78,8 @@ onMounted(async () => {
 const saveProfile = async () => {
   // 사용자 정보 업데이트
   console.log("프로필이 저장되었습니다.");
-  modifyUser(user,
+  modifyUser(
+    user,
     ({ data }) => {
       console.log("사용자 업데이트");
       console.log(data);
@@ -89,7 +89,7 @@ const saveProfile = async () => {
       console.log(error);
     }
   );
-  router.push('/mypage')
+  router.push("/mypage");
 };
 
 function goBack() {

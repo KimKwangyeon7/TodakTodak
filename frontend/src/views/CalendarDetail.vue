@@ -8,7 +8,7 @@
     />
   </div>
 
-  <div class="calendar-wrapper m-3" style="margin-top: 70px">
+  <div class="calendar-wrapper mt-5" style="margin-top: 70px">
     <main class="calendar-body">
       <div class="button-container">
         <button class="btn" @click="$router.back()">
