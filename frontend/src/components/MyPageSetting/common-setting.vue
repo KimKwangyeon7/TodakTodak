@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div>
     <button class="settings-back-button btn" @click="goBack">
         <img src="@/assets/back.png" alt="">
@@ -47,4 +47,51 @@ p {
   color: #666;
   margin-top: 20px;
 }
-</style>
+</style> -->
+<template>
+  <div>
+    <audio ref="audioPlayer"></audio>
+    <button @click="playFirstAudio">재생</button>
+  </div>
+</template>
+
+<script>
+import axios from 'axios';
+
+export default {
+  data() {
+    return {
+      audioList: [
+        '/src/assets/audio/2_20240206_202920.wav',
+        '/src/assets/audio/2_20240206_203020.wav',
+      ]
+    };
+  },
+  methods: {
+    async playFirstAudio() {
+      if (this.audioList.length > 0) {
+        const audioUrl = this.audioList[0];
+
+        // 음성 파일 재생
+        const audioPlayer = this.$refs.audioPlayer;
+        audioPlayer.src = audioUrl;
+        await audioPlayer.play();
+
+        // 재생이 끝나면 파일 삭제
+        this.deleteAudioFile(audioUrl);
+      }
+    },
+    async deleteAudioFile(audioUrl) {
+      try {
+        // 서버로 요청하여 음성 파일 삭제
+        await axios.delete('/delete-audio', { data: { audioUrl } });
+
+        // 음성 파일 리스트에서 삭제
+        this.audioList.shift(); // 첫 번째 요소 삭제
+      } catch (error) {
+        console.error('음성 파일 삭제 중 오류 발생:', error);
+      }
+    }
+  }
+};
+</script>

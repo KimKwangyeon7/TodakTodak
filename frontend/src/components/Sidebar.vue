@@ -53,7 +53,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
       <div class="offcanvas-body">
-        <notifications></notifications>
+        <notifications @play-first-audio="playFirstAudio"></notifications>
       </div>
     </div>
   </div>
