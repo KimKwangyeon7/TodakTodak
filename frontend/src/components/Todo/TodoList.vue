@@ -12,7 +12,7 @@
     <!-- Todo List -->
     <div class="todo-section">
       <div class="todo-date">
-        <span style="font-weight: bold;">{{ today }}</span>
+        <span style="font-weight: bold">{{ today }}</span>
         <button class="add-button" @click="openModal('AddTodo')">+</button>
       </div>
       <div class="todo-items">
@@ -24,7 +24,13 @@
           <span @click="openModal('TodoDetail', todo)" class="goal-content">{{
             todo.title
           }}</span>
-          <input type="checkbox" />
+          <div>
+            <input
+              type="checkbox"
+              v-model="todo.checked"
+              @change="handleTodoCheckboxChange(todo)"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -32,8 +38,10 @@
     <!-- Goals -->
     <div class="todo-section">
       <div class="todo-date">
-        <div style="margin-bottom: 5px; margin-top: 5px; font-weight: bold;">목표</div>
-        <button class="add-button" @click="goToAddGoalPage">+</button>
+        <div style="margin-bottom: 5px; margin-top: 5px; font-weight: bold">
+          목표
+        </div>
+        <button class="add-button" @click="openModal('AddGoal')">+</button>
       </div>
       <div class="todo-item" v-for="goal in goals" :key="goal.id">
         <div
@@ -43,7 +51,6 @@
         <span @click="openModal('GoalDetail', goal)" class="goal-content">{{
           goal.content
         }}</span>
-        <input type="checkbox" />
       </div>
     </div>
   </div>
@@ -51,12 +58,13 @@
 
 <script>
 import { getGoalList, getGoalDetail } from "@/api/goals";
-import { getTodoList, getTodoDetail } from "@/api/todos";
+import { getTodoList, getTodoDetail, isTodoCompleted } from "@/api/todos";
 import { useMemberStore } from "@/stores/auth";
-import { useTodoStore } from '@/stores/todoList';
+import { useTodoStore } from "@/stores/todoList";
 
 import TodoDetail from "@/components/Todo/TodoDetail.vue";
 import AddTodo from "@/components/Todo/AddTodo.vue";
+import AddGoal from "@/components/Goal/AddGoal.vue";
 import GoalDetail from "@/components/Goal/GoalDetail.vue";
 import Habit from "@/views/Habit.vue";
 
@@ -70,24 +78,26 @@ export default {
       activeModal: null,
       today: "",
       currentItem: null,
+      detailedTodo: null,
     };
   },
   setup() {
     const authStore = useMemberStore();
-    const todoStore = useTodoStore()
+    const todoStore = useTodoStore();
     const addTodoToStore = (newTodo) => {
       todoStore.addTodo(newTodo);
       // Todo 추가 후 필요한 로직 처리 (예: 알림 표시, 폼 초기화 등)
     };
     return {
       authStore,
-      addTodoToStore
+      addTodoToStore,
     };
   },
   components: {
     GoalDetail,
     TodoDetail,
     AddTodo,
+    AddGoal,
     Habit,
   },
   methods: {
@@ -102,15 +112,25 @@ export default {
         }
       } else if (component === "TodoDetail" && itemData) {
         try {
-          const detailedTodo = await getTodoDetail(itemData.id);
-          this.currentItem = detailedTodo;
+          getTodoDetail(
+            itemData.id,
+            ({ data }) => {
+              console.log("목표 리스트 목록");
+              console.log(data);
+              this.detailedTodo = data;
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
+          this.currentItem = this.detailedTodo;
         } catch (error) {
           console.error("Error fetching todo detail:", error);
           return;
         }
       } else if (component === "AddTodo") {
         try {
-          console.log('goalList', this.goalList)
+          console.log("goalList", this.goalList);
           if (this.goals.length === 0) {
             alert("최소 한 가지 목표를 먼저 설정하세요 :)");
             return;
@@ -120,17 +140,15 @@ export default {
           return;
         }
       }
-
       this.is_modal_valid = true;
       this.activeModal = component;
       this.currentItem = itemData;
     },
     fetchGoals() {
-      console.log("채팅 목록 가져오기");
       // API 호출
       getGoalList(
         ({ data }) => {
-          console.log("채팅목록리스트");
+          console.log("목표 리스트 목록");
           console.log(data);
           this.goals = data;
         },
@@ -139,10 +157,9 @@ export default {
         }
       );
     },
-    async fetchTodos() {
+    fetchTodos() {
       try {
         const now = new Date();
-
         // 연도, 월, 일 추출
         var year = now.getFullYear().toString();
         var month = (now.getMonth() + 1).toString();
@@ -164,7 +181,17 @@ export default {
         // 여기서 사용할 변수명 수정
         const todayString = year + "" + month + "" + day;
 
-        this.todos = await getTodoList(todayString);
+        getTodoList(
+          todayString,
+          ({ data }) => {
+            console.log("투두리스트 목록");
+            console.log(data);
+            this.todos = data;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
       } catch (error) {
         console.error("Error fetching todos:", error);
       }
@@ -184,11 +211,23 @@ export default {
       this.is_modal_valid = false;
       this.activeModal = null;
     },
-    goToAddGoalPage() {
-    this.$router.push('/goal'); // 라우터 이름을 'AddGoal'로 변경해야 합니다.
-    }
+    handleTodoCheckboxChange(todo) {
+      // Checkbox가 변경될 때 호출되는 메서드
+      // 여기서 todo.checked 값이 변경됨
+      console.log(`Todo ID ${todo.id}의 체크박스 상태 변경: ${todo.checked}`);
+      isTodoCompleted(
+        todo.id,
+        ({ data }) => {
+          console.log("투두리스트 체크표시 업데이트");
+          console.log(data);
+          this.todos = data;
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
   },
-
   mounted() {
     this.updateToday();
     this.fetchGoals();
@@ -196,7 +235,6 @@ export default {
   },
 };
 </script>
-
 
 <style scoped>
 .top-bar {

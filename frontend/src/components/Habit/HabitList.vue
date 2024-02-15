@@ -5,20 +5,20 @@
     <component :is="activeModal" :item="currentItem" @close-modal="closeModal" />
   </div>
 
-  <!-- 투두리스트 -->
+
+  <!-- 습관리스트 -->
   <div class="todo-section">
     <div class="todo-date">
-      <div style="margin-bottom: 5px; margin-top: 5px; font-weight: bold;">습관</div>
+      <div class="habit">습관</div>
       <span>{{ today }}</span>
       <!-- Habit 생성버튼 -->
       <button class="add-button" @click="openModal('AddHabit')">+</button>
     </div>
     <div class="todo-items">
       <div class="todo-item" v-for="habit in habits" :key="habit.id">
-        <!-- class로 todo-content 만들어야 하지만 귀찮아서 안 만듦
-        어차피 속성값은 동일함 -->
+        {{ habit.content }}
         <span @click="openModal('HabitDetail', habit)" class="goal-content">{{ habit.habitContent }}</span>
-        <input type="checkbox">
+        <!-- <input type="checkbox"> -->
       </div>
     </div>
   </div>
@@ -49,6 +49,10 @@ export default {
       HabitDetail,
   },
   methods: {
+    // handleHabitAdded(habitData) {
+    // console.log('Received habit data:', habitData);
+    // // 받은 데이터를 사용하여 무언가를 수행
+    // },
     async openModal(component, itemData = null) {
 
       if (component === 'HabitDetail' && itemData) {
@@ -65,12 +69,17 @@ export default {
       this.activeModal = component;
       this.currentItem = itemData;
     },
-    async fetchHabits() {
-      try {
-        this.habits = await getHabitList()
-      } catch (error) {
-        console.error('Error fetching habits:', error)
-      }
+    fetchHabits() {
+      getHabitList(
+        ({ data }) => {
+          console.log('습관 리스트 목록')
+          console.log(data)
+          this.habits = data
+        },
+        (error) => {
+          console.log(error)
+        }
+      )
     },
 
     closeModal() {
@@ -85,6 +94,14 @@ export default {
 </script>
 
 <style scoped>
+.habit {
+  font-weight: bold;
+  margin-bottom: 5px;
+  text-align: left;
+  display: flex;
+  justify-content: space-between; /* 요일과 버튼을 각각 왼쪽과 오른쪽에 배치 */
+  align-items: center; /* 세로 중앙 정렬 */
+}
 
 /* 상단 바 스타일링 */
 .top-bar {

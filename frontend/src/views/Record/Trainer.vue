@@ -1,6 +1,6 @@
 <template>
   <div class="app mt-5">
-    <p class="voice-title">음성 학습
+    <p class="voice-title">음성 녹음
       <button class='btn' @click.prevent="handleBackButton">back</button>
     </p>
 
@@ -8,12 +8,16 @@
       <div class="inner-box">
         <p class="inner-instruction-box">다음 문장을 소리내어 읽으세요.</p>
         <p class="inner-box-1">{{ currentSentence.sentence || '문장을 불러오는 중...' }}</p>
+        <button class="mr-4 record-btn" @click="record">
+          <img :src="recordingStatus === 'Record Sound' ? recordSoundImage : stopRecordingImage" alt="Recording Status" />
+          <!-- {{ recordingStatus }} -->
+        </button>
       </div>
       <div class="buttons inner-buttons-box">
         <button class="btn left-btn" @click="prevSentence" :disabled="currentSentenceId === 0">
           <img src="@/assets/voice/arrow-left.png" alt="">
         </button>
-        <p>{{ this.currentSentenceId + 1 }} / {{ sentences.length }}</p>
+        <p class="page-number">{{ this.currentSentenceId + 1 }} / {{ sentences.length }}</p>
         <button class="btn right-btn" @click="nextSentence" :disabled="currentSentenceId === sentences.length - 1">
           <img src="@/assets/voice/arrow-right.png" alt="">
         </button>
@@ -23,11 +27,7 @@
       </div>
     </div>  
 
-    <p class="voice-title">음성 녹음
-      <button class="mr-4" @click="record">
-        <img :src="recordingStatus === 'Record Sound' ? recordSoundImage : stopRecordingImage" alt="Recording Status" />
-        <!-- {{ recordingStatus }} -->
-      </button>
+    <p class="voice-title">녹음 이력
     </p>
 
     <div class="voice-box">
@@ -378,7 +378,7 @@ export default {
   background-color: #EAF3F9;
   padding: 10px;
   margin: 10px 0;
-  height: 380px;
+  height: 430px;
   border-radius: 24px;
   box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.25);
   font-size: 20px;
@@ -387,7 +387,7 @@ export default {
 
 .inner-instruction-box {
   position: absolute; /* 또는 absolute, 상황에 따라 */
-  top: 60%; /* 상위 요소나 브라우저 창 기준 중앙으로 설정 */
+  top: 73%; /* 상위 요소나 브라우저 창 기준 중앙으로 설정 */
   left: 50%; /* 상위 요소나 브라우저 창 기준 중앙으로 설정 */
   transform: translate(-50%, -50%); /* 정확한 중앙으로 이동 */
   width: calc(100% - 20px); /* padding을 고려한 너비 설정 */
@@ -399,7 +399,7 @@ export default {
 
 .inner-box-1 {
   position: absolute; /* 또는 absolute, 상황에 따라 */
-  top: 30%; /* 상위 요소나 브라우저 창 기준 중앙으로 설정 */
+  top: 25%; /* 상위 요소나 브라우저 창 기준 중앙으로 설정 */
   left: 50%; /* 상위 요소나 브라우저 창 기준 중앙으로 설정 */
   transform: translate(-50%, -50%); /* 정확한 중앙으로 이동 */
   width: calc(100% - 20px); /* padding을 고려한 너비 설정 */
@@ -410,30 +410,44 @@ export default {
   background-color: #fdfdfd;
 }
 
-
 .inner-buttons-box {
-
-white-space: nowrap; /* This will prevent the content from wrapping to the next line */
-overflow: hidden; /* Ensures that the text doesn't spill out of the container */
-text-overflow: ellipsis; /* Adds an ellipsis if the text is too long to fit */
-position: absolute;
-bottom: 10px; /* 내부 박스 하단에서 얼마나 떨어져 있을지 설정 */
-left: 50%; /* 부모 컨테이너의 가운데 */
-transform: translateX(-50%); /* 왼쪽으로 자기 자신의 너비의 50% 만큼 이동하여 가운데 정렬 */
-width: 90%; /* 버튼들이 차지할 너비. 필요에 따라 조정 */
-justify-content: center; /* 버튼들을 가운데 정렬 */
-align-items: center; /* 버튼들을 세로 중앙 정렬 */
-padding: 10px; /* 내부 여백 */
-border: 1px solid #e0e0e0; /* 테두리 */
-border-radius: 24px; /* 둥근 모서리 */
-background-color: #f9f9f9; /* 배경색 */
-display: flex; /* Flexbox를 사용하여 내부 요소들을 정렬 */
-white-space: nowrap; /* This will prevent the content from wrapping to the next line */
-
-text-overflow: ellipsis; /* Adds an ellipsis if the text is too long to fit */
-
+  top: 80%;
+  display: flex; /* Use flexbox for layout */
+  justify-content: center; /* Center children horizontally */
+  align-items: center; /* Center children vertically */
+  padding: 10px; /* Add padding inside the box */
+  border: 1px solid #e0e0e0; /* Add a border for visual structure */
+  border-radius: 24px; /* Round the corners of the border */
+  background-color: #f9f9f9; /* Set the background color */
+  position: relative; /* Position relative to its normal position */
 }
 
+.record-btn {
+  position: absolute;
+  top: 50%;
+  left: 142px;
+}
+
+.left-btn,
+.right-btn {
+  position: absolute; /* Position absolutely within the parent */
+}
+
+
+.page-number {
+  flex: 2; /* 페이지 번호가 더 많은 공간을 차지하도록 설정 */
+}
+.page-number {
+  flex: 2; /* 페이지 번호가 더 많은 공간을 차지하도록 설정 */
+}
+
+.left-btn {
+  left: 10px; /* Position from the left */
+}
+
+.right-btn {
+  right: 10px; /* Position from the right */
+}
 
 .sentence-btn {
   position: absolute;
@@ -507,15 +521,6 @@ text-overflow: ellipsis; /* Adds an ellipsis if the text is too long to fit */
   width: 180px;
   left: 0;
 } */
-
-.right-btn {
-  width: 180px;
-  right: 0;
-}
-
-.left-btn {
-  left: 0;
-}
 
 .voice-title {
   display: flex; 

@@ -76,32 +76,34 @@ export default {
     onFail(error){
         console.error(error)
       },
+    // async toggleVoice(voice) {
+    //   try {
+    //     await selectVoice(voice.id);
+    //     voice.isActive = !voice.isActive;
+    //   } catch (error) {
+    //     console.error('Error selecting voice:', error);
+    //   }
+    // },
+    
     async toggleVoice(voice) {
+      if (!voice.isActive) {
+        voice.isActive = true;
+        this.recordedVoices.forEach(v => {
+          if (v.id !== voice.id) v.isActive = false;
+          console.log('voice.id: ', voice.id)
+          console.log('v.id: ', v.id)
+        });
+
         try {
           // Use voice.id instead of recordId
           await selectVoice(voice.id, this.onSuccess, this.onFail);
+          const voices = await fetchVoiceList();
+          console.log('Fetched Voices:', voices);
         } catch (error) {
           console.error('Error selecting voice:', error);
         }
+      }
     },
-    
-    // async toggleVoice(voice) {
-    //   if (!voice.isActive) {
-    //     voice.isActive = true;
-    //     this.recordedVoices.forEach(v => {
-    //       if (v.id !== voice.id) v.isActive = false;
-    //       console.log('voice.id: ', voice.id)
-    //       console.log('v.id: ', v.id)
-    //     });
-
-    //     try {
-    //       // Use voice.id instead of recordId
-    //       await selectVoice(voice.id, this.onSuccess, this.onFail);
-    //     } catch (error) {
-    //       console.error('Error selecting voice:', error);
-    //     }
-    //   }
-    // },
 
     async openModal(component = 'RecordDetail', itemData = null) {
       if (component === 'RecordDetail' && itemData) {
@@ -245,3 +247,5 @@ export default {
   padding: 5px; /* 내용물과 버튼 사이의 간격 조절을 위한 패딩 */
 }
 </style>
+
+

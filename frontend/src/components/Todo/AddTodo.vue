@@ -1,11 +1,7 @@
 <template>
   <div class="modal-content" style="border-radius: 10px">
     <div class="modal-title">
-      <button
-        type="button"
-        class="btn-close"
-        aria-label="Close"
-        @click="closeModal"
+      <button type="button" class="btn-close" aria-label="Close" @click="closeModal"
       ></button>
     </div>
     <form>
@@ -94,14 +90,14 @@
       </div>
 
       <!-- 알람 시간 입력 -->
-      <div class="form-group" v-if="isAlarmed">
+      <div class="form-group" v-if="alarmed">
         <label for="time">알람 시간:</label>
         <input v-model="time" type="time" id="time" class="form-control" />
       </div>
 
       <button
         type="submit"
-        class="btn btn-primary"
+        class="btn todo-save"
         @click.prevent="registerTodo()"
       >
         저장
@@ -166,21 +162,17 @@ export default {
           title: this.todoTitle, // 제목
           content: this.todoContent, // 내용
           color: goalColor, // 색상
-          important: this.isImportant, // 중요여부
-          outside: this.isOutside, // 외출여부
-          alarmed: this.isAlarmded, // 알람여부
+          important: this.important, // 중요여부
+          outside: this.outside, // 외출여부
+          alarmed: this.alarmed, // 알람여부
           time: alarmTime, // 알람시간
         };
 
         try {
-          addTodo(
-            goalId,
-            todo,
-            { params: { todoDate: todoDate } },
+          addTodo(goalId, todo, todoDate,
             ({ data }) => {
               console.log("Todo added:", data);
               console.log(data);
-              this.goals = data;
             },
             (error) => {
               console.log(error);
@@ -274,4 +266,10 @@ export default {
 .custom-control-label {
   padding-left: 10px;
 }
+
+.todo-save {
+    display: flex;
+    margin-left: auto;
+  }
+
 </style>
