@@ -10,7 +10,7 @@
       <input v-model="item.memo" type="text" id="todoTitle" class="form-control" required>
     </div> 
     <div class="button-group">
-      <button class="edit-button" @click="fnSave">수정</button>
+      <button class="edit-button" @click="fnSave">수정하기</button>
       <button class="continue-button" @click="recordCont">이어 녹음하기</button>
       <button class="learning-button" @click="learningVoice" :disabled="!this.isRecorded">
         {{ isLearning ? '학습 중' : '학습하기' }}
@@ -85,7 +85,7 @@ export default {
     async checkRecording() {
       try {
         const userData = await getUser(this.item.id);
-        this.isRecorded = userData.time !== 0; // Corrected syntax and refactored
+        this.isRecorded = userData.prompt >= 16; // Corrected syntax and refactored
       } catch (error) {
         console.error(error);
         this.isRecorded = false;

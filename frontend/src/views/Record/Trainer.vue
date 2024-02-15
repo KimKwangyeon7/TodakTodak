@@ -349,7 +349,7 @@ export default {
       console.log('goOutfail: ', this.onFail)
       goOutFromTrainer(
         this.recordId, 
-        this.currentSentenceId,
+        this.currentSentenceId + 1,
         this.totalRecordingTime,
         this.onSuccess,
         this.onFail
