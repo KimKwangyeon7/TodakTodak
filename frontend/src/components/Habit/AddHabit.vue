@@ -43,7 +43,7 @@
         <button @click="addAlarmInput" type="button" class="btn btn-secondary">알람 추가</button>
       </div>
 
-      <button type="submit" class="btn habit-save" @click="fnAdd">저장</button>
+      <button type="submit" class="btn btn-primary" @click="fnAdd">저장</button>
     </form>
   </div>
 </template>
@@ -95,7 +95,6 @@ export default {
       });
       
       addHabit(this.habitData, 
-      
       (response) => {
         console.log('Habit added successfully:', response);
         console.log('content:', this.content)
@@ -144,13 +143,7 @@ export default {
   margin-right: 10px;
 }
 
-.form-control {
-    display: flex;
-    margin-left: auto;
-  }
-
-  .habit-save {
-    display: flex;
-    margin-left: auto;
-  }
+.custom-control-label {
+  padding-left: 10px;
+}
 </style>
