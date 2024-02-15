@@ -1,15 +1,27 @@
-import { localAxios } from '@/util/htp-commons'
+import { localAxios } from "@/util/http-commons";
 
-const local = localAxios()
-const url = '/tts/infer'
+const local = localAxios();
+const url = '/tts/infer';
 
-async function sendAudioToBackend(audioFile, success, fail) {
-  let formData = new FormData()
-  formData.append('file', audioFile, audioFile.name);
-  local.defaults.headers.Authorization = "Bearer " + localStorage.getItem("accessToken");
-  local.post(`${url}`, formData).then(success).catch(fail)
+// 백엔드로부터 오디오 파일 수신 및 재생
+async function receiveAudioFromBackend() {
+  console.log("receiveAudioFromBackend 실행");
+  try {
+    local.defaults.headers.Authorization = "Bearer " + localStorage.getItem("accessToken");
+    const response = await local.post(`${url}`, { responseType: 'arraybuffer' });
+    
+    // 이진 데이터를 Blob 객체로 변환
+    const audioBlob = new Blob([response.data], { type: 'audio/mp3' }); // MIME 타입은 오디오 파일 형식에 맞게 설정
+    const audioUrl = URL.createObjectURL(audioBlob);
+
+    // 오디오 재생
+    const audioPlayer = new Audio(audioUrl);
+    await audioPlayer.play();
+  } catch (error) {
+    console.error("오디오 파일 수신 및 재생 중 오류 발생:", error);
+  }
 }
 
-export{
-  sendAudioToBackend
+export {
+  receiveAudioFromBackend,
 }

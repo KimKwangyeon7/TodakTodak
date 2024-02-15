@@ -26,8 +26,8 @@ export default defineConfig({
         injectionPoint: undefined
       },
       manifest: {
-        "name": "c210",
-        "short_name": "c210",
+        "name": "todak",
+        "short_name": "todak",
         "icons": [
           {
             "src": "/logo/KakaoTalk_20240208_220849622.jpg",
