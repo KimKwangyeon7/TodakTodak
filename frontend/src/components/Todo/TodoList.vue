@@ -12,7 +12,7 @@
     <!-- Todo List -->
     <div class="todo-section">
       <div class="todo-date">
-        <span style="font-weight: bold">{{ today }}</span>
+        <span style="font-weight: bold; font-size: 18px;">{{ today }}</span>
         <button class="list-button" @click="toggleTodoList">{{ showTodoList ? '∧' : '∨' }}</button>
         <button class="add-button" @click="openModal('AddTodo')">+</button>
       </div>
@@ -39,7 +39,7 @@
     <!-- Goals -->
     <div class="todo-section">
       <div class="todo-date">
-        <div style="margin-bottom: 5px; margin-top: 5px; font-weight: bold">
+        <div style="margin-bottom: 5px; margin-top: 5px; font-weight: bold; font-size: 18px;">
           목표
         </div>
         <button class="list-button" @click="toggleGoalList">{{ showGoalList ? '∧' : '∨' }}</button>
@@ -85,7 +85,7 @@ export default {
       currentItem: null,
       detailedTodo: null,
       showTodoList: true,
-      showGoalList: true,
+      showGoalList: false,
     };
   },
   setup() {
