@@ -1,6 +1,11 @@
 <template>
   <div class="modal-content">
-    <button type="button" class="btn-close" aria-label="Close" @click="closeModal"></button>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      @click="closeModal"
+    ></button>
     <div class="form-group">
       <label for="selectedGoal">목표:</label>
       <select v-model="item.goalId" id="selectedGoal" class="form-control">
@@ -11,27 +16,55 @@
     </div>
     <div class="form-group">
       <label for="todoTitle">제목:</label>
-      <input v-model="item.title" type="text" id="todoTitle" class="form-control" required>
+      <input
+        v-model="item.title"
+        type="text"
+        id="todoTitle"
+        class="form-control"
+        required
+      />
     </div>
     <div class="form-group">
       <label for="todoContent">내용:</label>
-      <textarea v-model="item.content" id="todoContent" class="form-control" rows="3"></textarea>
+      <textarea
+        v-model="item.content"
+        id="todoContent"
+        class="form-control"
+        rows="3"
+      ></textarea>
     </div>
     <div class="form-group">
       <label for="todoContent">알림 문구:</label>
-      <textarea v-model="item.text" id="todoText" class="form-control" rows="1"></textarea>
+      <textarea
+        v-model="item.text"
+        id="todoText"
+        class="form-control"
+        rows="1"
+      ></textarea>
     </div>
     <div class="form-group">
       <label>중요여부:</label>
       <div class="form-check form-switch">
-        <input v-model="item.important" class="form-check-input" type="checkbox" role="switch" id="importantSwitch">
+        <input
+          v-model="item.important"
+          class="form-check-input"
+          type="checkbox"
+          role="switch"
+          id="importantSwitch"
+        />
         <label class="form-check-label" for="importantSwitch"></label>
       </div>
     </div>
     <div class="form-group">
       <label>외출 여부:</label>
       <div class="form-check form-switch">
-        <input v-model="item.outside" class="form-check-input" type="checkbox" role="switch" id="outsideSwitch">
+        <input
+          v-model="item.outside"
+          class="form-check-input"
+          type="checkbox"
+          role="switch"
+          id="outsideSwitch"
+        />
         <label class="form-check-label" for="outsideSwitch"></label>
       </div>
     </div>
@@ -39,20 +72,33 @@
       <label>알람 여부:</label>
       <div class="custom-control custom-switch">
         <div class="form-check form-switch">
-          <input v-model="item.alarmed" class="form-check-input" type="checkbox" role="switch" id="alarmSwitch">
+          <input
+            v-model="item.alarmed"
+            class="form-check-input"
+            type="checkbox"
+            role="switch"
+            id="alarmSwitch"
+          />
           <label class="form-check-label" for="alarmSwitch"></label>
         </div>
-      </div>   
+      </div>
     </div>
     <div class="form-group" v-if="item.alarmed">
       <label for="time">알람 시간:</label>
-      <input v-model="item.time" type="time" id="time" class="form-control">
+      <input v-model="item.time" type="time" id="time" class="form-control" />
     </div>
     <div class="form-group">
       <label>완료 여부:</label>
       <div class="custom-control custom-switch">
         <div class="form-check form-switch">
-          <input v-model="item.checked" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
+          <input
+            v-model="item.checked"
+            class="form-check-input"
+            type="checkbox"
+            role="switch"
+            id="flexSwitchCheckChecked"
+            checked
+          />
           <label class="form-check-label" for="flexSwitchCheckChecked"></label>
         </div>
       </div>
@@ -65,24 +111,24 @@
 </template>
 
 <script>
-import { getGoalList } from '@/api/goals';
-import { updateTodo, deleteTodo, isTodoCompleted } from '@/api/todos';
+import { getGoalList } from "@/api/goals";
+import { updateTodo, deleteTodo, isTodoCompleted } from "@/api/todos";
 
 export default {
   data() {
     return {
       originalItem: {},
-      goals: []
-    }
+      goals: [],
+    };
   },
   created() {
-    this.originalItem = {...this.item}
+    this.originalItem = { ...this.item };
   },
   props: {
     item: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
     localSelectedGoal: {
@@ -93,29 +139,45 @@ export default {
       set(newValue) {
         // Update the local item's selected goal when changed
         this.item.selectedGoal = newValue;
-      }
+      },
     },
   },
   methods: {
     closeModal() {
-      Object.assign(this.item, this.originalItem)
-      this.editableItem = {...this.item};
-      this.$emit('close-modal');
+      Object.assign(this.item, this.originalItem);
+      this.editableItem = { ...this.item };
+      this.$emit("close-modal");
     },
     async fnDelete() {
       try {
-        deleteTodo(this.item.id);
-        this.$emit('close-modal');
+        deleteTodo(
+          this.item.id,
+          (response) => {
+            let msg = "투두 삭제 처리시 문제 발생했습니다.";
+            if (response.status == 200) msg = "투두 삭제가 완료되었습니다.";
+            alert(msg);
+          },
+          (error) => console.log(error)
+        );
+        this.$emit("close-modal");
       } catch (error) {
-        console.error('Error deleting todo:', error);
+        console.error("Error deleting todo:", error);
       }
     },
     async fnSave() {
       try {
-        updateTodo(this.item.id, this.item); 
-        this.$emit('close-modal'); 
+        updateTodo(
+          this.item.id, this.item,
+          (response) => {
+            let msg = "투두 수정 시 문제 발생했습니다.";
+            if (response.status == 200) msg = "투두 수정시 완료되었습니다.";
+            alert(msg);
+          },
+          (error) => console.log(error)
+        );
+        this.$emit("close-modal");
       } catch (error) {
-        console.error('Error updating todo:', error);
+        console.error("Error deleting todo:", error);
       }
     },
     async fetchGoals() {
@@ -147,7 +209,7 @@ export default {
 
 <style scoped>
 .modal-content {
-  background: #EAF3F9;
+  background: #eaf3f9;
   border-radius: 8px;
   padding: 20px;
 }

@@ -8,7 +8,7 @@
     />
   </div>
 
-  <div class="calendar-wrapper mt-5" style="margin-top: 70px">
+  <div class="calendar-wrapper m-3" style="margin-top: 70px">
     <main class="calendar-body">
       <div class="button-container">
         <button class="btn" @click="$router.back()">
@@ -40,9 +40,24 @@
             <span>{{ todo.title }}</span>
           </div>
         </div>
-        <ul>
-          <li v-for="todo in todos" :key="todo.id">{{ todo.title }}</li>
-        </ul>
+
+        <div class="todo-section">
+          <div class="todo-item" v-for="todo in todos" :key="todo.id">
+            <div
+              class="color-circle"
+              :style="{ backgroundColor: todo.color }"
+            ></div>
+            <span class="todo-content">
+              {{ todo.content }}
+            </span>
+          </div>
+        </div>
+
+        <!-- <ul>
+          <li v-for="todo in todos" :key="todo.id">{{ todo.content }}
+            <span class="color-circle" :style="{ 'background-color': todo.color }"></span>
+          </li>
+        </ul> -->
       </div>
     </main>
   </div>
@@ -79,15 +94,13 @@ export default {
     const isModalValid = ref(false);
     const activeModal = ref(null);
     const currentItem = ref("");
-
     onMounted(async () => {
       formattedDate.value = moment(selectedDate.value).format("YYYYMMDD");
-      console.log("formattedDate:", formattedDate);
       try {
         getTodoList(
           formattedDate.value,
           ({ data }) => {
-            console.log("선택한 날 투두 리스트 목록");
+            console.log("목표 리스트 목록");
             console.log(data);
             todos.value = data;
           },
@@ -132,6 +145,11 @@ export default {
     console.log("Week Dates:", this.weekDates);
   },
   computed: {
+    // todos() {
+    //   const todoStore = useTodoStore();
+    //   console.log('todos', todoStore.todos)
+    //   return todoStore.todos;
+    // },
     weekTodos() {
       return this.todos.filter((todo) => {
         // Todo 항목의 날짜가 현재 주의 날짜 배열(weekDates)에 포함되는지 확인
@@ -226,21 +244,19 @@ export default {
 }
 
 .calendar-dates {
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
-  height: 500px;
 
   align-content: flex-start; /* 자식 요소들을 상단에서부터 시작하도록 정렬 */
   height: auto; /* 높이를 자동으로 조정하여 모든 항목을 포함하도록 함 */
 }
 
-
 .calendar-dates .date {
-  
   padding: 0.5rem; /* 패딩 추가 */
   text-align: center; /* 텍스트 가운데 정렬 */
   border-radius: 4px; /* 테두리 둥글게 */
-  
+
   transition: background-color 0.3s, color 0.3s; /* 배경 및 글자 색상 전환 효과 */
 }
 
@@ -267,7 +283,8 @@ export default {
   margin-bottom: 1rem; /* 버튼 하단 여백 */
 }
 
-.btn, .add-button {
+.btn,
+.add-button {
   cursor: pointer; /* 커서 포인터로 변경 */
   background: none; /* 배경 투명화 */
   border: none; /* 테두리 제거 */
@@ -303,7 +320,7 @@ export default {
 
 .todo-content {
   flex-grow: 1;
-  
+
   text-align: left;
   margin-right: 10px; /* Space before the checkbox */
 }
