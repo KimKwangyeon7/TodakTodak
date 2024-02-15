@@ -135,6 +135,7 @@ export default {
     
     closeModal() {
       this.$emit("close-modal");
+      window.location.reload(true);
     },
     registerTodo() {
       try {
@@ -184,6 +185,7 @@ export default {
         } catch (error) {
           console.error("Error fetching goals:", error);
         }
+        this.closeModal();
       } catch (error) {
         console.error("Error creating todo:", error);
       }
