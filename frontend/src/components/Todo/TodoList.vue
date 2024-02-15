@@ -13,9 +13,10 @@
     <div class="todo-section">
       <div class="todo-date">
         <span style="font-weight: bold">{{ today }}</span>
+        <button class="list-button" @click="toggleTodoList">{{ showTodoList ? '∧' : '∨' }}</button>
         <button class="add-button" @click="openModal('AddTodo')">+</button>
       </div>
-      <div class="todo-items">
+      <div v-if="showTodoList" class="todo-items">
         <div class="todo-item" v-for="todo in todos" :key="todo.id">
           <div
             class="color-bar"
@@ -41,8 +42,10 @@
         <div style="margin-bottom: 5px; margin-top: 5px; font-weight: bold">
           목표
         </div>
+        <button class="list-button" @click="toggleGoalList">{{ showGoalList ? '∧' : '∨' }}</button>
         <button class="add-button" @click="openAddGoalPage">+</button>
       </div>
+      <div v-if="showGoalList" class="todo-items">
       <div class="todo-item" v-for="goal in goals" :key="goal.id">
         <div
           class="color-circle"
@@ -52,6 +55,7 @@
           goal.content
         }}</span>
       </div>
+     </div>
     </div>
   </div>
 </template>
@@ -80,6 +84,8 @@ export default {
       today: "",
       currentItem: null,
       detailedTodo: null,
+      showTodoList: true,
+      showGoalList: true,
     };
   },
   setup() {
@@ -228,6 +234,12 @@ export default {
         }
       );
     },
+    toggleTodoList() {
+      this.showTodoList = !this.showTodoList;
+    },
+    toggleGoalList() {
+      this.showGoalList = !this.showGoalList;
+    },
   },
   mounted() {
     this.updateToday();
@@ -265,6 +277,17 @@ export default {
   display: flex;
   justify-content: space-between; /* 요일과 버튼을 각각 왼쪽과 오른쪽에 배치 */
   align-items: center; /* 세로 중앙 정렬 */
+}
+
+.list-button {
+  font-size: 20px;
+  background-color: #eaf3f9;
+  color: #000; /* 검정색 텍스트 색상 */
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-left: auto;
+  margin-bottom: 2px;
 }
 
 .add-button {
@@ -339,4 +362,3 @@ input[type="checkbox"] {
 }
 
 </style>
-@/records.js/auth

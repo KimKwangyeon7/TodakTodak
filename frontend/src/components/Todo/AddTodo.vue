@@ -183,9 +183,11 @@ export default {
         } catch (error) {
           console.error("Error fetching goals:", error);
         }
+        this.closeModal();
       } catch (error) {
         console.error("Error creating todo:", error);
       }
+      this.fetchTodos();
     },
     async fetchGoals() {
       console.log("fetchGoals 실행");
