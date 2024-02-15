@@ -146,15 +146,11 @@ const connect = () => {
 
 <template>
   <div>
-    <button class="back-button btn" @click="goBack">
+    <!-- <button class="back-button btn" @click="goBack">
       <img src="@/assets/back.png" alt="" />
-    </button>
-    <div></div>
+    </button> -->
     <div class="chat-container">
       <div class="chat-messages" ref="chatContainer" id="chatContainer">
-        <keep-alive>
-          <chat-component :allChats="allChats" />
-        </keep-alive>
         <div
           v-for="(schat, index) in savedChats"
           :key="index"

@@ -36,28 +36,26 @@
           class="date text-center"
         >
           <span class="day">{{ day }}</span>
-          <div v-for="todo in weekTodos" :key="todo.id">
-            <span>{{ todo.title }}</span>
-          </div>
+          
         </div>
 
-        <div class="todo-section">
-          <div class="todo-item" v-for="todo in todos" :key="todo.id">
-            <div
-              class="color-circle"
-              :style="{ backgroundColor: todo.color }"
-            ></div>
-            <span class="todo-content">
-              {{ todo.content }}
-            </span>
-          </div>
-        </div>
-
+        
         <!-- <ul>
           <li v-for="todo in todos" :key="todo.id">{{ todo.content }}
             <span class="color-circle" :style="{ 'background-color': todo.color }"></span>
           </li>
         </ul> -->
+      </div>
+      <div class="todo-section">
+        <div class="todo-item" v-for="todo in todos" :key="todo.id">
+          <div
+            class="color-circle"
+            :style="{ backgroundColor: todo.color }"
+          ></div>
+          <span class="todo-content">
+            {{ todo.title }}
+          </span>
+        </div>
       </div>
     </main>
   </div>
@@ -180,6 +178,7 @@ export default {
 };
 </script>
 
+
 <style scoped>
 .black-bg {
   width: 100%;
@@ -244,12 +243,10 @@ export default {
 }
 
 .calendar-dates {
-  width: 100%;
   display: flex;
   flex-wrap: wrap;
-
-  align-content: flex-start; /* 자식 요소들을 상단에서부터 시작하도록 정렬 */
-  height: auto; /* 높이를 자동으로 조정하여 모든 항목을 포함하도록 함 */
+  justify-content: space-between; /* 날짜 간격을 균등하게 조정 */
+  padding: 0 7px; /* 상하 여백은 0, 좌우 여백은 20px */
 }
 
 .calendar-dates .date {
@@ -320,8 +317,13 @@ export default {
 
 .todo-content {
   flex-grow: 1;
-
   text-align: left;
-  margin-right: 10px; /* Space before the checkbox */
+  margin-left: 5px; /* Space before the checkbox */
+  margin-top: 5px
+}
+
+.todo-section {
+  margin-top: 20px;
+  margin-left: 10px;
 }
 </style>

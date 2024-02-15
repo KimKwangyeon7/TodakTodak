@@ -85,7 +85,7 @@ export default {
       currentItem: null,
       detailedTodo: null,
       showTodoList: true,
-      showGoalList: false,
+      showGoalList: true,
     };
   },
   setup() {

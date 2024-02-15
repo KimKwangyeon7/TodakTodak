@@ -3,7 +3,8 @@
     <div class="profile-dialog profile-dialog-centered" role="document">
       <div class="profile-content">
         <div class="profile-header">
-          <h5 class="profile-title">친구 프로필</h5>
+          <h5 class="profile-title">{{ nickname }}님 프로필</h5>
+          
           <button class="back-button" @click="goBack">뒤로가기</button>
         </div>
 
@@ -31,15 +32,36 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
+import { getFriendGoals } from "@/api/friend";
+import { useRoute } from 'vue-router';
 
-const friend = ref({
-  name: '김싸피',
-  memo: '오늘만 살자',
-  profilePicture: '/src/assets/damgom.png',
-  goals: ['와플대학 입학', '청년카페 취업', '김밥천국 승천'],
-  following: false
-})
+const route = useRoute();
+
+onMounted(() => {
+  FriendGoals(nickname)
+  console.log('컴포넌트 마운트 시 닉네임:', nickname); // 컴포넌트 마운트 시 닉네임 출력
+});
+
+const FriendGoals = (nickname) => {
+  console.log("친구 목표 가져오기");
+  // API 호출
+  getFriendGoals(
+    ({ data }) => {
+      console.log("친구 목표 리스트");
+      console.log(data);
+      nickname.value = data;
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+};
+
+const nickname = route.params.nickname; // URL에서 nickname 파라미터를 가져옴
+
+
+const friend = ref({})
 
 const buttonText = ref('친구 신청')
 

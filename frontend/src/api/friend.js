@@ -43,15 +43,25 @@ async function acceptFriendRequest(sender, success, fail) {
 
 // 친구 요청 거절하기 DELETE
 async function rejectFriendRequest(friendNickname, success, fail) {
+  local.defaults.headers.Authorization = "Bearer " + localStorage.getItem("accessToken");
   local.delete(`/friends/reject/${friendNickname}`).then(success).catch(fail);
   console.log("친구 요청 삭제 성공");
 }
 
 // 친구 삭제하기 DELETE
 async function deleteFriend(friendId, success, fail) {
+  local.defaults.headers.Authorization = "Bearer " + localStorage.getItem("accessToken");
   local.delete(`/friends/${friendId}`).then(success).catch(fail);
   console.log("친구 삭제 성공");
 }
+
+// 친구 목표 가져오기
+async function getFriendGoals(friendNickname, success, fail) {
+  local.defaults.headers.Authorization = "Bearer " + localStorage.getItem("accessToken");
+  local.get(`/friends/${friendNickname}`).then(success).catch(fail);
+  console.log("친구 목표 가져오기");
+}
+
 
 
 export {
@@ -62,4 +72,5 @@ export {
   acceptFriendRequest,
   rejectFriendRequest,
   deleteFriend,
+  getFriendGoals,
 };
