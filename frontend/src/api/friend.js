@@ -43,28 +43,25 @@ async function acceptFriendRequest(sender, success, fail) {
 
 // 친구 요청 거절하기 DELETE
 async function rejectFriendRequest(friendNickname, success, fail) {
+  local.defaults.headers.Authorization = "Bearer " + localStorage.getItem("accessToken");
   local.delete(`/friends/reject/${friendNickname}`).then(success).catch(fail);
   console.log("친구 요청 삭제 성공");
 }
 
 // 친구 삭제하기 DELETE
 async function deleteFriend(friendId, success, fail) {
+  local.defaults.headers.Authorization = "Bearer " + localStorage.getItem("accessToken");
   local.delete(`/friends/${friendId}`).then(success).catch(fail);
   console.log("친구 삭제 성공");
 }
 
-// 무작위 친구 가져오기
-async function getRandomUsers(count, success, fail) {
-  try {
-    // 서버에서 사용자 목록을 가져옵니다.
-    const response = await local.get(`/friends`);
-    // 요청이 성공하면 사용자 목록을 반환합니다.
-    success(response.data);
-  } catch (error) {
-    // 요청이 실패하면 실패 함수를 호출합니다.
-    fail(error);
-  }
+// 친구 목표 가져오기
+async function getFriendGoals(friendNickname, success, fail) {
+  local.defaults.headers.Authorization = "Bearer " + localStorage.getItem("accessToken");
+  local.get(`/friends/${friendNickname}`).then(success).catch(fail);
+  console.log("친구 목표 가져오기");
 }
+
 
 
 export {
@@ -75,5 +72,5 @@ export {
   acceptFriendRequest,
   rejectFriendRequest,
   deleteFriend,
-  getRandomUsers
+  getFriendGoals,
 };

@@ -1,7 +1,6 @@
 <template>
     <div class="goal-success-rate">
       <div class="goal-success-rate-title">목표 별 성취율</div>
-      <div>{{ arrayGoalListId }}</div>
       <!-- Chart.js를 사용하여 현재 선택된 목표의 성공률과 실패율을 도넛 차트로 출력 -->
       <div class="goal-chart">
         <canvas id="successRateChart"></canvas>
@@ -113,7 +112,7 @@ const initChart = () => {
   chartInstance = new Chart(ctx, {
     type: 'doughnut',
     data: {
-      labels: ['완료', '비완료'],
+      labels: ['완료', '미완료'],
       datasets: [{
         label: '비율',
         data: [successRate, unsuccessRate],

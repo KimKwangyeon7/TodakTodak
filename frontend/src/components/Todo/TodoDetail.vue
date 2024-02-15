@@ -39,7 +39,7 @@
         v-model="item.text"
         id="todoText"
         class="form-control"
-        rows="1"
+        rows="2"
       ></textarea>
     </div>
     <div class="form-group">

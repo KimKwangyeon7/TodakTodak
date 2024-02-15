@@ -40,18 +40,14 @@ const getFriendList = () => {
 };
 
 const showProfile = (friend) => {
-  const route = {
-    path: "/friend-profile",
-    component: FriendProfile,
-    props: { friend },
-  };
-
-  router.push(route);
+  console.log('보내기 전 닉네임:', friend.nickname)
+  router.push({ name: 'FriendProfile', params: { nickname: friend.nickname } });
+  console.log('보낸 후 닉네임:', friend.nickname)
 };
 
 const filteredFriends = computed(() => {
   return friends.value.filter((friend) =>
-    friend.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+    friend.nickname.toLowerCase().includes(searchQuery.value.toLowerCase())
   );
 });
 

@@ -29,7 +29,7 @@
         v-model="nickname"
         type="text"
         class="form-control"
-        placeholder="친구 검색"
+        placeholder="닉네임을 입력하세요"
         @keyup.enter="getMemberInfo(nickname)"
       />
       <button class="btn input-group-append" @click="getMemberInfo(nickname)">
@@ -48,7 +48,7 @@
       >
         <div class="request-info">
           <img
-            :src="request.profilePicture"
+            src="@/assets/profile-default.jpg"
             alt="프로필 사진"
             class="profile-picture"
           />
@@ -59,7 +59,7 @@
           </div>
         </div>
         <div class="request-buttons">
-          <button class="accept-button" @click="sendFriend(request.nickname)">
+          <button class="accept-button" @click.stop="sendFriend(request.nickname)">
             {{ request.isRequesting ? "요청중" : "친구요청" }}
           </button>
           <!-- <button class="accept-button" @click="acceptRequest(request.id)">친구요청</button> -->
@@ -72,7 +72,7 @@
 
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { findByNickname } from "@/api/member";
 import { sendFriendRequest } from "@/api/friend";
 import { acceptFriends } from "@/api/friend";
@@ -80,14 +80,31 @@ import { acceptFriendRequest } from "@/api/friend";
 
 import AddFriendModal from "@/components/Friend/AddFriendModal.vue"; 
 
+onMounted(() => {
+  sendToMeAcceptFriends()
+})
 
 // 사용자 정보를 저장할 반응형 참조
 const memberInfo = ref(null);
 const nickname = ref(null);
 const requestFriend = ref(null);
 
+
+
+const sendToMeAcceptFriends = async () => {
+  acceptFriends(({ data }) => {
+    memberInfo.value = [];
+    console.log("data: ", data);
+    memberInfo.value = data;
+    
+    // friendRequests.value.push(data);
+    console.log("memberInfo: ", memberInfo.value);
+  });
+};
+
 const getMemberInfo = async (nickname) => {
   findByNickname(nickname, ({ data }) => {
+    friendRequests.value = []
     console.log("data: ", data);
     requestFriend.value = data;
     friendRequests.value.push(data);
@@ -98,22 +115,19 @@ const getMemberInfo = async (nickname) => {
 };
 
 const sendFriend = async (nickname) => {
-  const nicknameObject = { nickname: nickname };
-  console.log("nicknameObject", nicknameObject);
-  sendFriendRequest(nicknameObject, ({ data }) => {
+  // const nicknameObject = { nickname: nickname };
+  console.log("nickname", nickname)
+  sendFriendRequest(nickname, ({ data }) => {
     console.log("data: ", data);
+    // 요청 상태 업데이트
+    const request = friendRequests.value.find(req => req.nickname === nickname);
+    if (request) {
+      request.isRequesting = true;
+    }
   });
 };
 
-const showSearch = ref(false);
-const searchQuery = ref("");
 
-const toggleSearch = () => {
-  showSearch.value = !showSearch.value;
-  if (!showSearch.value) {
-    searchQuery.value = "";
-  }
-};
 
 // 친구 요청 리스트 데이터
 const friendRequests = ref([]);

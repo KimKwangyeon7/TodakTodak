@@ -9,25 +9,29 @@
 
     <!-- 좌우 화살표로 목표를 변경할 수 있는 슬라이더 -->
     <div class="slider">
-      <button class='btn' @click="prevGoal" :disabled="currentGoalIndex === 0">
-        <img src="@/assets/voice/arrow-left.png" alt=""> 
+      <button class="btn" @click="prevGoal" :disabled="currentGoalIndex === 0">
+        <img src="@/assets/voice/arrow-left.png" alt="" />
       </button>
-      <button class='btn' @click="nextGoal" :disabled="currentGoalIndex === goals.length - 1">
-        <img src="@/assets/voice/arrow-right.png" alt="">
+      <button
+        class="btn"
+        @click="nextGoal"
+        :disabled="currentGoalIndex === goals.length - 1"
+      >
+        <img src="@/assets/voice/arrow-right.png" alt="" />
       </button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { Chart, registerables } from 'chart.js'
-Chart.register(...registerables)
+import { ref, computed, onMounted } from "vue";
+import { Chart, registerables } from "chart.js";
+Chart.register(...registerables);
 
 const goals = ref([
-  { name: '정보처리기사 자격증 획득', successRate: [20, 70, 90] },
-  { name: '삼성전자 취업', successRate: [30, 50, 70] },
-  { name: '공동 프로젝트 앱 완성', successRate: [70, 80, 90] },
+  { name: "정보처리기사 자격증 획득", successRate: [20, 70, 90] },
+  { name: "삼성전자 취업", successRate: [30, 50, 70] },
+  { name: "공동 프로젝트 앱 완성", successRate: [70, 80, 90] },
   // 추가 목표는 필요에 따라 계속해서 추가
 ]);
 
@@ -61,28 +65,38 @@ function updateChart() {
   if (chartInstance) {
     chartInstance.destroy();
   }
-  const ctx = document.getElementById('goalChart').getContext('2d');
+  const ctx = document.getElementById("goalChart").getContext("2d");
+
+  // 현재 월을 기준으로 지난 3개월을 표시
+  const months = Array.from({ length: 3 }, (_, index) => {
+    const currentMonth = ((new Date().getMonth() - index + 12) % 12) + 1;
+    return `${currentMonth}월`;
+  }).reverse(); // 배열을 뒤집어서 최근 월이 가장 오른쪽에 표시되도록 함
+
   chartInstance = new Chart(ctx, {
-    type: 'bar',
+    type: "bar",
     data: {
-      labels: currentGoal.value.successRate.map((_, index) => `${index + 1}월`),
-      datasets: [{
-        label: currentGoal.value.name,
-        data: currentGoal.value.successRate,
-        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-        borderColor: 'rgba(54, 162, 235, 1)',
-        borderWidth: 1
-      }]
+      // labels: currentGoal.value.successRate.map((_, index) => `${index + 1}월`),
+      labels: months,
+      datasets: [
+        {
+          label: currentGoal.value.name,
+          data: currentGoal.value.successRate.slice(-3),
+          backgroundColor: "rgba(54, 162, 235, 0.2)",
+          borderColor: "rgba(54, 162, 235, 1)",
+          borderWidth: 1,
+        },
+      ],
     },
     options: {
-      indexAxis: 'x',
+      indexAxis: "x",
       scales: {
         y: {
-          beginAtZero: true
-        }
+          beginAtZero: true,
+        },
       },
       aspectRatio: 2,
-    }
+    },
   });
 }
 </script>
@@ -95,7 +109,7 @@ function updateChart() {
   justify-content: center;
   margin-top: 20px;
   border-radius: 24px;
-  background-color: #EAF3F9;
+  background-color: #eaf3f9;
   box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.25);
 }
 
