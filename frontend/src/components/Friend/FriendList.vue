@@ -23,6 +23,7 @@ onMounted(() => {
   getFriendList();
 });
 
+
 const getFriendList = () => {
   console.log("친구 목록 가져오기");
   // API 호출
@@ -56,16 +57,20 @@ const filteredFriends = computed(() => {
 
 const startChat = (friend) => {
   selectedFriend.value = friend;
-  const roomRequest = {
+  console.log(friend);
+  const roomRequest = ref({
     title: friend.nickname + "의 대화방",
     receiver: friend.nickname,
-  };
+  });
   createChatRoom(
-    roomRequest,
+    roomRequest.value,
     (response) => {
+      console.log(response.data);
       let msg = "채팅방 생성에 문제 발생했습니다";
+      console.log(response.data);
       if (response.status == 200) {
         msg = "채팅방 입장 완료되었습니다.";
+        console.log(response.data);
         roomid.value = response.data.chatRoomId;
         console.log(roomid.value);
         alert(msg);
@@ -88,7 +93,6 @@ const toggleSearch = () => {
     searchQuery.value = "";
   }
 };
-
 </script>
 
 <template>

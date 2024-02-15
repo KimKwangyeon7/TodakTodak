@@ -175,11 +175,11 @@ export default {
   top: 0;
   left: 0;
 }
-.calendar-wrapper {
+/* .calendar-wrapper {
   display: flex;
   margin: 2.5em 0;
   overflow: auto;
-}
+} */
 
 .calendar-wrapper {
   display: flex;
@@ -229,13 +229,18 @@ export default {
   display: flex;
   flex-wrap: wrap;
   height: 500px;
+
+  align-content: flex-start; /* 자식 요소들을 상단에서부터 시작하도록 정렬 */
+  height: auto; /* 높이를 자동으로 조정하여 모든 항목을 포함하도록 함 */
 }
 
+
 .calendar-dates .date {
-  width: 14.28%; /* 7일에 맞게 너비 조정 */
+  
   padding: 0.5rem; /* 패딩 추가 */
   text-align: center; /* 텍스트 가운데 정렬 */
   border-radius: 4px; /* 테두리 둥글게 */
+  
   transition: background-color 0.3s, color 0.3s; /* 배경 및 글자 색상 전환 효과 */
 }
 
@@ -262,8 +267,7 @@ export default {
   margin-bottom: 1rem; /* 버튼 하단 여백 */
 }
 
-.btn,
-.add-button {
+.btn, .add-button {
   cursor: pointer; /* 커서 포인터로 변경 */
   background: none; /* 배경 투명화 */
   border: none; /* 테두리 제거 */
@@ -275,5 +279,32 @@ export default {
   border-radius: 50%; /* 원형으로 만듬 */
   line-height: 1; /* 라인 높이 조정 */
   margin-left: auto; /* 왼쪽 자동 마진으로 오른쪽 정렬 */
+}
+
+.color-circle {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 10px;
+  display: inline-block;
+  justify-content: center; /* 자식 요소를 수평 중앙으로 정렬 */
+  align-items: center; /* 자식 요소를 수직 중앙으로 정렬 */
+}
+
+.todo-item {
+  display: flex;
+  align-items: flex-start; /* 자식 요소들을 컨테이너의 시작 부분에 정렬 */
+  margin-bottom: 10px; /* 각 todo-item 사이의 여백 */
+  word-wrap: break-word; /* 단어 단위로 줄바꿈 */
+  justify-content: center; /* 자식 요소를 수평 중앙으로 정렬 */
+  align-items: center; /* 자식 요소를 수직 중앙으로 정렬 */
+  /* 또는 */
+}
+
+.todo-content {
+  flex-grow: 1;
+  
+  text-align: left;
+  margin-right: 10px; /* Space before the checkbox */
 }
 </style>
