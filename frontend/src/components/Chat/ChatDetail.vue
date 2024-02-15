@@ -186,10 +186,9 @@ const connect = () => {
   border: 1px solid cornflowerblue;
   display: flex;
   flex-direction: column;
-  height: 70vh;
+  height: 80vh; /* 높이를 조정할 부분입니다. */
   padding: 20px;
 }
-
 .chat-messages {
   flex: 1;
   display: flex;

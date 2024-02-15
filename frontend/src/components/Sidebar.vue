@@ -8,7 +8,10 @@
         <router-link to="/main" class="todak-logo navbar-brand mx-auto">
           <img src="@/assets/todak/todak-logo.png" alt="">
         </router-link>
-        <button type="button" class="btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNotifications" aria-controls="offcanvasNotifications">
+        <!-- <button type="button" class="btn" @click="playFirstAudio" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNotifications" aria-controls="offcanvasNotifications">
+          <img src="@/assets/bell.png" alt="">
+        </button> -->
+        <button type="button" class="btn" @click="playFirstAudio">
           <img src="@/assets/bell.png" alt="">
         </button>
         <!-- 수정된 부분: Notifications 컴포넌트 추가 -->
@@ -47,20 +50,59 @@
     </nav>
     
     <!-- 수정된 부분: Notifications 컴포넌트 추가 -->
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNotifications" aria-labelledby="offcanvasNotificationsLabel" data-bs-toggle="offcanvas">
+    <!-- <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNotifications" aria-labelledby="offcanvasNotificationsLabel" data-bs-toggle="offcanvas">
       <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="offcanvasNotificationsLabel">알림</h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
       <div class="offcanvas-body">
-        <notifications @play-first-audio="playFirstAudio"></notifications>
+        <notifications ></notifications>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script setup>
-import Notifications from '@/components/Notifications.vue'
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+
+const audioPlayer = ref(null);
+const audioList = ref([
+  '/src/assets/audio/2_20240206_202920.wav',
+  '/src/assets/audio/2_20240206_203020.wav',
+]);
+
+onMounted(() => {
+  // 여기서 audioPlayer를 참조합니다.
+  audioPlayer.value = new Audio(); 
+});
+
+
+const playFirstAudio = async () => {
+  if (audioList.value.length > 0) {
+    const audioUrl = audioList.value[0];
+
+    // 음성 파일 재생
+    audioPlayer.value.src = audioUrl;
+    await audioPlayer.value.play();
+
+    // 재생이 끝나면 파일 삭제
+    deleteAudioFile(audioUrl);
+  }
+};
+
+const deleteAudioFile = async (audioUrl) => {
+  try {
+    // 서버로 요청하여 음성 파일 삭제
+    await axios.delete('/delete-audio', { data: { audioUrl } });
+
+    // 음성 파일 리스트에서 삭제
+    audioList.value.shift(); // 첫 번째 요소 삭제
+  } catch (error) {
+    console.error('음성 파일 삭제 중 오류 발생:', error);
+  }
+};
+
 
 </script>
 
