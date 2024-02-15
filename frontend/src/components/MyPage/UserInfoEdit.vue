@@ -1,7 +1,7 @@
 <template>
   <div v-if="userData">
     <button class="settings-back-button btn" @click="goBack">
-      <img src="@/assets/back.png" alt="뒤로 가기">
+      <img src="@/assets/back.png" alt="뒤로 가기" />
     </button>
 
     <div class="profile-section">
@@ -9,19 +9,40 @@
       <form @submit.prevent="saveProfile">
         <div class="form-group">
           <label for="name">이름:</label>
-          <input v-model="userData.name" type="text" id="name" class="form-control" required>
+          <input
+            v-model="userData.name"
+            type="text"
+            id="name"
+            class="form-control"
+            required
+          />
         </div>
         <div class="form-group">
           <label for="nickname">닉네임:</label>
-          <input v-model="userData.nickname" type="text" id="nickname" class="form-control" required>
+          <input
+            v-model="userData.nickname"
+            type="text"
+            id="nickname"
+            class="form-control"
+            required
+          />
         </div>
         <div class="form-group">
           <label for="memo">메모:</label>
-          <textarea v-model="userData.memo" id="memo" class="form-control"></textarea>
+          <textarea
+            v-model="userData.memo"
+            id="memo"
+            class="form-control"
+          ></textarea>
         </div>
         <div class="form-group">
           <label for="profilePicture">프로필 이미지:</label>
-          <input v-model="userData.profilePicture" type="text" id="profilePicture" class="form-control">
+          <input
+            v-model="userData.profileUrl"
+            type="text"
+            id="profilePicture"
+            class="form-control"
+          />
         </div>
         <button type="submit" class="profile-save-btn btn">저장</button>
       </form>
@@ -30,29 +51,49 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { useMemberStore } from '@/stores/auth'
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
+import { useMemberStore } from "@/stores/auth";
+import { modifyUser } from "@/api/member";
 
-const router = useRouter()
-const memberStore = useMemberStore()
+const router = useRouter();
+const memberStore = useMemberStore();
 
-const userData = ref(null)
+// const { updateUserInfo } = memberStore;
+// const { userInfo } = storeToRefs(memberStore);
+
+
+const userData = ref(null);
+const user = {
+  name: userData.name,
+  nickname: userData.nickname,
+  memo: userData.memo,
+  profileUrl: userData.profileUrl
+}
 
 onMounted(async () => {
-  const token = localStorage.getItem("accessToken")
-  userData.value = await memberStore.getUserInfo(token)
-})
+  const token = localStorage.getItem("accessToken");
+  userData.value = await memberStore.getUserInfo(token);
+});
 
 const saveProfile = async () => {
   // 사용자 정보 업데이트
-  await memberStore.updateUserInfo(userData.value)
-  console.log('프로필이 저장되었습니다.')
+  console.log("프로필이 저장되었습니다.");
+  modifyUser(user,
+    ({ data }) => {
+      console.log("사용자 업데이트");
+      console.log(data);
+      this.userData.value = data;
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
   router.push('/mypage')
-}
+};
 
 function goBack() {
-  window.history.back()
+  window.history.back();
 }
 </script>
 
