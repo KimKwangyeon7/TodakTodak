@@ -128,7 +128,9 @@ const handleLoginClick = () => {
   </div>
   <div v-else>
     <div class="welcome-screen">
-      <h1 class="welcome-message">Todak Todak</h1>
+      <h1 class="welcome-message">Todak Todak
+        <img src="" alt="">
+      </h1>
         <div class="auth-buttons">
           <RouterLink to="/login" class="auth-button">로그인</RouterLink>
           <RouterLink to="/signup" class="auth-button">회원가입</RouterLink>

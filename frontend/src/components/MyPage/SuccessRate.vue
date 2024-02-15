@@ -1,7 +1,7 @@
 <template>
     <div class="goal-success-rate">
       <div class="goal-success-rate-title">목표 별 성취율</div>
-  
+      <div>{{ arrayGoalListId }}</div>
       <!-- Chart.js를 사용하여 현재 선택된 목표의 성공률과 실패율을 도넛 차트로 출력 -->
       <div class="goal-chart">
         <canvas id="successRateChart"></canvas>
@@ -23,10 +23,70 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { Chart, registerables } from 'chart.js'
+import { getTodosSuccessRateByDay } from '@/api/rate'
+import { getGoalList } from '@/api/goals'
+
 Chart.register(...registerables)
 
+onMounted(() => {
+  fetchGoalList()
+  todosSuccessRateByDay();
+  
+});
+
+const todosSuccessRate = new Map()
+const todosSuccessRates = ref({}); // 각 id별 성취율을 저장할 객체
+
+
+const todosSuccessRateByDay = (firstGoalId) => {
+  console.log("하루 투두 성취율 가져오기");
+  // API 호출
+  getTodosSuccessRateByDay(
+    ({ data }) => {
+      console.log("하루 투두 성취율 가져오기");
+      console.log(data);
+      todosSuccessRate.value = data;
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+};
+// 오늘
+const nowDate = new Date()
+const month = nowDate.getMonth()
+
+const goalList = ref(null)
+const arrayGoalListId = ref([])
+
+
+
+const fetchGoalList = () => {
+  console.log("목표 가져오기");
+  // API 호출
+  getGoalList(
+    ({ data }) => {
+      
+      console.log('목표 리스트:', data);
+      goalList.value = data;
+      console.log('목표 리스트id:', goalList.value);
+      // console.log('goal:', goal)
+      goalList.value.forEach(item => {
+        arrayGoalListId.value.push(item.id);
+    });
+
+    console.log('arrayGoalListId:', arrayGoalListId.value);
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+};
+
+
+
 const goals = ref([
-  { name: '정보처리기사 자격증 획득', successRate: 80 },
+  { name: '정보처리기사 자격증 획득', successRate: 70 },
   { name: '삼성전자 취업', successRate: 60 },
   { name: '공동 프로젝트 앱 완성', successRate: 70 },
   // 추가 목표는 필요에 따라 계속해서 추가
@@ -53,7 +113,7 @@ const initChart = () => {
   chartInstance = new Chart(ctx, {
     type: 'doughnut',
     data: {
-      labels: ['완료', '미완료'],
+      labels: ['완료', '비완료'],
       datasets: [{
         label: '비율',
         data: [successRate, unsuccessRate],

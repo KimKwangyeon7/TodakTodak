@@ -543,10 +543,7 @@ export default {
   height: 700px;
 }
 
-/* .calendar-body {
 
-
-} */
 
 .calendar-header {
   margin-bottom: 3rem;
@@ -634,13 +631,13 @@ margin-top: -1px;
 display: none;
 } */
 
-.arrow-left {
+/* .arrow-left {
   margin-left: 90px;
 }
 
 .arrow-right {
   margin-right: 90px;
-}
+} */
 
 .arrow-left,
 .arrow-right:hover {
@@ -712,7 +709,7 @@ color: #ffffff;
   width: 100%; /* 전체 너비 사용 */
   max-width: 500px; /* 최대 너비 설정 */
   background-color: #ffffff; /* 배경색 설정 */
-  padding: 1rem; /* 패딩 추가 */
+  padding: 1rem;
   max-height: 800px; /* 최소 높이 설정 */
 }
 

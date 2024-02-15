@@ -7,11 +7,24 @@
       </div>
       <div class="form-group">
         <label for="selectedColor">목표 색상:</label>
-          <select v-model="localSelectedColor" id="selectedColor" class="form-control">
-            <option v-for="goal in goals" :key="goal.id" :value="goal.id">
-              {{ goal.color }}
-            </option>
-        </select>
+        <div class="form-group">
+        <button @click.prevent="openColorDetailModal" class="btn">색상 선택</button>
+      </div>
+      <div v-if="selectedColor" class="selected-color">
+        <p>선택한 색상: {{ selectedColor }}</p>
+        <div :key="color" class="color-option" :style="{ backgroundColor: color }"></div>
+      </div>
+      <div v-if="showColorDetailModal" class="color-modal">
+        <div class="color-modal-content">
+          <div class="color-options">
+            <div v-for="color in colorOptions" 
+            :key="color" @click="selectColor(color)"
+             class="color-option" :style="{ backgroundColor: color }">
+            </div>
+          </div>
+          <button @click="closeColorDetailModal" class="btn color-select">닫기</button>
+        </div>
+      </div>
     </div>
     <div class="button-group">
       <button class="btn" @click="fnDelete">삭제</button>
@@ -27,10 +40,16 @@ export default {
   data() {
     return {
       originalItem: {},
-      item: {
-        selectedColor: null,
-      },
+      selectedColor: null,
       goals: [],
+      content: '',
+      showColorDetailModal: false,
+      colorOptions: [
+        '#fff56e', '#ffa500', '#ffdbc1', '#ffbc9b',
+        '#e6c178', '#dc9146', '#ffcfda', '#ff9e9b',
+        '#ff7493', '#ff96ff', '#75ffca', '#b4f0b4',
+        '#6dd66d', '#32bebe', '#9ab9ff', '#46beff'
+      ],
     };
   },
   created() {
@@ -51,10 +70,23 @@ export default {
     },
   },
   methods: {
+    openColorDetailModal() {
+      this.showColorDetailModal = true;
+      console.log(`Goal Content:',${this.content} `)
+    },
+    closeColorDetailModal() {
+      this.showColorDetailModal = false;
+      // 추가: 모달이 닫힐 때 선택한 색상을 표시
+      console.log(`Selected Color: ${this.selectedColor}`);
+    },
     closeModal() {
       Object.assign(this.item, this.originalItem);
       this.editableItem = { ...this.item };
       this.$emit("close-modal");
+    },
+    selectColor(selectedColor) {
+      this.color = selectedColor;
+      this.selectedColor = selectedColor; // 추가: 선택한 색상 저장
     },
     async fnDelete() {
       try {
@@ -66,13 +98,22 @@ export default {
     },
     async fnSave() {
       try {
-        await updateGoal(this.item.id, this.item);
+        updateGoal(this.item.id, this.item,
+      ({ data }) => {
+        console.log("목표 수정");
+        console.log(data);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
         this.$emit("close-modal");
       } catch (error) {
         console.error("Error updating goal:", error);
       }
     },
   },
+
   mounted() {
     getGoalList(
       ({ data }) => {
@@ -123,5 +164,36 @@ font-size: 12px;
 .button-group button {
   flex: 1;
   margin-right: 10px; /* 버튼 간격 조절 */
+}
+.color-option {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.color-modal-content {
+  background-color: #EAF3F9;
+  border-radius: 20px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.color-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.color-options {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 10px;
 }
 </style>
