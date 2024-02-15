@@ -135,6 +135,7 @@ export default {
     
     closeModal() {
       this.$emit("close-modal");
+      window.location.reload(true);
     },
     registerTodo() {
       try {
@@ -188,7 +189,6 @@ export default {
       } catch (error) {
         console.error("Error creating todo:", error);
       }
-      this.fetchTodos();
     },
     async fetchGoals() {
       console.log("fetchGoals 실행");
