@@ -62,7 +62,7 @@ export default {
   data() {
     return {
       audioList: [
-        '/src/assets/audio/2_20240206_202920.wav',
+        '/src/assets/audio/1_20240216.wav',
         '/src/assets/audio/2_20240206_203020.wav',
       ]
     };
