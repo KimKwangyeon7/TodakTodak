@@ -32,9 +32,7 @@
 </template>
 
 <script>
-import { useGoalsStore } from '@/stores/goals';
 import { addGoal } from '@/api/goals'
-import axios from 'axios'
 
 export default {
   data() {
@@ -66,7 +64,7 @@ export default {
     },
     submitGoal() {
       const onSuccess = (response) => {
-      console.log("Goal added successfully:", response.data);
+      console.log(response.data);
       this.clearForm();
       this.$router.push('/Main');
     };

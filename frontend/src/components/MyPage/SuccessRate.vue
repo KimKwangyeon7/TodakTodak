@@ -38,12 +38,9 @@ const todosSuccessRates = ref({}); // 각 id별 성취율을 저장할 객체
 
 
 const todosSuccessRateByDay = (firstGoalId) => {
-  console.log("하루 투두 성취율 가져오기");
   // API 호출
   getTodosSuccessRateByDay(
     ({ data }) => {
-      console.log("하루 투두 성취율 가져오기");
-      console.log(data);
       todosSuccessRate.value = data;
     },
     (error) => {
@@ -61,20 +58,14 @@ const arrayGoalListId = ref([])
 
 
 const fetchGoalList = () => {
-  console.log("목표 가져오기");
   // API 호출
   getGoalList(
-    ({ data }) => {
-      
-      console.log('목표 리스트:', data);
+    ({ data }) => {      
       goalList.value = data;
-      console.log('목표 리스트id:', goalList.value);
-      // console.log('goal:', goal)
       goalList.value.forEach(item => {
         arrayGoalListId.value.push(item.id);
     });
 
-    console.log('arrayGoalListId:', arrayGoalListId.value);
     },
     (error) => {
       console.log(error);

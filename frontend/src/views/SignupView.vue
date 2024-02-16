@@ -96,7 +96,6 @@ const updateUser = () => {
 
 function registerMember() {
   const formattedGender = gender.value === '남' ? 0 : 1;
-  console.log(formattedGender);
   user.value = {
     name: name.value,
     email: email.value,
@@ -106,7 +105,6 @@ function registerMember() {
     phoneNumber: phone.value,
     birthDate: birthday.value,
   };
-  console.log("회원 등록하자 ㅎㅎ", user.value)
   signup(
     user.value,
     (response) => {

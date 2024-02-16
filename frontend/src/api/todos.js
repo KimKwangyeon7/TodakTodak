@@ -15,7 +15,6 @@ async function getTodoList(todoDate, success, fail) {
 }
 
 async function getTodoListByGoal(todoDate, success, fail) {
-  console.log("getTodoListByGoal 실행");
   local.defaults.headers.Authorization =
     "Bearer " + localStorage.getItem("accessToken");
   local.get(`/goals/todos/color/${todoDate}`).then(success).catch(fail);

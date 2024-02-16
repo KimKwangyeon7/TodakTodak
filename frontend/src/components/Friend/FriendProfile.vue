@@ -40,16 +40,13 @@ const route = useRoute();
 
 onMounted(() => {
   FriendGoals(nickname)
-  console.log('컴포넌트 마운트 시 닉네임:', nickname); // 컴포넌트 마운트 시 닉네임 출력
 });
 
 const FriendGoals = (nickname) => {
-  console.log("친구 목표 가져오기");
   // API 호출
   getFriendGoals(
     ({ data }) => {
-      console.log("친구 목표 리스트");
-      console.log(data);
+
       nickname.value = data;
     },
     (error) => {

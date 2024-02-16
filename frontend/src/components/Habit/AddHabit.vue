@@ -96,13 +96,11 @@ export default {
       
       addHabit(this.habitData, 
       (response) => {
-        console.log('Habit added successfully:', response);
-        console.log('content:', this.content)
-        console.log('HabitData:', this.HabitData)
+        console.log(response);
         // 성공 콜백: 성공 메시지 표시, 폼 초기화 등
       }, 
       (error) => {
-        console.error('Error adding habit:', error);
+        console.error(error);
         // 실패 콜백: 에러 메시지 표시 등
       }
     );

@@ -58,9 +58,7 @@ const friendRequests = ref(null);
 
 const sendToMeAcceptFriends = async () => {
   acceptFriends(({ data }) => {
-    console.log("data: ", data);
     friendRequests.value = data;
-    // friendRequests.value.push(data);
     console.log("friendRequests: ", friendRequests.value);
   });
 };
@@ -71,7 +69,6 @@ const acceptfriendRequests = ref(false)
 const acceptFriend = async (nickname) => {
   acceptFriendRequest(nickname, ({ data }) => {
     acceptfriendRequests.value = true;
-    console.log("data: ", data);
     friendRequests.value = friendRequests.value.filter(request => request.nickname !== nickname);
   });
 };
@@ -80,14 +77,9 @@ const acceptFriend = async (nickname) => {
 const rejectFriend = async (nickname) => {
   rejectFriendRequest(nickname, ({ data }) => {
     acceptfriendRequests.value = false;
-    console.log("data: ", data);
     friendRequests.value = friendRequests.value.filter(request => request.nickname !== nickname);
   });
 };
-
-// const handleRequestFriend = async () => {
-
-// }
 
 </script>
 

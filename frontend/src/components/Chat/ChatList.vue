@@ -14,14 +14,10 @@ onMounted(() => {
 });
 
 const getChatRoomList = () => {
-  console.log("채팅 목록 가져오기");
   // API 호출
   listChatRoom(
     ({ data }) => {
-      console.log("채팅목록리스트");
-      console.log(data);
       chatRooms.value = data;
-      console.log(chatRooms.value);
     },
     (error) => {
       console.log(error);

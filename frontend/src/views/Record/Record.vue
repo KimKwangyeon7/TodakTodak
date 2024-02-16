@@ -89,15 +89,11 @@ export default {
         voice.isActive = true;
         this.recordedVoices.forEach(v => {
           if (v.id !== voice.id) v.isActive = false;
-          console.log('voice.id: ', voice.id)
-          console.log('v.id: ', v.id)
         });
 
         try {
           // Use voice.id instead of recordId
           await selectVoice(voice.id, this.onSuccess, this.onFail);
-          const voices = await fetchVoiceList();
-          console.log('Fetched Voices:', voices);
         } catch (error) {
           console.error('Error selecting voice:', error);
         }
@@ -127,10 +123,8 @@ export default {
       this.currentItem = null;
     },
     async fetchRecords() {
-      console.log("fetchRecords 실행");
       try {
         const voices = await fetchVoiceList();
-        console.log('Fetched Voices:', voices);
         this.recordedVoices = voices.map(voice => ({
           ...voice,
           isActive: voice.used // 서버로부터 받은 isActive 상태를 현재 상태에 반영

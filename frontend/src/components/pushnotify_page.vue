@@ -33,8 +33,6 @@ export default {
         pMsg: message
       });
 
-      console.log(PreparedData);
-
       fetch('https://us-central1-c210-67728.cloudfunctions.net/storePushData', {
         method: "POST",
         headers: {
@@ -51,7 +49,7 @@ export default {
       .then(data => {
         console.log(data.message);
       })
-      .catch(err => console.log('오류!' + err.message));
+      .catch(err => console.log(err.message));
         }
   }
 }

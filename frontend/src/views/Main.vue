@@ -20,16 +20,14 @@
 </template>
 
 <script>
-import { getGoalList, getGoalDetail } from "@/api/goals";
-import { getTodoList, getTodoDetail } from "@/api/todos";
+import { getTodoList } from "@/api/todos";
 import { useMemberStore } from "@/stores/auth";
-import { useTodoStore } from '@/stores/todoList';
 
 import TodoList from '@/components/Todo/TodoList.vue'
 import Example from '@/components/Todo/example.vue'
 import HabitList from '@/components/Habit/HabitList.vue'
 
-import { onMounted, onBeforeUnmount, ref} from 'vue'
+import { onMounted, ref} from 'vue'
 import { receiveAudioFromBackend } from '@/api/tts'
 
 export default {
@@ -92,15 +90,13 @@ export default {
         if (!Array.isArray(data) || data.length !== 2) {
           throw new Error("Invalid quote data format");
         }
-        console.log();
+
         // 여기서 사용할 변수명 수정
         const todayString = year + "" + month + "" + day;
 
         getTodoList(
           todayString,
           ({ data }) => {
-            console.log("투두리스트 목록");
-            console.log(data);
             this.todos = data;
           },
           (error) => {
@@ -110,14 +106,10 @@ export default {
         this.randomQuote = data[0];
         this.quoteAuthor = data[1];
       } catch (error) {
-        console.error("Error fetching quote:", error);
+        console.error(error);
         this.quoteError = true; // 에러 발생 시 플래그 설정
       }
     },
-    handleLoginClick() {
-      console.log(this.authStore.isLogin);
-      // 여기에서 로그인 상태 확인
-    }
   },
   mounted() {
     // 컴포넌트가 생성될 때 명언을 가져오도록 호출

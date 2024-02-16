@@ -77,12 +77,9 @@ onMounted(async () => {
 
 const saveProfile = async () => {
   // 사용자 정보 업데이트
-  console.log("프로필이 저장되었습니다.");
   modifyUser(
     user,
     ({ data }) => {
-      console.log("사용자 업데이트");
-      console.log(data);
       this.userData.value = data;
     },
     (error) => {

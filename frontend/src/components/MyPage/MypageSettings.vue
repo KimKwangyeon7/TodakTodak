@@ -50,16 +50,6 @@ function cancelLogout() {
   showLogoutConfirmation.value = false;
 }
 
-// const logout = async () => {
-  // showLogoutConfirmation.value = false;
-  // console.log("로그아웃!!!!");
-  // let token = sessionStorage.getItem("accessToken"); //현재 로그인한 유저
-  // const userInfo = await getUserInfo(token); //유저의 role 권한 얻기 위해 메소드 호출
-  // console.log("userInfo: {}", userInfo);
-
-  // userLogout(userInfo.userEmail);
-// }
-
 function logoutConfirmed() {
   localStorage.removeItem("accessToken");
   showLogoutConfirmation.value = false;

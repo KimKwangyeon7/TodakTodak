@@ -77,7 +77,6 @@ export default {
 
     watch(fullDate, (newValue, oldValue) => {
       // fullDate가 변경될 때 수행할 작업
-      console.log(`fullDate가 ${oldValue}에서 ${newValue}로 변경되었습니다.`);
       // 필요한 로직 추가
     });
 
@@ -87,7 +86,6 @@ export default {
     const goalColors = computed(() =>
       goalsStore.goals.map((goal) => goal.color)
     );
-    console.log("가져온색상:", goalColors.value);
     const monthTodos = ref([]);
     const todos = ref([]);
     const nowMonth = ref("");
@@ -102,12 +100,9 @@ export default {
     onMounted(async () => {
       try {
         const formattedDate = moment(selectedDate.value).format("YYYYMMDD");
-        console.log("formattedDate:", formattedDate);
         getTodoList(
           formattedDate,
           ({ data }) => {
-            console.log("선택한 날 투두 리스트 목록");
-            console.log(data);
             todos.value = data;
           },
           (error) => {
@@ -124,8 +119,6 @@ export default {
         getTodoListByMonth(
           formattedMonth,
           ({ data }) => {
-            console.log("월별 투두 리스트 목록");
-            console.log(data);
             monthTodos.value = data;
           },
           (error) => {
@@ -217,7 +210,6 @@ export default {
         "days"
       );
       let weekday = firstDay.weekday();
-      console.log("First day of month:", weekday);
       return firstDay.weekday();
     },
     previousMonth: function () {
@@ -367,8 +359,6 @@ export default {
       getTodoListByMonth(
         currentMonth,
         ({ data }) => {
-          console.log("목표 리스트 목록");
-          console.log(data);
           this.monthTodos = data;
         },
         (error) => {
@@ -378,7 +368,6 @@ export default {
     },
     todosForDate(date) {
       const fullDate = moment(date.dates, "YYYYMMDD");
-      // console.log('fullDate:', fullDate)
       const currentMonth = this.dateContext.format("MM");
 
       // 특정 날짜에 해당하는 투두들을 필터링하고, 해당 달에 속하는지도 확인
@@ -407,7 +396,6 @@ export default {
 
     isToday(date) {
       const today = moment();
-      // console.log('today:', today)
       return today.isSame(
         moment({ year: date.year, month: date.month, day: date.dayNumber }),
         "day"
@@ -427,24 +415,16 @@ export default {
     },
 
     setSelectedDate: function (date, index) {
-      console.log("Year:", this.year); // 수정된 부분: date에서 year를 바로 가져오도록 변경
-      console.log("Month:", this.month);
-      console.log("Day Number:", date.dayNumber);
-
       // formattedDay를 숫자로 변환
       let formattedDay = parseInt(date.dayNumber);
       let formattedyear = parseInt(this.year);
 
-      console.log("Formatted Day1:", formattedDay);
-      console.log("Formatted Year1:", formattedyear);
       // moment 객체 생성
       this.selectedDate = moment({
         year: formattedyear,
         month: this.monthNumber - 1,
         day: formattedDay,
       });
-
-      console.log("Formatted Date2:", this.selectedDate.format("YYYYMMDD"));
 
       if (!this.selectedDate.isValid()) {
         console.error("Invalid Date!");

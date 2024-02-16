@@ -49,10 +49,6 @@ export default {
       HabitDetail,
   },
   methods: {
-    // handleHabitAdded(habitData) {
-    // console.log('Received habit data:', habitData);
-    // // 받은 데이터를 사용하여 무언가를 수행
-    // },
     async openModal(component, itemData = null) {
 
       if (component === 'HabitDetail' && itemData) {
@@ -72,8 +68,6 @@ export default {
     fetchHabits() {
       getHabitList(
         ({ data }) => {
-          console.log('습관 리스트 목록')
-          console.log(data)
           this.habits = data
         },
         (error) => {

@@ -131,14 +131,11 @@ export default {
           getTodoDetail(
             itemData.id,
             ({ data }) => {
-              console.log("목표 리스트 목록");
-              console.log('TodoData', data);
               if (data.time) {
             data.time = this.convertTimeFormat(data.time);
           }
           this.detailedTodo = data;
           this.currentItem = this.detailedTodo; 
-          console.log('알람시간변경:', this.currentItem)
             },
             (error) => {
               console.log(error);
@@ -161,8 +158,6 @@ export default {
       // API 호출
       getGoalList(
         ({ data }) => {
-          console.log("목표 리스트 목록");
-          console.log(data);
           this.goals = data;
         },
         (error) => {
@@ -178,10 +173,6 @@ export default {
         var month = (now.getMonth() + 1).toString();
         var day = now.getDate().toString();
 
-        console.log(year);
-        console.log(month);
-        console.log(day);
-
         // 여기서 사용할 변수명 수정
         if (month < 10) {
           month = "0" + month;
@@ -190,15 +181,13 @@ export default {
         if (day < 10) {
           day = "0" + day;
         }
-        console.log();
+        
         // 여기서 사용할 변수명 수정
         const todayString = year + "" + month + "" + day;
 
         getTodoList(
           todayString,
           ({ data }) => {
-            console.log("투두리스트 목록");
-            console.log(data);
             this.todos = data;
           },
           (error) => {
@@ -226,21 +215,15 @@ export default {
     },
     handleTodoCheckboxChange(todo) {
       // Checkbox가 변경될 때 호출되는 메서드
-      console.log(`Todo ID ${todo.id}의 체크박스 상태 변경: ${todo.checked}`);
       isTodoCompleted(
         todo.id,
         ({ data }) => {
-          console.log("투두리스트 체크표시 업데이트");
-          console.log(data);
-
           // 배열에서 업데이트된 할 일의 인덱스 찾기
           const index = this.todos.findIndex((t) => t.id === todo.id);
           // 배열에서 할 일 업데이트
           if (index !== -1) {
             const todosRefs = toRefs(this.todos);
             todosRefs[index].value = data;
-            // this.$set(this.todos, index, data); // $set을 사용하여 Vue.js 반응성 보장
-            // this.todos = data;
           }
         },
         (error) => {

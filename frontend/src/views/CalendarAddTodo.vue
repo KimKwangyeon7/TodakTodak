@@ -123,11 +123,9 @@ export default {
 
     const openModal = (component) => {
       if (component === "CalendarAddTodo") {
-        console.log('formattedDate in openModal:', formattedDate.value);
         isModalValid.value = true;
         activeModal.value = component;
         currentItem.value = { formattedDate: formattedDate.value }
-        console.log('currentItem:', currentItem.value)
       }
     };
 
@@ -161,7 +159,6 @@ export default {
 
     // 성공 콜백 함수
     const onSuccess = (response) => {
-      console.log("Todo added:", response.data);
       window.location.reload();
     };
 
@@ -169,13 +166,7 @@ export default {
     const onFail = (error) => {
       console.error('Error creating todo:', error);
     };
-    const goalColor = this.selectedGoal.color
-    console.log('goalColor:', goalColor)
     const goalId = this.selectedGoal.id
-    console.log('goalId:', goalId)
-    // console.log('selectedDate:', this.selectedDate)
-    console.log('formattedDate:', this.formattedDate)
-    // selectedGoal 객체에서 goalId를 가져옵니다.
     // addTodo 함수 호출
     addTodo(goalId, todo, this.formattedDate, onSuccess, onFail);
   } catch (error) {
@@ -187,20 +178,15 @@ export default {
     },
 
     async fetchGoals() {
-      console.log("fetchGoals 실행")
       try {
         getGoalList(
       ({ data }) => {
-        console.log("채팅목록리스트");
-        console.log(data);
         this.goals = data;
       },
       (error) => {
         console.log(error);
       }
     );
-        console.log('goals', this.goals)
-        // this.goals = await getGoalList();
       } catch (error) {
         console.error('Error fetching goals:', error);
       }
@@ -255,28 +241,6 @@ await addTodo(todoData);
   // 에러 처리 로직 (예: 사용자에게 에러 메시지 표시)
 }
 }
-    // fnAdd() {  
-    //   const t = this.time
-    //   this.time = this.fourDigitTime(t)
-
-    //   const d = this.todoDate
-    //   this.todoDate = this.eightDigitDate(d)
-
-    //   addTodo({
-    //     title: this.title,
-    //     content: this.content,
-    //     color: this.color,
-    //     time: this.time,
-    //     important: this.important,
-    //     outside: this.outside,
-    //     alarmed: this.alarmed,
-    //     checked: this.checked,
-    //     completed: this.completed,
-    //     todoDate: this.todoDate,
-    //   });
-
-    //   this.closeModal()
-    // },
 
   },
   mounted() {

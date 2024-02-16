@@ -29,16 +29,12 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import axios from "axios";
-import { storeToRefs } from "pinia";
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import { useMemberStore } from "@/stores/auth";
 
 const memberStore = useMemberStore();
 const { userLogin, isLogin } = memberStore;
-const { userInfo } = storeToRefs(memberStore);
 
-const route = useRoute();
 const router = useRouter();
 
 const email = ref(null);
@@ -115,4 +111,3 @@ const login = async () => {
   background-color: #0d8bf9;
 }
 </style>
-@/records.js/auth

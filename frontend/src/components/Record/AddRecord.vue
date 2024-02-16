@@ -59,7 +59,6 @@ export default {
       createNewVoice(
         voiceData,
         (response) => {
-          console.log("Voice created successfully:", response.data);
           const createdRecordId = response.data; 
           this.$router.push({ name: 'Trainer', params: { recordId: createdRecordId } });
           this.$emit('add-voice', voiceData);
