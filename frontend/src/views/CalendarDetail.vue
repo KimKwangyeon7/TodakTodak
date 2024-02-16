@@ -98,6 +98,8 @@ export default {
         getTodoList(
           formattedDate.value,
           ({ data }) => {
+            console.log("목표 리스트 목록");
+            console.log(data);
             todos.value = data;
           },
           (error) => {
@@ -111,9 +113,11 @@ export default {
 
     const openModal = (component) => {
       if (component === "CalendarAddTodo") {
+        console.log("formattedDate in openModal:", formattedDate.value);
         isModalValid.value = true;
         activeModal.value = component;
         currentItem.value = { formattedDate: formattedDate.value };
+        console.log("currentItem:", currentItem.value);
       }
     };
 
@@ -135,8 +139,15 @@ export default {
     this.calculateWeekDates();
     const todoStore = useTodoStore();
     todoStore.fetchTodos();
+    console.log("Selected Date:", this.selectedDate);
+    console.log("Week Dates:", this.weekDates);
   },
   computed: {
+    // todos() {
+    //   const todoStore = useTodoStore();
+    //   console.log('todos', todoStore.todos)
+    //   return todoStore.todos;
+    // },
     weekTodos() {
       return this.todos.filter((todo) => {
         // Todo 항목의 날짜가 현재 주의 날짜 배열(weekDates)에 포함되는지 확인
