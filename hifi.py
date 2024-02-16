@@ -117,7 +117,7 @@ def learnHifiGAN():
     # process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     # output, error = process.communicate()
 
-    time.sleep(300)
+    time.sleep(30)
 
     # 실행 결과 출력
     # if process.returncode == 0:

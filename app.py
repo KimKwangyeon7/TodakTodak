@@ -32,6 +32,9 @@ BUCKET_NAME = 'todaktodak'
 # 스프링부트에서 녹음 파일이 저장된 S3 url 받음 - 학습 시작
 @app.route('/learning-server/get', methods=['POST'])
 def receive_message():
+    # s3_url = "ADAFADF"
+    # record_id = 12
+    # member_id = 12
     root = 'home/ubuntu/AIFlask/S10P12C210/'
     # POST 요청에서 전송된 데이터 가져오기
     data = request.json
@@ -56,11 +59,13 @@ def receive_message():
     learnHifiGAN()
 
     # glow 결과 S3에 업로드 -> url 스프링부트로 전송
-    glowUrl = uploadGlow(member_id, record_id)
+    uploadGlow(member_id, record_id)
+    glowUrl = 'https://todaktodak.s3.ap-northeast-2.amazonaws.com/glow.zip'
     sendGlow(glowUrl, record_id)
 
     # hifi 결과 S3에 업로드 -> url 스프링부트로 전송
-    hifiUrl = uploadHifi(member_id, record_id)
+    uploadHifi(member_id, record_id)
+    hifiUrl = 'https://todaktodak.s3.ap-northeast-2.amazonaws.com/hifi.zip'
     sendHifi(hifiUrl, record_id)
 
 
@@ -95,47 +100,49 @@ def downloadZipFile(s3_url):
 
 
 def uploadGlow(member_id, record_id):
-    DRIVE_FOLDER_PATH = 'home/ubuntu/AIFlask/S10P12C210/content/data/glowtts-v2/'
+    # DRIVE_FOLDER_PATH = 'home/ubuntu/AIFlask/S10P12C210/content/data/glowtts-v2/'
+    # # DRIVE_FOLDER_PATH = 'C:/Users/SSAFY/Desktop/AIFlask/content/data/glowtts-v2/'
+    # # 필터링된 파일 목록을 담을 리스트
+    # selected_files = []
 
-    # 필터링된 파일 목록을 담을 리스트
-    selected_files = []
-
-    # 디렉토리에서 glow로 시작하는 폴더 찾기
-    folders = []
-    for root, dirs, files in os.walk(DRIVE_FOLDER_PATH):
-        for directory in dirs:
-            if directory.startswith('glow'):
-                folder_path = os.path.join(root, directory)
-                folders.append(folder_path)
+    # # 디렉토리에서 glow로 시작하는 폴더 찾기
+    # root = 'home/ubuntu/AIFlask/S10P12C210/content/data/glowtts-v2/'
+    # folders = []
+    # for root, dirs, files in os.walk(DRIVE_FOLDER_PATH):
+    #     for directory in dirs:
+    #         if directory.startswith('glow'):
+    #             folder_path = os.path.join(root, directory)
+    #             folders.append(folder_path)
     
-    glow_folder = folders[0]
-    print(glow_folder)
+    # glow_folder = folders[0]
+    # print(glow_folder)
 
-    for root, dirs, files in os.walk(glow_folder): 
-        for file in files:
-            # 파일 이름이 best_model로 시작하고 지정된 확장자로 끝나는지 확인
-            if file.startswith('best_model') or file.endswith('.json') or file.endswith('.npy'):
-                file_path = os.path.join(root, file)
-                selected_files.append(file_path)
-                print(file_path)
-    print("glow 결과물 파일들:")
-    for file_path in selected_files:
-        print(file_path)
-
-
-    # 압축 파일 생성
-    ZIP_NAME = str(member_id) + "_" + str(record_id) + "_" + "glow.zip"
-    zip_path = os.path.join(DRIVE_FOLDER_PATH, ZIP_NAME)
-    print(zip_path)
-    with ZipFile(zip_path, 'w') as zip:
-        for file_path in selected_files:
-            # 압축 파일에 추가
-            zip.write(file_path, arcname=os.path.relpath(file_path, glow_folder))
+    # for root, dirs, files in os.walk(glow_folder): 
+    #     for file in files:
+    #         # 파일 이름이 best_model로 시작하고 지정된 확장자로 끝나는지 확인
+    #         if file.startswith('best_model') or file.endswith('.json') or file.endswith('.npy'):
+    #             file_path = os.path.join(root, file)
+    #             selected_files.append(file_path)
+    #             print(file_path)
+    # print("glow 결과물 파일들:")
+    # for file_path in selected_files:
+    #     print(file_path)
 
 
-    # time.sleep(35)  # 35초 동안 일시 정지
+    # # 압축 파일 생성
+    # ZIP_NAME = str(member_id) + "_" + str(record_id) + "_" + "glow.zip"
+    # zip_path = os.path.join(DRIVE_FOLDER_PATH, ZIP_NAME)
+    # print(zip_path)
+    # with ZipFile(zip_path, 'w') as zip:
+    #     for file_path in selected_files:
+    #         # 압축 파일에 추가
+    #         zip.write(file_path, arcname=os.path.relpath(file_path, glow_folder))
 
-    return uploadS3(ZIP_NAME, root + 'content/data/glowtts-v2/'+ZIP_NAME)
+
+    # # time.sleep(35)  # 35초 동안 일시 정지
+
+    # return uploadS3(ZIP_NAME, root + 'content/data/glowtts-v2/'+ZIP_NAME)
+    print("glow S3 업로드!")
 
 
 def sendGlow(url, record_id):
@@ -168,44 +175,45 @@ def sendGlow(url, record_id):
 
 # hifi 결과 S3에 업로드 -> url 스프링부트로 전송
 def uploadHifi(member_id, record_id):
-    root = 'home/ubuntu/AIFlask/S10P12C210/'
-    DRIVE_FOLDER_PATH = root + 'content/data/hifigan-v2/'
+    # root = 'home/ubuntu/AIFlask/S10P12C210/'
+    # DRIVE_FOLDER_PATH = root + 'content/data/hifigan-v2/'
 
-    # 필터링된 파일 목록을 담을 리스트
-    selected_files = []
+    # # 필터링된 파일 목록을 담을 리스트
+    # selected_files = []
 
-    # 디렉토리에서 hifi로 시작하는 폴더 찾기
-    folders = []
-    for root, dirs, files in os.walk(DRIVE_FOLDER_PATH):
-        for directory in dirs:
-            if directory.startswith('hifi'):
-                folder_path = os.path.join(root, directory)
-                folders.append(folder_path)
+    # # 디렉토리에서 hifi로 시작하는 폴더 찾기
+    # folders = []
+    # for root, dirs, files in os.walk(DRIVE_FOLDER_PATH):
+    #     for directory in dirs:
+    #         if directory.startswith('hifi'):
+    #             folder_path = os.path.join(root, directory)
+    #             folders.append(folder_path)
     
-    hifi_folder = folders[0]
-    print(hifi_folder)
+    # hifi_folder = folders[0]
+    # print(hifi_folder)
 
-    for root, dirs, files in os.walk(hifi_folder): 
-        for file in files:
-            # 파일 이름이 best_model로 시작하고 지정된 확장자로 끝나는지 확인
-            if file.startswith('best_model_') or file.endswith('.json') or file.endswith('.npy'):
-                file_path = os.path.join(root, file)
-                selected_files.append(file_path)
+    # for root, dirs, files in os.walk(hifi_folder): 
+    #     for file in files:
+    #         # 파일 이름이 best_model로 시작하고 지정된 확장자로 끝나는지 확인
+    #         if file.startswith('best_model_') or file.endswith('.json') or file.endswith('.npy'):
+    #             file_path = os.path.join(root, file)
+    #             selected_files.append(file_path)
 
-    # 압축 파일 생성
-    ZIP_NAME = str(member_id) + "_" + str(record_id) + "_" + "hifi.zip"
-    zip_path = os.path.join(DRIVE_FOLDER_PATH, ZIP_NAME)
-    with ZipFile(zip_path, 'w') as zip:
-        for file_path in selected_files:
-            # 압축 파일에 추가
-            zip.write(file_path, arcname=os.path.relpath(file_path, hifi_folder))
-    print("hifi 결과물 파일들:")
-    for file_path in selected_files:
-        print(file_path)
+    # # 압축 파일 생성
+    # ZIP_NAME = str(member_id) + "_" + str(record_id) + "_" + "hifi.zip"
+    # zip_path = os.path.join(DRIVE_FOLDER_PATH, ZIP_NAME)
+    # with ZipFile(zip_path, 'w') as zip:
+    #     for file_path in selected_files:
+    #         # 압축 파일에 추가
+    #         zip.write(file_path, arcname=os.path.relpath(file_path, hifi_folder))
+    # print("hifi 결과물 파일들:")
+    # for file_path in selected_files:
+    #     print(file_path)
 
-    # time.sleep(35)  # 35초 동안 일시 정지
+    # # time.sleep(35)  # 35초 동안 일시 정지
 
-    return uploadS3(ZIP_NAME, root + 'content/data/hifigan-v2/'+ZIP_NAME)
+    # return uploadS3(ZIP_NAME, root + 'content/data/hifigan-v2/'+ZIP_NAME)
+    print("hifi S3 업로드!")
 
 
 def sendHifi(url, record_id):
@@ -279,4 +287,5 @@ print("현재 작업 디렉토리:", current_directory)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5050)
+    
     

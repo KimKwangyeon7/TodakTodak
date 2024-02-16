@@ -114,7 +114,7 @@ def learnGlowTTS():
     # process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     # output, error = process.communicate()
 
-    time.sleep(300) # 5분 대기
+    time.sleep(30) # 5분 대기
 
     # 실행 결과 출력
     # if process.returncode == 0:
