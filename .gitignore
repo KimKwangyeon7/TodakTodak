@@ -89,3 +89,6 @@ ehthumbs.db
 *.temp
 *.swp
 
+/frontend/dist/
+/frontend/package-lock.json
+/frontend/node_modules/
