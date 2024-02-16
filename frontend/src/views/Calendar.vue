@@ -86,10 +86,6 @@ export default {
     const goalColors = computed(() =>
       goalsStore.goals.map((goal) => goal.color)
     );
-    const monthTodos = ref([]);
-    const todos = ref([]);
-    const nowMonth = ref("");
-    const currentMonth = moment().format("MM");
     nowMonth.value = currentMonth;
     const route = useRoute(); // 현재 라우트에 접근
 

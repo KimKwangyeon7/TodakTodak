@@ -90,7 +90,6 @@ export default {
         if (!Array.isArray(data) || data.length !== 2) {
           throw new Error("Invalid quote data format");
         }
-
         // 여기서 사용할 변수명 수정
         const todayString = year + "" + month + "" + day;
 
@@ -110,6 +109,10 @@ export default {
         this.quoteError = true; // 에러 발생 시 플래그 설정
       }
     },
+    handleLoginClick() {
+      console.log(this.authStore.isLogin);
+      // 여기에서 로그인 상태 확인
+    }
   },
   mounted() {
     // 컴포넌트가 생성될 때 명언을 가져오도록 호출

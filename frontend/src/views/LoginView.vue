@@ -34,7 +34,6 @@ import { useMemberStore } from "@/stores/auth";
 
 const memberStore = useMemberStore();
 const { userLogin, isLogin } = memberStore;
-
 const router = useRouter();
 
 const email = ref(null);

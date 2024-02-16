@@ -12,6 +12,10 @@ const messaging = firebase.messaging();
 // 사용자에게 알림 권한 요청
 messaging.requestPermission()
 .then(function() {
+<<<<<<< HEAD
+=======
+  console.log('Notification permission granted.');
+>>>>>>> e9f3bdd3097afb78255ffd53be7e4f162cbbaa2a
   // 토큰을 받아옵니다.
   return messaging.getToken();
 })

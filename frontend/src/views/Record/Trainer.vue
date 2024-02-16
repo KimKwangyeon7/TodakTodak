@@ -172,7 +172,6 @@ export default {
       try {
         const userData = await getUser(this.recordId);
         if (userData) {
-
           
           if (parseInt(userData.prompt) - 1 >= this.sentences.length) {
             this.currentSentenceId = this.sentences.length; // getUser에서 받은 prompt 값을 현재 문장 ID로 설정
@@ -180,7 +179,6 @@ export default {
             this.currentSentenceId = parseInt(userData.prompt) - 1; // getUser에서 받은 prompt 값을 현재 문장 ID로 설정
           }
           this.totalRecordingTime = parseInt(userData.time); // getUser에서 받은 time 값을 총 녹음 시간으로 설정
-
         }
       } catch (error) {
         console.error('Error fetching user data:', error);

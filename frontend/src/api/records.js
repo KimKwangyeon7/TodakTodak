@@ -5,7 +5,6 @@ const url = "/records"
 
 async function getUser(recordId) {
   local.defaults.headers.Authorization = "Bearer " + localStorage.getItem("accessToken");
-
   try {
     const response = await local.get(`${url}/${recordId}/prompt`) 
     return response.data
@@ -16,7 +15,6 @@ async function getUser(recordId) {
 
 async function fetchVoiceList() {
   local.defaults.headers.Authorization = "Bearer " + localStorage.getItem("accessToken");
-
   try {
     const response = await local.get(url); // Make sure 'url' is defined and correct
     return response.data; // Assuming the data is directly in the response
@@ -25,6 +23,7 @@ async function fetchVoiceList() {
     return []; // Return an empty array in case of error
   }
 }
+
 async function fetchVoiceDetail(recordId, success, fail) {
   local.defaults.headers.Authorization = "Bearer " + localStorage.getItem("accessToken");
   await local.get(`${url}/${recordId}`).then(success).catch(fail)
@@ -104,7 +103,6 @@ async function goOutFromTrainer(recordId, prompt, time, success, fail) {
     prompt: prompt,
     time: time
   };
-
   try {
     local.defaults.headers.Authorization = "Bearer " + localStorage.getItem("accessToken");
     const queryParams = new URLSearchParams({ promptNum: prompt, time: time }).toString();

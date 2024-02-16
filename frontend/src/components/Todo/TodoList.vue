@@ -131,6 +131,7 @@ export default {
           getTodoDetail(
             itemData.id,
             ({ data }) => {
+     
               if (data.time) {
             data.time = this.convertTimeFormat(data.time);
           }
@@ -181,13 +182,13 @@ export default {
         if (day < 10) {
           day = "0" + day;
         }
-        
         // 여기서 사용할 변수명 수정
         const todayString = year + "" + month + "" + day;
 
         getTodoList(
           todayString,
           ({ data }) => {
+ 
             this.todos = data;
           },
           (error) => {
@@ -218,12 +219,16 @@ export default {
       isTodoCompleted(
         todo.id,
         ({ data }) => {
+
+
           // 배열에서 업데이트된 할 일의 인덱스 찾기
           const index = this.todos.findIndex((t) => t.id === todo.id);
           // 배열에서 할 일 업데이트
           if (index !== -1) {
             const todosRefs = toRefs(this.todos);
             todosRefs[index].value = data;
+            // this.$set(this.todos, index, data); // $set을 사용하여 Vue.js 반응성 보장
+            // this.todos = data;
           }
         },
         (error) => {

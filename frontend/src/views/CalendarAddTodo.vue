@@ -166,8 +166,8 @@ export default {
     const onFail = (error) => {
       console.error('Error creating todo:', error);
     };
+    const goalColor = this.selectedGoal.color
     const goalId = this.selectedGoal.id
-    // addTodo 함수 호출
     addTodo(goalId, todo, this.formattedDate, onSuccess, onFail);
   } catch (error) {
     console.error('Error in addTodo:', error);
@@ -187,6 +187,7 @@ export default {
         console.log(error);
       }
     );
+
       } catch (error) {
         console.error('Error fetching goals:', error);
       }
@@ -241,6 +242,28 @@ await addTodo(todoData);
   // 에러 처리 로직 (예: 사용자에게 에러 메시지 표시)
 }
 }
+    // fnAdd() {  
+    //   const t = this.time
+    //   this.time = this.fourDigitTime(t)
+
+    //   const d = this.todoDate
+    //   this.todoDate = this.eightDigitDate(d)
+
+    //   addTodo({
+    //     title: this.title,
+    //     content: this.content,
+    //     color: this.color,
+    //     time: this.time,
+    //     important: this.important,
+    //     outside: this.outside,
+    //     alarmed: this.alarmed,
+    //     checked: this.checked,
+    //     completed: this.completed,
+    //     todoDate: this.todoDate,
+    //   });
+
+    //   this.closeModal()
+    // },
 
   },
   mounted() {
