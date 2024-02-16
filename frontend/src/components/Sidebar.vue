@@ -68,8 +68,8 @@ import axios from 'axios';
 
 const audioPlayer = ref(null);
 const audioList = ref([
-  "/public/audio/1_20240216.wav",
-  "/public/audio/2_20240206_203020.wav",
+  "public/audio/1_20240216.wav",
+  "public/audio/2_20240206_203020.wav",
 ]);
 
 onMounted(() => {
