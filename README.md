@@ -69,3 +69,12 @@
 
 ![image](/uploads/4ef0e80727ce180a74bea6912f252a65/image.png)
 
+
+# 주요 기능
+
+---
+
+### 녹음
+![image](/uploads/0c26f55669bc98b9ad7ab515891458ce/image.png)
+
+![image](/uploads/1b9769db0b95ab9306dbd7dfd70d1558/image.png)
