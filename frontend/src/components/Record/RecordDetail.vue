@@ -22,8 +22,6 @@
 <script>
 import { modifyVoice, getUser } from '@/api/records'
 import { startLearning } from '@/api/learning'
-import { onMounted } from 'vue'
-
 
 export default {
   props: {
@@ -34,8 +32,8 @@ export default {
   },
   data(){
     return {
-      isLearning: false, // 학습 상태를 추적하는 새로운 속성
-      isRecorded: null, // Holds the availability status of the recording
+      isLearning: false, 
+      isRecorded: null, 
     }
   },
   computed: {
@@ -74,7 +72,6 @@ export default {
       this.isLearning = true; // 학습 시작 시
       try {
         await startLearning(this.item.id)
-        console.log(`${this.item.id}번 음성 학습 중`)
       } catch (error) {
         console.error('Error learning voice:', error)
       }
@@ -85,11 +82,10 @@ export default {
     async checkRecording() {
       try {
         const userData = await getUser(this.item.id);
-        this.isRecorded = userData.prompt >= 16; // Corrected syntax and refactored
+        this.isRecorded = userData.prompt >= 16; 
       } catch (error) {
         console.error(error);
         this.isRecorded = false;
-        // Optionally, handle error state in UI
       }
     }
   },  

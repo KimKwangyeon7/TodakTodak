@@ -5,7 +5,6 @@ const url = '/tts/infer';
 
 // 백엔드로부터 오디오 파일 수신 및 재생
 async function receiveAudioFromBackend() {
-  console.log("receiveAudioFromBackend 실행");
   try {
     local.defaults.headers.Authorization = "Bearer " + localStorage.getItem("accessToken");
     const response = await local.post(`${url}`, { responseType: 'arraybuffer' });
@@ -18,7 +17,7 @@ async function receiveAudioFromBackend() {
     const audioPlayer = new Audio(audioUrl);
     await audioPlayer.play();
   } catch (error) {
-    console.error("오디오 파일 수신 및 재생 중 오류 발생:", error);
+    console.error(error);
   }
 }
 
