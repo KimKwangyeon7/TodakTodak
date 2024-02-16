@@ -3,22 +3,17 @@ import { localAxios } from "@/util/http-commons";
 const local = localAxios();
 
 async function signup(param, success, fail) {
-  console.log("param", param);
   await local.post(`/members`, param).then(success).catch(fail);
-  console.log("회원가입 성공");
 }
 
 async function login(param, success, fail) {
-  console.log("param", param);
   await local.post(`/members/auth`, param).then(success).catch(fail);
-  console.log("로그인 ok");
 }
 
 async function findByNickname(nickname, success, fail) {
   local.defaults.headers.Authorization =
     "Bearer " + localStorage.getItem("accessToken");
   await local.get(`/members/${nickname}`).then(success).catch(fail);
-  console.log("친구닉네임조회성공");
 }
 
 async function findByToken(success, fail) {
@@ -34,7 +29,6 @@ async function logout(userEmail, success, fail) {
 }
 
 function modifyUser(user, success, fail) {
-  console.log("modifyUser 실행");
   local.defaults.headers.Authorization =
     "Bearer " + localStorage.getItem("accessToken");
   local.put(`/members`, user).then(success).catch(fail);

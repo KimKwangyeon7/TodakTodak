@@ -152,13 +152,9 @@ export default {
         }
         const todoDate = year + "" + month + "" + day;
         const alarmTime = this.fourDigitTime(this.time);
-
-        console.log("todoDate:", todoDate);
-
         const goalColor = this.selectedGoal.color;
-        console.log("goalColor:", goalColor);
         const goalId = this.selectedGoal.id;
-        console.log("goalId:", goalId);
+
         // selectedGoal 객체에서 goalId를 가져옵니다.
         const todo = {
           title: this.todoTitle, // 제목
@@ -173,14 +169,12 @@ export default {
         try {
           addTodo(goalId, todo, todoDate,
             ({ data }) => {
-              console.log("Todo added:", data);
               console.log(data);
             },
             (error) => {
-              console.log(error);
+              console.error(error);
             }
           );
-          console.log("goals", this.goals);
           // this.goals = await getGoalList();
         } catch (error) {
           console.error("Error fetching goals:", error);
@@ -191,19 +185,15 @@ export default {
       }
     },
     async fetchGoals() {
-      console.log("fetchGoals 실행");
       try {
         getGoalList(
           ({ data }) => {
-            console.log("목표리스트");
-            console.log(data);
             this.goals = data;
           },
           (error) => {
-            console.log(error);
+            console.error(error);
           }
         );
-        console.log("goals", this.goals);
         // this.goals = await getGoalList();
       } catch (error) {
         console.error("Error fetching goals:", error);

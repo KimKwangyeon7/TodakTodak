@@ -17,12 +17,7 @@ async function sendNotification(id, type, title, body) {
 
         // POST 요청 보내기
         const response = await local.post(url, requestData);
-
-        // 요청이 성공하면 여기에서 추가적인 작업을 수행할 수 있습니다.
-        console.log('알림 전송 성공:', response.data);
     } catch (error) {
-        // 요청이 실패한 경우 에러를 처리할 수 있습니다.
-        console.error('알림 전송 실패:', error);
     }
 }
 

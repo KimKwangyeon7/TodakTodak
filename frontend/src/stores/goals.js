@@ -15,12 +15,6 @@ export const useGoalsStore = defineStore({
       this.goals.push(goalWithId);
     },
 
-    logGoals() {
-      this.goals.forEach(goal => {
-        console.log(`id: ${goal.id}, content: ${goal.content}, color: ${goal.color}`);
-      });
-    },
-
     resetGoals() {
       this.goals = []; // Reset the goals array to an empty array
       this.nextId = 1; // Reset the ID as well

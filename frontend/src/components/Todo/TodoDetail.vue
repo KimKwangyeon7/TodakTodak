@@ -181,19 +181,15 @@ export default {
       }
     },
     async fetchGoals() {
-      console.log("fetchGoals 실행");
       try {
         getGoalList(
           ({ data }) => {
-            console.log("목표리스트");
-            console.log(data);
             this.goals = data;
           },
           (error) => {
             console.log(error);
           }
         );
-        console.log("goals", this.goals);
         // this.goals = await getGoalList();
       } catch (error) {
         console.error("Error fetching goals:", error);
@@ -201,7 +197,6 @@ export default {
     },
   },
   mounted() {
-    console.log(this.item);
     this.fetchGoals();
   },
 };

@@ -59,10 +59,7 @@ export default {
       createNewVoice(
         voiceData,
         (response) => {
-          console.log("Voice created successfully:", response.data);
-          console.log('response.data :', response.data)
-          // If you need to use the recordId from the created voice, you should get it from the response
-          const createdRecordId = response.data; // Assuming the response data has the id of the created record
+          const createdRecordId = response.data; 
           this.$router.push({ name: 'Trainer', params: { recordId: createdRecordId } });
           this.$emit('add-voice', voiceData);
         },
@@ -111,4 +108,4 @@ export default {
   margin-left: auto;
   padding: 20px;
 }
-</style>@/api/records
+</style>

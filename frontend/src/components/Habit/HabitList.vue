@@ -64,8 +64,6 @@ export default {
     fetchHabits() {
       getHabitList(
         ({ data }) => {
-          console.log("습관 리스트 목록");
-          console.log(data);
           this.habits = data;
         },
         (error) => {

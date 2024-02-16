@@ -97,7 +97,6 @@ export default {
 
     loadKoreanCorpus().then(sentencesArray => {
       sentences.value = sentencesArray.slice(0, sentenceLength); 
-      console.log('sentences: ', sentences.value)
     }).catch(error => {
       console.error('Error loading Korean corpus:', error);
     });
@@ -108,9 +107,6 @@ export default {
     const route = useRoute()
     const recordId = ref(route.params.recordId)
     if (recordId) {
-      // If recordId is available, do something with it
-      console.log('The recordId from URL is:', recordId);
-      // You can store it in your component's data if you need to use it later
       this.recordId = recordId;
     } else {
       console.error('RecordId is not defined in the URL');
@@ -143,7 +139,6 @@ export default {
   computed: {
     currentRecordHistory() {
       const history = this.recordHistoryStore.histories[this.recordId.toString()] || [];
-      console.log('Current Record History:', history);
       return history.records || [];
     },
     cantSave() {
@@ -154,19 +149,15 @@ export default {
     },
     totalRecordingTime() {
       const recordHistory = this.recordHistoryStore.histories[this.recordId];
-      console.log('Record History:', recordHistory); // Check if record history is available
       if (recordHistory && recordHistory.durations) {
         const totalDuration = recordHistory.durations.reduce((total, duration) => total + duration, 0);
-        console.log('Total Duration:', totalDuration); // Check the calculated total duration
         return totalDuration;
       }
-      console.log('No record history or durations found.'); // Log if there's no record history or durations
       return 0; // If there's no history or durations, return 0
     },
 
     hasRecordedCurrent() {
       const currentHistory = this.recordHistoryStore.histories[this.recordId.toString()];
-      console.log('currentHistory', currentHistory)
       if (currentHistory && currentHistory.records) {
         return currentHistory.records.some(record => record.promptNum === this.currentSentenceId + 1);
       }
@@ -181,8 +172,6 @@ export default {
       try {
         const userData = await getUser(this.recordId);
         if (userData) {
-          console.log('userData.prompt: ', userData.prompt)
-          console.log('userData.time: ', userData.time)
           
           if (parseInt(userData.prompt) - 1 >= this.sentences.length) {
             this.currentSentenceId = this.sentences.length; // getUser에서 받은 prompt 값을 현재 문장 ID로 설정
@@ -190,17 +179,12 @@ export default {
             this.currentSentenceId = parseInt(userData.prompt) - 1; // getUser에서 받은 prompt 값을 현재 문장 ID로 설정
           }
           this.totalRecordingTime = parseInt(userData.time); // getUser에서 받은 time 값을 총 녹음 시간으로 설정
-          console.log('loadUserData this.currentSentenceId: ', this.currentSentenceId)
-          console.log('loadUserData this.totalRecordingTime: ', this.totalRecordingTime)
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
     },
     async checkAllRecordingsDone() {
-      console.log('All this.currentRecordHistory: ',this.currentRecordHistory)
-      console.log('All this.currentRecordHistory.length', this.currentRecordHistory.length)
-      console.log('All this.sentenceLength', this.sentenceLength)
       if (this.currentRecordHistory.length === this.sentenceLength) {
         const learning = window.confirm('모든 문장 녹음이 끝났으니 음성 모델 학습을해주세요!')
         if (learning) {
@@ -214,7 +198,6 @@ export default {
       this.isLearning = true; // 학습 시작 시
       try {
         await startLearning(this.recordId)
-        console.log(`${this.recordId}번 음성 학습 중`)
       } catch (error) {
         console.error('Error learning voice:', error)
       }
@@ -224,13 +207,13 @@ export default {
       this.$router.go(-1);
     },
     onSuccess(response) {
-      console.log('Recording saved successfully:', response);
+      console.log(response);
       // Handle the successful response, e.g., navigate to another page or show a message
     },
 
     // Failure callback
     onFail(error) {
-      console.error('Failed to save recording:', error);
+      console.error(error);
       // Handle the error, e.g., show an error message to the user
     },
     prevSentence() {
@@ -264,8 +247,6 @@ export default {
         if (this.audioContext.state === 'suspended') {
           await this.audioContext.resume();
         }
-
-      console.log(this.audioContext.state)
       
       this.stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
       const input = this.audioContext.createMediaStreamSource(this.stream);
@@ -302,7 +283,6 @@ export default {
       });
 
       recorder.onComplete = (recorder, blob) => {
-        console.log('onCompleteblob: ', blob)
         this.blob = blob;
         this.recordHistoryStore.addRecord(this.recordId, {
           id: this.currentSentenceId, // Assuming this is the correct id to use
@@ -314,8 +294,6 @@ export default {
         saveRecord(
           this.recordId,
           this.blob,
-          // this.onSuccess, // pass the onSuccess callback
-          // this.onFail    // pass the onFail callback
         );
         this.checkAllRecordingsDone()
       } else {
@@ -342,11 +320,6 @@ export default {
     },
 
     async goOut() {
-      console.log('goOutrecordId: ', this.recordId)
-      console.log('goOutprompt: ', this.currentSentenceId + 1)
-      console.log('goOuttime: ', this.totalRecordingTime)
-      console.log('goOutsuccess: ', this.onSuccess)
-      console.log('goOutfail: ', this.onFail)
       goOutFromTrainer(
         this.recordId, 
         this.currentSentenceId + 1,

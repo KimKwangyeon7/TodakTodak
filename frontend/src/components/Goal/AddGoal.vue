@@ -32,9 +32,7 @@
 </template>
 
 <script>
-import { useGoalsStore } from '@/stores/goals';
 import { addGoal } from '@/api/goals'
-import axios from 'axios'
 
 export default {
   data() {
@@ -55,12 +53,10 @@ export default {
   methods: {
     openColorDetailModal() {
       this.showColorDetailModal = true;
-      console.log(`Goal Content:',${this.content} `)
     },
     closeColorDetailModal() {
       this.showColorDetailModal = false;
       // 추가: 모달이 닫힐 때 선택한 색상을 표시
-      console.log(`Selected Color: ${this.selectedColor}`);
     },
     selectColor(selectedColor) {
       this.color = selectedColor;
@@ -68,19 +64,19 @@ export default {
     },
     submitGoal() {
       const onSuccess = (response) => {
-    console.log("Goal added successfully:", response.data);
-    this.clearForm();
-    this.$router.push('/Main');
-  };
+      console.log(response.data);
+      this.clearForm();
+      this.$router.push('/Main');
+    };
 
-  // 실패 콜백 함수 정의
-  const onFail = (error) => {
-    console.error("Error adding goal:", error);
-  };
+      // 실패 콜백 함수 정의
+      const onFail = (error) => {
+      console.error("Error adding goal:", error);
+    };
 
-  // `addgoal` 함수 호출
-  addGoal({ content: this.content, color: this.color }, onSuccess, onFail);
-},
+    // `addgoal` 함수 호출
+    addGoal({ content: this.content, color: this.color }, onSuccess, onFail);
+    },
     clearForm() {
       this.content = '';
       this.color = '#000000';

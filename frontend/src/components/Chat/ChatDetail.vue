@@ -30,11 +30,8 @@ let stomp = reactive(null);
 onMounted(async () => {
   let token = localStorage.getItem("accessToken"); //현재 로그인한 유저
   const userInfo = await getUserInfo(token);
-  console.log(userInfo);
   loginUser.value = userInfo;
   nickname.value = userInfo.nickname;
-  console.log(nickname.value);
-  console.log(roomid);
   fetchAndLoadMessages(); //저장한 대화 가져오기
   connect();
   scrollToBottom();
@@ -49,10 +46,7 @@ const fetchAndLoadMessages = () => {
   loadMessages(
     chatRoomId,
     ({ data }) => {
-      console.log("roomid :", roomid);
-      console.log("data : ", data);
       savedChats.value = data;
-      console.log("저장된 대화 : ", savedChats.value);
     },
     (error) => {
       console.error(error);
@@ -87,10 +81,6 @@ const sendMessage = async (e) => {
 
 
 const send = () => {
-  console.log("Send message:" + message.value);
-  console.log(roomid);
-  console.log(loginUser.value);
-  console.log("로그인한 유저 닉네임" + loginUser.value.nickname);
 
   const msg = {
     chatRoomId: roomid,
@@ -99,8 +89,6 @@ const send = () => {
     messageType: "TALK",
   };
 
-  console.log(msg);
-  console.log(JSON.stringify(msg));
   stomp.send(
     "/pub/chat/message",
     { Authorization: `Bearer ${accessToken}` },
@@ -114,18 +102,13 @@ const connect = () => {
 
   stomp = Stomp.client(serverURL);
   // stomp.reconnect_delay = 5000;
-
-  console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`);
   stomp.connect(
     { Authorization: "Bearer " + accessToken },
     (frame) => {
       // 소켓 연결 성공
-      console.log("소켓 연결 성공", frame);
 
       stomp.subscribe("/sub/chat/room/" + roomid, (res) => {
-        console.log("구독으로 받은 메시지 입니다.", res.body);
         const chat = JSON.parse(res.body);
-        console.log("수신 메시지: ", chat);
         chats.value.push({
           chatRoomId: chat.chatRoomId,
           message: chat.message,

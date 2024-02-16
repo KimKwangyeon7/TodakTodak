@@ -13,7 +13,6 @@
 
 <script>
 import { ref } from 'vue';
-import axios from 'axios';
 
 export default {
   setup() {
@@ -28,14 +27,7 @@ export default {
           const queryParams = new URLSearchParams({ promptNum: prompt, time: time }).toString();
           // Make the POST request to the server with query params
           const response = await local.post(`${url}/${recordId}/save/member?${queryParams}`);
-          
-          console.log('Audio save record response:', response.data);
           if (success) success(response);
-          console.log('recordId', recordId)
-          console.log('prompt', prompt)
-          console.log('time', time)
-          console.log('success', success)
-          console.log('fail', fail)
         } catch (error) {
           console.error('Error saving audio record:', error);
           if (fail) fail(error);

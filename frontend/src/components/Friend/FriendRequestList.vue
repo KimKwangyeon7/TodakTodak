@@ -94,31 +94,20 @@ const requestFriend = ref(null);
 const sendToMeAcceptFriends = async () => {
   acceptFriends(({ data }) => {
     memberInfo.value = [];
-    console.log("data: ", data);
     memberInfo.value = data;
-    
-    // friendRequests.value.push(data);
-    console.log("memberInfo: ", memberInfo.value);
   });
 };
 
 const getMemberInfo = async (nickname) => {
   findByNickname(nickname, ({ data }) => {
     friendRequests.value = []
-    console.log("data: ", data);
     requestFriend.value = data;
     friendRequests.value.push(data);
-    const nicknameObject = { nickname: data.nickname };
-    console.log("nicknameObject", nicknameObject);
-    console.log("requestFriend: ", requestFriend.value);
   });
 };
 
 const sendFriend = async (nickname) => {
-  // const nicknameObject = { nickname: nickname };
-  console.log("nickname", nickname)
   sendFriendRequest(nickname, ({ data }) => {
-    console.log("data: ", data);
     // 요청 상태 업데이트
     const request = friendRequests.value.find(req => req.nickname === nickname);
     if (request) {
@@ -135,7 +124,6 @@ const friendRequests = ref([]);
 // 친구 요청 수락 기능
 const acceptRequest = (requestId) => {
   // 요청 수락 로직 구현
-  console.log(`친구 요청 ID ${requestId}를 수락했습니다.`);
   friendRequests.value = friendRequests.value.filter(
     (request) => request.id !== requestId
   );
@@ -145,7 +133,6 @@ const acceptRequest = (requestId) => {
 // 친구 요청 거절 기능
 const rejectRequest = (requestId) => {
   // 요청 거절 로직 구현
-  console.log(`친구 요청 ID ${requestId}를 거절했습니다.`);
   friendRequests.value = friendRequests.value.filter(
     (request) => request.id !== requestId
   );

@@ -40,9 +40,6 @@ const memberStore = useMemberStore() // Pinia 스토어 사용
 onMounted(async () => {
   const token = localStorage.getItem("accessToken");
   userData.value = await memberStore.getUserInfo(token); // 사용자 정보를 가져옴
-  console.log('userData:', userData);
-  // userData.value = memberStore.userInfo; // 가져온 사용자 정보를 userData에 할당
-  // console.log('userData.value', userData )
 });
 
 const goToProfileEdit = () => {

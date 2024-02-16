@@ -106,12 +106,10 @@ export default {
   methods: {
     openColorDetailModal() {
       this.showColorDetailModal = true;
-      console.log(`Goal Content:',${this.content} `);
     },
     closeColorDetailModal() {
       this.showColorDetailModal = false;
       // 추가: 모달이 닫힐 때 선택한 색상을 표시
-      console.log(`Selected Color: ${this.selectedColor}`);
     },
     closeModal() {
       Object.assign(this.item, this.originalItem);
@@ -143,8 +141,6 @@ export default {
   mounted() {
     getGoalList(
       ({ data }) => {
-        console.log("목표 리스트 목록");
-        console.log(data);
         this.goals = data;
         this.item.selectedColor = this.goals[0]?.id;
       },
