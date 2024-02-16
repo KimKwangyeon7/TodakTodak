@@ -1,10 +1,18 @@
-프론트엔드 빌드
+FRONTEND
 
-프론트엔드 최상위 디렉토리에서 아래 명령어 입력
+/frontend/
 
 npm install
 
 npm run build
+
+
+/frontend/functions/
+
+npm install firebase-functions
+
+
+/frontend/
 
 firebase deploy
 
