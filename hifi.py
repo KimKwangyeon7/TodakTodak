@@ -91,31 +91,31 @@ def learnHifiGAN():
     # #         line = line.replace(old_text, new_text)
     # #     modified_lines.append(line)
 
-    # # # 수정된 내용으로 파일 저장
-    # # with open(file_path, 'w', encoding='utf-8') as f:
-    # #     f.writelines(modified_lines)
+    # # 수정된 내용으로 파일 저장
+    # with open(file_path, 'w', encoding='utf-8') as f:
+    #     f.writelines(modified_lines)
 
 
-    # # 실행할 명령어
-    # command = [
-    #     'python', 'home/ubuntu/AIFlask/S10P12C210/TTS/TTS/bin/train_vocoder_gan.py',
-    #     '--config_path', 'home/ubuntu/AIFlask/S10P12C210/content/data/hifigan-v2/config.json',
-    #     '--coqpit.data_path', 'home/ubuntu/AIFlask/S10P12C210/content/TTS/filelists/wavs',
-    #     '--coqpit.audio.stats_path', 'home/ubuntu/AIFlask/S10P12C210/content/data/hifigan-v2/scale_stats_new.npy',
-    #     '--coqpit.test_sentences_file', 'home/ubuntu/AIFlask/S10P12C210/content/TTS/test_sentences.txt',
-    #     '--coqpit.output_path', 'home/ubuntu/AIFlask/S10P12C210/content/data/hifigan-v2/',
-    #     '--coqpit.num_loader_workers', '2',
-    #     '--coqpit.num_val_loader_workers', '2',
-    #     '--restore_path', 'home/ubuntu/AIFlask/S10P12C210/content/data/hifigan-v2/model_file.pth.tar'
-    # ]
+    # 실행할 명령어
+    command = [
+        'python', 'home/ubuntu/AIFlask/S10P12C210/TTS/TTS/bin/train_vocoder_gan.py',
+        '--config_path', 'home/ubuntu/AIFlask/S10P12C210/content/data/hifigan-v2/config.json',
+        '--coqpit.data_path', 'home/ubuntu/AIFlask/S10P12C210/content/TTS/filelists/wavs',
+        '--coqpit.audio.stats_path', 'home/ubuntu/AIFlask/S10P12C210/content/data/hifigan-v2/scale_stats_new.npy',
+        '--coqpit.test_sentences_file', 'home/ubuntu/AIFlask/S10P12C210/content/TTS/test_sentences.txt',
+        '--coqpit.output_path', 'home/ubuntu/AIFlask/S10P12C210/content/data/hifigan-v2/',
+        '--coqpit.num_loader_workers', '2',
+        '--coqpit.num_val_loader_workers', '2',
+        '--restore_path', 'home/ubuntu/AIFlask/S10P12C210/content/data/hifigan-v2/model_file.pth.tar'
+    ]
 
     
-    # # subprocess 모듈을 사용하여 명령 실행
-    # subprocess.run(command)
+    # subprocess 모듈을 사용하여 명령 실행
+    subprocess.run(command)
 
-    # # 명령어 실행
-    # process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    # output, error = process.communicate()
+    # 명령어 실행
+    process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    output, error = process.communicate()
 
     time.sleep(30)
 
