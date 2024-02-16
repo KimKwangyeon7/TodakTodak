@@ -3,10 +3,12 @@
     <div class="meeting-header">
       <div class="meeting">모임</div>
       <div class="meeting-buttons">
-        <button class="create-room-button btn btn-primary" @click="toggleSearch">
-          <div class="search">검색</div>
+        <button class="create-room-button btn" @click="toggleSearch">
+          <div class="search"><img src="@/assets/search.png" alt=""></div>
         </button>
-        <button class="create-room-button btn btn-primary" @click="showCreateRoomModal">추가</button>
+        <button class="create-room-button btn" @click="showCreateRoomModal">
+          <img src="@/assets/plus.png" alt="">
+        </button>
         <CreateRoomModal v-if="showModal" @close="closeCreateRoomModal" @create="createRoom" />
       </div>
     </div>
@@ -28,7 +30,6 @@
 import { ref, reactive, watch } from 'vue'
 import RoomCard from '@/components/Meeting/RoomCard.vue'
 import CreateRoomModal from '@/components/Meeting/CreateRoomModal.vue'
-import MeetingRoom from '@/components/Meeting/MeetingRoom.vue'
 import router from '@/router';
 
 const rooms = ref([
@@ -102,7 +103,7 @@ const toggleSearch = () => {
 }
 
 .meeting {
-  font-size: 30px;
+  font-size: 25px;
 }
 
 </style>

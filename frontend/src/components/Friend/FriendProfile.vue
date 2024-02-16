@@ -1,38 +1,22 @@
 <template>
   <div class="friend-profile">
-<<<<<<< HEAD
-    <div class="friend-profile-dialog" role="document">
-=======
     <div class="profile-dialog profile-dialog-centered" role="document">
->>>>>>> ef41bd7757d8e55acd0a3398b0717bceac2f7e4a
       <div class="profile-content">
         <div class="profile-header">
-          <h5 class="profile-title">친구 프로필</h5>
+          <h5 class="profile-title">{{ nickname }}님 프로필</h5>
+          
           <button class="back-button" @click="goBack">뒤로가기</button>
         </div>
-<<<<<<< HEAD
-        <div class="profile-body" v-if="friend">
-          <!-- 프로필 사진, 이름, 메모 표시 -->
-          <div class="profile-info">
-            <img :src="friend.profilePicture" alt="프로필 사진" class="profile-picture" />
-            <p><strong>이름:</strong> {{ friend.name }}</p>
-            <p><strong>메모:</strong> {{ friend.memo }}</p>
-          </div>
-          
-          <!-- 목표 리스트 표시 -->
-          <div class="goal-list">
-            <h6><strong>목표 리스트</strong></h6>
-            <ul>
-              <li v-for="(goal, index) in friend.goals" :key="index">{{ goal }}</li>
-            </ul>
-=======
 
         <div class="profile-body" v-if="friend">
           <div class="profile-info">
             <img :src="friend.profilePicture" alt="프로필 사진" class="profile-picture" />
-            <p class="profile-name">{{ friend.name }}</p>
-            <p class="profile-memo">{{ friend.memo }}</p>
->>>>>>> ef41bd7757d8e55acd0a3398b0717bceac2f7e4a
+            <div class="profile-name">{{ friend.name }}</div>
+            <div class="profile-memo">{{ friend.memo }}</div>
+            <button class="friend-add btn btn-success btn-sm ml-2"
+              @click.stop="toggleFriendship">
+              {{ buttonText }}
+            </button>
           </div>
         </div>
 
@@ -42,40 +26,73 @@
             <li v-for="(goal, index) in friend.goals" :key="index">{{ goal }}</li>
           </ul>
         </div>
-        
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
+import { getFriendGoals } from "@/api/friend";
+import { useRoute } from 'vue-router';
 
-function goBack() {
+const route = useRoute();
+
+onMounted(() => {
+  FriendGoals(nickname)
+  console.log('컴포넌트 마운트 시 닉네임:', nickname); // 컴포넌트 마운트 시 닉네임 출력
+});
+
+const FriendGoals = (nickname) => {
+  console.log("친구 목표 가져오기");
+  // API 호출
+  getFriendGoals(
+    ({ data }) => {
+      console.log("친구 목표 리스트");
+      console.log(data);
+      nickname.value = data;
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+};
+
+const nickname = route.params.nickname; // URL에서 nickname 파라미터를 가져옴
+
+
+const friend = ref({})
+
+const buttonText = ref('친구 신청')
+
+const goBack = () => {
   window.history.back()
 }
 
-const friend = ref({
-<<<<<<< HEAD
-  name: '친구 이름',
-  age: 25,
-  memo: '친구에 대한 메모',
-  profilePicture: 'URL 또는 이미지 경로',
-  goals: ['목표 1', '목표 2', '목표 3']
-=======
-  name: '김싸피',
-  memo: '오늘만 살자',
-  profilePicture: '/src/assets/damgom.png',
-  goals: ['교촌치킨 주문', '네네치킨 주문', '노랑통닭 주문']
->>>>>>> ef41bd7757d8e55acd0a3398b0717bceac2f7e4a
+const toggleFriendship = () => {
+  if (!friend.value.following) {
+    // 모달 창 표시
+    if (confirm("친구 신청하겠습니까?")) {
+      friend.value.following = !friend.value.following
+      buttonText.value = '친구 신청 중'
+    }
+  } else if (friend.value.following && !friend.value.accepted) {
+    // 친구 삭제 모달 창 표시
+    if (confirm("친구를 삭제하시겠습니까?")) {
+      friend.value.following = !friend.value.following
+      buttonText.value = '친구 신청'
+    }
+  }
+}
+
+watch(() => friend.value.following, (newValue) => {
+  if (newValue && friend.value.accepted) {
+    buttonText.value = '친구!'
+  }
 })
 </script>
 
 <style scoped>
-<<<<<<< HEAD
-
-=======
->>>>>>> ef41bd7757d8e55acd0a3398b0717bceac2f7e4a
 .profile-content {
   background-color: #fff;
   border-radius: 8px;
@@ -83,22 +100,14 @@ const friend = ref({
 }
 
 .profile-header {
-  background-color: #0084ff;
-  color: #fff;
-<<<<<<< HEAD
-  padding: 10px;
-=======
   padding: 5px;
->>>>>>> ef41bd7757d8e55acd0a3398b0717bceac2f7e4a
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-<<<<<<< HEAD
-=======
 .profile-title {
-  margin-top: 10px;
+  font-size: 25px;
 }
 
 .profile-name {
@@ -108,18 +117,28 @@ const friend = ref({
 
 .profile-memo {
   font-size: 15px;
+  margin-bottom: 10px;
 }
 
->>>>>>> ef41bd7757d8e55acd0a3398b0717bceac2f7e4a
 .back-button {
   background-color: transparent;
-  color: #fff;
   border: none;
   cursor: pointer;
 }
 
 .profile-body {
   padding: 20px;
+  align-items: center;
+  justify-content: space-between;
+  border-color: #EAF3F9;
+  position: relative;
+  overflow: hidden;
+  background-color: #EAF3F9;
+  color: black;
+  margin-bottom: 10px;
+  border-radius: 24px;
+  overflow-y: auto;
+  box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.25);
 }
 
 .profile-info {
@@ -135,17 +154,23 @@ const friend = ref({
 
 .goal-list {
   margin-top: 20px;
+  border-color: #EAF3F9;
+  position: relative;
+  overflow: hidden;
+  background-color: #EAF3F9;
+  color: black;
+  margin-bottom: 10px;
+  border-radius: 24px;
+  justify-content: space-between;
+  align-items: center;
+  overflow-y: auto;
+  box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.25);
 }
 
-<<<<<<< HEAD
-.goal-list h6 {
-  color: #0084ff;
-=======
 .goal-list-title {
+  margin-top: 10px;
+  margin-left: 20px;
   font-size: 25px;
-  font-weight: bold;
-  color:#0084ff;
->>>>>>> ef41bd7757d8e55acd0a3398b0717bceac2f7e4a
 }
 
 .goal-list ul {
@@ -154,9 +179,20 @@ const friend = ref({
 }
 
 .goal-list li {
-  margin-bottom: 8px;
+  margin-left: 22px;
+  margin-bottom: 5px;
 }
 
-/* 필요한 경우 추가적인 스타일링 코드를 작성하세요. */
-</style>
+/* 팔로잉 중일 때의 버튼 스타일 */
+.friend-add button.following {
+  background-color: #28a745;
+  border-color: #28a745;
+}
 
+/* 팔로잉 중이 아닐 때의 버튼 스타일 */
+.friend-add button:not(.following) {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+</style>

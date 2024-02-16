@@ -1,183 +1,148 @@
 <template>
-  <div>
+  <div v-if="authStore.isLogin" class="mt-5">
+    <div>
+      <TodoList :todoList="todoList" />
+      <HabitList :habitList="habitList" />
 
-  <!-- 모달 -->
-  <div class="black-bg" v-if="is_modal_valid">
-    <component :is="activeModal" @close-modal="closeModal" />
-  </div>
-
-  <!-- 명언 -->
-  <div class="top-bar">
-    <div class="quote">"행복은 우연이 아니라 선택이다"</div>
-    <div>짐  론</div>
-  </div>
-
-  <!-- 투두리스트 -->
-  <div class="todo-section">
-    <div class="todo-date">
-      <span>{{ today }}</span>
-      <!-- Todo 생성버튼 -->
-      <button class="add-button" @click="openModal('AddTodo')">+</button>
-    </div>
-
-    <div class="todo-items">
-      <div class="todo-item">
-        <label @click="openModal('TodoList')" for="todo1">공부하기</label>
-        <input type="checkbox">
-      </div>
-      <div class="todo-item">
-        <label @click="openModal('TodoList')" for="todo2">운동하기</label>
-        <input type="checkbox">
+      <div class="penguin">
+        <img src="@/assets/penguin.jpg">
       </div>
     </div>
   </div>
 
-  <!-- 목표 -->
-  <div class="todo-section">
-    <div class="todo-date">
-     <div style="margin-bottom: 5px; margin-top: 5px;">목표</div>
-    </div>
-    <div class="todo-items">
-      <div class="todo-item">
-        <label @click="openModal('GoalList')" for="todo1">약먹기</label>
-        <input type="checkbox">
-      </div>
-      <div class="todo-item">
-        <label @click="openModal('GoalList')" for="todo2">밥먹기</label>
-        <input type="checkbox">
-      </div>
-    </div>
+  <div v-else>
+    <!-- <div>
+      <RouterLink :to="{ name: 'LoginView' }">Login</RouterLink>
+      <RouterLink :to="{ name: 'SignUpView' }">SignUp</RouterLink>
+    </div> -->
   </div>
-</div>
+  <RouterView />
 </template>
 
 <script>
-import Sidebar from '@/views/Sidebar.vue'
-import TodoList from '@/views/TodoList.vue'
-import GoalList from '@/views/GoalList.vue'
-import AddTodo from '@/views/AddTodo.vue'
+import { getGoalList, getGoalDetail } from "@/api/goals";
+import { getTodoList, getTodoDetail } from "@/api/todos";
+import { useMemberStore } from "@/stores/auth";
+import { useTodoStore } from '@/stores/todoList';
+
+import TodoList from '@/components/Todo/TodoList.vue'
+import Example from '@/components/Todo/example.vue'
+import HabitList from '@/components/Habit/HabitList.vue'
+
+import { onMounted, onBeforeUnmount, ref} from 'vue'
+import { receiveAudioFromBackend } from '@/api/tts'
 
 export default {
-  name: 'App',
+  components: {
+      TodoList,
+      HabitList,
+      Example,
+  },
   data() {
+      return {
+        habitList: null,
+        randomQuote: "", // 명언을 저장할 변수
+        quoteAuthor: "", // 작가를 저장할 변수
+        quoteError: false // 에러 여부를 나타내는 변수
+      };
+  },
+  setup() {
+    const authStore = useMemberStore()
+    const audioUrl = ref(null)
+
+    const fetchAndPlayAudio = async () => {
+      try {
+        const audioFileName = 'audioFileName.mp3'; // 오디오 파일 이름
+        const response = await receiveAudioFromBackend(audioFileName);
+        
+        // Blob 객체 생성 후 URL 설정
+        const audioBlob = new Blob([response.data], { type: 'audio/mp3' });
+        audioUrl.value = URL.createObjectURL(audioBlob);
+
+        // 오디오 재생
+        const audioPlayer = new Audio(audioUrl.value);
+        await audioPlayer.play();
+      } catch (error) {
+        console.error('Error fetching and playing audio:', error);
+      }
+    };
+
+    const pollAudioAvailability = () => {
+      setInterval(() => {
+        fetchAndPlayAudio();
+      }, 60000); // 60초마다 폴링
+    };
+    onMounted(() => {
+      fetchAndPlayAudio();
+      pollAudioAvailability();
+    })
     return {
-      is_modal_valid: false,
-      activeModal: null,
-      today: '', // 현재 날짜를 저장할 데이터 속성 추가
+      authStore, 
+      audioUrl
     }
   },
-  components: {
-    Sidebar,
-    TodoList,
-    GoalList,
-    AddTodo,
-  },
   methods: {
-    openModal(component) {
-      this.is_modal_valid = true
-      this.activeModal = component
+    async fetchQuote() {
+      try {
+        const response = await fetch("/members/quote");
+        if (!response.ok) {
+          throw new Error("Failed to fetch quote");
+        }
+        const data = await response.json();
+        if (!Array.isArray(data) || data.length !== 2) {
+          throw new Error("Invalid quote data format");
+        }
+        console.log();
+        // 여기서 사용할 변수명 수정
+        const todayString = year + "" + month + "" + day;
+
+        getTodoList(
+          todayString,
+          ({ data }) => {
+            console.log("투두리스트 목록");
+            console.log(data);
+            this.todos = data;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+        this.randomQuote = data[0];
+        this.quoteAuthor = data[1];
+      } catch (error) {
+        console.error("Error fetching quote:", error);
+        this.quoteError = true; // 에러 발생 시 플래그 설정
+      }
     },
-    closeModal() {
-      this.is_modal_valid = false
-      this.activeModal = null
-    },
-    updateToday() {
-      const now = new Date()
-      const options = { month: '2-digit', day: '2-digit',  weekday: 'long' }
-      this.today = now.toLocaleDateString('ko-KR', options)
-    },
+    handleLoginClick() {
+      console.log(this.authStore.isLogin);
+      // 여기에서 로그인 상태 확인
+    }
   },
   mounted() {
-    // 컴포넌트가 화면에 나타날 때 현재 날짜 업데이트
-    this.updateToday()
-  },
+    // 컴포넌트가 생성될 때 명언을 가져오도록 호출
+    this.fetchQuote();
+  }
 }
 </script>
 
 <style scoped>
-.top-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  background-color: #ffffff;
-}
-
 .quote {
-  font-size: 10px;
+  font-size: 16px;
 }
 
-
-/* 할 일 목록 스타일링 */
-.todo-section {
-  background-color: #EAF3F9; 
-  border-radius: 20px; 
-  padding: 15px;
-  margin: 10px 0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
-}
-
-.todo-date {
-  font-weight: bold;
-  margin-bottom: 5px;
-  text-align: left;
-  display: flex;
-  justify-content: space-between; /* 요일과 버튼을 각각 왼쪽과 오른쪽에 배치 */
-  align-items: center; /* 세로 중앙 정렬 */
-}
-
-.add-button {
-  font-size: 20px;
-  background-color: #EAF3F9;
-  color: #000; /* 검정색 텍스트 색상 */
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  padding: 5px; /* 내용물과 버튼 사이의 간격 조절을 위한 패딩 */
-}
-
-
-.todo-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* 체크박스를 오른쪽으로 이동 */
-}
-
-.todo-item input[type="checkbox"] {
-  margin-right: 5px;
-}
-
-/* 하단 네비게이션 바 스타일링 */
-.bottom-nav {
+.penguin {
   position: fixed;
-  bottom: 0;
+  bottom: 80px; 
+  width: 100%;
   left: 50%;
   transform: translateX(-50%);
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
-  background-color: #f3f3f3;
-  padding: 10px 0;
+  z-index: -1;
 }
 
-/* 모달 스타일링 */
-.black-bg {
+.penguin img {
+  opacity: 0.5;
   width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  position: fixed;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2;
-  top: 0;
-  left: 0;
-}
-
-.white-bg {
-  width: 100%; 
-  background: white;
-  border-radius: 8px;
-  padding: 20px;
 }
 </style>
+@/records.js/auth

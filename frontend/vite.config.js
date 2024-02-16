@@ -6,16 +6,17 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  assetsInclude: ['**/*.mem'],
   workboxOptions: {
     include: [/^index\.html$/, /\.css$/, /\.js$/, /^manifest\.json$/, /\.png$/],
     exclude: []
   },
-  publicPath: '/',
+  publicPath: '/public',
   plugins: [
     vue(),
     VitePWA({
-      srcDir: 'src',
-      filename: 'sw.js',
+      srcDir: 'public',
+      filename: 'firebase-messaging-sw.js',
       devOptions: {
         enabled: true,
         type: 'module',
@@ -25,17 +26,17 @@ export default defineConfig({
         injectionPoint: undefined
       },
       manifest: {
-        "name": "c210",
-        "short_name": "c210",
+        "name": "todak",
+        "short_name": "todak",
         "icons": [
           {
-            "src": "/img/icons/android-chrome-192x192.png",
+            "src": "/logo/KakaoTalk_20240208_220849622.jpg",
             "sizes": "192x192",
             "type": "image/png",
             "purpose": "any"
           },
           {
-            "src": "/img/icons/android-chrome-512x512.png",
+            "src": "/logo/KakaoTalk_20240208_220849622.jpg",
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "maskable"

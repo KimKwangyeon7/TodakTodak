@@ -1,8 +1,8 @@
 <template>
     <div class="mt-5">
-        <button class="settings-button" @click="goToSettings">설정</button>
       <UserInfo :userData="userData" />
       <SuccessRate :successRate="successRate" />
+      <SuccessChart :successChart="successChart"/>
       <GoalSuccessRate :goalRate="goalRate" />
     </div>
 </template>
@@ -11,18 +11,21 @@
 import UserInfo from '@/components/MyPage/UserInfo.vue'
 import SuccessRate from '@/components/MyPage/SuccessRate.vue'
 import GoalSuccessRate from '@/components/MyPage/GoalSuccessRate.vue'
+import SuccessChart from '@/components/MyPage/SuccessChart.vue'
 
 export default {
 components: {
     UserInfo,
     SuccessRate,
     GoalSuccessRate,
+    SuccessChart
 },
 data() {
     return {
     userData: null,
     successRate: null,
     goalRate: null,
+    successChart: null,
     };
 },
 mounted() {
@@ -41,14 +44,7 @@ methods: {
 };
 </script>
 
+
 <style scoped>
-.settings-button {
-  background-color: #0084ff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-left: auto;
-  display: flex;
-}
+
 </style>
