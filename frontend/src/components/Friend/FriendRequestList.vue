@@ -13,7 +13,6 @@
     <div class="friend-request-header">
       <h2 class="list-title">사용자 검색</h2>
       <div class="friend-buttons">
-
       </div>
       <div class="todo-section">
     <div class="todo-date">
@@ -24,17 +23,14 @@
   </div>
 
     <!-- 닉네임검색 -->
-    <div class="friend-search mb-3 input-group" >
+    <div class="friend-search mb-3" >
       <input
         v-model="nickname"
         type="text"
         class="form-control"
-        placeholder="닉네임을 입력하세요"
+        placeholder="친구 검색"
         @keyup.enter="getMemberInfo(nickname)"
       />
-      <button class="btn input-group-append" @click="getMemberInfo(nickname)">
-          <div class="search"><img src="@/assets/search.png" alt="" /></div>
-        </button>
     </div>
 
     <div v-if="friendRequests === 0" class="empty-list-message">
@@ -48,7 +44,7 @@
       >
         <div class="request-info">
           <img
-            src="@/assets/profile-default.jpg"
+            :src="request.profilePicture"
             alt="프로필 사진"
             class="profile-picture"
           />
@@ -59,7 +55,7 @@
           </div>
         </div>
         <div class="request-buttons">
-          <button class="accept-button" @click.stop="sendFriend(request.nickname)">
+          <button class="accept-button" @click="sendFriend(request.nickname)">
             {{ request.isRequesting ? "요청중" : "친구요청" }}
           </button>
           <!-- <button class="accept-button" @click="acceptRequest(request.id)">친구요청</button> -->
@@ -72,7 +68,7 @@
 
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import { findByNickname } from "@/api/member";
 import { sendFriendRequest } from "@/api/friend";
 import { acceptFriends } from "@/api/friend";
@@ -80,43 +76,40 @@ import { acceptFriendRequest } from "@/api/friend";
 
 import AddFriendModal from "@/components/Friend/AddFriendModal.vue"; 
 
-onMounted(() => {
-  sendToMeAcceptFriends()
-})
 
 // 사용자 정보를 저장할 반응형 참조
 const memberInfo = ref(null);
 const nickname = ref(null);
 const requestFriend = ref(null);
 
-
-
-const sendToMeAcceptFriends = async () => {
-  acceptFriends(({ data }) => {
-    memberInfo.value = [];
-    memberInfo.value = data;
-  });
-};
-
 const getMemberInfo = async (nickname) => {
   findByNickname(nickname, ({ data }) => {
-    friendRequests.value = []
+    console.log("data: ", data);
     requestFriend.value = data;
     friendRequests.value.push(data);
+    const nicknameObject = { nickname: data.nickname };
+    console.log("nicknameObject", nicknameObject);
+    console.log("requestFriend: ", requestFriend.value);
   });
 };
 
 const sendFriend = async (nickname) => {
-  sendFriendRequest(nickname, ({ data }) => {
-    // 요청 상태 업데이트
-    const request = friendRequests.value.find(req => req.nickname === nickname);
-    if (request) {
-      request.isRequesting = true;
-    }
+  const nicknameObject = { nickname: nickname };
+  console.log("nicknameObject", nicknameObject);
+  sendFriendRequest(nicknameObject, ({ data }) => {
+    console.log("data: ", data);
   });
 };
 
+const showSearch = ref(false);
+const searchQuery = ref("");
 
+const toggleSearch = () => {
+  showSearch.value = !showSearch.value;
+  if (!showSearch.value) {
+    searchQuery.value = "";
+  }
+};
 
 // 친구 요청 리스트 데이터
 const friendRequests = ref([]);
@@ -124,6 +117,7 @@ const friendRequests = ref([]);
 // 친구 요청 수락 기능
 const acceptRequest = (requestId) => {
   // 요청 수락 로직 구현
+  console.log(`친구 요청 ID ${requestId}를 수락했습니다.`);
   friendRequests.value = friendRequests.value.filter(
     (request) => request.id !== requestId
   );
@@ -133,6 +127,7 @@ const acceptRequest = (requestId) => {
 // 친구 요청 거절 기능
 const rejectRequest = (requestId) => {
   // 요청 거절 로직 구현
+  console.log(`친구 요청 ID ${requestId}를 거절했습니다.`);
   friendRequests.value = friendRequests.value.filter(
     (request) => request.id !== requestId
   );
@@ -256,19 +251,5 @@ function closeModal() {
   /* 이미지 크기 조절 */
   width: 70%; /* 버튼 크기에 맞추어 이미지 크기 조절 */
   height: auto; /* 이미지 비율을 유지하면서 높이 조절 */
-}
-
-.friend-search {
-  display: flex;
-  width: 100%;
-}
-.input-group-append {
-  margin-left: -1px; /* 버튼을 input과 접하게 합니다 */
-}
-.search-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 12px; /* 버튼 내부의 여백 */
 }
 </style>
