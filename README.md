@@ -1,10 +1,10 @@
-
+![image](/uploads/7d830b0cb95b5632ed0fb7d837b46c87/image.png) 
 ![KakaoTalk_20240216_014349973](/uploads/013b169e58a2991a1abcc9edcd2eb79a/KakaoTalk_20240216_014349973.jpg){: width="200" height="200"}
 
 # 샘플링한 AI 음성 기반 자기계발 플래너 서비스
 1인 가구 사회초년생에게 부모님의 목소리로 외출, 일정을 알려주는 자기계발 플래너 서비스
 
-# 💻 Stack
+# 🛠️ Stack
 <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white">
 <img src="https://img.shields.io/badge/SpringBoot-6DB33F?style=for-the-badge&logo=SpringBoot&logoColor=white"/>
 <img src="https://img.shields.io/badge/JPA-000000?style=for-the-badge&logoColor=white"/>
@@ -53,6 +53,7 @@
 
 ![image](/uploads/4ef0e80727ce180a74bea6912f252a65/image.png)
 
+# 🖥️ 서비스 화면
 
 ## 메인화면
 ![image](/uploads/ea7ecba5dbf6f9d39377605b6c39bfa5/image.png)
@@ -63,10 +64,10 @@
 ### 투두 상세화면
 ![image](/uploads/d968973c3a2bd801cfdd4aa36aefe5a4/image.png)
 
-### 캘린더
+## 캘린더
 ![image](/uploads/e3364e88ccc8f02d5d015bf1501ffd6e/image.png)
 
-### 친구
+## 친구
 ![image](/uploads/ef7d90906f631f15882e743d6fe8ece1/image.png)
 ![image](/uploads/fc4fa715722f5df87fa87453adb172b7/image.png)
 ![image](/uploads/97365513d1c0a9ec89d4df893a2f9f47/image.png)
@@ -74,10 +75,10 @@
 #### 채팅
 ![image](/uploads/eba3f04c2ed62e3c9e98942204c0a058/image.png)
 
-### 녹음
+## 녹음
 ![image](/uploads/0c26f55669bc98b9ad7ab515891458ce/image.png)
 
 ![image](/uploads/1b9769db0b95ab9306dbd7dfd70d1558/image.png)
 
-### 마이페이지
+## 마이페이지
 ![image](/uploads/b0bff313e7861693c3655bde022976fd/image.png)
