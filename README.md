@@ -56,24 +56,24 @@
 # 🖥️ 서비스 화면
 
 ## 메인화면
-![image](/uploads/ea7ecba5dbf6f9d39377605b6c39bfa5/image.png)
+![image](/uploads/ea7ecba5dbf6f9d39377605b6c39bfa5/image.png){: height="500"}
 
 ### 목표 추가화면
-![image](/uploads/2bffa01950147a107ee1448217f2bd9f/image.png)
+![image](/uploads/2bffa01950147a107ee1448217f2bd9f/image.png){: height="500"}
 
 ### 투두 상세화면
-![image](/uploads/d968973c3a2bd801cfdd4aa36aefe5a4/image.png)
+![image](/uploads/d968973c3a2bd801cfdd4aa36aefe5a4/image.png){: height="500"}
 
 ## 캘린더
-![image](/uploads/e3364e88ccc8f02d5d015bf1501ffd6e/image.png)
+![image](/uploads/e3364e88ccc8f02d5d015bf1501ffd6e/image.png){: height="500"}
 
 ## 친구
-![image](/uploads/ef7d90906f631f15882e743d6fe8ece1/image.png)
-![image](/uploads/fc4fa715722f5df87fa87453adb172b7/image.png)
-![image](/uploads/97365513d1c0a9ec89d4df893a2f9f47/image.png)
+![image](/uploads/ef7d90906f631f15882e743d6fe8ece1/image.png){: height="500"}
+![image](/uploads/fc4fa715722f5df87fa87453adb172b7/image.png){: height="500"}
+![image](/uploads/97365513d1c0a9ec89d4df893a2f9f47/image.png){: height="500"}
 
 #### 채팅
-![image](/uploads/eba3f04c2ed62e3c9e98942204c0a058/image.png)
+![image](/uploads/eba3f04c2ed62e3c9e98942204c0a058/image.png){: height="500"}
 
 ## 녹음
 ![image](/uploads/0c26f55669bc98b9ad7ab515891458ce/image.png)
@@ -81,4 +81,4 @@
 ![image](/uploads/1b9769db0b95ab9306dbd7dfd70d1558/image.png)
 
 ## 마이페이지
-![image](/uploads/b0bff313e7861693c3655bde022976fd/image.png)
+![image](/uploads/b0bff313e7861693c3655bde022976fd/image.png){: height="500"}
