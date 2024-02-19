@@ -66,6 +66,7 @@
 
 ## 캘린더
 ![image](/uploads/e3364e88ccc8f02d5d015bf1501ffd6e/image.png){: height="500"}
+![image](/uploads/3561ffc724fa232987dc9db3128a20da/image.png){: height="500"}
 
 ## 친구
 ![image](/uploads/ef7d90906f631f15882e743d6fe8ece1/image.png){: height="500"}
