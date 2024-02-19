@@ -27,6 +27,10 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.firewall.DefaultHttpFirewall;
 import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 /**
  * 인증(authentication) 와 인가(authorization) 처리를 위한 스프링 시큐리티 설정 정의.
@@ -76,8 +80,25 @@ public class SecurityConfig {
                                 .requestMatchers("/api/v1/users/me").authenticated()       //인증이 필요한 URL과 필요하지 않은 URL에 대하여 설정
                                 .anyRequest().permitAll()
                 )
-                .cors(Customizer.withDefaults());
+                .cors(withDefaults()); // 기본 CORS 설정 사용
         return http.build();
+    }
+
+    // WebMvcConfigurer를 사용하여 CORS 설정
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "https://c210-67728.web.app")
+                        .allowedMethods("OPTIONS", "GET", "POST", "PUT", "PATCH", "DELETE")
+                        .allowedHeaders("*")
+                        .exposedHeaders(JwtTokenUtil.HEADER_STRING)
+                        .allowCredentials(true)
+                        .maxAge(3600L);
+            }
+        };
     }
 
     @Bean

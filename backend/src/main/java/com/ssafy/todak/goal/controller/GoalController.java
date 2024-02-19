@@ -1,33 +1,33 @@
 package com.ssafy.todak.goal.controller;
 
+import com.ssafy.todak.common.WeatherLoader;
 import com.ssafy.todak.goal.domain.Alarm;
 import com.ssafy.todak.goal.domain.Goal;
 import com.ssafy.todak.goal.domain.Habit;
 import com.ssafy.todak.goal.domain.Todo;
-import com.ssafy.todak.goal.dto.request.GoalCreateRequestDto;
-import com.ssafy.todak.goal.dto.request.GoalModifyRequestDto;
-import com.ssafy.todak.goal.dto.request.HabitCreateRequestDto;
-import com.ssafy.todak.goal.dto.request.TodoCreateRequestDto;
+import com.ssafy.todak.goal.dto.request.*;
 import com.ssafy.todak.goal.dto.response.AlarmResponseDto;
 import com.ssafy.todak.goal.dto.response.GoalResponseDto;
 import com.ssafy.todak.goal.dto.response.HabitResponseDto;
 import com.ssafy.todak.goal.dto.response.TodoResponseDto;
 import com.ssafy.todak.goal.repository.GoalRepository;
+import com.ssafy.todak.goal.repository.HabitRepository;
 import com.ssafy.todak.goal.repository.TodoRepository;
 import com.ssafy.todak.goal.service.GoalService;
 import com.ssafy.todak.member.common.MemberLoader;
-import com.ssafy.todak.member.domain.Member;
-import jakarta.transaction.Transactional;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.text.ParseException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+
 import java.time.format.DateTimeFormatter;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,15 +37,19 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/goals")
 @RequiredArgsConstructor
+@Log4j2
 public class GoalController {
     private final GoalService goalService;
     private final MemberLoader memberLoader;
     private final TodoRepository todoRepository;
     private final GoalRepository goalRepository;
+    private final HabitRepository habitRepository;
+    private final WeatherLoader weatherLoader;
 
     @PostMapping("")
     public ResponseEntity<String> createGoal(@RequestBody GoalCreateRequestDto goalCreateInfo) {
         int memberId = memberLoader.getId();
+        log.info("goalCreateInfo {}", goalCreateInfo);
         goalService.createGoal(memberId, goalCreateInfo);
         goalService.createGoalFriend(memberId, goalCreateInfo);
         return ResponseEntity.status(200).body("Success");
@@ -53,18 +57,27 @@ public class GoalController {
 
     @GetMapping("")
     public ResponseEntity<List<GoalResponseDto>> getGoalList() {
+
         int memberId = memberLoader.getId();
-        List<GoalResponseDto> goals = goalService.getGoalList(memberId)
-                .stream()
-                .map(GoalResponseDto::new)
-                .collect(Collectors.toList());
+
+        List<GoalResponseDto> goals = new ArrayList<>();
+        List<Goal> goalList = goalService.getGoalList(memberId);
+
+        for (Goal goal : goalList) {
+            GoalResponseDto goalResponseDto = new GoalResponseDto(memberLoader.getMember().getNickname(), goal.getId(), goal.getContent(), goal.getColor(), goal.getGoalFriendList(), goal.getStatus());
+            goals.add(goalResponseDto);
+        }
+//        List<GoalResponseDto> goals = goalService.getGoalList(memberId)
+//                .stream()
+//                .map(GoalResponseDto::new)
+//                .collect(Collectors.toList());
         return ResponseEntity.ok(goals);
     }
 
     @GetMapping("/{goalId}")
     public ResponseEntity<GoalResponseDto> getGoalDetail(@PathVariable int goalId) {
         Goal goal = goalService.getGoalDetail(goalId);
-        GoalResponseDto goalResponseDto = new GoalResponseDto(goal);
+        GoalResponseDto goalResponseDto = new GoalResponseDto(memberLoader.getNickname(), goal.getId(), goal.getContent(), goal.getColor(), goal.getGoalFriendList(), goal.getStatus());
 
         return ResponseEntity.ok(goalResponseDto);
     }
@@ -72,7 +85,7 @@ public class GoalController {
     @PutMapping("/{goalId}")
     public ResponseEntity<GoalResponseDto> modifyGoal(@PathVariable int goalId, @RequestBody GoalModifyRequestDto goalModifyInfo) {
         Goal goal = goalService.modifyGoal(goalId, goalModifyInfo);
-        GoalResponseDto goalResponseDto = new GoalResponseDto(goal);
+        GoalResponseDto goalResponseDto = new GoalResponseDto(memberLoader.getNickname(), goal.getId(), goal.getContent(), goal.getColor(), goal.getGoalFriendList(), goal.getStatus());
         return ResponseEntity.ok(goalResponseDto);
     }
 
@@ -85,6 +98,7 @@ public class GoalController {
     @PostMapping("/{goalId}/todos")
     public ResponseEntity<String> createTodo(@PathVariable int goalId, @RequestParam  String todoDate, @RequestBody TodoCreateRequestDto todoCreateRequestDto) throws ParseException {
         int memberId = memberLoader.getId();
+
         goalService.createTodo(memberId, goalId, todoDate, todoCreateRequestDto);
         goalService.createTodoAlarm(memberId, todoCreateRequestDto);
         return ResponseEntity.status(200).body("Success");
@@ -115,9 +129,8 @@ public class GoalController {
         return ResponseEntity.ok(todoResponseList);
     }
 
+
     // 미완성 투두리스트만 가져오기,
-
-
     @PatchMapping("/todos/{todoId}/complete")
     public ResponseEntity<TodoResponseDto> isTodoCompleted(@PathVariable int todoId) {
         goalService.isTodoCompleted(todoId);
@@ -132,6 +145,7 @@ public class GoalController {
                 .isAlarmed(todo.getAlarmList().get(0).isAlarmed())
                 .isOutside(todo.getAlarmList().get(0).isOutside())
                 .isChecked(todo.getAlarmList().get(0).isChecked())
+                .todoDate(todo.getTodoDate())
                 .build();
 
         return ResponseEntity.ok(todoResponseDto);
@@ -147,7 +161,7 @@ public class GoalController {
 
     @PutMapping("/todos/{todoId}")
     public ResponseEntity<TodoResponseDto> modifyTodo(@PathVariable int todoId, @RequestBody TodoCreateRequestDto todoCreateInfo) {
-        Todo modifiedTodo = goalService.modifyTodo(todoId, todoCreateInfo);
+        Todo modifiedTodo = todoRepository.findById(goalService.modifyTodo(todoId, todoCreateInfo)).get();
         TodoResponseDto todoResponseDto = new TodoResponseDto(modifiedTodo);
         return ResponseEntity.ok(todoResponseDto);
     }
@@ -189,9 +203,9 @@ public class GoalController {
         return ResponseEntity.ok(goalService.getHabitListByDay(memberId, day));
     }
 
-    @PatchMapping("/habits/{habitId}/{alarmId}/complete")
-    public ResponseEntity<List<HabitResponseDto>> isHabitCompleted(@PathVariable int habitId, @PathVariable int alarmId) {
-        goalService.isHabitCompleted(habitId, alarmId);
+    @PatchMapping("/habits/{alarmId}/complete")
+    public ResponseEntity<List<HabitResponseDto>> isHabitCompleted(@PathVariable int alarmId) {
+        goalService.isHabitCompleted(alarmId);
 
         int memberId = memberLoader.getId();
         List<Habit> habitList = goalService.getHabitList(memberId);
@@ -214,8 +228,9 @@ public class GoalController {
     }
 
     @PutMapping("/habits/{habitId}")
-    public ResponseEntity<HabitResponseDto> modifyHabit(@PathVariable int habitId, @RequestBody HabitCreateRequestDto habitCreateInfo) {
-        Habit modifiedHabit = goalService.modifyHabit(habitId, habitCreateInfo);
+    public ResponseEntity<HabitResponseDto> modifyHabit(@PathVariable int habitId, @RequestBody HabitModifyRequestDto habitDto) {
+        int memberId = memberLoader.getId();
+        Habit modifiedHabit = habitRepository.findById(goalService.modifyHabit(memberId, habitId, habitDto)).get();
         HabitResponseDto habitResponseDto = new HabitResponseDto(modifiedHabit);
         return ResponseEntity.ok(habitResponseDto);
     }
@@ -368,5 +383,16 @@ public class GoalController {
 //    }
 
 
+    @PutMapping("/alarms/{alarmId}")
+    public ResponseEntity<String> customizeTTS(@PathVariable int alarmId, @RequestParam String text){
+        goalService.customizeTTS(alarmId, text);
+        return ResponseEntity.ok("Success");
+    }
+
+    @GetMapping("/weather")
+    public ResponseEntity<Map<String, Object>> getWeather(){
+        String url = weatherLoader.getWeatherString();
+        return ResponseEntity.ok(weatherLoader.parseWeather(url));
+    }
 
 }

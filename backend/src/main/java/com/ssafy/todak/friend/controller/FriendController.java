@@ -65,10 +65,10 @@ public class FriendController {
     }
 
     //친구 요청 거절하기
-    @DeleteMapping("/reject/{friendId}")
-    public ResponseEntity<String> rejectFriend(@PathVariable int friendId) {
+    @DeleteMapping("/reject/{friendNickname}")
+    public ResponseEntity<String> rejectFriend(@PathVariable String friendNickname) {
         Member member = memberLoader.getMember();
-        friendService.rejectFriend(member.getId(), friendId);
+        friendService.rejectFriend(member.getId(), friendNickname);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(new MediaType("applicaton", "text", StandardCharsets.UTF_8))
@@ -76,14 +76,14 @@ public class FriendController {
     }
 
     //친구 삭제하기
-    @DeleteMapping("/delete/{friendId}")
-    public ResponseEntity<String> deleteFriend(@PathVariable int friendId) {
+    @DeleteMapping("/delete/{friendNickname}")
+    public ResponseEntity<String> deleteFriend(@PathVariable String friendNickname) {
         Member member = memberLoader.getMember();
-        friendService.rejectFriend(member.getId(), friendId);
+        friendService.deleteFriend(member.getId(), friendNickname);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(new MediaType("applicaton", "text", StandardCharsets.UTF_8))
-                .body("요청을 거절했습니다.");
+                .body("친구가 삭제됐습니다.");
     }
 
     //친구 프로필 보기
@@ -94,4 +94,12 @@ public class FriendController {
 
         return ResponseEntity.status(HttpStatus.OK).body(friendPage);
     }
+
+    // 친구 추천
+    @GetMapping("/recommend")
+    public ResponseEntity<List<String>> recommendFriend(){
+        int memberId = memberLoader.getId();
+        return ResponseEntity.ok(friendService.recommendFriend(memberId));
+    }
+
 }

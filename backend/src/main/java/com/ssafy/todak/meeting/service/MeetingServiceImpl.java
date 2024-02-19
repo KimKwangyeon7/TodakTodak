@@ -144,7 +144,7 @@ public int enterMeeting(int meetingId, int memberId, String password) {
         List<Meeting> list = new ArrayList<>();
 
         if (findMeetingRequestInfo.getNickname() != null){ // 방장 닉넴으로 찾기
-            Optional<Member> member = memberRepository.findByNickname(findMeetingRequestInfo.getNickname());
+            Optional<Member> member = memberRepository.findMemberByNickname(findMeetingRequestInfo.getNickname());
             if (member.isPresent()) {
                 list = meetingRepository.findByMember(member.get());
                 return list.stream().map(MeetingResponseDto::new).collect(Collectors.toList());

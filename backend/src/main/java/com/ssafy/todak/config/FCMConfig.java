@@ -16,6 +16,8 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 
+import static com.google.api.ResourceProto.resource;
+
 @Configuration
 @Log4j2
 public class FCMConfig {
@@ -35,19 +37,41 @@ public class FCMConfig {
      * GoogleCredentials : OAuth2를 이용해 GoogleApi 호출을 승인하기 위한 객체
      */
 
-    @PostConstruct
-    public void firebaseInit() throws IOException {
+    @Bean
+    FirebaseMessaging firebaseMessaging() throws IOException {
         ClassPathResource serviceAccount = new ClassPathResource(firebaseConfigPath);
+        FirebaseApp firebaseApp = null;
+        List<FirebaseApp> firebaseAppList = FirebaseApp.getApps();
 
-        FirebaseOptions options = FirebaseOptions.builder()
-                .setCredentials(GoogleCredentials.fromStream(serviceAccount.getInputStream())
-                        .createScoped(Collections.singleton(scope)))
-                .build();
-
-        if (FirebaseApp.getApps().isEmpty()) {
-            FirebaseApp.initializeApp(options);
-            log.info("Firebase init start");
+        if (firebaseAppList != null && !firebaseAppList.isEmpty()) {
+            for (FirebaseApp app : firebaseAppList) {
+                if (app.getName().equals(FirebaseApp.DEFAULT_APP_NAME)) {
+                    firebaseApp = app;
+                }
+            }
         }
+        else {
+            FirebaseOptions options = FirebaseOptions.builder()
+                    .setCredentials(GoogleCredentials.fromStream(serviceAccount.getInputStream())
+                            .createScoped(Collections.singleton(scope)))
+                    .build();
+            firebaseApp = FirebaseApp.initializeApp(options);
+        }
+        return FirebaseMessaging.getInstance(firebaseApp);
     }
+//    @PostConstruct
+//    public void firebaseInit() throws IOException {
+//        ClassPathResource serviceAccount = new ClassPathResource(firebaseConfigPath);
+//
+//        FirebaseOptions options = FirebaseOptions.builder()
+//                .setCredentials(GoogleCredentials.fromStream(serviceAccount.getInputStream())
+//                        .createScoped(Collections.singleton(scope)))
+//                .build();
+//
+//        if (FirebaseApp.getApps().isEmpty()) {
+//            FirebaseApp.initializeApp(options);
+//            log.info("Firebase init start");
+//        }
+//    }
 
 }

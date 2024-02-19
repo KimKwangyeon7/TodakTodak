@@ -1,37 +1,18 @@
 package com.ssafy.todak.learning.controller;
 
-import com.ssafy.todak.learning.service.TtsService;
+import com.ssafy.todak.common.BatchLoader;
+import com.ssafy.todak.learning.service.LearningService;
 import com.ssafy.todak.member.common.MemberLoader;
-import com.ssafy.todak.member.domain.RefreshToken;
-import com.ssafy.todak.member.repository.RefreshTokenRepository;
-import com.ssafy.todak.member.util.JwtTokenUtil;
+import com.ssafy.todak.record.RecordManager;
+import com.ssafy.todak.record.repository.RecordRepository;
+import com.ssafy.todak.record.service.RecordService;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
-import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.io.FileUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestTemplate;
-
+import org.springframework.web.bind.annotation.*;
 import java.io.*;
-import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
-import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.zip.GZIPInputStream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
 
 
 @Controller
@@ -39,227 +20,200 @@ import java.util.zip.ZipOutputStream;
 @RequiredArgsConstructor
 public class LearningController {
 
-    @Value("${flask2.server.url}")
-    private String flaskServerUrl;  // Flask 서버의 URL을 application.properties에서 읽어옵니다.
-
-    private final JwtTokenUtil jwtTokenUtil;
-    private final RefreshTokenRepository refreshTokenRepository;
     private final MemberLoader memberLoader;
-    //private final RestTemplate restTemplate;
-    //private final TtsService ttsService;
+    private final BatchLoader batchLoader;
+    private final RecordManager recordManager;
+    private final LearningService learningService;
+    private final RecordService recordService;
+    private final RecordRepository recordRepository;
 
-    // 프론트로부터 학습하기 요청을 받기 + 녹음 음성 zip 파일을 플라스크로 보내주기
-    @PostMapping()
-    public void getRecordAndSend() throws IOException {
-        // 저장돼있는 녹음 파일들 가져오기 -> 추후 보완 **************
-        String memberId = String.valueOf(memberLoader.getId());
 
-        // ZIP 파일 생성 경로
-        // 현재 시간 문자열로 저장
-        String currentDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
+    private static final String ttsServerPath = "home\\ubuntu\\S10P12C210\\src\\main\\resources\\tts-server";
+    private static final String recordingPath = "home\\ubuntu\\S10P12C210\\src\\main\\resources\\mimic-recording-studio";
 
-        // 파일 이름 생성 (예: member_id_20220101_123456.wav)
-        String fileName = String.format("%s_%s.zip", memberId, currentDateTime);
+    private String[] names = new String[6];
 
-        // 저장할 경로와 파일 이름 합치기
-        String zipFilePath = Paths.get("C:\\tts-server\\save\\", fileName).toString();
+    // 프론트로부터 학습하기 요청을 받기 + 녹음 음성 zip 파일을 S3에 저장 후 플라스크에 요청
+    @PostMapping("/{recordId}")
+    public ResponseEntity<String> getRecordAndSend(@PathVariable int recordId) throws IOException {
+//        // 저장돼있는 녹음 파일들 가져오기
+//        // 폴더 경로
+        int memberId = memberLoader.getId();
 
-        // 압축하기
-        ZipOutputStream zipOutputStream = new ZipOutputStream(new FileOutputStream(zipFilePath));
-        List<File> wavList = new ArrayList<>();
-        for (File wavFile: wavList){
-            addToZip(zipOutputStream, wavFile);
-        }
+        //String folderName = memberId + "_" + recordId;
+        String folderName = "249fce65-3224-b071-aebb-0554e8d61145";
+        String folderPath = recordingPath + "\\audio_files\\" + folderName;
 
-        // Flask 서버의 엔드포인트 URL
-        String flaskLearningUrl = flaskServerUrl + "learning-server/get";
+//        // 배치 파일 편집하기
+//        String batchFilePath = recordingPath + "\\run-ljs-converter.bat";
+//        String newContent = batchLoader.editBatchFile(folderName);
+//        batchLoader.writeBatchFile(batchFilePath, newContent);
+//
+//        batchLoader.executeBatchFile(batchFilePath);
+//
+//        learningService.getLoading(30000);
 
-        // 헤더 설정
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        // 압축할 파일 또는 폴더
+        File sourceFile = new File(recordingPath + "\\filelists");
 
-        // 요청 엔터티 생성
-        HttpEntity<List<File>> requestEntity = new HttpEntity<>(wavList, headers);
-
-        // RestTemplate을 사용하여 플라스크 서버에 POST 요청을 보낸다
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> responseEntity = restTemplate.postForEntity(flaskLearningUrl, requestEntity, String.class);
-
-        // 응답 출력
-        System.out.println("Response from Flask server: " + responseEntity.getBody());
-    }
-
-    private static void addToZip(ZipOutputStream zipOutputStream, File file) throws IOException {
-        ZipEntry zipEntry = new ZipEntry(file.getName());
-        zipOutputStream.putNextEntry(zipEntry);
-
-        try (FileInputStream fileInputStream = new FileInputStream(file)) {
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = fileInputStream.read(buffer)) > 0) {
-                zipOutputStream.write(buffer, 0, bytesRead);
-            }
-        }
-
-        zipOutputStream.closeEntry();
-    }
-
-    // 플라스크로부터 모델 학습 결과 받아오기 - glowtts => 추후 이미 존재 여부에 따라 다시 조건 나누기 ************************
-    @PostMapping("/glow")
-    public String getGlowRes(@RequestParam("file") MultipartFile file) {
-        String uploadPath = "C:\\tts-server\\models\\glowtts-v2\\";
+        // 생성할 zip 파일
+        File zipFile = new File(recordingPath + "\\filelists.zip");
 
         try {
-            // 임시 폴더에 zip 파일 저장
-            File zipFile = File.createTempFile("received_zip", ".zip");
-            file.transferTo(zipFile);
+            learningService.zipFile(sourceFile, zipFile);
+            //learningService.getLoading(30000);
+            System.out.println("Zip 파일이 성공적으로 생성되었습니다.");
+        } catch (IOException e) {
+            System.err.println("Zip 파일 생성 중 오류가 발생했습니다: " + e.getMessage());
+        }
 
-            // 압축 해제할 폴더 설정
-            File extractFolder = new File(uploadPath);
+        // zip 파일 S3에 저장
+        String fileName = memberLoader.getId() + "_" + recordId +  "_"  + "filelists.zip";
+        String S3Url = learningService.uploadZipFileToS3(zipFile, "todaktodak", fileName);
+        System.out.println("저장완료");
 
-            // ZipInputStream을 사용하여 압축 해제
-            try (ZipInputStream zipInputStream = new ZipInputStream(FileUtils.openInputStream(zipFile))) {
-                ZipEntry entry;
-                while ((entry = zipInputStream.getNextEntry()) != null) {
-                    // 압축 해제할 파일 경로 설정
-                    File entryFile = new File(uploadPath, entry.getName());
+//        String S3Url = "https://todaktodak.s3.ap-northeast-2.amazonaws.com/colab.zip";
+        // 플라스크에 s3 url 전달
+        learningService.connectFlask(recordId, memberId, S3Url);
 
-                    // 디렉터리인 경우 생성
-                    if (entry.isDirectory()) {
-                        entryFile.mkdirs();
-                    } else {
-                        // 파일인 경우 복사
-                        FileUtils.copyInputStreamToFile(zipInputStream, entryFile);
-                    }
+        // 삭제하기
+        File folder = new File(recordingPath + "\\filelists.zip");
+        folder.delete();
+        learningService.resetDirectory(recordingPath + "\\filelists");
+        folder = new File(recordingPath + "\\filelists");
+        FileUtils.deleteDirectory(folder);
+        learningService.resetDirectory(recordingPath + "\\audio_files\\2_9");
+        folder = new File(recordingPath + "\\audio_files\\2_9");
+        FileUtils.deleteDirectory(folder);
 
-                    zipInputStream.closeEntry();
-                }
-            }
+        return ResponseEntity.ok("성공!");
+    }
 
-            // 압축 해제 후 원본 파일 및 폴더 삭제
-            zipFile.delete();
-            FileUtils.deleteDirectory(extractFolder);
 
-            return "File uploaded and extracted successfully.";
+    // 플라스크로부터 요청을 받아서 S3에서 모델 학습 결과 zip 파일 받아오기 - glowtts => 추후 이미 존재 여부에 따라 다시 조건 나누기 ************************
+    @PostMapping("{recordId}/glow")
+    public ResponseEntity<String> getGlowRes(@PathVariable int recordId, @RequestParam("url") String url) throws IOException {
+        System.out.println("recordId: " + recordId + " url: " + url);
+        String uploadPath = ttsServerPath + "\\models\\glowtts-v2";
+
+        // 파일들 다 삭제
+        learningService.resetDirectory(uploadPath);
+
+        // S3 URL에서 zip 파일 다운로드
+        try {
+            learningService.processZipFromS3(url, uploadPath);
+            System.out.println("다운로드 성공!");
         } catch (IOException e) {
             e.printStackTrace();
-            return "Failed to process the file.";
+            return new ResponseEntity<>("다운로드 실패!", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
+        // 레디스에 학습 여부 및 결과 url 저장
+        int memberId = recordRepository.findById(recordId).get().getMember().getId();
+        String redisKey = memberId + "_" + recordId +  "_" + "glow";
+        recordManager.saveRecord("learning:" + redisKey, url);
+
+        System.out.println("레디스 저장 성공!");
+
+        // 파일 이름 저장하기
+        getGlowNames(uploadPath);
+
+
+        batchLoader.writeTTS("home/ubuntu/S10P12C21/src/main/resources/tts-server/run-server.bat", batchLoader.editTTS(names[0], names[1], names[3], names[4]));
+
+        // config 파일 편집
+        System.out.println(uploadPath);
+        batchLoader.editAndWriteConfig("home\\ubuntu\\S10P12C21\\src\\main\\resources\\tts-server\\models\\glowtts-v2\\" + names[0], "home\\ubuntu\\S10P12C21\\src\\main\\resources\\tts-server\\models\\glowtts-v2\\" + names[2]);
+
+        return ResponseEntity.ok("glow 설정 완료!");
     }
+
 
     // hifi-gan
-    @PostMapping("/gan")
-    public String getGanRes(@RequestParam("file") MultipartFile file) {
-        String uploadPath = "C:\\tts-server\\models\\hifigan-v2\\";
+    @PostMapping("{recordId}/hifi")
+    public ResponseEntity<String> getHifiRes(@PathVariable int recordId, @RequestParam String url) throws IOException {
+        String uploadPath = ttsServerPath + "\\models\\hifigan-v2";
 
+        // 파일들 다 삭제
+        learningService.resetDirectory(uploadPath);
+
+        // S3 URL에서 zip 파일 다운로드
         try {
-            // 임시 폴더에 zip 파일 저장
-            File zipFile = File.createTempFile("received_zip", ".zip");
-            file.transferTo(zipFile);
-
-            // 압축 해제할 폴더 설정
-            File extractFolder = new File(uploadPath);
-
-            // ZipInputStream을 사용하여 압축 해제
-            try (ZipInputStream zipInputStream = new ZipInputStream(FileUtils.openInputStream(zipFile))) {
-                ZipEntry entry;
-                while ((entry = zipInputStream.getNextEntry()) != null) {
-                    // 압축 해제할 파일 경로 설정
-                    File entryFile = new File(uploadPath, entry.getName());
-
-                    // 디렉터리인 경우 생성
-                    if (entry.isDirectory()) {
-                        entryFile.mkdirs();
-                    } else {
-                        // 파일인 경우 복사
-                        FileUtils.copyInputStreamToFile(zipInputStream, entryFile);
-                    }
-
-                    zipInputStream.closeEntry();
-                }
-            }
-
-            // 압축 해제 후 원본 파일 및 폴더 삭제
-            zipFile.delete();
-            FileUtils.deleteDirectory(extractFolder);
-
-            return "File uploaded and extracted successfully.";
+            learningService.processZipFromS3(url, uploadPath);
+            System.out.println("다운로드 성공!");
         } catch (IOException e) {
             e.printStackTrace();
-            return "Failed to process the file.";
+            return new ResponseEntity<>("다운로드 실패!", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
+        // 레디스에 학습 여부 및 결과 url 저장
+        int memberId = recordRepository.findById(recordId).get().getMember().getId();
+        String redisKey = memberId + "_" + recordId +  "_" + "hifi";
+        recordManager.saveRecord("learning:" + redisKey, url);
+
+        System.out.println("레디스 저장 성공!");
+
+        // 파일 이름 저장하기
+        getHifiNames(uploadPath);
+
+        // tts 서버 편집
+        batchLoader.writeTTS("home/ubuntu/S10P12C21/src/main/resources/tts-server/run-server.bat", batchLoader.editTTS(names[0], names[1], names[3], names[4]));
+
+        // config 파일 편집
+        batchLoader.editAndWriteConfig("home\\ubuntu\\S10P12C21\\src\\main\\resources\\tts-server\\models\\hifigan-v2\\" + names[3], "home\\ubuntu\\S10P12C21\\src\\main\\resources\\tts-server\\models\\hifigan-v2\\" + names[5]);
+
+        // 해당 음성 사용 가능으로 바꾸기
+        recordService.completeLearning(recordId);
+
+
+
+
+        return ResponseEntity.ok("gan 설정 완료!");
     }
 
-//    public static ResponseEntity<String> handleGzipFileUpload(MultipartFile file, String uploadDirectory) {
-//        try {
-//            Path uploadPath = Paths.get(uploadDirectory);
-//
-//            if (!Files.exists(uploadPath)) {
-//                Files.createDirectories(uploadPath);
-//            }
-//
-//            try (GZIPInputStream gzipInputStream = new GZIPInputStream(file.getInputStream())) {
-//                // 압축 해제된 파일들의 정보를 얻어서 처리
-//                Files.walkFileTree(uploadPath, new SimpleFileVisitor<Path>() {
-//                    @Override
-//                    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-//                        // 각 파일에 대한 정보를 얻어서 원하는 대로 처리
-//                        String originalFileName = file.getFileName().toString();
-//                        String newFileName = getNewFileName(originalFileName); // 원하는 로직에 따라 파일 이름을 수정
-//
-//                        // 수정된 파일 이름으로 저장
-//                        Path newFilePath = uploadPath.resolve(newFileName);
-//                        Files.copy(gzipInputStream, newFilePath, StandardCopyOption.REPLACE_EXISTING);
-//
-//                        return FileVisitResult.CONTINUE;
-//                    }
-//                });
-//            }
-//
-//            return ResponseEntity.ok("Files uploaded successfully.");
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return ResponseEntity.status(500).body("Error uploading files.");
-//        }
-//    }
-//
-//    private static String getNewFileName(String originalFileName) {
-//        // 원하는 로직에 따라 파일 이름을 수정하고 반환
-//        // 예: 원래 파일 이름에 timestamp를 더한다.
-//        long timestamp = System.currentTimeMillis();
-//        return timestamp + "_" + originalFileName;
-//    }
-
-    // ------------------------------------------------------------------------------------------------------
-
-    // 압축하기
-    private static byte[] compressList(List<byte[]> dataList) throws IOException {
-        // 리스트를 GZIP으로 압축
-        try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
-             GzipCompressorOutputStream gzipOut = new GzipCompressorOutputStream(baos)) {
-            for (byte[] data : dataList) {
-                gzipOut.write(data);
-            }
-            gzipOut.finish();
-            return baos.toByteArray();
-        }
-    }
-
-    // 압축풀기
-    private static List<byte[]> decompressList(byte[] compressedData) throws IOException {
-        // GZIP으로 압축 해제
-        List<byte[]> dataList = new ArrayList<>();
-        try (ByteArrayInputStream bais = new ByteArrayInputStream(compressedData);
-             GzipCompressorInputStream gzipIn = new GzipCompressorInputStream(bais)) {
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = gzipIn.read(buffer)) != -1) {
-                byte[] dataChunk = new byte[bytesRead];
-                System.arraycopy(buffer, 0, dataChunk, 0, bytesRead);
-                dataList.add(dataChunk);
+    private void getGlowNames(String uploadPath) {
+        // 폴더 내 파일 목록 가져오기
+        File folder = new File(uploadPath);
+        File[] fs = folder.listFiles();
+        String json = "";
+        String npy = "";
+        String tar = "";
+        for (File f: fs){
+            if (f.isFile()){
+                if (f.getName().endsWith(".json")) {
+                    json += f.getName();
+                } else if (f.getName().endsWith(".npy")) {
+                    npy += f.getName();
+                } else if (f.getName().endsWith(".tar")) {
+                    tar += f.getName();
+                }
             }
         }
-        return dataList;
+        names[0] = json;
+        names[1] = tar;
+        names[2] = npy;
     }
 
+    private void getHifiNames(String uploadPath) {
+        // 폴더 내 파일 목록 가져오기
+        File folder = new File(uploadPath);
+        File[] fs = folder.listFiles();
+        String json = "";
+        String npy = "";
+        String tar = "";
+        for (File f: fs){
+            if (f.isFile()){
+                if (f.getName().endsWith(".json")) {
+                    json += f.getName();
+                } else if (f.getName().endsWith(".npy")) {
+                    npy += f.getName();
+                } else if (f.getName().endsWith(".tar")) {
+                    tar += f.getName();
+                }
+            }
+        }
+        names[3] = json;
+        names[4] = tar;
+        names[5] = npy;
+    }
 }

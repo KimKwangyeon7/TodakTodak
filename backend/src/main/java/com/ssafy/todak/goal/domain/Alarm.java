@@ -41,6 +41,8 @@ public class Alarm {
     @Column(columnDefinition = "boolean default false")
     private boolean isCompleted; // 완료 여부
 
+    private String text; // tts 음성 문구
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;

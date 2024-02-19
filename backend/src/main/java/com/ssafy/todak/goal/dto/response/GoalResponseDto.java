@@ -2,6 +2,7 @@ package com.ssafy.todak.goal.dto.response;
 
 import com.ssafy.todak.goal.domain.Goal;
 import com.ssafy.todak.friend.domain.Friend;
+import com.ssafy.todak.goal.domain.GoalFriend;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -16,26 +17,28 @@ public class GoalResponseDto {
     private int id;
     private String content;
     private String color;
+    private String writer;
     private List<String> friendList; // 목표 공개할 친구 리스트
     private int status;
 
-    public GoalResponseDto(Goal goal) {
-        this.id = goal.getId();
-        this.content = goal.getContent();
-        this.color = goal.getColor();
+    public GoalResponseDto(String writer, int id, String content, String color, List<GoalFriend> goalFriendList1, int status) {
+        this.id = id;
+        this.content = content;
+        this.color = color;
 
         List<String> goalFriendList = new ArrayList<>();
-        for (int i = 0; i < goal.getGoalFriendList().size(); i++){
-            Friend friend = goal.getGoalFriendList().get(i).getFriend();
-            if (friend.isFriend()){
-                if (friend.getFromMember().getId() == goal.getMember().getId()){
+
+        for (int i = 0; i < goalFriendList1.size(); i++) {
+            Friend friend = goalFriendList1.get(i).getFriend();
+            if (friend.isFriend()) {
+                if (friend.getFromMember().getNickname().equals(writer)) {
                     goalFriendList.add(friend.getToMember().getNickname());
-                } else{
+                } else {
                     goalFriendList.add(friend.getFromMember().getNickname());
                 }
             }
         }
         this.friendList = goalFriendList;
-        this.status = goal.getStatus();
+        this.status = status;
     }
 }

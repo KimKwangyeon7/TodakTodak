@@ -13,8 +13,6 @@ import java.util.List;
 public class HabitCreateRequestDto {
     private String content;
 
-    private boolean isImportant;
-
     private boolean isOutside; // 외출 여부
 
     private boolean isAlarmed; // 알람 여부

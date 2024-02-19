@@ -27,26 +27,25 @@ public class RedisRepository {
     @PostConstruct
     private void init() {
         topicMap = new HashMap<>();
-        List<ChatRoom> roomList = chatRoomRepository.findAll();
-        for (ChatRoom chatRoom : roomList) {
-            ChannelTopic topic = ChannelTopic.of(String.valueOf(chatRoom.getId()));
+        List<ChatRoom> roomList = chatRoomRepository.findAllRooms();
+        for (ChatRoom c : roomList) {
+            ChannelTopic topic = ChannelTopic.of(c.getChatRoomId());
             redisMessageListenerContainer.addMessageListener(redisSub, topic);
-            topicMap.put(String.valueOf(chatRoom.getId()), topic);
+            topicMap.put(c.getChatRoomId(), topic);
         }
     }
 
     // 채팅방 생성 시 사용해야함
-    public void subscribe(String roomId) {
-        ChannelTopic topic = topicMap.get(roomId);
+    public void subscribe(String chatRoomId) {
+        ChannelTopic topic = topicMap.get(chatRoomId);
         if (topic == null) {
-            topic = ChannelTopic.of(roomId);
+            topic = ChannelTopic.of(chatRoomId);
             redisMessageListenerContainer.addMessageListener(redisSub, topic);
-            topicMap.put(roomId, topic);
+            topicMap.put(chatRoomId, topic);
         }
     }
 
     public ChannelTopic getTopic(String roomId) {
         return topicMap.get(roomId);
     }
-
 }

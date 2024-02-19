@@ -1,9 +1,5 @@
 package com.ssafy.todak.friend.service;
 
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.FirebaseMessagingException;
-import com.google.firebase.messaging.Message;
-import com.google.firebase.messaging.Notification;
 import com.ssafy.todak.exception.CustomException;
 import com.ssafy.todak.exception.ErrorCode;
 import com.ssafy.todak.fcm.FCMService;
@@ -13,7 +9,6 @@ import com.ssafy.todak.friend.dto.request.FriendRequestDto;
 import com.ssafy.todak.friend.repository.FriendRepository;
 import com.ssafy.todak.goal.domain.Goal;
 import com.ssafy.todak.goal.domain.GoalFriend;
-import com.ssafy.todak.goal.domain.GoalFriendId;
 import com.ssafy.todak.goal.domain.Todo;
 import com.ssafy.todak.goal.dto.response.GoalTodoResponseDto;
 import com.ssafy.todak.goal.dto.response.TodoResponseDto;
@@ -30,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -57,7 +53,7 @@ public class FriendServiceImpl implements FriendService {
         Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         );
-        Member friend = memberRepository.findByNickname(nickname).orElseThrow(
+        Member friend = memberRepository.findMemberByNickname(nickname).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         );
         //나 <-> 친구 관계가 맞는지 확인 (친구 아니면 기본 프로필)
@@ -160,7 +156,7 @@ public class FriendServiceImpl implements FriendService {
         Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         );
-        Member friend = memberRepository.findByNickname(requestDto.getNickname()).orElseThrow(
+        Member friend = memberRepository.findMemberByNickname(requestDto.getNickname()).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         );
         Optional<Friend> result = friendRepository.findRelation(member, friend);
@@ -180,15 +176,16 @@ public class FriendServiceImpl implements FriendService {
         }
         String targetUserToken = fcmTokenManager.getToken(String.valueOf(friend.getId()));
 
-        Optional.ofNullable(targetUserToken).ifPresent(token -> fcmService.sendMessage(
-                token,
-                "친구 요청!",
-                member.getNickname() + "님이 친구 신청을 보냈습니다")
-        );
+//        Optional.ofNullable(targetUserToken).ifPresent(token -> fcmService.sendMessage(
+//                token,
+//                "친구 요청!",
+//                member.getNickname() + "님이 친구 신청을 보냈습니다")
+//        );
 
         friendRepository.save(new Friend(member, friend));
 
     }
+
 
     /**
      * 친구 요청 승낙
@@ -202,7 +199,7 @@ public class FriendServiceImpl implements FriendService {
         Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         );
-        Member friend = memberRepository.findByNickname(nickname).orElseThrow(
+        Member friend = memberRepository.findMemberByNickname(nickname).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         );
         //요청 오지 않음 (친구 -> 나)
@@ -222,11 +219,11 @@ public class FriendServiceImpl implements FriendService {
                 //내가 친구의 요청을 승낙 -> 친구에게 친구됐다고 알림
                 String targetUserToken = fcmTokenManager.getToken(String.valueOf(friend.getId()));
 
-                Optional.ofNullable(targetUserToken).ifPresent(token -> fcmService.sendMessage(
-                        token,
-                        "친구 승낙!",
-                        member.getNickname() + "님과 친구입니다.")
-                );
+//                Optional.ofNullable(targetUserToken).ifPresent(token -> fcmService.sendMessage(
+//                        token,
+//                        "친구 승낙!",
+//                        member.getNickname() + "님과 친구입니다.")
+//                );
             }
         }
 
@@ -236,14 +233,14 @@ public class FriendServiceImpl implements FriendService {
      * 친구 거절
      *
      * @param memberId
-     * @param friendId
+     * @param friendNickname
      */
     @Override
-    public void rejectFriend(int memberId, int friendId) {
+    public void rejectFriend(int memberId, String friendNickname) {
         Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         );
-        Member friend = memberRepository.findById(friendId).orElseThrow(
+        Member friend = memberRepository.findMemberByNickname(friendNickname).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         );
 
@@ -267,14 +264,14 @@ public class FriendServiceImpl implements FriendService {
      * 친구 삭제
      *
      * @param memberId
-     * @param friendId
+     * @param friendNickname
      */
     @Override
-    public void deleteFriend(int memberId, int friendId) {
+    public void deleteFriend(int memberId, String friendNickname) {
         Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         );
-        Member friend = memberRepository.findById(friendId).orElseThrow(
+        Member friend = memberRepository.findMemberByNickname(friendNickname).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         );
 
@@ -349,9 +346,41 @@ public class FriendServiceImpl implements FriendService {
 
         for (Friend friend : friendRepository.findAllByToMember_Id(memberId)) {
             //해당 회원으로 요청 보낸 회원들
-            MemberResponseDto responseDto = MemberResponseDto.of(friend.getFromMember());
-            responseDtoList.add(responseDto);
+            if (!friend.isFriend()) {
+                MemberResponseDto responseDto = MemberResponseDto.of(friend.getFromMember());
+                responseDtoList.add(responseDto);
+            }
         }
         return responseDtoList;
+    }
+
+    public List<String> recommendFriend(int memberId) {
+        // 친구 관계인 회원 ID 조회
+        List<Integer> friendIds = new ArrayList<>();
+        List<Friend> friends = friendRepository.findAllFriend(memberRepository.findById(memberId).get());
+
+        if (friends != null) {
+            for (int i = 0; i < friends.size(); i++) {
+                if (friends.get(i).getFromMember().getId() == memberId) {
+                    friendIds.add(friends.get(i).getToMember().getId());
+                } else {
+                    friendIds.add(friends.get(i).getFromMember().getId());
+                }
+            }
+        }
+
+        // 친구가 아닌 회원의 닉네임을 담을 리스트
+        List<String> nonFriendNicknames = new ArrayList<>();
+
+        // 친구가 아닌 회원의 닉네임을 찾아서 리스트에 추가
+        List<Member> nonFriends = memberRepository.findAll().stream()
+                .filter(member -> !friendIds.contains(member.getId()) && member.getId() != memberId)
+                .collect(Collectors.toList());
+
+        for (Member nonFriend : nonFriends) {
+            nonFriendNicknames.add(nonFriend.getNickname());
+        }
+
+        return nonFriendNicknames;
     }
 }

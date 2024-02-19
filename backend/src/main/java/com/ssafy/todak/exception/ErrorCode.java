@@ -25,7 +25,7 @@ public enum ErrorCode {
 
 
     //채팅
-    NO_CHAT_ROOM(HttpStatus.NOT_FOUND, "404","채팅방을 찾을 수 없습니다."),
+    ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "404","채팅방을 찾을 수 없습니다."),
     EXISTING_ROOM(HttpStatus.BAD_REQUEST, "400", "이미 채팅방이 존재합니다."),
 
     ;

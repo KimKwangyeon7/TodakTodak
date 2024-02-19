@@ -27,7 +27,7 @@ public class RecordService {
     private final MemberRepository memberRepository;
     private final MemberLoader memberLoader;
     private static final String promptPath = "src\\main\\resources\\prompts\\korean_corpus.csv";
-    public void createRecord(RecordCreateRequestDto recordCreateInfo) {
+    public int createRecord(RecordCreateRequestDto recordCreateInfo) {
         Record record = Record.builder()
                 .name(recordCreateInfo.getName())
                 .memo(recordCreateInfo.getMemo())
@@ -35,9 +35,11 @@ public class RecordService {
                 .build();
 
         recordRepository.save(record);
-        Member member = memberRepository.findById(memberLoader.getId()).get();
+        Member member = memberRepository.findById(memberLoader.getMember().getId()).get();
         member.getRecordList().add(record);
         memberRepository.save(member);
+
+        return record.getId();
     }
 
     public Record modifyRecord(int recordId, RecordCreateRequestDto recordCreateInfo) {
@@ -54,30 +56,31 @@ public class RecordService {
     }
 
     public void isRecordUsed(int recordId) {
-        List<Record> list = recordRepository.findByMember(memberLoader.getMember());
-        for (int i = 0; i < list.size(); i++){
-            if (list.get(i).getId() == recordId){
-                recordRepository.findById(recordId).get().setUsed(true);
+        Member member = memberLoader.getMember();
+        List<Record> list = recordRepository.findByMember(member);
+        for (Record record : list) {
+            if (record.getId() == recordId) {
+                record.setUsed(true);
             } else {
-                recordRepository.findById(list.get(i).getId()).get().setUsed(false);
+                record.setUsed(false);
             }
         }
+        // 수정된 레코드 업데이트
+        recordRepository.saveAll(list);
     }
 
     // 새 폴더 만들기
-    public void createFolderIfNotExists(String folderPath) {
-        try {
-            Path path = Paths.get(folderPath);
+    public int createFolderIfNotExists(String folderPath) throws IOException {
+        Path path = Paths.get(folderPath);
 
-            // 폴더가 존재하지 않으면 생성
-            if (!Files.exists(path)) {
-                Files.createDirectories(path);
-                System.out.println("폴더가 생성되었습니다: " + folderPath);
-            } else {
-                System.out.println("폴더가 이미 존재합니다: " + folderPath);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        // 폴더가 존재하지 않으면 생성
+        if (!Files.exists(path)) {
+            Files.createDirectories(path);
+            System.out.println("폴더가 생성되었습니다: " + folderPath);
+            return 1;
+        } else {
+            System.out.println("폴더가 이미 존재합니다: " + folderPath);
+            return -1;
         }
     }
 
@@ -93,17 +96,19 @@ public class RecordService {
         }
     }
 
-    public void saveAudioLocally(ResponseEntity<byte[]> audioResponseEntity, String filePath) {
+    public void saveAudioLocally(byte[] audio, String filePath) {
         try (FileOutputStream fos = new FileOutputStream(filePath)) {
-            // ResponseEntity에서 오디오 바이트 배열 가져오기
-            byte[] audioBytes = audioResponseEntity.getBody();
-
             // 파일에 쓰기
-            fos.write(audioBytes);
-
+            fos.write(audio);
             System.out.println("Audio saved locally at: " + filePath);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void completeLearning(int recordId) {
+        Record record = recordRepository.findById(recordId).get();
+        record.setAvailable(true);
+        recordRepository.save(record);
     }
 }

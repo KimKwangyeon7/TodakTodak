@@ -31,4 +31,6 @@ public interface FriendRepository extends JpaRepository<Friend, Integer> {
     Optional<Friend> findBothRelation(Member fromMember, Member toMember);
 
     List<Friend> findByFromMember_IdOrToMember_Id(int fromMemberId, int toMemberId);
+
+
 }

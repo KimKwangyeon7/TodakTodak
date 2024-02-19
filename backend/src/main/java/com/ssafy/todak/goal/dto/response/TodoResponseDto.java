@@ -17,6 +17,9 @@ public class TodoResponseDto {
     private boolean isOutside;
     private boolean isAlarmed;
     private boolean isChecked;
+    private int goalId;
+    private String color;
+    private String todoDate;
 
     public TodoResponseDto(Todo todo){
         this.id = todo.getId();
@@ -27,6 +30,9 @@ public class TodoResponseDto {
         this.isAlarmed = todo.getAlarmList().get(0).isAlarmed();
         this.isOutside = todo.getAlarmList().get(0).isOutside();
         this.isChecked = todo.getAlarmList().get(0).isChecked();
+        this.goalId = todo.getGoal().getId();
+        this.color = todo.getGoal().getColor();
+        this.todoDate = todo.getTodoDate();
     }
 
 }

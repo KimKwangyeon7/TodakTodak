@@ -20,4 +20,9 @@ public class MemberLoader {
         return principal.getId();
     }
 
+    public String getNickname() {
+        Member principal = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return principal.getNickname();
+    }
+
 }

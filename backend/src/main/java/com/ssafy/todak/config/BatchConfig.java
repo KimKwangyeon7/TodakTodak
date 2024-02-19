@@ -16,12 +16,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 public interface BatchConfig {
     String getJobName();
-
     boolean isJobEnabled();
-
     String getCronExpression();
-
     void setCronExpression(String cronExpression);
-
     Job createJob(JobRepository jobRepository, PlatformTransactionManager transactionManager);
 }

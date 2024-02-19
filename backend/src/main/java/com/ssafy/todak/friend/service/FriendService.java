@@ -17,10 +17,10 @@ public interface FriendService {
     void acceptFriend(int memberId, String nickname);
 
     //친구 요청 거절하기
-    void rejectFriend(int memberId, int friendId);
+    void rejectFriend(int memberId, String friendNickname);
 
     //친구 삭제하기
-    void deleteFriend(int memberId, int friendId);
+    void deleteFriend(int memberId, String friendNickname);
 
     //친구 목록
     List<MemberResponseDto> getFriendList(int memberId);
@@ -29,4 +29,5 @@ public interface FriendService {
     List<MemberResponseDto> getRequestList(int memberId);
 
 
+    List<String> recommendFriend(int memberId);
 }

@@ -10,12 +10,14 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class RecordResponseDto {
+    private int id;
     private String name;
     private String memo;
     private boolean isAvailable;
     private boolean isUsed;
 
     public RecordResponseDto(Record record){
+        this.id = record.getId();
         this.name = record.getName();
         this.memo = record.getMemo();
         this.isAvailable = record.isAvailable();

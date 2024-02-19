@@ -27,6 +27,8 @@ public class MemberResponseDto extends BaseResponseBody {
 
     private String memo;
 
+    private String profileUrl;
+
     public static MemberResponseDto of(Member member) {
         MemberResponseDto res = new MemberResponseDto();
         res.setEmail(member.getEmail());
@@ -36,6 +38,7 @@ public class MemberResponseDto extends BaseResponseBody {
         res.setMileage(member.getMileage());
         res.setPhoneNumber(member.getPhoneNumber());
         res.setMemo(member.getMemo());
+        res.setProfileUrl(member.getProfileUrl());
 
         return res;
     }
@@ -48,6 +51,7 @@ public class MemberResponseDto extends BaseResponseBody {
         res.setMileage(member.getMileage());
         res.setPhoneNumber(member.getPhoneNumber());
         res.setMemo(member.getMemo());
+        res.setProfileUrl(member.getProfileUrl());
 
         return res;
     }

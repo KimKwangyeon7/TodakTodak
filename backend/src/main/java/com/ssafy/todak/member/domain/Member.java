@@ -57,9 +57,13 @@ public class Member extends BaseEntity implements Serializable {
     private String phoneNumber;
 
     @Column(nullable = false)
-    private String birthDate;
+    private String birthDate; //20240203
 
     private String memo; //자기소개
+    
+    private String profileUrl; // 프로필 사진
+
+    private String firebaseToken;
 
     @Column(columnDefinition = "boolean default false")
     private boolean isAlarmAgreed; //알람 동의 여부

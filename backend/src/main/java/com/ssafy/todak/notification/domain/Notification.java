@@ -24,11 +24,16 @@ public class Notification extends BaseEntity {
     @Column(nullable = false)
     private int type; //0:친구요청 / 1:댓글 / 2:채팅
 
-    @Column(columnDefinition = "boolean default false")
-    private boolean isChecked; //알람 확인 여부
+//    @Column(columnDefinition = "boolean default false")
+//    private boolean isChecked; //알람 확인 여부
+
+    private String title;
+
+    private String body;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
 
 }

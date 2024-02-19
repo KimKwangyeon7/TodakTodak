@@ -33,4 +33,6 @@ public class MemberRegisterRequestDto {
 
     private boolean isAgreedLocation;
 
+    private String profileUrl;
+
 }

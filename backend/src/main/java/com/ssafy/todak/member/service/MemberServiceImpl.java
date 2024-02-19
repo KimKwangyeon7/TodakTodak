@@ -1,7 +1,10 @@
 package com.ssafy.todak.member.service;
 
+import com.ssafy.todak.exception.CustomException;
+import com.ssafy.todak.exception.ErrorCode;
 import com.ssafy.todak.member.domain.Member;
 import com.ssafy.todak.member.domain.RefreshToken;
+import com.ssafy.todak.member.dto.request.MemberModifyRequestDto;
 import com.ssafy.todak.member.dto.request.MemberRegisterRequestDto;
 import com.ssafy.todak.member.repository.MemberRepository;
 import com.ssafy.todak.member.repository.RefreshTokenRepository;
@@ -36,6 +39,7 @@ public class MemberServiceImpl implements MemberService {
                 .phoneNumber(requestDto.getPhoneNumber())
                 .isAlarmAgreed(requestDto.isAgreedAlarm())
                 .isLocationAgreed(requestDto.isAgreedLocation())
+                .profileUrl(requestDto.getProfileUrl())
                 .build();
 
         return memberRepository.save(member);
@@ -43,7 +47,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     public void dupleEmailCheck(String email) {
-        if (memberRepository.findByEmail(email).isPresent()) {
+        if (memberRepository.findMemberByEmail(email).isPresent()) {
 
         }
     }
@@ -51,20 +55,19 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member getMemberByEmail(String email) {
-        Optional<Member> result = memberRepository.findByEmail(email);
-        if (result.isPresent()) {
-            return result.get();
-        }
-        return null;
+        Member member = memberRepository.findMemberByEmail(email).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+        );
+        return member;
     }
+
 
     @Override
     public Member getMemberById(int memberId) {
-        Optional<Member> result = memberRepository.findById(memberId);
-        if (result.isPresent()) {
-            return result.get();
-        }
-        return null;
+        Member member = memberRepository.findMemberById(memberId).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+        );
+        return member;
     }
 
     /**
@@ -79,12 +82,15 @@ public class MemberServiceImpl implements MemberService {
         //Redis에 저장된 리프레시 토큰 가져오기
         RefreshToken refreshToken1 = refreshTokenRepository.findRefreshTokenByMemberId(memberId);
         String rt = refreshToken1.getRefreshToken();
+        Member member = memberRepository.findMemberById(memberId).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+        );
 
         //request 리프레시 토큰과 Redis에 있는 리프레시 토큰이 같다면
         if (rt.equals(refreshToken)) {
             //리프레시 토큰의 유효시간이 남아있다면
             if (!jwtTokenUtil.isRefreshTokenExpired(String.valueOf(memberId))) {
-                return jwtTokenUtil.createAccessToken(String.valueOf(memberId));
+                return jwtTokenUtil.createAccessToken(member);
             }
         }
         return null;
@@ -92,13 +98,18 @@ public class MemberServiceImpl implements MemberService {
 
     /**
      * 리프레시 토큰 재발급
+     *
      * @param memberId
      * @return
      */
     public String createRefreshToken(int memberId) {
+        Member member = memberRepository.findMemberById(memberId).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+        );
+
         //리프레시 토큰의 유효시간이 남아있다면
         if (!jwtTokenUtil.isRefreshTokenExpired(String.valueOf(memberId))) {
-            return jwtTokenUtil.createRefreshToken(String.valueOf(memberId));
+            return jwtTokenUtil.createRefreshToken(member);
         }
         return null;
     }
@@ -109,7 +120,14 @@ public class MemberServiceImpl implements MemberService {
         refreshTokenRepository.deleteRefreshTokenByMemberId(memberId);
 
         return "로그아웃 완료";
+    }
 
+    @Override
+    public Member getMemberByNickname(String nickname) {
+        Member member = memberRepository.findMemberByNickname(nickname).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+        );
+        return member;
     }
 
     // 기존에 존재하는 Fcm 토큰 삭제
@@ -118,5 +136,17 @@ public class MemberServiceImpl implements MemberService {
 ////        fcmTokenManager.deleteAndSaveFCMToken(String.valueOf(memberId), fcmToken);
 //    }
 
+    @Override
+    public void modifyMember(MemberModifyRequestDto requestDto) {
+        Member member = memberRepository.findMemberByNickname(requestDto.getNickname()).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+        );
+        member.setName(requestDto.getName());
+        member.setName(requestDto.getNickname());
+        member.setMemo(requestDto.getMemo());
+        member.setProfileUrl(requestDto.getProfileUrl());
+
+        memberRepository.save(member);
+    }
 
 }

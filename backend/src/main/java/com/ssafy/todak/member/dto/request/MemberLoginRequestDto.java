@@ -12,12 +12,12 @@ public class MemberLoginRequestDto {
 
     private String password;
 
-    private String fcmToken;
+    private String firebaseToken;
 
     @Builder
     public MemberLoginRequestDto(String email, String password, String fcmToken) {
         this.email = email;
         this.password = password;
-        this.fcmToken = fcmToken;
+        this.firebaseToken = fcmToken;
     }
 }

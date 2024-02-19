@@ -1,5 +1,7 @@
 package com.ssafy.todak.goal.service;
 
+import com.ssafy.todak.batch.event.HabitEvent;
+import com.ssafy.todak.batch.event.TodoEvent;
 import com.ssafy.todak.goal.domain.*;
 import com.ssafy.todak.goal.dto.request.*;
 import com.ssafy.todak.goal.dto.response.AlarmResponseDto;
@@ -13,11 +15,10 @@ import com.ssafy.todak.notification.scheduler.NotificationSchedulerService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -33,6 +34,7 @@ public class GoalServiceImpl implements GoalService {
     private final GoalFriendRepository goalFriendRepository;
     private final AlarmRepository alarmRepository;
     private final NotificationSchedulerService schedulerService;
+    private final ApplicationEventPublisher eventPublisher;
 
     private int goalId;
     private int todoId;
@@ -69,7 +71,7 @@ public class GoalServiceImpl implements GoalService {
 
         for (int i = 0; i < goalCreateInfo.getFriendList().size(); i++) {
             String friendNickname = goalCreateInfo.getFriendList().get(i);
-            Member friendMember = memberRepository.findByNickname(friendNickname).get();
+            Member friendMember = memberRepository.findMemberByNickname(friendNickname).get();
             Member member = memberRepository.findById(memberId).get();
             Optional<Friend> result = friendRepository.findBothRelation(member, friendMember);
             System.out.println("----------------------------------------------");
@@ -104,6 +106,7 @@ public class GoalServiceImpl implements GoalService {
     @Override
     public List<Goal> getGoalList(int memberId) { // 전체 목표 리스트 가져오기
         Member member = memberRepository.findById(memberId).get();
+
         return goalRepository.findByMember(member);
     }
 
@@ -126,7 +129,7 @@ public class GoalServiceImpl implements GoalService {
             return goalRepository.save(goal);
         }
         for (int i = 0; i < nicknameList.size(); i++) {
-            int nicknameId = memberRepository.findByNickname(nicknameList.get(i)).get().getId();
+            int nicknameId = memberRepository.findMemberByNickname(nicknameList.get(i)).get().getId();
             List<Friend> friendList = friendRepository.findByFromMember_IdOrToMember_Id(goal.getMember().getId(), nicknameId);
             int friendId = friendList.get(0).getId();
 
@@ -174,7 +177,7 @@ public class GoalServiceImpl implements GoalService {
 
     @Transactional
     @Override
-    public Todo createTodoAlarm(int memberId, TodoCreateRequestDto todoCreateRequestDto) throws ParseException {
+    public void createTodoAlarm(int memberId, TodoCreateRequestDto todoCreateRequestDto) throws ParseException {
         List<Alarm> alarmList = new ArrayList<>();
 
         Alarm alarm = new Alarm();
@@ -194,7 +197,11 @@ public class GoalServiceImpl implements GoalService {
 
         alarmRepository.save(alarm);
         todo.setAlarmList(alarmList);
-        return todoRepository.save(todo);
+        todoRepository.save(todo);
+
+        // TodoAddedEvent 발생
+        TodoEvent todoEvent = new TodoEvent(this, todo);
+        eventPublisher.publishEvent(todoEvent);
     }
 
     @Override
@@ -250,7 +257,8 @@ public class GoalServiceImpl implements GoalService {
     }
 
     @Override
-    public Todo modifyTodo(int todoId, TodoCreateRequestDto todoCreateInfo) { // 투두 수정하기
+    @Transactional
+    public int modifyTodo(int todoId, TodoCreateRequestDto todoCreateInfo) { // 투두 수정하기
         Todo todo = todoRepository.findById(todoId).get();
         todo.setTitle(todoCreateInfo.getTitle());
         todo.setContent(todoCreateInfo.getContent());
@@ -259,13 +267,25 @@ public class GoalServiceImpl implements GoalService {
         todo.getAlarmList().get(0).setOutside(todoCreateInfo.isOutside());
         todo.getAlarmList().get(0).setTime(todoCreateInfo.getTime());
 
-        return todoRepository.save(todo);
+        todoRepository.save(todo);
+
+        // TodoAddedEvent 발생
+        TodoEvent todoAddedEvent = new TodoEvent(this, todo);
+        eventPublisher.publishEvent(todoAddedEvent);
+        eventPublisher.publishEvent(todo);
+
+        return todoId;
     }
 
     //@Transactional
     @Override
+    @Transactional
     public void deleteTodo(int todoId) { // 투두 삭제하기
+
         todoRepository.deleteById(todoId);
+        // TodoAddedEvent 발생
+        TodoEvent todoAddedEvent = new TodoEvent(this, todoRepository.findById(todoId).get());
+        eventPublisher.publishEvent(todoAddedEvent);
     }
 
 
@@ -300,7 +320,7 @@ public class GoalServiceImpl implements GoalService {
 
     @Transactional
     @Override
-    public Habit createHabitAlarm(int memberId, HabitCreateRequestDto habitCreateInfo) {
+    public void createHabitAlarm(int memberId, HabitCreateRequestDto habitCreateInfo) {
 
         List<AlarmCreateRequestDto> alarmDtoList = habitCreateInfo.getAlarmDtoList();
         Habit habit = habitRepository.findById(habitId).get();
@@ -315,12 +335,19 @@ public class GoalServiceImpl implements GoalService {
                 alarm.setAlarmed(habitCreateInfo.isAlarmed());
                 alarm.setOutside(habitCreateInfo.isOutside());
 
+                Member member = memberRepository.findById(memberId).get();
+                alarm.setMember(member);
+
                 list.add(alarm);
                 alarmRepository.save(alarm);
             }
         }
         habit.setAlarmList(list);
-        return habitRepository.save(habit);
+        habitRepository.save(habit);
+
+        // Habit 생성 이벤트 발생
+        HabitEvent habitEvent = new HabitEvent(this, habit);
+        eventPublisher.publishEvent(habitEvent);
     }
 
     @Override
@@ -354,17 +381,16 @@ public class GoalServiceImpl implements GoalService {
 
 
     @Override
-    public Habit isHabitCompleted(int habitId, int alarmId) { // 습관 완료 여부 체크시 => 완료(T) -> 미완료(F) / 미완료 -> 완료
-        Habit habit = habitRepository.findById(habitId).get();
-        for (int i = 0; i < habit.getAlarmList().size(); i++) {
-            if (habit.getAlarmList().get(i).getId() == alarmId) {
-                boolean a = habit.getAlarmList().get(i).isChecked();
-                habit.getAlarmList().get(i).setChecked(!a);
-
-                break;
-            }
-        }
-        return habitRepository.save(habit);
+    public Habit isHabitCompleted(int alarmId) { // 습관 완료 여부 체크시 => 완료(T) -> 미완료(F) / 미완료 -> 완료
+        Alarm alarm = alarmRepository.findById(alarmId).get();
+        boolean a = alarm.isCompleted();
+        alarm.setCompleted(!a);
+        alarmRepository.save(alarm);
+        Habit habit = alarm.getHabit();
+//        for (int i = 0; i < habit.getAlarmList().size(); i++){
+//            System.out.println("알람 확인: " + habit.getAlarmList().get(i).getId() + " " + habit.getAlarmList().get(i).isCompleted());
+//        }
+        return habit;
     }
 
     @Override
@@ -378,23 +404,27 @@ public class GoalServiceImpl implements GoalService {
     }
 
     @Override
-    public Habit modifyHabit(int habitId, HabitCreateRequestDto habitCreateInfo) {
+    @Transactional
+    public int modifyHabit(int memberId,int habitId, HabitModifyRequestDto habitDto) {
         Habit habit = habitRepository.findById(habitId).get();
-
+        Member member = memberRepository.findById(memberId).get();
         // 기존 알람 리스트를 가져옴
         List<Alarm> oldAlarmList = habit.getAlarmList();
 
         // 새로운 알람 리스트를 만듦
-        List<AlarmCreateRequestDto> newAlarmDtoList = habitCreateInfo.getAlarmDtoList();
+        List<AlarmModifyRequestDto> newAlarmDtoList = habitDto.getAlarmDtoList();
         List<Alarm> newAlarmList = new ArrayList<>();
 
-        // 새로운 알람 리스트에 새로운 알람을 추가
-        for (AlarmCreateRequestDto alarmDto : newAlarmDtoList) {
+        // 새로운 알람 리스트에 새로운 알람을 추가 ******************************* 수정필요
+        for (AlarmModifyRequestDto alarmDto : newAlarmDtoList) {
             Alarm newAlarm = new Alarm();
-            newAlarm.setOutside(habitCreateInfo.isOutside());
+            newAlarm.setOutside(alarmDto.isOutside());
+            newAlarm.setCompleted(alarmDto.isCompleted());
             newAlarm.setDay(alarmDto.getDay());
             newAlarm.setTime(alarmDto.getTime());
             newAlarm.setHabit(habit);
+            newAlarm.setAlarmed(alarmDto.isAlarmed());
+            newAlarm.setMember(member);
             newAlarmList.add(newAlarm);
         }
 
@@ -407,17 +437,52 @@ public class GoalServiceImpl implements GoalService {
         }
 
         // 습관의 내용을 업데이트
-        habit.setContent(habitCreateInfo.getContent());
+        habit.setContent(habitDto.getContent());
 
         // 습관을 저장
-        return habitRepository.save(habit);
+        habitRepository.save(habit);
+
+        // Habit 생성 이벤트 발생
+        HabitEvent habitEvent = new HabitEvent(this, habit);
+        eventPublisher.publishEvent(habitEvent);
+
+        return habitId;
     }
+
+//    public int modifyHabitAlarm(int alarmId, AlarmModifyRequestDto alarmDto) {
+//
+//    }
 
 
 
     @Override
+    @Transactional
     public void deleteHabit(int habitId) {
+
         habitRepository.deleteById(habitId);
+
+        // Habit 생성 이벤트 발생
+        HabitEvent habitEvent = new HabitEvent(this, habitRepository.findById(habitId).get());
+        eventPublisher.publishEvent(habitEvent);
+    }
+
+    // TTS 문구 바꾸기
+    @Override
+    @Transactional
+    public void customizeTTS(int alarmId, String text){
+        Alarm alarm = alarmRepository.findById(alarmId).get();
+        alarm.setText(text);
+        alarmRepository.save(alarm);
+
+        // 알람 생성 이벤트 발생
+        if (alarm.getTodo() == null) {
+            HabitEvent habitEvent = new HabitEvent(this, alarmRepository.findById(alarmId).get().getHabit());
+            eventPublisher.publishEvent(habitEvent);
+        } else {
+            TodoEvent todoEvent = new TodoEvent(this, alarmRepository.findById(alarmId).get().getTodo());
+            eventPublisher.publishEvent(todoEvent);
+        }
+
     }
 
 }

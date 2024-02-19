@@ -4,12 +4,16 @@ package com.ssafy.todak.member.util;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.*;
+import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
+import com.ssafy.todak.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+import javax.security.auth.Subject;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -46,34 +50,80 @@ public class JwtTokenUtil {
                 .build();
     }
 
-    public String createAccessToken(String memberId) {
+    public String extractNickname(String token) {
+        try {
+            // 토큰 검증 및 디코딩
+            DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512(secretKey.getBytes()))
+                    .withIssuer(ISSUER)
+                    .build()
+                    .verify(token.replace(TOKEN_PREFIX, ""));
+
+            // 클레임이 null이 아닌지 확인
+            Claim claim = decodedJWT.getClaim("nickname");
+            return claim.asString();
+
+        } catch (JWTVerificationException ex) {
+            // 서명 오류, 만료된 토큰 등의 예외 처리
+            return null;
+        }
+    }
+
+    public int getMemberId(String token) {
+        try {
+            // 토큰 검증 및 디코딩
+            DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512(secretKey.getBytes()))
+                    .withIssuer(ISSUER)
+                    .build()
+                    .verify(token.replace(TOKEN_PREFIX, ""));
+            String subject = decodedJWT.getSubject();
+            return Integer.parseInt(subject);
+
+        } catch (JWTVerificationException ex) {
+            // 서명 오류, 만료된 토큰 등의 예외 처리
+            return 0;
+        }
+    }
+
+    public boolean validateToken(String token) {
+        try {
+            // 토큰 검증 및 디코딩
+            DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512(secretKey.getBytes()))
+                    .withIssuer(ISSUER)
+                    .build()
+                    .verify(token.replace(TOKEN_PREFIX, ""));
+
+            // 클레임이 null이 아닌지 확인
+            Claim claim = decodedJWT.getClaim("nickname");
+            return claim != null;
+
+        } catch (JWTVerificationException ex) {
+            // 서명 오류, 만료된 토큰 등의 예외 처리
+            return false;
+        }
+    }
+
+    public String createAccessToken(Member member) {
         Date now = new Date();
         Date expires = new Date(now.getTime() + accessExpiration);
 
         return JWT.create()
-                .withSubject(memberId)
+                .withSubject(String.valueOf(member.getId()))
                 .withExpiresAt(expires)
+                .withClaim("nickname", member.getNickname())
                 .withIssuer(ISSUER)
                 .withIssuedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
                 .sign(Algorithm.HMAC512(secretKey.getBytes()));
     }
 
-    public String createAccessToken(Instant expires, String memberId) {
-        return JWT.create()
-                .withSubject(memberId)
-                .withExpiresAt(Date.from(expires))
-                .withIssuer(ISSUER)
-                .withIssuedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
-                .sign(Algorithm.HMAC512(secretKey.getBytes()));
-    }
-
-    public String createRefreshToken(String memberId) {
+    public String createRefreshToken(Member member) {
         Date now = new Date();
         Date expireDate = new Date(now.getTime() + refreshExpiration);
+        String memberId = String.valueOf(member.getId());
 
         String refreshToken = JWT.create()
                 .withSubject(memberId)
                 .withExpiresAt(expireDate)
+                .withClaim("nickname", member.getNickname())
                 .withIssuer(ISSUER)
                 .withIssuedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
                 .sign(Algorithm.HMAC512(secretKey.getBytes()));

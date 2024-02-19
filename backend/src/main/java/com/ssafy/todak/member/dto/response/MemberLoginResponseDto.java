@@ -1,5 +1,6 @@
 package com.ssafy.todak.member.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ssafy.todak.common.BaseResponseBody;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,17 +10,20 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class MemberLoginResponseDto extends BaseResponseBody {
 
     String accessToken;
     String refreshToken;
+    String nickname;
 
-    public static MemberLoginResponseDto of(Integer statusCode, String message, String accessToken, String refreshToken) {
+    public static MemberLoginResponseDto of(Integer statusCode, String message, String accessToken, String refreshToken, String nickname) {
         MemberLoginResponseDto res = new MemberLoginResponseDto();
         res.setStatusCode(statusCode);
         res.setMessage(message);
         res.setAccessToken(accessToken);
         res.setRefreshToken(refreshToken);
+        res.setNickname(nickname);
 
         return res;
     }
