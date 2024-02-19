@@ -168,7 +168,7 @@ public class GoalController {
 
     @DeleteMapping("/todos/{todoId}")
     public ResponseEntity<String> deleteTodo(@PathVariable int todoId) {
-        goalService.deleteGoal(todoId);
+        goalService.deleteTodo(todoId);
         return ResponseEntity.status(200).body("Success");
     }
 

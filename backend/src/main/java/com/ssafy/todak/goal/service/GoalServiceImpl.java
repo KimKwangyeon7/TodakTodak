@@ -281,11 +281,24 @@ public class GoalServiceImpl implements GoalService {
     @Override
     @Transactional
     public void deleteTodo(int todoId) { // 투두 삭제하기
-
+//        Todo todo = todoRepository.findById(todoId).get();
+//        Goal goal = goalRepository.findById(todo.getGoal().getId()).get();
+//
+//        List<Todo> todos = goal.getTodoList();
+//        List<Todo> newTodos = new ArrayList<>();
+//        if (todos != null){
+//            for (int i = 0;i < todos.size(); i++){
+//                if (todos.get(i).getId() != todoId){
+//                    newTodos.add(todos.get(i));
+//                }
+//            }
+//        }
+//        todo.setGoal(null);
+//        goal.setTodoList(newTodos);
         todoRepository.deleteById(todoId);
-        // TodoAddedEvent 발생
-        TodoEvent todoAddedEvent = new TodoEvent(this, todoRepository.findById(todoId).get());
-        eventPublisher.publishEvent(todoAddedEvent);
+//        // TodoAddedEvent 발생
+//        TodoEvent todoAddedEvent = new TodoEvent(this, todoRepository.findById(todoId).get());
+//        eventPublisher.publishEvent(todoAddedEvent);
     }
 
 
@@ -461,9 +474,9 @@ public class GoalServiceImpl implements GoalService {
 
         habitRepository.deleteById(habitId);
 
-        // Habit 생성 이벤트 발생
-        HabitEvent habitEvent = new HabitEvent(this, habitRepository.findById(habitId).get());
-        eventPublisher.publishEvent(habitEvent);
+//        // Habit 생성 이벤트 발생
+//        HabitEvent habitEvent = new HabitEvent(this, habitRepository.findById(habitId).get());
+//        eventPublisher.publishEvent(habitEvent);
     }
 
     // TTS 문구 바꾸기

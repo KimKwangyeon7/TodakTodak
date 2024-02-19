@@ -17,8 +17,6 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@DynamicInsert
-@DynamicUpdate
 @Builder
 public class Todo {
 
