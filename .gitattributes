@@ -1,14 +1,1 @@
-C:UsersSSAFYDesktopAIFlaskcontentdataglowtts-v2model_fil.pth.tar filter=lfs diff=lfs merge=lfs -text
-C:UsersSSAFYDesktopAIFlaskcontentdatahifigan-v2model_fil.pth.tar filter=lfs diff=lfs merge=lfs -text
-C:UsersSSAFYDesktopAIFlaskcontentdataglowtts-v2glowtts_dafdaf filter=lfs diff=lfs merge=lfs -text
-C:UsersSSAFYDesktopAIFlaskcontentdatahifigan-v2hifigan_Afdafdf filter=lfs diff=lfs merge=lfs -text
-C:UsersSSAFYDesktopAIFlaskcontentdataglowtts-v2glowtts-new/best_model.pth.tar filter=lfs diff=lfs merge=lfs -text
-C:UsersSSAFYDesktopAIFlaskcontentdatahifigan-v2hifigan-new/best_model_317393.pth.tar filter=lfs diff=lfs merge=lfs -text
-C:UsersSSAFYDesktopAIFlaskcontentdatahifigan-v2hifigan-new/hifi.zip filter=lfs diff=lfs merge=lfs -text
-C:UsersSSAFYDesktopAIFlaskcontentdataglowtts-v2glowtts-new/glow.zip filter=lfs diff=lfs merge=lfs -text
-C:UsersSSAFYDesktopAIFlaskcontentdataglowtts-v212_12_glow.zip filter=lfs diff=lfs merge=lfs -text
-backend/src/main/resources/tts-server/mecab/mecab-ko-dic/sys.dic filter=lfs diff=lfs merge=lfs -text
-backend/src/main/resources/tts-server/mecab/mecab-ko-dic/matrix.def filter=lfs diff=lfs merge=lfs -text
-backend/src/main/resources/tts-server/server.exe filter=lfs diff=lfs merge=lfs -text
-backend/build/resources/main/tts-server/models/hifigan-v2/checkpoint_325000.pth.tar filter=lfs diff=lfs merge=lfs -text
-backend/build/resources/main/tts-server/models/glowtts-v2/best_model.pth.tar filter=lfs diff=lfs merge=lfs -text
+
