@@ -7,3 +7,6 @@ C:UsersSSAFYDesktopAIFlaskcontentdatahifigan-v2hifigan-new/best_model_317393.pth
 C:UsersSSAFYDesktopAIFlaskcontentdatahifigan-v2hifigan-new/hifi.zip filter=lfs diff=lfs merge=lfs -text
 C:UsersSSAFYDesktopAIFlaskcontentdataglowtts-v2glowtts-new/glow.zip filter=lfs diff=lfs merge=lfs -text
 C:UsersSSAFYDesktopAIFlaskcontentdataglowtts-v212_12_glow.zip filter=lfs diff=lfs merge=lfs -text
+backend/src/main/resources/tts-server/mecab/mecab-ko-dic/sys.dic filter=lfs diff=lfs merge=lfs -text
+backend/src/main/resources/tts-server/mecab/mecab-ko-dic/matrix.def filter=lfs diff=lfs merge=lfs -text
+backend/src/main/resources/tts-server/server.exe filter=lfs diff=lfs merge=lfs -text
