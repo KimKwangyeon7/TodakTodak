@@ -1,5 +1,7 @@
-<img src="docs/로고.png" width="200px" height="500px">
-<img src="docs/이름.png">
+<p>
+    <img src="docs/이름.png">
+    <img src="docs/로고.jpg" width="200px" height="200px">  
+</p>
 
 # 샘플링한 AI 음성 기반 자기계발 플래너 서비스
 1인 가구 사회초년생에게 부모님의 목소리로 외출, 일정을 알려주는 자기계발 플래너 서비스
@@ -58,22 +60,26 @@
 ## 메인화면
 <img src="docs/메인화면.png" height="500px">
 
-### 목표 추가화면
+## 목표 추가화면
 <img src="docs/목표추가.png" height="500px">
 
-### 투두 상세화면
+## 투두 상세화면
 <img src="docs/투두상세.png" height="500px">
 
 ## 캘린더
-<img src="docs/캘린더1.png" height="500px">
-<img src="docs/캘린더2.png" height="500px">
+<p>
+  <img src="docs/캘린더1.png" height="500px">
+  <img src="docs/캘린더2.png" height="500px">
+</p>
 
 ## 친구
-<img src="docs/친구1.png" height="500px">
-<img src="docs/친구2.png" height="500px">
-<img src="docs/친구3.png" height="500px">
+<p>
+  <img src="docs/친구1.png" height="500px">
+  <img src="docs/친구2.png" height="500px">
+  <img src="docs/친구3.png" height="500px">
+</p>
 
-#### 채팅
+## 채팅
 <img src="docs/채팅.png" height="500px">
 
 ## 녹음
