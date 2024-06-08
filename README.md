@@ -1,5 +1,5 @@
-![image](/uploads/7d830b0cb95b5632ed0fb7d837b46c87/image.png) 
-![KakaoTalk_20240216_014349973](/uploads/013b169e58a2991a1abcc9edcd2eb79a/KakaoTalk_20240216_014349973.jpg){: width="200" height="200"}
+<img src="docs/로고.png" width="200px" height="500px">
+<img src="docs/이름.png">
 
 # 샘플링한 AI 음성 기반 자기계발 플래너 서비스
 1인 가구 사회초년생에게 부모님의 목소리로 외출, 일정을 알려주는 자기계발 플래너 서비스
@@ -51,35 +51,35 @@
 
 # 📐 Architecture
 
-![image](/uploads/4ef0e80727ce180a74bea6912f252a65/image.png)
+<img src="docs/아키텍쳐.png">
 
 # 🖥️ 서비스 화면
 
 ## 메인화면
-![image](/uploads/ea7ecba5dbf6f9d39377605b6c39bfa5/image.png){: height="500"}
+<img src="docs/메인화면.png" height="500px">
 
 ### 목표 추가화면
-![image](/uploads/2bffa01950147a107ee1448217f2bd9f/image.png){: height="500"}
+<img src="docs/목표추가.png" height="500px">
 
 ### 투두 상세화면
-![image](/uploads/d968973c3a2bd801cfdd4aa36aefe5a4/image.png){: height="500"}
+<img src="docs/투두상세.png" height="500px">
 
 ## 캘린더
-![image](/uploads/e3364e88ccc8f02d5d015bf1501ffd6e/image.png){: height="500"}
-![image](/uploads/3561ffc724fa232987dc9db3128a20da/image.png){: height="500"}
+<img src="docs/캘린더1.png" height="500px">
+<img src="docs/캘린더2.png" height="500px">
 
 ## 친구
-![image](/uploads/ef7d90906f631f15882e743d6fe8ece1/image.png){: height="500"}
-![image](/uploads/fc4fa715722f5df87fa87453adb172b7/image.png){: height="500"}
-![image](/uploads/97365513d1c0a9ec89d4df893a2f9f47/image.png){: height="500"}
+<img src="docs/친구1.png" height="500px">
+<img src="docs/친구2.png" height="500px">
+<img src="docs/친구3.png" height="500px">
 
 #### 채팅
-![image](/uploads/eba3f04c2ed62e3c9e98942204c0a058/image.png){: height="500"}
+<img src="docs/채팅.png" height="500px">
 
 ## 녹음
-![image](/uploads/0c26f55669bc98b9ad7ab515891458ce/image.png)
+<img src="docs/녹음1.png" height="500px">
 
-![image](/uploads/1b9769db0b95ab9306dbd7dfd70d1558/image.png)
+<img src="docs/녹음2.png" height="500px">
 
 ## 마이페이지
-![image](/uploads/b0bff313e7861693c3655bde022976fd/image.png){: height="500"}
+<img src="docs/마이페이지.png" height="500px">
